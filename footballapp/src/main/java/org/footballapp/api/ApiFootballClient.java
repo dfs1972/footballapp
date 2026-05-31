@@ -4,6 +4,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
 
+/*
+ * Handles all HTTP communication with API-Football.
+ *
+ * Sends requests to API-Football endpoints and returns
+ * the raw JSON response to the service layer.
+ */
+
 public class ApiFootballClient {
 
     private final String apiKey;
@@ -13,6 +20,11 @@ public class ApiFootballClient {
         this.apiKey = apiKey;
         this.client = HttpClient.newHttpClient();
     }
+
+    /*
+     * Sends a GET request to the specified API-Football endpoint
+     * and returns the response body as a JSON string.
+     */
 
     public String get(String url) throws IOException, InterruptedException {
 

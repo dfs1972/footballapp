@@ -2,6 +2,14 @@ package org.footballapp.model.teams;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+/**
+ * Represents a single entry within the API-Football
+ * response array.
+ *
+ * Each response contains:
+ * - Team information
+ * - Venue information
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TeamResponse {
 

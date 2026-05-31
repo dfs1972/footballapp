@@ -1,40 +1,70 @@
 package org.footballapp.service;
 
-import org.footballapp.databaserepository.VenueRepository;
-import org.footballapp.model.teams.TeamResponse;
-import org.footballapp.model.teams.TeamsApiResponse;
-import org.footballapp.databaserepository.TeamRepository;
+import org.footballapp.service.FixtureImportService;
+import org.footballapp.service.StandingsImportService;
+import org.footballapp.service.TeamImportService;
 
+/**
+ * Data Flow
+ * =========
+ *
+ * API-Football
+ *      ↓
+ * Service Layer
+ *      ↓
+ * Import Services
+ *      ↓
+ * Repository Layer
+ *      ↓
+ * PostgreSQL
+ *
+ * The database becomes the primary source of data
+ * for the application, reducing API usage and allowing
+ * historical data to be stored locally.
+ */
+/*************************************************************************
+/**
+ * Coordinates the import of league-related data.
+ *
+ * This service acts as the entry point for league imports
+ * and delegates work to specialised import services.
+ *
+ * Future responsibilities:
+ * - Teams
+ * - Venues
+ * - Standings
+ * - Fixtures
+ */
 public class LeagueImportService {
 
-    private final TeamService teamService;
-    private final TeamRepository teamRepository;
-    private final VenueRepository venueRepository;
+    private final TeamImportService teamImportService;
+    private final StandingsImportService standingsImportService;
+    private final FixtureImportService fixtureImportService;
 
     public LeagueImportService(
-            TeamService teamService,
-            TeamRepository teamRepository,
-            VenueRepository venueRepository
+            TeamImportService teamImportService,
+            StandingsImportService standingsImportService,
+            FixtureImportService fixtureImportService
     ) {
-        this.teamService = teamService;
-        this.teamRepository = teamRepository;
-        this.venueRepository = venueRepository;
+        this.teamImportService = teamImportService;
+        this.standingsImportService = standingsImportService;
+        this.fixtureImportService = fixtureImportService;
     }
 
-    public void importScottishPremiership2024() throws Exception {
+    /**
+     * Imports all available data for a league.
+     *
+     * Currently imports teams and venues only.
+     */
+    public void importLeague()
+            throws Exception {
 
-        TeamsApiResponse response =
-                teamService.getScottishPremiershipTeams();
+        teamImportService.importLeagueTeams();
 
-        for (TeamResponse teamResponse : response.getResponse()) {
+        // standingsImportService.importLeagueStandings(
+        //        leagueId, season);
 
-            teamRepository.saveTeam(
-                    teamResponse.getTeam()
-            );
-
-            venueRepository.saveVenue(
-                    teamResponse.getVenue()
-            );
-        }
+        // fixtureImportService.importLeagueFixtures(
+        //        leagueId, season);
     }
 }

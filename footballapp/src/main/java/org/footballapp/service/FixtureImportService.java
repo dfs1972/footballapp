@@ -1,4 +1,4 @@
 package org.footballapp.service;
 
-public class PlayerService {
+public class FixtureImportService {
 }

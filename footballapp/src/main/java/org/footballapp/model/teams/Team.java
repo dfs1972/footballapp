@@ -2,8 +2,11 @@ package org.footballapp.model.teams;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-// Returns the club data received from TeamResponse.
-
+/**
+ * Represents a football club returned by API-Football.
+ *
+ * Mapped from the JSON "team" object.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Team {
 
@@ -32,6 +35,6 @@ public class Team {
     public String getCountry() {return country;}
     public void setCountry(String country) {this.country = country;}
 
-    public int getClubFounded() {return founded;}
-    public void setClubFounded(int founded) {this.founded = founded;}
+    public int getFounded() {return founded;}
+    public void setFounded(int founded) {this.founded = founded;}
 }

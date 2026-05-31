@@ -5,8 +5,9 @@ import org.footballapp.api.ApiFootballClient;
 import org.footballapp.model.teams.TeamResponse;
 import org.footballapp.model.teams.TeamsApiResponse;
 
-/** Creates API client, retrieves data for specified league & season from API-Football,
- *  sends "response" json to TeamsApiResponse.
+/**
+ * Retrieves team data from API-Football and converts
+ * JSON responses into Java objects using Jackson.
  */
 public class TeamService {
 
@@ -18,9 +19,14 @@ public class TeamService {
         this.mapper = new ObjectMapper();
     }
 
+    /**
+     * Retrieves all teams associated with the Scottish Premiership
+     * for season 2024 and maps the JSON response to
+     * TeamsApiResponse.
+     */
     public TeamsApiResponse getScottishPremiershipTeams() throws Exception {
 
-        String url = "https://v3.football.api-sports.io/teams?league=179&season=2024";
+        String url = "https://v3.football.api-sports.io//teams?league=179&season=2024";
 
         String json = apiClient.get(url);
 

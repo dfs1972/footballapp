@@ -4,8 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
 
-/** returns the full "response" json of teams in Scottish Premiership,
- *  for specified season.
+/**
+ * Represents the root JSON response returned by
+ * API-Football's teams endpoint.
+ *
+ * Example:
+ * {
+ *   "response": [...]
+ * }
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)

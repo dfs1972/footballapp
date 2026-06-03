@@ -1,8 +1,7 @@
 package org.footballapp.service;
 
-import org.footballapp.service.FixtureImportService;
-import org.footballapp.service.StandingsImportService;
-import org.footballapp.service.TeamImportService;
+import org.footballapp.databaserepository.LeagueRepository;
+import org.footballapp.model.league.League;
 
 /**
  * Data Flow
@@ -22,49 +21,76 @@ import org.footballapp.service.TeamImportService;
  * for the application, reducing API usage and allowing
  * historical data to be stored locally.
  */
-/*************************************************************************
+
 /**
  * Coordinates the import of league-related data.
  *
  * This service acts as the entry point for league imports
  * and delegates work to specialised import services.
  *
- * Future responsibilities:
+ * Current responsibilities:
+ * - League metadata
  * - Teams
  * - Venues
+ *
+ * Future responsibilities:
  * - Standings
  * - Fixtures
  */
 public class LeagueImportService {
 
+    private final LeagueRepository leagueRepository;
     private final TeamImportService teamImportService;
-    private final StandingsImportService standingsImportService;
-    private final FixtureImportService fixtureImportService;
+
+    // private final StandingsImportService standingsImportService;
+    // private final FixtureImportService fixtureImportService;
 
     public LeagueImportService(
-            TeamImportService teamImportService,
-            StandingsImportService standingsImportService,
-            FixtureImportService fixtureImportService
+            LeagueRepository leagueRepository,
+            TeamImportService teamImportService
+            // StandingsImportService standingsImportService,
+            // FixtureImportService fixtureImportService
     ) {
+        this.leagueRepository = leagueRepository;
         this.teamImportService = teamImportService;
-        this.standingsImportService = standingsImportService;
-        this.fixtureImportService = fixtureImportService;
+
+        // this.standingsImportService = standingsImportService;
+        // this.fixtureImportService = fixtureImportService;
     }
 
     /**
      * Imports all available data for a league.
-     *
-     * Currently imports teams and venues only.
      */
-    public void importLeague()
-            throws Exception {
+    public void importLeague(
+            int leagueId,
+            int season
+    ) throws Exception {
 
-        teamImportService.importLeagueTeams();
+        League league = new League();
+
+        league.setId(leagueId);
+        league.setSeason(season);
+
+        // Temporary hard-coded values.
+        // Later these will come from API-Football.
+        league.setName("Scottish Premiership");
+        league.setCountry("Scotland");
+
+        leagueRepository.saveLeague(league);
+
+        teamImportService.importLeagueTeams(
+                leagueId,
+                season
+        );
 
         // standingsImportService.importLeagueStandings(
-        //        leagueId, season);
+        //         leagueId,
+        //         season
+        // );
 
         // fixtureImportService.importLeagueFixtures(
-        //        leagueId, season);
+        //         leagueId,
+        //         season
+        // );
     }
 }

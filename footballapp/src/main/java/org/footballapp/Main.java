@@ -1,11 +1,11 @@
 package org.footballapp;
 
 import org.footballapp.api.ApiFootballClient;
+import org.footballapp.databaserepository.LeagueRepository;
 import org.footballapp.databaserepository.TeamRepository;
 import org.footballapp.databaserepository.VenueRepository;
-import org.footballapp.model.teams.Team;
-import org.footballapp.model.teams.TeamResponse;
-import org.footballapp.model.teams.TeamsApiResponse;
+import org.footballapp.service.LeagueImportService;
+import org.footballapp.service.TeamImportService;
 import org.footballapp.service.TeamService;
 
 /**
@@ -35,41 +35,50 @@ public class Main {
 
     public static void main(String[] args) {
 
-        //leagueImportService.importLeague();
-
         try {
-            String apiKey = System.getenv("API_FOOTBALL_KEY");
+
+            String apiKey =
+                    System.getenv("API_FOOTBALL_KEY");
 
             ApiFootballClient client =
                     new ApiFootballClient(apiKey);
 
-            TeamService service =
+            TeamService teamService =
                     new TeamService(client);
 
-            TeamRepository repository =
+            TeamRepository teamRepository =
                     new TeamRepository();
 
-            VenueRepository vRepository =
+            VenueRepository venueRepository =
                     new VenueRepository();
 
-            TeamsApiResponse response =
-                    service.getScottishPremiershipTeams();
+            LeagueRepository leagueRepository =
+                    new LeagueRepository();
 
-            for (TeamResponse teamResponse : response.getResponse()) {
+            TeamImportService teamImportService =
+                    new TeamImportService(
+                            teamService,
+                            teamRepository,
+                            venueRepository
+                    );
 
-                repository.saveTeam(teamResponse.getTeam());
+            LeagueImportService leagueImportService =
+                    new LeagueImportService(
+                            leagueRepository,
+                            teamImportService
+                    );
 
-                vRepository.saveVenue(teamResponse.getVenue());
+            leagueImportService.importLeague(
+                    179,
+                    2024
+            );
 
-
-                System.out.println(
-                        teamResponse.getTeam().getName() + " - " + teamResponse.getTeam().getCountry()
-                                + " - " + teamResponse.getTeam().getFounded()
-                );
-            }
+            System.out.println(
+                    "Scottish Premiership 2024 imported successfully."
+            );
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }// End of main.
-}// End of Main Class.
+    }
+}

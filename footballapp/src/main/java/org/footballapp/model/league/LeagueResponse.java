@@ -3,20 +3,22 @@ package org.footballapp.model.league;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
- * Represents a football league & season returned by API-Football.
+ * Represents a single entry within the API-Football
+ * response array.
  *
- * Mapped from the JSON "team" object.
+ * Each response contains:
+ * - League information
+ * - Country information
+ * - Season information
  */
-
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class League {
-
+public class LeagueResponse {
     private int id;
     private String name;
     private String country;
     private int season;
 
-    public League() {
+    public LeagueResponse() {
 
     }
 

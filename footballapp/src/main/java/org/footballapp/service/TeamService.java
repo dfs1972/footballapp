@@ -20,32 +20,26 @@ public class TeamService {
     }
 
     /**
-     * Retrieves all teams associated with the Scottish Premiership
-     * for season 2024 and maps the JSON response to
-     * TeamsApiResponse.
+     * Retrieves all teams associated with a league
+     * and season from API-Football and maps the
+     * response to TeamsApiResponse.
      */
-    public TeamsApiResponse getScottishPremiershipTeams() throws Exception {
+    public TeamsApiResponse getLeagueTeams(
+            int leagueId,
+            int season
+    ) throws Exception {
 
-        String url = "https://v3.football.api-sports.io//teams?league=179&season=2024";
+        String url =
+                "https://v3.football.api-sports.io/teams?league="
+                        + leagueId
+                        + "&season="
+                        + season;
 
         String json = apiClient.get(url);
 
-        return mapper.readValue(json, TeamsApiResponse.class);
-    }
-
-    // retrieves team by id and sends data to TeamResponse.
-    public TeamResponse getTeamById(int teamId) throws Exception {
-
-        TeamsApiResponse response =
-                getScottishPremiershipTeams();
-
-        for (TeamResponse teamResponse : response.getResponse()) {
-
-            if (teamResponse.getTeam().getId() == teamId) {
-                return teamResponse;
-            }
-        }
-
-        return null;
+        return mapper.readValue(
+                json,
+                TeamsApiResponse.class
+        );
     }
 }

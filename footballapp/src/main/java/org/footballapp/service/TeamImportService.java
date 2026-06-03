@@ -1,5 +1,6 @@
 package org.footballapp.service;
 
+//import org.footballapp.databaserepository.LeagueRepository;
 import org.footballapp.databaserepository.TeamRepository;
 import org.footballapp.databaserepository.VenueRepository;
 import org.footballapp.model.teams.TeamResponse;
@@ -22,6 +23,7 @@ public class TeamImportService {
             TeamService teamService,
             TeamRepository teamRepository,
             VenueRepository venueRepository
+            //LeagueRepository leagueRepository
     ) {
         this.teamService = teamService;
         this.teamRepository = teamRepository;
@@ -32,10 +34,16 @@ public class TeamImportService {
      * Imports all teams and venues returned by the
      * Scottish Premiership API endpoint.
      */
-    public void importLeagueTeams() throws Exception {
+    public void importLeagueTeams(
+            int leagueId,
+            int season
+    ) throws Exception {
 
         TeamsApiResponse response =
-                teamService.getScottishPremiershipTeams();
+                teamService.getLeagueTeams(
+                        leagueId,
+                        season
+                );
 
         for (TeamResponse teamResponse : response.getResponse()) {
 

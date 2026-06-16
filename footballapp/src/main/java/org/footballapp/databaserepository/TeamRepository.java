@@ -2,9 +2,9 @@ package org.footballapp.databaserepository;
 
 import org.footballapp.database.DatabaseConnection;
 import org.footballapp.model.teams.Team;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
  * Handles persistence of team data.
@@ -54,5 +54,56 @@ public class TeamRepository {
 
         stmt.close();
         conn.close();
+    }
+
+    /**Test GET Team By ID.*/
+    public Team getTeamById(int teamId)
+            throws Exception {
+
+        Connection conn =
+                DatabaseConnection.connect();
+
+        PreparedStatement stmt =
+                conn.prepareStatement(
+                        """
+                        SELECT *
+                        FROM teams
+                        WHERE id = ?
+                        """
+                );
+
+        stmt.setInt(1, teamId);
+
+        ResultSet rs =
+                stmt.executeQuery();
+
+        Team team = null;
+
+        if (rs.next()) {
+
+            team = new Team();
+
+            team.setId(
+                    rs.getInt("id")
+            );
+
+            team.setName(
+                    rs.getString("name")
+            );
+
+            team.setCountry(
+                    rs.getString("country")
+            );
+
+            team.setFounded(
+                    rs.getInt("founded")
+            );
+        }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+
+        return team;
     }
 }

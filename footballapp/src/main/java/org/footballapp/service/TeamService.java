@@ -30,7 +30,7 @@ public class TeamService {
     ) throws Exception {
 
         String url =
-                "https://v3.football.api-sports.io/teams?league="
+                "https://v3.football.api-sports.io/standings?league="
                         + leagueId
                         + "&season="
                         + season;

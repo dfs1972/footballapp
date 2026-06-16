@@ -34,8 +34,8 @@ import org.footballapp.model.league.League;
  * - Venues
  *
  * Future responsibilities:
- * - Standings
- * - Fixtures
+ * - Standing
+ * - Fixture
  */
 public class LeagueImportService {
 

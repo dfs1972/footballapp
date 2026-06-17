@@ -2,25 +2,25 @@ package org.footballapp.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.footballapp.api.ApiFootballClient;
-import org.footballapp.model.fixtures.FixturesApiResponse;
+import org.footballapp.model.standings.StandingsApiResponse;
 
-public class FixtureService {
+public class StandingService {
 
     private final ApiFootballClient apiClient;
     private final ObjectMapper mapper;
 
-    public FixtureService(ApiFootballClient apiClient) {
+    public StandingService(ApiFootballClient apiClient) {
         this.apiClient = apiClient;
         this.mapper = new ObjectMapper();
     }
 
-    public FixturesApiResponse getFixtures(
+    public StandingsApiResponse getStandings(
             int leagueId,
             int season
     ) throws Exception {
 
         String url =
-                "https://v3.football.api-sports.io/fixtures?league="
+                "https://v3.football.api-sports.io/standings?league="
                         + leagueId
                         + "&season="
                         + season;
@@ -30,7 +30,7 @@ public class FixtureService {
 
         return mapper.readValue(
                 json,
-                FixturesApiResponse.class
+                StandingsApiResponse.class
         );
     }
 }

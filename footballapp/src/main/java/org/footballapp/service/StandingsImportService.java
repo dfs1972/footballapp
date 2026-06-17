@@ -8,17 +8,26 @@ import org.footballapp.model.standings.StandingsApiResponse;
 public class StandingsImportService {
 
     private final StandingRepository standingRepository;
+    private final StandingService standingService;
 
     public StandingsImportService(
+            StandingService standingService,
             StandingRepository standingRepository
     ) {
-        this.standingRepository =
-                standingRepository;
+        this.standingService = standingService;
+        this.standingRepository = standingRepository;
     }
 
-    public void importStandings(
-            StandingsApiResponse response
+    public void importLeagueStandings(
+            int leagueId,
+            int season
     ) throws Exception {
+
+        StandingsApiResponse response =
+                standingService.getStandings(
+                        leagueId,
+                        season
+                );
 
         StandingLeague league =
                 response.getResponse()

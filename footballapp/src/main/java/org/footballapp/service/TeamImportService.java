@@ -1,6 +1,7 @@
 package org.footballapp.service;
 
 //import org.footballapp.databaserepository.LeagueRepository;
+import org.footballapp.databaserepository.LeagueTeamRepository;
 import org.footballapp.databaserepository.TeamRepository;
 import org.footballapp.databaserepository.VenueRepository;
 import org.footballapp.model.teams.TeamResponse;
@@ -18,22 +19,22 @@ public class TeamImportService {
     private final TeamService teamService;
     private final TeamRepository teamRepository;
     private final VenueRepository venueRepository;
+    private final LeagueTeamRepository
+            leagueTeamRepository;
 
     public TeamImportService(
             TeamService teamService,
             TeamRepository teamRepository,
-            VenueRepository venueRepository
-            //LeagueRepository leagueRepository
+            VenueRepository venueRepository,
+            LeagueTeamRepository leagueTeamRepository
     ) {
         this.teamService = teamService;
         this.teamRepository = teamRepository;
         this.venueRepository = venueRepository;
+        this.leagueTeamRepository =
+                leagueTeamRepository;
     }
 
-    /**
-     * Imports all teams and venues returned by the
-     * Scottish Premiership API endpoint.
-     */
     public void importLeagueTeams(
             int leagueId,
             int season
@@ -53,6 +54,12 @@ public class TeamImportService {
 
             venueRepository.saveVenue(
                     teamResponse.getVenue()
+            );
+
+            leagueTeamRepository.saveLeagueTeam(
+                    leagueId,
+                    season,
+                    teamResponse.getTeam().getId()
             );
         }
     }

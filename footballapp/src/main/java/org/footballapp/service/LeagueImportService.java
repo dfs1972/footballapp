@@ -39,23 +39,21 @@ import org.footballapp.model.league.League;
  */
 public class LeagueImportService {
 
-    private final LeagueRepository leagueRepository;
+    //private final LeagueRepository leagueRepository;
     private final TeamImportService teamImportService;
-
-    // private final StandingsImportService standingsImportService;
-    // private final FixtureImportService fixtureImportService;
+    private final StandingsImportService standingsImportService;
+    private final FixtureImportService fixtureImportService;
 
     public LeagueImportService(
-            LeagueRepository leagueRepository,
-            TeamImportService teamImportService
-            // StandingsImportService standingsImportService,
-            // FixtureImportService fixtureImportService
+            //LeagueRepository leagueRepository,
+            TeamImportService teamImportService,
+            StandingsImportService standingsImportService,
+            FixtureImportService fixtureImportService
     ) {
-        this.leagueRepository = leagueRepository;
+        //this.leagueRepository = leagueRepository;
         this.teamImportService = teamImportService;
-
-        // this.standingsImportService = standingsImportService;
-        // this.fixtureImportService = fixtureImportService;
+        this.standingsImportService = standingsImportService;
+        this.fixtureImportService = fixtureImportService;
     }
 
     /**
@@ -76,21 +74,21 @@ public class LeagueImportService {
         league.setName("Scottish Premiership");
         league.setCountry("Scotland");
 
-        leagueRepository.saveLeague(league);
+        //leagueRepository.saveLeague(league);
 
         teamImportService.importLeagueTeams(
                 leagueId,
                 season
         );
 
-        // standingsImportService.importLeagueStandings(
-        //         leagueId,
-        //         season
-        // );
+         standingsImportService.importLeagueStandings(
+                 leagueId,
+                 season
+         );
 
-        // fixtureImportService.importLeagueFixtures(
-        //         leagueId,
-        //         season
-        // );
+         fixtureImportService.importLeagueFixtures(
+                 leagueId,
+                 season
+         );
     }
 }

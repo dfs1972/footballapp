@@ -18,22 +18,16 @@ public class VenueRepository {
      *
      * If the venue already exists, updates the existing record.
      */
-    public void saveVenue(Venue venue) throws Exception {
+    public void saveVenue(Venue venues) throws Exception {
 
         Connection conn =
                 DatabaseConnection.connect();
 
         PreparedStatement stmt =
                 conn.prepareStatement(
-//                        """
-//                        INSERT INTO venue
-//                        (id, name, address, city, capacity, surface)
-//                        VALUES (?, ?, ?, ?, ?, ?)
-//                        ON CONFLICT (id)
-//                        DO NOTHING
-//                        """
+
                         """
-                        INSERT INTO venue
+                        INSERT INTO venues
                         (id, name, address, city, capacity, surface)
                         VALUES (?, ?, ?, ?, ?, ?)
                         ON CONFLICT (id)
@@ -46,12 +40,12 @@ public class VenueRepository {
                         """
                 );
 
-        stmt.setInt(1, venue.getId());
-        stmt.setString(2, venue.getName());
-        stmt.setString(3, venue.getAddress());
-        stmt.setString(4, venue.getCity());
-        stmt.setInt(5, venue.getCapacity());
-        stmt.setString(6, venue.getSurface());
+        stmt.setInt(1, venues.getId());
+        stmt.setString(2, venues.getName());
+        stmt.setString(3, venues.getAddress());
+        stmt.setString(4, venues.getCity());
+        stmt.setInt(5, venues.getCapacity());
+        stmt.setString(6, venues.getSurface());
 
         stmt.executeUpdate();
 

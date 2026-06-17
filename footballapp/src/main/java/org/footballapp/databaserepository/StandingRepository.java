@@ -201,4 +201,68 @@ public class StandingRepository {
         return table;
     }
 
+    /**
+     * Returns a team's league standing
+     */
+    public LeagueTableRow getTeamStanding(
+            int leagueId,
+            int season,
+            int teamId
+    )
+            throws Exception {
+
+        Connection conn =
+                DatabaseConnection.connect();
+
+        PreparedStatement stmt =
+                conn.prepareStatement(
+                        """
+                        SELECT
+                            s.position,
+                            t.name,
+                            s.points
+                        FROM standings s
+                        JOIN teams t
+                            ON s.team_id = t.id
+                        WHERE s.league_id = ?
+                        AND s.season = ?
+                        AND s.team_id = ?
+                        """
+                );
+
+        stmt.setInt(1, leagueId);
+        stmt.setInt(2, season);
+        stmt.setInt(3, teamId);
+
+        ResultSet rs =
+                stmt.executeQuery();
+
+        LeagueTableRow row = null;
+
+        if (rs.next()) {
+
+            row = new LeagueTableRow();
+
+            row.setPosition(
+                    rs.getInt("position")
+            );
+
+            row.setTeamName(
+                    rs.getString("name")
+            );
+
+            row.setPoints(
+                    rs.getInt("points")
+            );
+        }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+
+        return row;
+    }
 }
+
+
+

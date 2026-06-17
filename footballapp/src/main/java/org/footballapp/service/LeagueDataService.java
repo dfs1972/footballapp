@@ -8,6 +8,7 @@ import org.footballapp.databaserepository.TeamRepository;
 /**Import models*/
 import org.footballapp.model.fixtures.FixtureRow;
 import org.footballapp.model.standings.Standing;
+import org.footballapp.model.teamdetails.TeamDetails;
 import org.footballapp.model.teams.Team;
 import org.footballapp.model.standings.LeagueTableRow;
 
@@ -137,6 +138,56 @@ public class LeagueDataService {
         }
 
         return form.toString();
+    }
+
+    /**
+     * Returns a team's league standing */
+    public TeamDetails getTeamDetails(
+            int leagueId,
+            int season,
+            int teamId
+    )
+            throws Exception {
+
+        TeamDetails details =
+                new TeamDetails();
+
+        Team team =
+                teamRepository.getTeamById(
+                        teamId
+                );
+
+        details.setTeam(team);
+
+        LeagueTableRow standing =
+                standingRepository
+                        .getTeamStanding(
+                                leagueId,
+                                season,
+                                teamId
+                        );
+
+        details.setLeaguePosition(
+                standing.getPosition()
+        );
+
+        details.setPoints(
+                standing.getPoints()
+        );
+
+        details.setForm(
+                getTeamForm(teamId)
+        );
+
+        details.setRecentFixtures(
+                fixtureRepository
+                        .getRecentFixturesByTeam(
+                                teamId,
+                                5
+                        )
+        );
+
+        return details;
     }
 }
 

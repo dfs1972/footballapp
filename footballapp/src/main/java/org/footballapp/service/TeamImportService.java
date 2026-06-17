@@ -1,6 +1,7 @@
 package org.footballapp.service;
 
 //import org.footballapp.databaserepository.LeagueRepository;
+import org.footballapp.api.ApiFootballService;
 import org.footballapp.databaserepository.LeagueTeamRepository;
 import org.footballapp.databaserepository.TeamRepository;
 import org.footballapp.databaserepository.VenueRepository;
@@ -16,19 +17,22 @@ import org.footballapp.model.teams.TeamsApiResponse;
  */
 public class TeamImportService {
 
-    private final TeamService teamService;
+    private final ApiFootballService apiService;
+    //private final TeamService teamService;
     private final TeamRepository teamRepository;
     private final VenueRepository venueRepository;
     private final LeagueTeamRepository
             leagueTeamRepository;
 
     public TeamImportService(
-            TeamService teamService,
+            ApiFootballService apiService,
+            //TeamService teamService,
             TeamRepository teamRepository,
             VenueRepository venueRepository,
             LeagueTeamRepository leagueTeamRepository
     ) {
-        this.teamService = teamService;
+        this.apiService = apiService;
+        //this.teamService = teamService;
         this.teamRepository = teamRepository;
         this.venueRepository = venueRepository;
         this.leagueTeamRepository =
@@ -41,7 +45,7 @@ public class TeamImportService {
     ) throws Exception {
 
         TeamsApiResponse response =
-                teamService.getLeagueTeams(
+                apiService.getLeagueTeams(
                         leagueId,
                         season
                 );

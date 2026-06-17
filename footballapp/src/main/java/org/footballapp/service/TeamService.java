@@ -6,8 +6,7 @@ import org.footballapp.model.teams.TeamResponse;
 import org.footballapp.model.teams.TeamsApiResponse;
 
 /**
- * Retrieves team data from API-Football and converts
- * JSON responses into Java objects using Jackson.
+ * @deprecated Use ApiFootballService instead
  */
 public class TeamService {
 

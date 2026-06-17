@@ -3,6 +3,7 @@ package org.footballapp.service;
 import org.footballapp.databaserepository.FixtureRepository;
 import org.footballapp.model.fixtures.FixtureResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
+import org.footballapp.api.ApiFootballService;
 
 /**
  * Imports fixtures for a given league and season
@@ -10,15 +11,18 @@ import org.footballapp.model.fixtures.FixturesApiResponse;
  */
 public class FixtureImportService {
 
-    private final FixtureService fixtureService;
+    private final ApiFootballService apiFootballService;
     private final FixtureRepository fixtureRepository;
 
     public FixtureImportService(
-            FixtureService fixtureService,
+            ApiFootballService apiFootballService,
             FixtureRepository fixtureRepository
     ) {
-        this.fixtureService = fixtureService;
-        this.fixtureRepository = fixtureRepository;
+        this.apiFootballService =
+                apiFootballService;
+
+        this.fixtureRepository =
+                fixtureRepository;
     }
 
     /**
@@ -30,7 +34,7 @@ public class FixtureImportService {
     ) throws Exception {
 
         FixturesApiResponse response =
-                fixtureService.getFixtures(
+                apiFootballService.getFixtures(
                         leagueId,
                         season
                 );

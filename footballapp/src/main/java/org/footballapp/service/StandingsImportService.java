@@ -4,27 +4,30 @@ import org.footballapp.databaserepository.StandingRepository;
 import org.footballapp.model.standings.Standing;
 import org.footballapp.model.standings.StandingLeague;
 import org.footballapp.model.standings.StandingsApiResponse;
+import org.footballapp.api.ApiFootballService;
 
 public class StandingsImportService {
 
+    private final ApiFootballService apiFootballService;
     private final StandingRepository standingRepository;
-    private final StandingService standingService;
 
     public StandingsImportService(
-            StandingService standingService,
+            ApiFootballService apiFootballService,
             StandingRepository standingRepository
     ) {
-        this.standingService = standingService;
-        this.standingRepository = standingRepository;
-    }
+        this.apiFootballService =
+                apiFootballService;
 
+        this.standingRepository =
+                standingRepository;
+    }
     public void importLeagueStandings(
             int leagueId,
             int season
     ) throws Exception {
 
         StandingsApiResponse response =
-                standingService.getStandings(
+                apiFootballService.getStandings(
                         leagueId,
                         season
                 );

@@ -114,31 +114,27 @@ public class FixtureRepository {
 
         PreparedStatement stmt =
                 conn.prepareStatement(
-                                """
+                        """
                         SELECT
                             f.fixture_date,
                             f.round,
                             home.name AS home_team,
                             away.name AS away_team,
                             f.home_goals,
-               
-                                        f.away_goals
+                            f.away_goals
     
-              
-                                     FROM fixtures f
+                        FROM fixtures f
     
                         JOIN teams home
-                            ON f.
-                                home_team_id = home.id
+                            ON f.home_team_id = home.id
     
                         JOIN teams away
                             ON f.away_team_id = away.id
     
-                        WHERE f.
-                                                        league_i
-                                     AND f.season = ?
- 
-                                   ORDER BY f.fixture_date
+                        WHERE f.league_id = ?
+                        AND f.season = ?
+    
+                        ORDER BY f.fixture_date
                         """
                 );
 
@@ -201,25 +197,27 @@ public class FixtureRepository {
 
         PreparedStatement stmt =
                 conn.prepareStatement(
-                                """
-                       
-                                           f
-                                                  f.round,
+                        """
+                        SELECT
+                            f.fixture_date,
+                            f.round,
                             home.name AS home_team,
-                            away.name AS a
-                                             f.
-                                h
-                                              f.
-                               
-                                               
-                                                     JOIN teams home
-                            ON f.home_t
-                                                     JOIN teams away
-                            ON f.away_team_id = 
-                                            WHERE f.
-                                home
-                                               OR f.awa
-                                                  ORDER BY f.fixture_date
+                            away.name AS away_team,
+                            f.home_goals,
+                            f.away_goals
+    
+                        FROM fixtures f
+    
+                        JOIN teams home
+                            ON f.home_team_id = home.id
+    
+                        JOIN teams away
+                            ON f.away_team_id = away.id
+    
+                        WHERE f.home_team_id = ?
+                           OR f.away_team_id = ?
+    
+                        ORDER BY f.fixture_date
                         """
                 );
 
@@ -284,30 +282,26 @@ public class FixtureRepository {
                 DatabaseConnection.connect();
 
         PreparedStatement stmt =
-                conn.
-                                prepareStatement(
-                                """
-                        SELE
-                                      f.fixture_date,
-                            f.
-                                ro
-                                        home.name
-                                                        away.name AS away_team,
+                conn.prepareStatement(
+                        """
+                        SELECT
+                            f.fixture_date,
+                            f.round,
+                            home.name AS home_team,
+                            away.name AS away_team,
                             f.home_goals,
-                                                        f
-                      
-                                 
-                        FROM
-                                f
-                                              J
-                                                  ON f.home_team_id
-                            
-                                                  JOI
-                                                ON f.
-                                away_team_id = away.
-                                id
-                                                            WHERE
-                                                AND f.season = ?
+                            f.away_goals
+    
+                        FROM fixtures f
+    
+                        JOIN teams home
+                            ON f.home_team_id = home.id
+    
+                        JOIN teams away
+                            ON f.away_team_id = away.id
+    
+                        WHERE f.league_id = ?
+                        AND f.season = ?
     
                         ORDER BY f.fixture_date DESC
     

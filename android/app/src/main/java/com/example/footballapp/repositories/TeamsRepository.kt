@@ -1,6 +1,6 @@
 package com.example.footballapp.repositories
 
-import com.example.footballapp.TeamRow
+import com.example.footballapp.model.TeamRow
 
 class TeamsRepository {
 

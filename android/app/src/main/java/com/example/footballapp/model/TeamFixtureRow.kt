@@ -1,4 +1,4 @@
-package com.example.footballapp
+package com.example.footballapp.model
 
 data class TeamFixtureRow(
     val homeTeam: String,

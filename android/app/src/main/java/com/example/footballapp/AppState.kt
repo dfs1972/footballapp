@@ -6,4 +6,6 @@ object AppState {
 
     var selectedLeagueName: String =
         "Scottish Premiership"
+
+    var selectedSeason: Int = 2024
 }

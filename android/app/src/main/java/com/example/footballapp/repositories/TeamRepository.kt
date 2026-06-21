@@ -1,4 +1,4 @@
-package com.example.footballapp
+package com.example.footballapp.repositories
 
 import com.example.footballapp.model.TeamDetails
 

@@ -5,14 +5,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.footballapp.AppState
-import com.example.footballapp.FixturesScreen
-import com.example.footballapp.LeagueSelectionScreen
+
+import com.example.footballapp.screens.FixturesScreen
+import com.example.footballapp.screens.LeagueSelectionScreen
 import com.example.footballapp.MainScreen
-import com.example.footballapp.TeamFixturesScreen
-import com.example.footballapp.TeamsScreen
+import com.example.footballapp.screens.TeamFixturesScreen
 import com.example.footballapp.screens.LeagueOverviewScreen
 import com.example.footballapp.screens.LeagueTableScreen
 import com.example.footballapp.screens.TeamScreen
+import com.example.footballapp.screens.TeamsScreen
 
 @Composable
 fun FootballNavGraph() {

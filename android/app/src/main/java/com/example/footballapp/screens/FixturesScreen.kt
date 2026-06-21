@@ -1,4 +1,4 @@
-package com.example.footballapp
+package com.example.footballapp.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,38 +9,55 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.footballapp.AppState
+import com.example.footballapp.model.FixtureRow
+import com.example.footballapp.repositories.FixturesApiRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun FixturesScreen() {
 
-    val repository =
-        FixtureRepository()
+    var fixtures by remember {
+        mutableStateOf<List<FixtureRow>>(
+            emptyList()
+        )
+    }
 
-    val fixtures =
-        repository.getFixtures()
+    LaunchedEffect(Unit) {
+
+        fixtures =
+            withContext(
+                Dispatchers.IO
+            ) {
+
+                FixturesApiRepository()
+                    .getFixtures(
+                        AppState.selectedLeagueId,
+                        AppState.selectedSeason
+                    )
+            }
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
+
         Text(
             text =
-                AppState.selectedLeagueName,
+                "${AppState.selectedLeagueName} Fixtures",
             style =
                 MaterialTheme.typography.headlineMedium
         )
+
         Spacer(
             modifier =
                 Modifier.height(16.dp)
-        )
-
-        Text(
-            text = "Fixtures",
-            style = MaterialTheme.typography.headlineMedium
         )
 
         LazyColumn {
@@ -49,13 +66,27 @@ fun FixturesScreen() {
 
                 Text(
                     text =
+                        fixture.fixtureDate,
+                    style =
+                        MaterialTheme.typography.titleMedium
+                )
+
+                Text(
+                    text =
                         "${fixture.homeTeam} " +
                                 "${fixture.homeGoals} - " +
                                 "${fixture.awayGoals} " +
-                                fixture.awayTeam,
+                                fixture.awayTeam
+                )
 
+                Text(
+                    text =
+                        fixture.round
+                )
+
+                Spacer(
                     modifier =
-                        Modifier.padding(8.dp)
+                        Modifier.height(16.dp)
                 )
             }
         }

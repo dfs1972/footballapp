@@ -7,25 +7,46 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.footballapp.AppState
-import com.example.footballapp.repositories.LeagueRepository
+import com.example.footballapp.repositories.LeagueApiRepository
+
+import com.example.footballapp.model.TableRow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun LeagueTableScreen(
     onTeamClick: (String) -> Unit
 ) {
 
-    val repository =
-        LeagueRepository()
+    var table by remember {
+        mutableStateOf<List<TableRow>>(
+            emptyList()
+        )
+    }
 
-    val table =
-        repository.getLeagueTable()
+    LaunchedEffect(Unit) {
+
+        table =
+            withContext(
+                Dispatchers.IO
+            ) {
+                LeagueApiRepository()
+                    .getLeagueTable(AppState.selectedLeagueId,
+                        AppState.selectedSeason)
+            }
+    }
 
     Column(
         modifier = Modifier
@@ -34,12 +55,12 @@ fun LeagueTableScreen(
     ) {
 
         Text(
-            AppState.selectedLeagueName,
+            text = AppState.selectedLeagueName,
             style = MaterialTheme.typography.headlineMedium
         )
+
         Spacer(
-            modifier =
-                Modifier.height(16.dp)
+            modifier = Modifier.height(16.dp)
         )
 
         LazyColumn {
@@ -56,9 +77,10 @@ fun LeagueTableScreen(
                 ) {
 
                     Text(
-                        "${row.position}. " +
-                                "${row.teamName} - " +
-                                "${row.points} pts"
+                        text =
+                            "${row.position}. " +
+                                    "${row.teamName} - " +
+                                    "${row.points} pts"
                     )
                 }
             }

@@ -9,6 +9,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 public class FixtureRepository {
 
@@ -118,6 +121,8 @@ public class FixtureRepository {
                         SELECT
                             f.fixture_date,
                             f.round,
+                            f.home_team_id,
+                            f.away_team_id,
                             home.name AS home_team,
                             away.name AS away_team,
                             f.home_goals,
@@ -152,12 +157,37 @@ public class FixtureRepository {
             FixtureRow row =
                     new FixtureRow();
 
+            String rawDate =
+                    rs.getString("fixture_date");
+
+            OffsetDateTime fixtureDate =
+                    OffsetDateTime.parse(rawDate);
+
+            String displayDate =
+                    fixtureDate
+                            .atZoneSameInstant(
+                                    ZoneId.of("Europe/London")
+                            )
+                            .format(
+                                    DateTimeFormatter.ofPattern(
+                                            "EEE dd MMM yyyy HH:mm"
+                                    )
+                            );
+
             row.setFixtureDate(
-                    rs.getString("fixture_date")
+                    displayDate
             );
 
             row.setRound(
                     rs.getString("round")
+            );
+
+            row.setHomeTeamId(
+                    rs.getInt("home_team_id")
+            );
+
+            row.setAwayTeamId(
+                    rs.getInt("away_team_id")
             );
 
             row.setHomeTeam(
@@ -201,6 +231,8 @@ public class FixtureRepository {
                         SELECT
                             f.fixture_date,
                             f.round,
+                            f.home_team_id,
+                            f.away_team_id,
                             home.name AS home_team,
                             away.name AS away_team,
                             f.home_goals,
@@ -235,12 +267,37 @@ public class FixtureRepository {
             FixtureRow row =
                     new FixtureRow();
 
+            String rawDate =
+                    rs.getString("fixture_date");
+
+            OffsetDateTime fixtureDate =
+                    OffsetDateTime.parse(rawDate);
+
+            String displayDate =
+                    fixtureDate
+                            .atZoneSameInstant(
+                                    ZoneId.of("Europe/London")
+                            )
+                            .format(
+                                    DateTimeFormatter.ofPattern(
+                                            "EEE dd MMM yyyy HH:mm"
+                                    )
+                            );
+
             row.setFixtureDate(
-                    rs.getString("fixture_date")
+                    displayDate
             );
 
             row.setRound(
                     rs.getString("round")
+            );
+
+            row.setHomeTeamId(
+                    rs.getInt("home_team_id")
+            );
+
+            row.setAwayTeamId(
+                    rs.getInt("away_team_id")
             );
 
             row.setHomeTeam(
@@ -324,12 +381,37 @@ public class FixtureRepository {
             FixtureRow row =
                     new FixtureRow();
 
+            String rawDate =
+                    rs.getString("fixture_date");
+
+            OffsetDateTime fixtureDate =
+                    OffsetDateTime.parse(rawDate);
+
+            String displayDate =
+                    fixtureDate
+                            .atZoneSameInstant(
+                                    ZoneId.of("Europe/London")
+                            )
+                            .format(
+                                    DateTimeFormatter.ofPattern(
+                                            "EEE dd MMM yyyy HH:mm"
+                                    )
+                            );
+
             row.setFixtureDate(
-                    rs.getString("fixture_date")
+                    displayDate
             );
 
             row.setRound(
                     rs.getString("round")
+            );
+
+            row.setHomeTeamId(
+                    rs.getInt("home_team_id")
+            );
+
+            row.setAwayTeamId(
+                    rs.getInt("away_team_id")
             );
 
             row.setHomeTeam(
@@ -410,9 +492,27 @@ public class FixtureRepository {
             FixtureRow row =
                     new FixtureRow();
 
+            String rawDate =
+                    rs.getString("fixture_date");
+
+            OffsetDateTime fixtureDate =
+                    OffsetDateTime.parse(rawDate);
+
+            String displayDate =
+                    fixtureDate
+                            .atZoneSameInstant(
+                                    ZoneId.of("Europe/London")
+                            )
+                            .format(
+                                    DateTimeFormatter.ofPattern(
+                                            "EEE dd MMM yyyy HH:mm"
+                                    )
+                            );
+
             row.setFixtureDate(
-                    rs.getString("fixture_date")
+                    displayDate
             );
+
             row.setHomeTeamId(
                     rs.getInt("home_team_id")
             );

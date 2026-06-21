@@ -1,4 +1,4 @@
-package com.example.footballapp
+package com.example.footballapp.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,20 +11,44 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.footballapp.repositories.TeamsRepository
+import com.example.footballapp.AppState
+import com.example.footballapp.repositories.TeamsApiRepository
+import com.example.footballapp.model.TeamRow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun TeamsScreen(
     onTeamClick: (String) -> Unit
 ) {
 
-    val repository =
-        TeamsRepository()
+    var teams by remember {
+        mutableStateOf<List<TeamRow>>(
+            emptyList()
+        )
+    }
 
-    val teams =
-        repository.getTeams()
+    LaunchedEffect(Unit) {
+
+        teams =
+            withContext(
+                Dispatchers.IO
+            ) {
+
+                TeamsApiRepository()
+                    .getTeams(
+                        AppState.selectedLeagueId,
+                        AppState.selectedSeason
+                    )
+            }
+    }
 
     Column(
         modifier = Modifier
@@ -32,17 +56,13 @@ fun TeamsScreen(
             .padding(16.dp)
     ) {
 
-//        Text(
-//            text = "Teams",
-//            style = MaterialTheme.typography.headlineMedium
-//        )
-
         Text(
             text =
-                AppState.selectedLeagueName,
+                "${AppState.selectedLeagueName} Teams",
             style =
                 MaterialTheme.typography.headlineMedium
         )
+
         Spacer(
             modifier =
                 Modifier.height(16.dp)
@@ -54,15 +74,17 @@ fun TeamsScreen(
 
                 Button(
                     onClick = {
+
                         onTeamClick(
                             team.teamName
                         )
                     },
-                    modifier = Modifier.padding(8.dp)
+                    modifier =
+                        Modifier.padding(8.dp)
                 ) {
 
                     Text(
-                        text = team.teamName
+                        team.teamName
                     )
                 }
             }

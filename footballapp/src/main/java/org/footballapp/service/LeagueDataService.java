@@ -7,6 +7,7 @@ import org.footballapp.databaserepository.TeamRepository;
 
 /**Import models*/
 import org.footballapp.model.fixtures.FixtureRow;
+import org.footballapp.model.fixtures.FixtureTeam;
 import org.footballapp.model.standings.Standing;
 import org.footballapp.model.teamdetails.TeamDetails;
 import org.footballapp.model.teams.Team;

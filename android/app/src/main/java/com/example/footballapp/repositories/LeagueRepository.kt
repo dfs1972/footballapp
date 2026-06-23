@@ -1,6 +1,6 @@
 package com.example.footballapp.repositories
 
-import com.example.footballapp.model.LeagueApiRepository
+import com.example.footballapp.repositories.LeagueApiRepository
 
 class LeagueRepository {
 

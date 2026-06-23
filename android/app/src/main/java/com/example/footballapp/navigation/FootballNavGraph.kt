@@ -9,6 +9,7 @@ import com.example.footballapp.AppState
 import com.example.footballapp.screens.FixturesScreen
 import com.example.footballapp.screens.LeagueSelectionScreen
 import com.example.footballapp.MainScreen
+import com.example.footballapp.screens.FixtureDetailsScreen
 import com.example.footballapp.screens.TeamFixturesScreen
 import com.example.footballapp.screens.LeagueOverviewScreen
 import com.example.footballapp.screens.LeagueTableScreen
@@ -87,55 +88,84 @@ fun FootballNavGraph() {
             ) {
 
                 LeagueTableScreen(
-                    onTeamClick = { teamName ->
+                    onTeamClick = { teamId ->
 
                         navController.navigate(
-                            "team/$teamName"
+                            "team/$teamId"
                         )
                     }
                 )
             }
 
             /** TeamScreen */
-            composable(
-                Screen.Team.route
-            ) { backStackEntry ->
+        composable(
+            Screen.Team.route
+        ) { backStackEntry ->
 
-                val teamName =
-                    backStackEntry.arguments
-                        ?.getString("teamName")
-                        ?: ""
+            val teamId =
+                backStackEntry.arguments
+                    ?.getString("teamId")
+                    ?.toIntOrNull()
+                    ?: 0
+            println(
+                "Team route teamId = $teamId"
+            )
 
-                TeamScreen(
-                    teamName = teamName,
+            TeamScreen(
+                teamId = teamId,
 
-                    onFixturesClick = {
+                onFixturesClick = { teamName ->
 
-                        navController.navigate(
-                            "team_fixtures/$it"
-                        )
-                    }
-                )
-            }
+                    navController.navigate(
+                        "team_fixtures/$teamName"
+                    )
+                }
+            )
+        }
 
             /** FixturesScreen */
             composable(
                 Screen.Fixtures.route
             ) {
 
-                FixturesScreen()
+                FixturesScreen(
+
+                    onFixtureClick = { fixture ->
+
+                        navController.navigate(
+                            "fixture_details/${fixture.fixtureId}"
+                        )
+                    }
+                )
+            }
+
+            /** FixtureDetailsScreen */
+            composable(
+                Screen.FixtureDetails.route
+            ) { backStackEntry ->
+
+                val fixtureId =
+                    backStackEntry.arguments
+                        ?.getString("fixtureId")
+                        ?.toLongOrNull()
+                        ?: 0L
+
+                FixtureDetailsScreen(
+                    fixtureId = fixtureId
+                )
             }
 
             /** TeamsScreen */
             composable(
-                Screen.Teams.route
-            )   {
-
+                Screen.Teams.route)
+            {
                 TeamsScreen(
-                    onTeamClick = { teamName ->
-
+                    onTeamClick = { teamId ->
+                        println(
+                            "NavGraph received teamId = $teamId"
+                        )
                         navController.navigate(
-                        "team/$teamName"
+                        "team/$teamId"
                     )
                 }
             )

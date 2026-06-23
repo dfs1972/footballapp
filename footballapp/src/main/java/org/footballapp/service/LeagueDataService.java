@@ -31,7 +31,9 @@ public class LeagueDataService {
         this.fixtureRepository = fixtureRepository;
     }
 
-    /** Get team by ID method*/
+    /**
+     *  Get team by ID method
+     */
     public Team getTeam(
             int teamId
     ) throws Exception {
@@ -40,7 +42,9 @@ public class LeagueDataService {
                 teamId
         );
     }
-    /** Get league table by season */
+    /**
+     * Get league table by season
+     */
     public List<LeagueTableRow> getLeagueTable(
             int leagueId,
             int season
@@ -51,7 +55,9 @@ public class LeagueDataService {
                 season
         );
     }
-    /** Get a particular team's fixtures for that season. */
+    /**
+     *  Get a particular team's fixtures for that season.
+     */
     public List<FixtureRow> getLeagueFixtures(
             int leagueId,
             int season
@@ -73,14 +79,18 @@ public class LeagueDataService {
                 season
         );
     }
-    /** Get a list of a team's fixtures for a season. */
+    /**
+     * Get a list of a team's fixtures for a season.
+     */
     public List<FixtureRow> getFixturesByTeam(
             int teamId
     ) throws Exception {
 
         return fixtureRepository.getFixturesByTeam(teamId);
     }
-    /** Get a list of a team's recent results. */
+    /**
+     * Get a list of a team's recent results.
+     */
     public List<FixtureRow> getRecentResults(
             int leagueId,
             int season,
@@ -93,7 +103,9 @@ public class LeagueDataService {
                 limit
         );
     }
-    /** Get team's form from last 5 matches. */
+    /**
+     * Get team's form from last 5 matches.
+     */
     public String getTeamForm(
             int teamId
     ) throws Exception {
@@ -142,7 +154,8 @@ public class LeagueDataService {
     }
 
     /**
-     * Returns a team's league standing */
+     * Returns a team's league standing
+     */
     public TeamDetails getTeamDetails(
             int leagueId,
             int season,
@@ -159,6 +172,11 @@ public class LeagueDataService {
                 );
 
         details.setTeam(team);
+        System.out.println(
+                "leagueId=" + leagueId +
+                        ", season=" + season +
+                        ", teamId=" + teamId
+        );
 
         LeagueTableRow standing =
                 standingRepository
@@ -189,6 +207,19 @@ public class LeagueDataService {
         );
 
         return details;
+    }
+
+    /**
+     *  Get a single fixture from league.
+     */
+    public FixtureRow getFixtureDetails(
+            long fixtureId
+    ) throws Exception {
+
+        return fixtureRepository
+                .getFixtureDetails(
+                        fixtureId
+                );
     }
 }
 

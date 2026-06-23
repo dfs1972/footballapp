@@ -154,7 +154,13 @@ public class StandingRepository {
                         """
                         SELECT
                             s.position,
+                            s.team_id,
                             t.name,
+                            s.played,
+                            s.wins,
+                            s.draws,
+                            s.losses,
+                            s.goal_difference,
                             s.points
                         FROM standings s
                         JOIN teams t
@@ -183,8 +189,32 @@ public class StandingRepository {
                     rs.getInt("position")
             );
 
+            row.setTeamId(
+                    rs.getInt("team_id")
+            );
+
             row.setTeamName(
                     rs.getString("name")
+            );
+
+            row.setPlayed(
+                    rs.getInt("played")
+            );
+
+            row.setWins(
+                    rs.getInt("wins")
+            );
+
+            row.setDraws(
+                    rs.getInt("draws")
+            );
+
+            row.setLosses(
+                    rs.getInt("losses")
+            );
+
+            row.setGoalDifference(
+                    rs.getInt("goal_difference")
             );
 
             row.setPoints(

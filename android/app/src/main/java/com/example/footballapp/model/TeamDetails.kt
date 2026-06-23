@@ -1,8 +1,14 @@
 package com.example.footballapp.model
 
 data class TeamDetails(
-    val teamName: String,
-    val position: Int,
+
+    val team: Team,
+
+    val leaguePosition: Int,
+
     val points: Int,
-    val form: String
+
+    val form: String,
+
+    val recentFixtures: List<FixtureRow>
 )

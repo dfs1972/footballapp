@@ -7,6 +7,7 @@ import org.footballapp.model.fixtures.FixtureRow;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.OffsetDateTime;
@@ -119,6 +120,7 @@ public class FixtureRepository {
                 conn.prepareStatement(
                         """
                         SELECT
+                            f.fixture_id,
                             f.fixture_date,
                             f.round,
                             f.home_team_id,
@@ -157,30 +159,20 @@ public class FixtureRepository {
             FixtureRow row =
                     new FixtureRow();
 
-            String rawDate =
-                    rs.getString("fixture_date");
-
-            OffsetDateTime fixtureDate =
-                    OffsetDateTime.parse(rawDate);
-
-            String displayDate =
-                    fixtureDate
-                            .atZoneSameInstant(
-                                    ZoneId.of("Europe/London")
-                            )
-                            .format(
-                                    DateTimeFormatter.ofPattern(
-                                            "EEE dd MMM yyyy HH:mm"
-                                    )
-                            );
-
-            row.setFixtureDate(
-                    displayDate
+            populateFixtureDateTime(
+                    row,
+                    rs.getString(
+                            "fixture_date"
+                    )
             );
 
-            row.setRound(
-                    rs.getString("round")
+            row.setFixtureId(
+                    rs.getLong("fixture_id")
             );
+
+//            row.setRound(
+//                    rs.getString("round")
+//            );
 
             row.setHomeTeamId(
                     rs.getInt("home_team_id")
@@ -229,6 +221,7 @@ public class FixtureRepository {
                 conn.prepareStatement(
                         """
                         SELECT
+                            f.fixture_id,
                             f.fixture_date,
                             f.round,
                             f.home_team_id,
@@ -267,30 +260,18 @@ public class FixtureRepository {
             FixtureRow row =
                     new FixtureRow();
 
-            String rawDate =
-                    rs.getString("fixture_date");
-
-            OffsetDateTime fixtureDate =
-                    OffsetDateTime.parse(rawDate);
-
-            String displayDate =
-                    fixtureDate
-                            .atZoneSameInstant(
-                                    ZoneId.of("Europe/London")
-                            )
-                            .format(
-                                    DateTimeFormatter.ofPattern(
-                                            "EEE dd MMM yyyy HH:mm"
-                                    )
-                            );
-
-            row.setFixtureDate(
-                    displayDate
+            populateFixtureDateTime(
+                    row,
+                    rs.getString("fixture_date")
             );
 
-            row.setRound(
-                    rs.getString("round")
+            row.setFixtureId(
+                    rs.getLong("fixture_id")
             );
+
+//            row.setRound(
+//                    rs.getString("round")
+//            );
 
             row.setHomeTeamId(
                     rs.getInt("home_team_id")
@@ -342,6 +323,7 @@ public class FixtureRepository {
                 conn.prepareStatement(
                         """
                         SELECT
+                            f.fixture_id,
                             f.fixture_date,
                             f.round,
                             home.name AS home_team,
@@ -381,30 +363,18 @@ public class FixtureRepository {
             FixtureRow row =
                     new FixtureRow();
 
-            String rawDate =
-                    rs.getString("fixture_date");
-
-            OffsetDateTime fixtureDate =
-                    OffsetDateTime.parse(rawDate);
-
-            String displayDate =
-                    fixtureDate
-                            .atZoneSameInstant(
-                                    ZoneId.of("Europe/London")
-                            )
-                            .format(
-                                    DateTimeFormatter.ofPattern(
-                                            "EEE dd MMM yyyy HH:mm"
-                                    )
-                            );
-
-            row.setFixtureDate(
-                    displayDate
+            populateFixtureDateTime(
+                    row,
+                    rs.getString("fixture_date")
             );
 
-            row.setRound(
-                    rs.getString("round")
+            row.setFixtureId(
+                    rs.getLong("fixture_id")
             );
+
+//            row.setRound(
+//                    rs.getString("round")
+//            );
 
             row.setHomeTeamId(
                     rs.getInt("home_team_id")
@@ -453,26 +423,27 @@ public class FixtureRepository {
                         """
               
                                 SELECT
-                  f.fixture_date,
-                  home.name AS home_team,
-                  away.name AS away_team,
-                  f.home_team_id,
-                  f.away_team_id,
-                  f.home_goals,
-                  f.away_goals
+                                    f.fixture_id,
+                                    f.fixture_date,
+                                    home.name AS home_team,
+                                    away.name AS away_team,
+                                    f.home_team_id,
+                                    f.away_team_id,
+                                    f.home_goals,
+                                    f.away_goals
               
-              FROM fixtures f
+                                FROM fixtures f
               
-              JOIN teams home
-                  ON f.home_team_id = home.id
+                                JOIN teams home
+                                ON f.home_team_id = home.id
               
-              JOIN teams away
-                  ON f.away_team_id = away.id
+                                JOIN teams away
+                                ON f.away_team_id = away.id
               
-              WHERE f.home_team_id = ?
-                 OR f.away_team_id = ?
+                                WHERE f.home_team_id = ?
+                                OR f.away_team_id = ?
               
-              ORDER BY f.fixture_date DESC
+                                ORDER BY f.fixture_date DESC
               
               LIMIT ?
                     """
@@ -492,25 +463,13 @@ public class FixtureRepository {
             FixtureRow row =
                     new FixtureRow();
 
-            String rawDate =
-                    rs.getString("fixture_date");
+            populateFixtureDateTime(
+                    row,
+                    rs.getString("fixture_date")
+            );
 
-            OffsetDateTime fixtureDate =
-                    OffsetDateTime.parse(rawDate);
-
-            String displayDate =
-                    fixtureDate
-                            .atZoneSameInstant(
-                                    ZoneId.of("Europe/London")
-                            )
-                            .format(
-                                    DateTimeFormatter.ofPattern(
-                                            "EEE dd MMM yyyy HH:mm"
-                                    )
-                            );
-
-            row.setFixtureDate(
-                    displayDate
+            row.setFixtureId(
+                    rs.getLong("fixture_id")
             );
 
             row.setHomeTeamId(
@@ -542,5 +501,136 @@ public class FixtureRepository {
         conn.close();
 
         return results;
+    }
+
+    public FixtureRow getFixtureDetails(
+            long fixtureId
+    ) throws Exception {
+
+        Connection conn =
+                DatabaseConnection.connect();
+
+        PreparedStatement stmt =
+                conn.prepareStatement(
+                        """
+                        SELECT
+                            f.fixture_id,
+                            f.fixture_date,
+                            f.round,
+                            f.home_team_id,
+                            f.away_team_id,
+                            home.name AS home_team,
+                            away.name AS away_team,
+                            f.home_goals,
+                            f.away_goals
+    
+                        FROM fixtures f
+    
+                        JOIN teams home
+                            ON f.home_team_id = home.id
+    
+                        JOIN teams away
+                            ON f.away_team_id = away.id
+    
+                        WHERE f.fixture_id = ?
+                        """
+                );
+
+        stmt.setLong(
+                1,
+                fixtureId
+        );
+
+        ResultSet rs =
+                stmt.executeQuery();
+
+        FixtureRow row =
+                new FixtureRow();
+
+        if (rs.next()) {
+
+            row.setFixtureId(
+                    rs.getLong("fixture_id")
+            );
+
+            populateFixtureDateTime(
+                    row,
+                    rs.getString(
+                            "fixture_date"
+                    )
+            );
+
+//            row.setRound(
+//                    rs.getString("round")
+//            );
+
+            row.setHomeTeamId(
+                    rs.getInt("home_team_id")
+            );
+
+            row.setAwayTeamId(
+                    rs.getInt("away_team_id")
+            );
+
+            row.setHomeTeam(
+                    rs.getString("home_team")
+            );
+
+            row.setAwayTeam(
+                    rs.getString("away_team")
+            );
+
+            row.setHomeGoals(
+                    rs.getInt("home_goals")
+            );
+
+            row.setAwayGoals(
+                    rs.getInt("away_goals")
+            );
+        }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+
+        return row;
+    }
+
+    /**
+     * Date & Time helper method for UK style format
+     */
+    private void populateFixtureDateTime(
+            FixtureRow row,
+            String rawDate
+    ) {
+
+        OffsetDateTime fixtureDate =
+                OffsetDateTime.parse(
+                        rawDate
+                );
+
+        ZonedDateTime ukDateTime =
+                fixtureDate
+                        .atZoneSameInstant(
+                                ZoneId.of(
+                                        "Europe/London"
+                                )
+                        );
+
+        row.setFixtureDate(
+                ukDateTime.format(
+                        DateTimeFormatter.ofPattern(
+                                "EEE dd MMM yyyy"
+                        )
+                )
+        );
+
+        row.setFixtureTime(
+                ukDateTime.format(
+                        DateTimeFormatter.ofPattern(
+                                "HH:mm"
+                        )
+                )
+        );
     }
 }

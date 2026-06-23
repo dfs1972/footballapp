@@ -14,7 +14,7 @@ sealed class Screen(
         Screen("league_table")
 
     object Team :
-        Screen("team/{teamName}")
+        Screen("team/{teamId}")
 
     object Fixtures :
         Screen("fixtures")
@@ -27,6 +27,11 @@ sealed class Screen(
 
     object LeagueOverview :
         Screen("league_overview")
+
+    object FixtureDetails :
+        Screen(
+            "fixture_details/{fixtureId}"
+        )
 
 
 }

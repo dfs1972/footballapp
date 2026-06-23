@@ -18,15 +18,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.footballapp.AppState
-import com.example.footballapp.repositories.TeamsApiRepository
-import com.example.footballapp.model.TeamRow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+import com.example.footballapp.AppState
+import com.example.footballapp.repositories.TeamsApiRepository
+import com.example.footballapp.model.TeamRow
+
+
 @Composable
 fun TeamsScreen(
-    onTeamClick: (String) -> Unit
+    onTeamClick: (Int) -> Unit
 ) {
 
     var teams by remember {
@@ -74,9 +76,12 @@ fun TeamsScreen(
 
                 Button(
                     onClick = {
+                        println(
+                            "Clicked teamId = ${team.id}"
+                        )
 
                         onTeamClick(
-                            team.teamName
+                            team.id
                         )
                     },
                     modifier =
@@ -84,7 +89,7 @@ fun TeamsScreen(
                 ) {
 
                     Text(
-                        team.teamName
+                        team.name
                     )
                 }
             }

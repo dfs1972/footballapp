@@ -8,65 +8,107 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.footballapp.repositories.TeamRepository
+import com.example.footballapp.model.TeamDetails
+import com.example.footballapp.repositories.TeamDetailsApiRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun TeamScreen(
-    teamName: String,
+    teamId: Int,
     onFixturesClick: (String) -> Unit
 ) {
 
-    val repository =
-        TeamRepository()
-
-    val team =
-        repository.getTeamDetails(
-            teamName
+    var teamDetails by remember {
+        mutableStateOf<TeamDetails?>(
+            null
         )
+    }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
+    LaunchedEffect(
+        teamId
     ) {
 
-        Text(
-            text = team.teamName,
-            style =
-                MaterialTheme.typography.headlineMedium
-        )
-        Spacer(
-            modifier =
-                Modifier.height(16.dp)
-        )
+        teamDetails =
+            withContext(
+                Dispatchers.IO
+            ) {
 
-        Text(
-            text =
-                "Position: ${team.position}"
-        )
+                TeamDetailsApiRepository()
+                    .getTeamDetails(
+                        teamId
+                    )
+            }
+    }
 
-        Text(
-            text =
-                "Points: ${team.points}"
-        )
+    teamDetails?.let { team ->
 
-        Text(
-            text =
-                "Form: ${team.form}"
-        )
-
-        Button(
-            onClick = {
-                onFixturesClick(
-                    team.teamName
-                )
-            },
-            modifier = Modifier.padding(top = 16.dp)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
         ) {
-            Text("Recent Fixtures")
+
+            Text(
+                text =
+                    team.team.name,
+                style =
+                    MaterialTheme.typography.headlineMedium
+            )
+
+            Spacer(
+                modifier =
+                    Modifier.height(16.dp)
+            )
+
+            Text(
+                text =
+                    "Position: ${team.leaguePosition}"
+            )
+
+            Text(
+                text =
+                    "Points: ${team.points}"
+            )
+
+            Text(
+                text =
+                    "Form: ${team.form}"
+            )
+
+            Spacer(
+                modifier =
+                    Modifier.height(16.dp)
+            )
+
+            Text(
+                text =
+                    "Founded: ${team.team.founded}"
+            )
+
+            Text(
+                text =
+                    "Country: ${team.team.country}"
+            )
+
+            Button(
+                onClick = {
+
+                    onFixturesClick(
+                        team.team.name
+                    )
+                },
+                modifier =
+                    Modifier.padding(top = 16.dp)
+            ) {
+
+                Text(
+                    "Recent Fixtures"
+                )
+            }
         }
     }
 }

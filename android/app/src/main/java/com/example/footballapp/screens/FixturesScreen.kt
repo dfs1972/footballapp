@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -19,7 +20,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 @Composable
-fun FixturesScreen() {
+fun FixturesScreen(
+    onFixtureClick: (
+        FixtureRow
+    ) -> Unit
+)
+{
 
     var fixtures by remember {
         mutableStateOf<List<FixtureRow>>(
@@ -66,23 +72,32 @@ fun FixturesScreen() {
 
                 Text(
                     text =
-                        fixture.fixtureDate,
+                        "${fixture.fixtureDate} ${fixture.fixtureTime}",
                     style =
                         MaterialTheme.typography.titleMedium
                 )
 
-                Text(
-                    text =
+                Button(
+                    onClick = {
+
+                        onFixtureClick(
+                            fixture
+                        )
+                    }
+                )
+                {
+                    Text(
                         "${fixture.homeTeam} " +
                                 "${fixture.homeGoals} - " +
                                 "${fixture.awayGoals} " +
                                 fixture.awayTeam
-                )
+                    )
+                }
 
-                Text(
-                    text =
-                        fixture.round
-                )
+//                Text(
+//                    text =
+//                        fixture.round
+//                )
 
                 Spacer(
                     modifier =

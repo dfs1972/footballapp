@@ -2,23 +2,30 @@ package org.footballapp.model.fixtures;
 
 public class FixtureRow {
 
+    private long fixtureId;
     private String fixtureDate;
+    private String fixtureTime;
     private int homeTeamId;
     private int awayTeamId;
     private String homeTeam;
     private String awayTeam;
     private int homeGoals;
     private int awayGoals;
-    private String round;
+    //private String round;
 
     /**Getters and Setters*/
-    public String getFixtureDate() {
-        return fixtureDate;
-    }
+    public long getFixtureId() {return fixtureId;}
+
+    public void setFixtureId(long fixtureId) {this.fixtureId = fixtureId;}
+
+    public String getFixtureDate() {return fixtureDate;}
 
     public void setFixtureDate(String fixtureDate) {
         this.fixtureDate = fixtureDate;
     }
+
+    public String getFixtureTime() {return fixtureTime;}
+    public void setFixtureTime(String fixtureTime) {this.fixtureTime = fixtureTime;}
 
     public int getHomeTeamId() {return homeTeamId;}
 
@@ -60,11 +67,11 @@ public class FixtureRow {
         this.awayGoals = awayGoals;
     }
 
-    public String getRound() {
-        return round;
-    }
-
-    public void setRound(String round) {
-        this.round = round;
-    }
+//    public String getRound() {
+//        return round;
+//    }
+//
+//    public void setRound(String round) {
+//        this.round = round;
+//    }
 }

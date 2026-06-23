@@ -7,12 +7,11 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
-class FixturesApiRepository {
+class FixtureDetailsApiRepository {
 
-    fun getFixtures(
-        leagueId: Int,
-        season: Int
-    ): List<FixtureRow> {
+    fun getFixture(
+        fixtureId: Long
+    ): FixtureRow {
 
         val client =
             OkHttpClient()
@@ -20,9 +19,8 @@ class FixturesApiRepository {
         val request =
             Request.Builder()
                 .url(
-                    "${ApiConfig.BASE_URL}/fixtures" +
-                            "?leagueId=$leagueId" +
-                            "&season=$season"
+                    "${ApiConfig.BASE_URL}/fixture" +
+                            "?fixtureId=$fixtureId"
                 )
                 .build()
 
@@ -31,12 +29,12 @@ class FixturesApiRepository {
                 .execute()
                 .body
                 ?.string()
-                ?: "[]"
+                ?: "{}"
 
         val mapper =
             jacksonObjectMapper()
-        System.out.println(json)
 
+        System.out.println(json)
         return mapper.readValue(json)
     }
 }

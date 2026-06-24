@@ -3,6 +3,7 @@ package com.example.footballapp.repositories
 import com.example.footballapp.ApiConfig
 import com.example.footballapp.model.LeagueUk
 import com.example.footballapp.model.TableRow
+import com.example.footballapp.model.LeagueOverview
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import okhttp3.OkHttpClient
@@ -59,5 +60,35 @@ class LeagueApiRepository {
             jacksonObjectMapper()
 
         return mapper.readValue(json)
-    }
+    } // End of getLeagues()
+
+    fun getLeagueOverview(
+        leagueId: Int,
+        season: Int
+    ): LeagueOverview {
+
+        val client =
+            OkHttpClient()
+
+        val request =
+            Request.Builder()
+                .url(
+                    "${ApiConfig.BASE_URL}/leagueOverview" +
+                            "?leagueId=$leagueId" +
+                            "&season=$season"
+                )
+                .build()
+
+        val json =
+            client.newCall(request)
+                .execute()
+                .body
+                ?.string()
+                ?: "{}"
+
+        val mapper =
+            jacksonObjectMapper()
+
+        return mapper.readValue(json)
+    } // End of getLeagueOverview()
 }

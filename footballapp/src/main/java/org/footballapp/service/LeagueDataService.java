@@ -14,6 +14,7 @@ import org.footballapp.model.standings.Standing;
 import org.footballapp.model.teamdetails.TeamDetails;
 import org.footballapp.model.teams.Team;
 import org.footballapp.model.standings.LeagueTableRow;
+import org.footballapp.model.league.LeagueOverview;
 
 import java.util.List;
 
@@ -248,7 +249,57 @@ public class LeagueDataService {
                 .getFixtureDetails(
                         fixtureId
                 );
-    }
+    } // End of getFixturesDetails
+
+    /**
+     * Get League Overview
+     */
+    public LeagueOverview getLeagueOverview(
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        LeagueOverview overview =
+                new LeagueOverview();
+
+        LeagueUk league =
+                leagueUkRepository
+                        .getLeagueById(
+                                leagueId
+                        );
+
+        overview.setLeagueId(
+                leagueId
+        );
+
+        overview.setLeagueName(
+                league.getName()
+        );
+
+        overview.setSeason(
+                season
+        );
+
+        overview.setTeamCount(
+                teamRepository
+                        .getTeamsForLeague(
+                                leagueId,
+                                season
+                        )
+                        .size()
+        );
+
+        overview.setFixtureCount(
+                fixtureRepository
+                        .getLeagueFixtures(
+                                leagueId,
+                                season
+                        )
+                        .size()
+        );
+
+        return overview;
+    } // End of getLeagueOverview()
 }
 
 

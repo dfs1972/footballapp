@@ -193,7 +193,7 @@ fun FootballNavGraph() {
 
             LeagueOverviewScreen(
 
-                onTableClick = {
+                onLeagueTableClick = {
                     navController.navigate(
                         Screen.LeagueTable.route
                     )

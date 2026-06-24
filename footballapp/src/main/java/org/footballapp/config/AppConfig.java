@@ -16,6 +16,7 @@ public class AppConfig {
     /**
      * Database repositories
      */
+    private final LeagueUkRepository leagueUkRepository;
     private final TeamRepository teamRepository;
     private final VenueRepository venueRepository;
     //private final LeagueRepository leagueRepository;
@@ -28,7 +29,7 @@ public class AppConfig {
     private final FixtureImportService fixtureImportService;
 
     private final LeagueImportService leagueImportService;
-
+    private final LeagueUkImportService leagueUkImportService;
     private final LeagueDataService leagueDataService;
 
     public AppConfig() {
@@ -48,6 +49,9 @@ public class AppConfig {
         /**
          * Repository Layer
          */
+        leagueUkRepository =
+                new LeagueUkRepository();
+
         teamRepository =
                 new TeamRepository();
 
@@ -89,6 +93,12 @@ public class AppConfig {
                         fixtureRepository
                 );
 
+        leagueUkImportService =
+                new LeagueUkImportService(
+                        apiFootballService,
+                        leagueUkRepository
+                );
+
         leagueImportService =
                 new LeagueImportService(
                         teamImportService,
@@ -101,12 +111,16 @@ public class AppConfig {
          */
         leagueDataService =
                 new LeagueDataService(
+                        leagueUkRepository,
                         teamRepository,
                         standingRepository,
                         fixtureRepository
                 );
-
     }
+    public ApiFootballService getApiFootballService() {return apiFootballService;}
+
+    public LeagueUkImportService getLeagueUkImportService() {return leagueUkImportService;}
+
     public LeagueImportService getLeagueImportService() {
         return leagueImportService;
     }
@@ -114,4 +128,7 @@ public class AppConfig {
     public LeagueDataService getLeagueDataService() {
         return leagueDataService;
     }
+
+    public StandingsImportService getStandingsImportService() {return standingsImportService;}
+
 }// End of AppConfig Class.

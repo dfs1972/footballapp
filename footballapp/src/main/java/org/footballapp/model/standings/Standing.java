@@ -27,11 +27,7 @@ public class Standing {
         return team;
     }
 
-    public void setTeam(
-            StandingTeam team
-    ) {
-        this.team = team;
-    }
+    public void setTeam(StandingTeam team) {this.team = team;}
 
     public int getPoints() {
         return points;
@@ -53,9 +49,5 @@ public class Standing {
         return all;
     }
 
-    public void setAll(
-            StandingRecord all
-    ) {
-        this.all = all;
-    }
+    public void setAll(StandingRecord all) {this.all = all;}
 }

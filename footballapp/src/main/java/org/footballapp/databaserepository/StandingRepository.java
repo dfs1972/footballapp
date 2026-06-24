@@ -134,6 +134,12 @@ public class StandingRepository {
                         .getAgainst()
         );
 
+        System.out.println(
+                standing.getTeam().getId()
+                        + " Played="
+                        + standing.getAll().getPlayed()
+        );
+
         stmt.executeUpdate();
 
         stmt.close();

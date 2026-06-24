@@ -1,6 +1,7 @@
 package com.example.footballapp.repositories
 
 import com.example.footballapp.ApiConfig
+import com.example.footballapp.model.LeagueUk
 import com.example.footballapp.model.TableRow
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -17,7 +18,33 @@ class LeagueApiRepository {
         val request =
             Request.Builder()
                 .url(
-                    "${ApiConfig.BASE_URL}/leagueTable?leagueId=179&season=2024"
+                    "${ApiConfig.BASE_URL}/leagueTable" +
+                            "?leagueId=$leagueId" +
+                            "&season=$season"                )
+                .build()
+
+        val json =
+            client.newCall(request)
+                .execute()
+                .body
+                ?.string()
+                ?: "[]"
+
+        val mapper =
+            jacksonObjectMapper()
+
+        return mapper.readValue(json)
+    }
+
+    fun getLeagues(): List<LeagueUk> {
+
+        val client =
+            OkHttpClient()
+
+        val request =
+            Request.Builder()
+                .url(
+                    "${ApiConfig.BASE_URL}/leagues"
                 )
                 .build()
 

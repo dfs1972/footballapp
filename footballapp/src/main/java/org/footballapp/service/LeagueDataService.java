@@ -2,12 +2,14 @@ package org.footballapp.service;
 
 /**Import repositories*/
 import org.footballapp.databaserepository.FixtureRepository;
+import org.footballapp.databaserepository.LeagueUkRepository;
 import org.footballapp.databaserepository.StandingRepository;
 import org.footballapp.databaserepository.TeamRepository;
 
 /**Import models*/
 import org.footballapp.model.fixtures.FixtureRow;
 import org.footballapp.model.fixtures.FixtureTeam;
+import org.footballapp.model.league.LeagueUk;
 import org.footballapp.model.standings.Standing;
 import org.footballapp.model.teamdetails.TeamDetails;
 import org.footballapp.model.teams.Team;
@@ -17,18 +19,44 @@ import java.util.List;
 
 public class LeagueDataService {
 
+    private final LeagueUkRepository leagueUkRepository;
     private final TeamRepository teamRepository;
     private final StandingRepository standingRepository;
     private final FixtureRepository fixtureRepository;
 
+    /**
+     * Contructors
+     */
     public LeagueDataService(
+            LeagueUkRepository leagueUkRepository,
             TeamRepository teamRepository,
             StandingRepository standingRepository,
             FixtureRepository fixtureRepository
     ) {
+        this.leagueUkRepository = leagueUkRepository;
         this.teamRepository = teamRepository;
         this.standingRepository = standingRepository;
         this.fixtureRepository = fixtureRepository;
+    }
+
+    /**
+     * Get Leagues
+     */
+    public List<LeagueUk> getLeagues()
+            throws Exception {
+
+        return leagueUkRepository
+                .getLeagues();
+    }
+
+    /**
+     * Get Enabled Leagues
+     */
+    public List<LeagueUk> getEnabledLeagues()
+            throws Exception {
+
+        return leagueUkRepository
+                .getEnabledLeagues();
     }
 
     /**

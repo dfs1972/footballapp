@@ -36,9 +36,41 @@ public class StandingsImportService {
                 response.getResponse()
                         .get(0)
                         .getLeague();
+        /*
+         * Scottish Premiership split league handling.
+         *
+         * Group 0 = Phase 1 (33 games)
+         * Group 1 = Championship Group (positions 1-6)
+         * Group 2 = Relegation Group (positions 7-12)
+         *
+         * Import final standings from Groups 1 and 2
+         * and renumber positions 1-12.
+         */
 
+        int finalPosition = 1;
+
+        // Championship Group (positions 1-6)
         for (Standing standing :
-                league.getStandings().get(0)) {
+                league.getStandings().get(1)) {
+
+            standing.setRank(
+                    finalPosition++
+            );
+
+            standingRepository.saveStanding(
+                    league.getId(),
+                    league.getSeason(),
+                    standing
+            );
+        }
+
+        // Relegation Group (positions 7-12)
+        for (Standing standing :
+                league.getStandings().get(2)) {
+
+            standing.setRank(
+                    finalPosition++
+            );
 
             standingRepository.saveStanding(
                     league.getId(),

@@ -11,20 +11,45 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.footballapp.repositories.LeagueSelectionRepository
+import com.example.footballapp.model.LeagueUk
+import com.example.footballapp.repositories.LeagueApiRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun LeagueSelectionScreen(
     onLeagueClick: (Int, String) -> Unit
 ) {
 
-    val repository =
-        LeagueSelectionRepository()
+//    val repository =
+//        LeagueSelectionRepository()
+//
+//    val leagues =
+//        repository.getLeagues()
+    var leagues by remember {
+        mutableStateOf<List<LeagueUk>>(
+            emptyList()
+        )
+    }
 
-    val leagues =
-        repository.getLeagues()
+    LaunchedEffect(Unit) {
+
+        leagues =
+            withContext(
+                Dispatchers.IO
+            ) {
+
+                LeagueApiRepository()
+                    .getLeagues()
+            }
+    }
 
     Column(
         modifier = Modifier
@@ -49,14 +74,14 @@ fun LeagueSelectionScreen(
                     onClick = {
                         onLeagueClick(
                             league.leagueId,
-                            league.leagueName
+                            league.name
                         )
                     },
                     modifier = Modifier.padding(8.dp)
                 ) {
 
                     Text(
-                        league.leagueName
+                        league.name
                     )
                 }
             }

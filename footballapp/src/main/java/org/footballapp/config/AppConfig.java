@@ -34,6 +34,7 @@ public class AppConfig {
 
     private final PlayerRepository playerRepository;
     private final PlayerImportService playerImportService;
+    private final PlayerStatisticsRepository playerStatisticsRepository;
 
     public AppConfig() {
 
@@ -55,6 +56,9 @@ public class AppConfig {
 
         playerRepository =
                 new PlayerRepository();
+
+        playerStatisticsRepository =
+                new PlayerStatisticsRepository();
 
         leagueUkRepository =
                 new LeagueUkRepository();
@@ -84,7 +88,8 @@ public class AppConfig {
         playerImportService =
                 new PlayerImportService(
                         apiFootballService,
-                        playerRepository
+                        playerRepository,
+                        playerStatisticsRepository
                 );
 
         teamImportService =

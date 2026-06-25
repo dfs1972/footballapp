@@ -14,7 +14,15 @@ sealed class Screen(
         Screen("league_table")
 
     object Team :
-        Screen("team/{teamId}")
+        Screen("team/{teamId}") {
+
+        fun createRoute(
+            teamId: Int
+        ): String {
+
+            return "team/$teamId"
+        }
+    }
 
     object Fixtures :
         Screen("fixtures")
@@ -23,15 +31,29 @@ sealed class Screen(
         Screen("teams")
 
     object TeamFixtures :
-        Screen("team_fixtures/{teamName}")
+        Screen("team_fixtures/{teamName}") {
+
+        fun createRoute(
+            teamName: String
+        ): String {
+
+            return "team_fixtures/$teamName"
+        }
+    }
 
     object LeagueOverview :
         Screen("league_overview")
 
     object FixtureDetails :
-        Screen(
-            "fixture_details/{fixtureId}"
-        )
+        Screen("fixture_details/{fixtureId}") {
+
+        fun createRoute(
+            fixtureId: Long
+        ): String {
+
+            return "fixture_details/$fixtureId"
+        }
+    }
 
 
 }

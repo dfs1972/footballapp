@@ -4,6 +4,7 @@ import org.footballapp.database.DatabaseConnection;
 import org.footballapp.model.teams.Venue;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
  * Handles persistence of venue data.
@@ -51,5 +52,80 @@ public class VenueRepository {
 
         stmt.close();
         conn.close();
+    }
+
+    public Venue getVenueForTeam(
+            int leagueId,
+            int season,
+            int teamId
+    ) throws Exception {
+
+        Connection conn =
+                DatabaseConnection.connect();
+
+        PreparedStatement stmt =
+                conn.prepareStatement(
+                        """
+                        SELECT DISTINCT
+                            v.id,
+                            v.name,
+                            v.address,
+                            v.city,
+                            v.capacity,
+                            v.surface
+                        FROM venues v
+                        JOIN fixtures f
+                            ON v.id = f.venue_id
+                        WHERE f.league_id = ?
+                        AND f.season = ?
+                        AND f.home_team_id = ?
+                        LIMIT 1
+                        """
+                );
+
+        stmt.setInt(1, leagueId);
+        stmt.setInt(2, season);
+        stmt.setInt(3, teamId);
+
+        ResultSet rs =
+                stmt.executeQuery();
+
+        Venue venue = null;
+
+        if (rs.next()) {
+
+            venue =
+                    new Venue();
+
+            venue.setId(
+                    rs.getInt("id")
+            );
+
+            venue.setName(
+                    rs.getString("name")
+            );
+
+            venue.setAddress(
+                    rs.getString("address")
+            );
+
+            venue.setCity(
+                    rs.getString("city")
+            );
+
+            venue.setCapacity(
+                    rs.getInt("capacity")
+            );
+
+            venue.setSurface(
+                    rs.getString("surface")
+            );
+        }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+
+        return venue;
     }
 }

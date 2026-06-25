@@ -33,8 +33,6 @@ class TeamDetailsApiRepository {
                     "&season=${AppState.selectedSeason}" +
                     "&teamId=$teamId"
 
-        println(url)
-
         val request =
             Request.Builder()
                 .url(url)
@@ -47,12 +45,9 @@ class TeamDetailsApiRepository {
                 ?.string()
                 ?: "{}"
 
-        println(json)
-
         val mapper =
             jacksonObjectMapper()
 
-        println(json)
         return mapper.readValue(json)
     }
 }

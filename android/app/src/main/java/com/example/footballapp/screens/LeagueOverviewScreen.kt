@@ -1,5 +1,6 @@
 package com.example.footballapp.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.footballapp.AppState
 import com.example.footballapp.model.LeagueOverview
@@ -32,7 +34,8 @@ import kotlinx.coroutines.withContext
 fun LeagueOverviewScreen(
     onLeagueTableClick: () -> Unit,
     onTeamsClick: () -> Unit,
-    onFixturesClick: () -> Unit
+    onFixturesClick: () -> Unit,
+    onTeamClick: (Int) -> Unit
 ) {
 
     var overview by remember {
@@ -187,8 +190,12 @@ fun LeagueOverviewScreen(
                 .forEach { row ->
 
                     Row(
-                        modifier =
-                            Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                onTeamClick(row.teamId)
+                            }
+                            .padding(vertical = 4.dp)
                     ) {
 
                         Text(
@@ -202,7 +209,8 @@ fun LeagueOverviewScreen(
                             text =
                                 row.teamName,
                             modifier =
-                                Modifier.weight(1f)
+                                Modifier.weight(1f),
+                            fontWeight = FontWeight.SemiBold
                         )
 
                         Text(

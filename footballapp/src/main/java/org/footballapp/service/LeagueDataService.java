@@ -5,6 +5,7 @@ import org.footballapp.databaserepository.FixtureRepository;
 import org.footballapp.databaserepository.LeagueUkRepository;
 import org.footballapp.databaserepository.StandingRepository;
 import org.footballapp.databaserepository.TeamRepository;
+import org.footballapp.databaserepository.VenueRepository;
 
 /**Import models*/
 import org.footballapp.model.fixtures.FixtureRow;
@@ -13,6 +14,7 @@ import org.footballapp.model.league.LeagueUk;
 import org.footballapp.model.standings.Standing;
 import org.footballapp.model.teamdetails.TeamDetails;
 import org.footballapp.model.teams.Team;
+import org.footballapp.model.teams.Venue;
 import org.footballapp.model.standings.LeagueTableRow;
 import org.footballapp.model.league.LeagueOverview;
 
@@ -22,6 +24,7 @@ public class LeagueDataService {
 
     private final LeagueUkRepository leagueUkRepository;
     private final TeamRepository teamRepository;
+    private final VenueRepository venueRepository;
     private final StandingRepository standingRepository;
     private final FixtureRepository fixtureRepository;
 
@@ -31,11 +34,13 @@ public class LeagueDataService {
     public LeagueDataService(
             LeagueUkRepository leagueUkRepository,
             TeamRepository teamRepository,
+            VenueRepository venueRepository,
             StandingRepository standingRepository,
             FixtureRepository fixtureRepository
     ) {
         this.leagueUkRepository = leagueUkRepository;
         this.teamRepository = teamRepository;
+        this.venueRepository = venueRepository;
         this.standingRepository = standingRepository;
         this.fixtureRepository = fixtureRepository;
     }
@@ -201,6 +206,16 @@ public class LeagueDataService {
                 );
 
         details.setTeam(team);
+
+        Venue venue =
+                venueRepository.getVenueForTeam(
+                        leagueId,
+                        season,
+                        teamId
+                );
+
+        details.setVenue(venue);
+
         System.out.println(
                 "leagueId=" + leagueId +
                         ", season=" + season +

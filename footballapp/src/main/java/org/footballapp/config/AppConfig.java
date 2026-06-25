@@ -32,6 +32,9 @@ public class AppConfig {
     private final LeagueUkImportService leagueUkImportService;
     private final LeagueDataService leagueDataService;
 
+    private final PlayerRepository playerRepository;
+    private final PlayerImportService playerImportService;
+
     public AppConfig() {
 
         /**
@@ -49,6 +52,10 @@ public class AppConfig {
         /**
          * Repository Layer
          */
+
+        playerRepository =
+                new PlayerRepository();
+
         leagueUkRepository =
                 new LeagueUkRepository();
 
@@ -73,6 +80,13 @@ public class AppConfig {
         /**
          * Import Layer
          */
+
+        playerImportService =
+                new PlayerImportService(
+                        apiFootballService,
+                        playerRepository
+                );
+
         teamImportService =
                 new TeamImportService(
                         apiFootballService,
@@ -113,6 +127,7 @@ public class AppConfig {
                 new LeagueDataService(
                         leagueUkRepository,
                         teamRepository,
+                        venueRepository,
                         standingRepository,
                         fixtureRepository
                 );
@@ -130,5 +145,7 @@ public class AppConfig {
     }
 
     public StandingsImportService getStandingsImportService() {return standingsImportService;}
+
+    public PlayerImportService getPlayerImportService() {return playerImportService;}
 
 }// End of AppConfig Class.

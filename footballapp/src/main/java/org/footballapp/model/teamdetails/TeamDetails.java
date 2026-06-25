@@ -2,6 +2,7 @@ package org.footballapp.model.teamdetails;
 
 import org.footballapp.model.fixtures.FixtureRow;
 import org.footballapp.model.teams.Team;
+import org.footballapp.model.teams.Venue;
 
 import java.util.List;
 
@@ -11,6 +12,8 @@ import java.util.List;
 public class TeamDetails {
 
     private Team team;
+
+    private Venue venue;
 
     private int leaguePosition;
 
@@ -29,6 +32,14 @@ public class TeamDetails {
 
     public void setTeam(Team team) {
         this.team = team;
+    }
+
+    public Venue getVenue() {
+        return venue;
+    }
+
+    public void setVenue(Venue venue) {
+        this.venue = venue;
     }
 
     public int getLeaguePosition() {

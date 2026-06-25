@@ -117,7 +117,7 @@ fun FootballNavGraph() {
                 onFixturesClick = { teamName ->
 
                     navController.navigate(
-                        "team_fixtures/$teamName"
+                        Screen.TeamFixtures.createRoute(teamName)
                     )
                 }
             )
@@ -133,7 +133,9 @@ fun FootballNavGraph() {
                     onFixtureClick = { fixture ->
 
                         navController.navigate(
-                            "fixture_details/${fixture.fixtureId}"
+                            Screen.FixtureDetails.createRoute(
+                                fixture.fixtureId
+                            )
                         )
                     }
                 )
@@ -208,6 +210,13 @@ fun FootballNavGraph() {
                 onFixturesClick = {
                     navController.navigate(
                         Screen.Fixtures.route
+                    )
+                },
+
+                onTeamClick = { teamId ->
+
+                    navController.navigate(
+                        Screen.Team.createRoute(teamId)
                     )
                 }
             )

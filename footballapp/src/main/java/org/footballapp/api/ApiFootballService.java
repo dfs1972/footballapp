@@ -155,5 +155,25 @@ public class ApiFootballService {
 
         return apiClient.get(url);
     }
+
+    /**
+     * Gets the raw JSON for a single player in a league and season.
+     */
+    public String getPlayerJson(
+            int playerId,
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        String url =
+                "https://v3.football.api-sports.io/players?id="
+                        + playerId
+                        + "&league="
+                        + leagueId
+                        + "&season="
+                        + season;
+
+        return apiClient.get(url);
+    }
 }
 

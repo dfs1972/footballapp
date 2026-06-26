@@ -33,7 +33,8 @@ import java.text.NumberFormat
 @Composable
 fun TeamScreen(
     teamId: Int,
-    onFixturesClick: (String) -> Unit
+    onFixturesClick: (String) -> Unit,
+    onSquadClick: (Int) -> Unit
 ) {
 
     var teamState by remember {
@@ -105,7 +106,8 @@ fun TeamScreen(
             is TeamScreenState.Ready -> {
                 TeamDetailsContent(
                     teamDetails = state.teamDetails,
-                    onFixturesClick = onFixturesClick
+                    onFixturesClick = onFixturesClick,
+                    onSquadClick = onSquadClick
                 )
             }
         }
@@ -115,7 +117,8 @@ fun TeamScreen(
 @Composable
 private fun TeamDetailsContent(
     teamDetails: TeamDetails,
-    onFixturesClick: (String) -> Unit
+    onFixturesClick: (String) -> Unit,
+    onSquadClick: (Int) -> Unit
 ) {
 
     val team =
@@ -225,6 +228,27 @@ private fun TeamDetailsContent(
 
         Text(
             text = "Fixtures"
+        )
+    }
+
+    Spacer(
+        modifier =
+            Modifier.height(8.dp)
+    )
+
+    Button(
+        onClick = {
+
+            onSquadClick(
+                team.id
+            )
+        },
+        modifier =
+            Modifier.fillMaxWidth()
+    ) {
+
+        Text(
+            text = "Squad"
         )
     }
 }

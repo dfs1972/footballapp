@@ -15,6 +15,7 @@ import com.example.footballapp.screens.LeagueOverviewScreen
 import com.example.footballapp.screens.LeagueTableScreen
 import com.example.footballapp.screens.TeamScreen
 import com.example.footballapp.screens.TeamsScreen
+import com.example.footballapp.screens.SquadScreen
 
 @Composable
 fun FootballNavGraph() {
@@ -107,9 +108,6 @@ fun FootballNavGraph() {
                     ?.getString("teamId")
                     ?.toIntOrNull()
                     ?: 0
-            println(
-                "Team route teamId = $teamId"
-            )
 
             TeamScreen(
                 teamId = teamId,
@@ -119,9 +117,36 @@ fun FootballNavGraph() {
                     navController.navigate(
                         Screen.TeamFixtures.createRoute(teamName)
                     )
+                },
+                onSquadClick = {
+
+                    navController.navigate(
+
+                        Screen.Squad.createRoute(it)
+
+                    )
                 }
             )
         }
+
+            /**
+             * Squad Screen
+             */
+            composable(
+                route = Screen.Squad.route
+            ) { backStackEntry ->
+
+                val teamId =
+                    backStackEntry.arguments
+                        ?.getString("teamId")
+                        ?.toIntOrNull()
+                        ?: 0
+
+                SquadScreen(
+                    teamId = teamId
+                )
+            }
+
 
             /** FixturesScreen */
             composable(

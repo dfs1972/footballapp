@@ -38,6 +38,7 @@ android {
 }
 
 dependencies {
+    implementation("io.coil-kt:coil-compose:2.7.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.1")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation(platform(libs.androidx.compose.bom))
@@ -50,6 +51,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.coil.compose)
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)

@@ -55,5 +55,16 @@ sealed class Screen(
         }
     }
 
+    object Squad :
+        Screen(
+            "squad/{teamId}"
+        ) {
+
+        fun createRoute(
+            teamId: Int
+        ) =
+            "squad/$teamId"
+    }
+
 
 }

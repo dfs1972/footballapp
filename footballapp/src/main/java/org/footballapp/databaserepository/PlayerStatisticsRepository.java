@@ -1,11 +1,15 @@
 package org.footballapp.databaserepository;
 
 import org.footballapp.database.DatabaseConnection;
+import org.footballapp.model.playerdetails.PlayerSummary;
 import org.footballapp.model.playerstatistics.PlayerStatistics;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Repository for storing player statistics.
@@ -316,4 +320,142 @@ public class PlayerStatisticsRepository {
             stmt.executeUpdate();
         }
     }
-}
+
+    /**
+     * Get Player line up from a game
+     */
+
+    public List<PlayerSummary> getPlayersForTeam(
+            int teamId,
+            int leagueId,
+            int season
+    )throws Exception {
+
+        Connection conn =
+                DatabaseConnection.connect();
+
+        PreparedStatement stmt =
+                conn.prepareStatement(
+                        """
+                        SELECT
+    
+                            p.player_id,
+                            p.display_name,
+                            p.photo_url,
+                            p.nationality,
+                            p.age,
+    
+                            ps.position,
+                            ps.shirt_number,
+                            ps.captain,
+                            ps.appearances,
+                            ps.goals,
+                            ps.assists
+    
+                        FROM players p
+    
+                        JOIN player_statistics ps
+                          ON p.player_id = ps.player_id
+    
+                        WHERE ps.team_id = ?
+                          AND ps.league_id = ?
+                          AND ps.season = ?
+    
+                        ORDER BY
+                        CASE ps.position
+                            
+                            WHEN 'Goalkeeper' THEN 1
+                            WHEN 'Defender'   THEN 2
+                            WHEN 'Midfielder' THEN 3
+                            WHEN 'Attacker'   THEN 4
+                        
+                            ELSE 5
+                        END,
+                            
+                        p.display_name;
+                            
+                        """
+                );
+
+        stmt.setInt(1, teamId);
+        stmt.setInt(2, leagueId);
+        stmt.setInt(3, season);
+
+        ResultSet rs =
+                stmt.executeQuery();
+
+        List<PlayerSummary> players =
+                new ArrayList<>();
+
+        while (rs.next()) {
+
+            PlayerSummary player =
+                    new PlayerSummary();
+
+            player.setPlayerId(
+                    rs.getInt("player_id")
+            );
+
+            player.setDisplayName(
+                    rs.getString("display_name")
+            );
+
+            player.setPhotoUrl(
+                    rs.getString("photo_url")
+            );
+
+            player.setNationality(
+                    rs.getString("nationality")
+            );
+
+            player.setAge(
+                    (Integer) rs.getObject("age")
+            );
+
+            player.setPosition(
+                    rs.getString("position")
+            );
+
+            if (!rs.wasNull()) {
+                player.setShirtNumber(
+                        (Integer) rs.getObject(
+                                "shirt_number"
+                        )
+                );
+            }
+
+            player.setCaptain(
+                    (Boolean) rs.getObject(
+                            "captain"
+                    )
+            );
+
+            player.setAppearances(
+                    (Integer) rs.getObject(
+                            "appearances"
+                    )
+            );
+
+            player.setGoals(
+                    (Integer) rs.getObject(
+                            "goals"
+                    )
+            );
+
+            player.setAssists(
+                    (Integer) rs.getObject(
+                            "assists"
+                    )
+            );
+
+            players.add(player);
+        }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+
+        return players;
+    }
+
+} // End of Class.

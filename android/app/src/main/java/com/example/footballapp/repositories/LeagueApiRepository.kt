@@ -4,12 +4,42 @@ import com.example.footballapp.ApiConfig
 import com.example.footballapp.model.LeagueUk
 import com.example.footballapp.model.TableRow
 import com.example.footballapp.model.LeagueOverview
+import com.example.footballapp.model.PlayerSummary
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
 class LeagueApiRepository {
+
+    fun getTeamPlayers(
+        teamId: Int,
+        leagueId: Int,
+        season: Int
+    ): List<PlayerSummary> {
+
+        val client = OkHttpClient()
+
+        val request =
+            Request.Builder()
+                .url(
+                    "${ApiConfig.BASE_URL}/teamPlayers" +
+                            "?teamId=$teamId" +
+                            "&leagueId=$leagueId" +
+                            "&season=$season"
+                )
+                .build()
+
+        val json =
+            client.newCall(request)
+                .execute()
+                .body
+                ?.string()
+                ?: "[]"
+
+        return jacksonObjectMapper()
+            .readValue(json)
+    }
 
     fun getLeagueTable(leagueId: Int, season: Int): List<TableRow> {
 

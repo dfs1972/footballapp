@@ -135,7 +135,8 @@ public class AppConfig {
                         venueRepository,
                         standingRepository,
                         fixtureRepository,
-                        playerStatisticsRepository
+                        playerStatisticsRepository,
+                        playerRepository
                 );
     }
     public ApiFootballService getApiFootballService() {return apiFootballService;}

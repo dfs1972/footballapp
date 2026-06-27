@@ -2,6 +2,7 @@ package org.footballapp.controller;
 
 
 import org.footballapp.config.AppConfig;
+import org.footballapp.model.playerdetails.PlayerDetails;
 import org.footballapp.service.LeagueDataService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,5 +40,26 @@ public class PlayerController {
                         leagueId,
                         season
                 );
+    }
+
+    /**
+     * Returns detailed information for a player.
+     */
+    @GetMapping("/playerDetails")
+    public PlayerDetails getPlayerDetails(
+
+            @RequestParam int playerId,
+
+            @RequestParam int leagueId,
+
+            @RequestParam int season
+
+    ) throws Exception {
+
+        return leagueDataService.getPlayerDetails(
+                playerId,
+                leagueId,
+                season
+        );
     }
 }

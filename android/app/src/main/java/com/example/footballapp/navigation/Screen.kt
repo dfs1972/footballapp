@@ -66,5 +66,13 @@ sealed class Screen(
             "squad/$teamId"
     }
 
+    object PlayerDetails :
+        Screen("player/{playerId}") {
+
+        fun createRoute(
+            playerId: Int
+        ) = "player/$playerId"
+    }
+
 
 }

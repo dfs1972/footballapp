@@ -7,6 +7,7 @@ import org.footballapp.databaserepository.StandingRepository;
 import org.footballapp.databaserepository.TeamRepository;
 import org.footballapp.databaserepository.VenueRepository;
 import org.footballapp.databaserepository.PlayerStatisticsRepository;
+import org.footballapp.databaserepository.PlayerRepository;
 
 /**Import models*/
 import org.footballapp.model.fixtures.FixtureRow;
@@ -19,6 +20,7 @@ import org.footballapp.model.teams.Team;
 import org.footballapp.model.teams.Venue;
 import org.footballapp.model.standings.LeagueTableRow;
 import org.footballapp.model.league.LeagueOverview;
+import org.footballapp.model.playerdetails.PlayerDetails;
 
 import java.util.List;
 
@@ -30,6 +32,7 @@ public class LeagueDataService {
     private final StandingRepository standingRepository;
     private final FixtureRepository fixtureRepository;
     private final PlayerStatisticsRepository playerStatisticsRepository;
+    private final PlayerRepository playerRepository;
 
     /**
      * Contructors
@@ -40,7 +43,8 @@ public class LeagueDataService {
             VenueRepository venueRepository,
             StandingRepository standingRepository,
             FixtureRepository fixtureRepository,
-            PlayerStatisticsRepository playerStatisticsRepository
+            PlayerStatisticsRepository playerStatisticsRepository,
+            PlayerRepository playerRepository
     ) {
         this.leagueUkRepository = leagueUkRepository;
         this.teamRepository = teamRepository;
@@ -48,6 +52,7 @@ public class LeagueDataService {
         this.standingRepository = standingRepository;
         this.fixtureRepository = fixtureRepository;
         this.playerStatisticsRepository = playerStatisticsRepository;
+        this.playerRepository = playerRepository;
     }
 
     /**
@@ -98,6 +103,23 @@ public class LeagueDataService {
                         season
                 );
     }
+
+    /**
+     * Returns detailed information for a player.
+     */
+    public PlayerDetails getPlayerDetails(
+            int playerId,
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        return playerRepository.getPlayerDetails(
+                playerId,
+                leagueId,
+                season
+        );
+    }
+
     /**
      * Get league table by season
      */

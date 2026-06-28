@@ -138,6 +138,25 @@ Development is currently focused on improving the Android user experience, expan
 
 ---
 
+## Developer Tools
+
+FootballApp includes several internal developer utilities used during development.
+
+### ApiTester
+
+A standalone utility for exploring API-Football endpoints.
+
+Features:
+
+- Pretty-print JSON
+- Save formatted responses
+- Timestamped output
+- Endpoint-based folders
+- Response timing
+- Validation support (planned)
+
+ApiTester greatly simplifies modelling new API endpoints before implementing repositories and import services.
+
 # Long-Term Vision
 
 FootballApp is being designed as a scalable football platform rather than simply an Android application.

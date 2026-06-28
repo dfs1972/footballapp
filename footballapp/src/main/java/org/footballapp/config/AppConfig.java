@@ -3,6 +3,7 @@ package org.footballapp.config;
 import org.footballapp.api.ApiFootballClient;
 import org.footballapp.api.ApiFootballService;
 import org.footballapp.databaserepository.*;
+import org.footballapp.model.teamstatistics.TeamStatistics;
 import org.footballapp.service.*;
 
 public class AppConfig {
@@ -18,13 +19,12 @@ public class AppConfig {
      */
     private final LeagueUkRepository leagueUkRepository;
     private final TeamRepository teamRepository;
+    private final TeamStatisticsRepository teamStatisticsRepository;
     private final VenueRepository venueRepository;
     //private final LeagueRepository leagueRepository;
     private final LeagueTeamRepository leagueTeamRepository;
     private final StandingRepository standingRepository;
     private final FixtureRepository fixtureRepository;
-
-    private final TeamStatisticsRepository teamStatisticsRepository;
 
     private final TeamStatisticsImportService teamStatisticsImportService;
     private final TeamImportService teamImportService;
@@ -146,6 +146,7 @@ public class AppConfig {
                 new LeagueDataService(
                         leagueUkRepository,
                         teamRepository,
+                        teamStatisticsRepository,
                         venueRepository,
                         standingRepository,
                         fixtureRepository,

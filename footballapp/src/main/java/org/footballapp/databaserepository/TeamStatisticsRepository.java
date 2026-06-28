@@ -3,6 +3,7 @@ package org.footballapp.databaserepository;
 import org.footballapp.database.DatabaseConnection;
 import org.footballapp.model.teamstatistics.CardColour;
 import org.footballapp.model.teamstatistics.CardMinute;
+import org.footballapp.model.teamstatistics.TeamStatistics;
 import org.footballapp.model.teamstatistics.TeamStatisticsResponse;
 
 import java.sql.Connection;
@@ -212,5 +213,104 @@ public class TeamStatisticsRepository {
         return minute.getTotal() == null
                 ? 0
                 : minute.getTotal();
+    }
+
+    /**
+     * Returns statistics for a team in a league season.
+     */
+    public TeamStatistics getTeamStatistics(
+            int teamId,
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        Connection conn =
+                DatabaseConnection.connect();
+
+        PreparedStatement stmt =
+                conn.prepareStatement(
+                        """
+                        SELECT *
+    
+                        FROM team_statistics
+    
+                        WHERE team_id = ?
+                          AND league_id = ?
+                          AND season = ?
+                        """
+                );
+
+        stmt.setInt(1, teamId);
+        stmt.setInt(2, leagueId);
+        stmt.setInt(3, season);
+
+        ResultSet rs =
+                stmt.executeQuery();
+
+        TeamStatistics statistics = null;
+
+        if (rs.next()) {
+
+            statistics =
+                    new TeamStatistics();
+
+            statistics.setTeamId(
+                    rs.getInt("team_id")
+            );
+
+            statistics.setLeagueId(
+                    rs.getInt("league_id")
+            );
+
+            statistics.setSeason(
+                    rs.getInt("season")
+            );
+
+            statistics.setPlayed(
+                    rs.getInt("played")
+            );
+
+            statistics.setWins(
+                    rs.getInt("wins")
+            );
+
+            statistics.setDraws(
+                    rs.getInt("draws")
+            );
+
+            statistics.setLosses(
+                    rs.getInt("losses")
+            );
+
+            statistics.setGoalsFor(
+                    rs.getInt("goals_for")
+            );
+
+            statistics.setGoalsAgainst(
+                    rs.getInt("goals_against")
+            );
+
+            statistics.setCleanSheets(
+                    rs.getInt("clean_sheets")
+            );
+
+            statistics.setFailedToScore(
+                    rs.getInt("failed_to_score")
+            );
+
+            statistics.setYellowCards(
+                    rs.getInt("yellow_cards")
+            );
+
+            statistics.setRedCards(
+                    rs.getInt("red_cards")
+            );
+        }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+
+        return statistics;
     }
 } // End of Class.

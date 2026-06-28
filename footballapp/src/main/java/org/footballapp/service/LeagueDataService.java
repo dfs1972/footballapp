@@ -5,6 +5,7 @@ import org.footballapp.databaserepository.FixtureRepository;
 import org.footballapp.databaserepository.LeagueUkRepository;
 import org.footballapp.databaserepository.StandingRepository;
 import org.footballapp.databaserepository.TeamRepository;
+import org.footballapp.databaserepository.TeamStatisticsRepository;
 import org.footballapp.databaserepository.VenueRepository;
 import org.footballapp.databaserepository.PlayerStatisticsRepository;
 import org.footballapp.databaserepository.PlayerRepository;
@@ -21,6 +22,7 @@ import org.footballapp.model.teams.Venue;
 import org.footballapp.model.standings.LeagueTableRow;
 import org.footballapp.model.league.LeagueOverview;
 import org.footballapp.model.playerdetails.PlayerDetails;
+import org.footballapp.model.teamstatistics.TeamStatistics;
 
 import java.util.List;
 
@@ -28,6 +30,7 @@ public class LeagueDataService {
 
     private final LeagueUkRepository leagueUkRepository;
     private final TeamRepository teamRepository;
+    private final TeamStatisticsRepository teamStatisticsRepository;
     private final VenueRepository venueRepository;
     private final StandingRepository standingRepository;
     private final FixtureRepository fixtureRepository;
@@ -40,6 +43,7 @@ public class LeagueDataService {
     public LeagueDataService(
             LeagueUkRepository leagueUkRepository,
             TeamRepository teamRepository,
+            TeamStatisticsRepository teamStatisticsRepository,
             VenueRepository venueRepository,
             StandingRepository standingRepository,
             FixtureRepository fixtureRepository,
@@ -48,6 +52,7 @@ public class LeagueDataService {
     ) {
         this.leagueUkRepository = leagueUkRepository;
         this.teamRepository = teamRepository;
+        this.teamStatisticsRepository = teamStatisticsRepository;
         this.venueRepository = venueRepository;
         this.standingRepository = standingRepository;
         this.fixtureRepository = fixtureRepository;
@@ -229,6 +234,23 @@ public class LeagueDataService {
         }
 
         return form.toString();
+    }
+
+    /**
+     * Get a team's stats
+     */
+    public TeamStatistics getTeamStatistics(
+            int teamId,
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        return teamStatisticsRepository
+                .getTeamStatistics(
+                        teamId,
+                        leagueId,
+                        season
+                );
     }
 
     /**

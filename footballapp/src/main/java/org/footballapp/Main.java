@@ -1,28 +1,37 @@
 package org.footballapp;
 
-import org.footballapp.api.ApiFootballClient;
-import org.footballapp.api.ApiFootballService;
-import org.footballapp.config.AppConfig;
+import org.footballapp.tools.ApiTester;
 
 public class Main {
 
     public static void main(String[] args)
             throws Exception {
 
-        AppConfig config =
-                new AppConfig();
+            ApiTester tester =
+                    new ApiTester();
 
-        ApiFootballService apiFootballService =
-                config.getApiFootballService();
+            System.out.println(
+                    "ApiTester initialised successfully."
+            );
+        } // End of main()
 
-        String json =
-                apiFootballService.getPlayerJson(
-                        306979,
-                        179,
-                        2024
-                );
-
-        System.out.println(json);
-
-    } // End of main method.
+//        /**
+//         * Save to file
+//         */
+//        ApiTester tester =
+//                new ApiTester();
+//
+//        tester.saveToFile(
+//                "teams/statistics?league=179&season=2024&team=257"
+//        );
+//
+//        /**
+//         * Save to file and print
+//         */
+//        ApiTester tester_print =
+//                new ApiTester();
+//
+//        tester_print.saveAndPrint(
+//                "teams/statistics?league=179&season=2024&team=257"
+//        );
 } // End of Main Class.

@@ -298,6 +298,52 @@ public class StandingRepository {
 
         return row;
     }
+
+    /**
+     * Get team id
+     */
+    public List<Integer> getTeamIds(
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        List<Integer> teamIds =
+                new ArrayList<>();
+
+        Connection conn =
+                DatabaseConnection.connect();
+
+        PreparedStatement stmt =
+                conn.prepareStatement(
+                        """
+                        SELECT team_id
+        
+                        FROM standings
+        
+                        WHERE league_id = ?
+                          AND season = ?
+                        """
+                );
+
+        stmt.setInt(1, leagueId);
+        stmt.setInt(2, season);
+
+        ResultSet rs =
+                stmt.executeQuery();
+
+        while (rs.next()) {
+
+            teamIds.add(
+                    rs.getInt("team_id")
+            );
+        }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+
+        return teamIds;
+    }
 }
 
 

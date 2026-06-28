@@ -28,14 +28,20 @@ import org.footballapp.model.league.League;
  * This service acts as the entry point for league imports
  * and delegates work to specialised import services.
  *
- * Current responsibilities:
- * - League metadata
- * - Teams
- * - Venues
- *
- * Future responsibilities:
- * - Standing
- * - Fixture
+ Current responsibilities:
+ - Teams
+ - Venues
+ - League standings
+ - Fixtures
+ - Team statistics
+
+ Future responsibilities:
+ - Players
+ - Squads
+ - Transfers
+ - Injuries
+ - Match events
+ - Line-ups
  */
 public class LeagueImportService {
 
@@ -43,17 +49,20 @@ public class LeagueImportService {
     private final TeamImportService teamImportService;
     private final StandingsImportService standingsImportService;
     private final FixtureImportService fixtureImportService;
+    private final TeamStatisticsImportService teamStatisticsImportService;
 
     public LeagueImportService(
             //LeagueRepository leagueRepository,
             TeamImportService teamImportService,
             StandingsImportService standingsImportService,
-            FixtureImportService fixtureImportService
+            FixtureImportService fixtureImportService,
+            TeamStatisticsImportService teamStatisticsImportService
     ) {
         //this.leagueRepository = leagueRepository;
         this.teamImportService = teamImportService;
         this.standingsImportService = standingsImportService;
         this.fixtureImportService = fixtureImportService;
+        this.teamStatisticsImportService = teamStatisticsImportService;
     }
 
     /**
@@ -76,19 +85,44 @@ public class LeagueImportService {
 
         //leagueRepository.saveLeague(league);
 
+        System.out.println(
+                "Importing teams..."
+        );
+
         teamImportService.importLeagueTeams(
                 leagueId,
                 season
         );
 
-         standingsImportService.importLeagueStandings(
-                 leagueId,
-                 season
-         );
+        System.out.println(
+                "Importing standings..."
+        );
 
-         fixtureImportService.importLeagueFixtures(
-                 leagueId,
-                 season
-         );
+        standingsImportService.importLeagueStandings(
+                leagueId,
+                season
+        );
+
+        System.out.println(
+                "Importing fixtures..."
+        );
+
+        fixtureImportService.importLeagueFixtures(
+                leagueId,
+                season
+        );
+
+        System.out.println(
+                "Importing team statistics..."
+        );
+
+        teamStatisticsImportService.importLeagueStatistics(
+                leagueId,
+                season
+        );
+
+        System.out.println(
+                "League import complete."
+        );
     }
 }

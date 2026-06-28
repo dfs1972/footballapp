@@ -7,6 +7,7 @@ import org.footballapp.model.league.LeaguesApiResponse;
 import org.footballapp.model.teams.TeamsApiResponse;
 import org.footballapp.model.standings.StandingsApiResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
+import org.footballapp.model.teamstatistics.TeamStatisticsApiResponse;
 
 public class ApiFootballService {
 
@@ -174,6 +175,32 @@ public class ApiFootballService {
                         + season;
 
         return apiClient.get(url);
+    }
+
+    /**
+     * Gets team statistics for a league and season.
+     */
+    public TeamStatisticsApiResponse getTeamStatistics(
+            int leagueId,
+            int season,
+            int teamId
+    ) throws Exception {
+
+        String url =
+                "https://v3.football.api-sports.io/teams/statistics?league="
+                        + leagueId
+                        + "&season="
+                        + season
+                        + "&team="
+                        + teamId;
+
+        String json =
+                apiClient.get(url);
+
+        return mapper.readValue(
+                json,
+                TeamStatisticsApiResponse.class
+        );
     }
 }
 

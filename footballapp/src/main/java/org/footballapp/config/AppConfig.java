@@ -24,6 +24,9 @@ public class AppConfig {
     private final StandingRepository standingRepository;
     private final FixtureRepository fixtureRepository;
 
+    private final TeamStatisticsRepository teamStatisticsRepository;
+
+    private final TeamStatisticsImportService teamStatisticsImportService;
     private final TeamImportService teamImportService;
     private final StandingsImportService standingsImportService;
     private final FixtureImportService fixtureImportService;
@@ -66,6 +69,9 @@ public class AppConfig {
         teamRepository =
                 new TeamRepository();
 
+        teamStatisticsRepository =
+                new TeamStatisticsRepository();
+
         venueRepository =
                 new VenueRepository();
 
@@ -100,6 +106,13 @@ public class AppConfig {
                         leagueTeamRepository
                 );
 
+        teamStatisticsImportService =
+                new TeamStatisticsImportService(
+                        apiFootballService,
+                        teamStatisticsRepository,
+                        standingRepository
+                );
+
         standingsImportService =
                 new StandingsImportService(
                         apiFootballService,
@@ -122,7 +135,8 @@ public class AppConfig {
                 new LeagueImportService(
                         teamImportService,
                         standingsImportService,
-                        fixtureImportService
+                        fixtureImportService,
+                        teamStatisticsImportService
                 );
 
         /**
@@ -138,6 +152,10 @@ public class AppConfig {
                         playerStatisticsRepository,
                         playerRepository
                 );
+    }
+
+    public TeamStatisticsImportService getTeamStatisticsImportService() {
+        return teamStatisticsImportService;
     }
     public ApiFootballService getApiFootballService() {return apiFootballService;}
 

@@ -7,6 +7,10 @@ import org.footballapp.api.ApiFootballClient;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
+
 /**
  * Developer utility for inspecting API-Football endpoints.
  *
@@ -29,6 +33,7 @@ public class ApiTester {
     private static final String SEPARATOR =
             "============================================================";
 
+
     /**
      * API client.
      */
@@ -38,6 +43,12 @@ public class ApiTester {
      * Jackson mapper used for pretty-printing JSON.
      */
     private final ObjectMapper mapper;
+
+    /**
+     * Root folder for saved API responses.
+     */
+    private static final String OUTPUT_FOLDER =
+            "api-tests";
 
     /**
      * Creates a new ApiTester instance.
@@ -148,49 +159,34 @@ public class ApiTester {
      * Prints formatted JSON
      * returned by an endpoint.
      */
+    /**
+     * Prints formatted JSON returned by an endpoint.
+     */
     public void print(
             String endpoint
     ) throws Exception {
 
-        printBanner();
-
-        long start =
-                System.currentTimeMillis();
-
-        String json =
-                getJson(
+        ApiTestResult result =
+                execute(
                         endpoint
                 );
 
-        long elapsed =
-                System.currentTimeMillis()
-                        - start;
-
-        Object jsonObject =
-                readJson(
-                        json
-                );
-
-        String formatted =
-                formatJson(
-                        jsonObject
-                );
+        printBanner();
 
         printSummary(
 
-                endpoint,
+                result.getEndpoint(),
 
-                elapsed,
+                result.getElapsedTime(),
 
-                getResponseSize(
-                        json
-                )
+                result.getResponseSize()
+
         );
 
         System.out.println();
 
         System.out.println(
-                formatted
+                result.getFormattedJson()
         );
 
         printSeparator();
@@ -226,6 +222,274 @@ public class ApiTester {
                                 "yyyy-MM-dd HH:mm:ss"
                         )
                 );
+    }
+
+    /**
+     * Executes an API request and returns the result.
+     *
+     * @param endpoint API endpoint
+     * @return Test result
+     */
+    private ApiTestResult execute(
+            String endpoint
+    ) throws Exception {
+
+        long start =
+                System.currentTimeMillis();
+
+        String json =
+                getJson(
+                        endpoint
+                );
+
+        long elapsed =
+                System.currentTimeMillis()
+                        - start;
+
+        Object jsonObject =
+                readJson(
+                        json
+                );
+
+        String formatted =
+                formatJson(
+                        jsonObject
+                );
+
+        ApiTestResult result =
+                new ApiTestResult();
+
+        result.setEndpoint(
+                endpoint
+        );
+
+        result.setJson(
+                json
+        );
+
+        result.setFormattedJson(
+                formatted
+        );
+
+        result.setElapsedTime(
+                elapsed
+        );
+
+        result.setResponseSize(
+                getResponseSize(
+                        json
+                )
+        );
+
+        result.setTimestamp(
+                getTimestamp()
+        );
+
+        result.setValid(
+                false
+        );
+
+        result.setValidationMessage(
+                "Not validated"
+        );
+
+        return result;
+    }
+
+    /**
+     * Builds the relative output path.
+     */
+    private String buildRelativePath(
+            String endpoint,
+            String filename
+    ) {
+
+        String endpointGroup =
+                endpoint.split("\\?")[0]
+                        .replace("/", "-");
+
+        return "OUTPUT_FOLDER"
+                + File.separator
+                + endpointGroup
+                + File.separator
+                + LocalDate.now()
+                + File.separator
+                + filename;
+    }
+
+    /**
+     * Creates the output folder for an endpoint.
+     *
+     * Folder structure:
+     *
+     * api-tests/
+     *      teams/
+     *          2026-06-29/
+     *
+     *      players/
+     *          2026-06-29/
+     */
+    private File buildOutputFolder(
+            String endpoint
+    ) {
+
+        String endpointGroup =
+                endpoint.split("\\?")[0]
+                        .replace("/", "-");
+
+        File folder =
+                new File(
+                        "OUTPUT_FOLDER"
+                                + File.separator
+                                + endpointGroup
+                                + File.separator
+                                + LocalDate.now()
+                );
+
+        if (!folder.exists()) {
+
+            folder.mkdirs();
+        }
+
+        return folder;
+    }
+
+    /**
+     * Builds a timestamped filename.
+     */
+    private String buildFilename(
+            String endpoint
+    ) {
+
+        String timestamp =
+                LocalDateTime.now()
+                        .format(
+                                DateTimeFormatter.ofPattern(
+                                        "yyyyMMdd_HHmmss"
+                                )
+                        );
+
+        String parameters = "";
+
+        if (endpoint.contains("?")) {
+
+            parameters =
+                    endpoint.substring(
+                                    endpoint.indexOf('?') + 1
+                            )
+                            .replace("=", "")
+                            .replace("&", "_")
+                            .replace("/", "_");
+        }
+
+        if (!parameters.isEmpty()) {
+
+            return timestamp
+                    + "_"
+                    + parameters
+                    + ".json";
+        }
+
+        return timestamp + ".json";
+    }
+
+    /**
+     * Builds the output file.
+     */
+    private File buildOutputFile(
+            String endpoint
+    ) {
+
+        return new File(
+
+                buildOutputFolder(
+                        endpoint
+                ),
+
+                buildFilename(
+                        endpoint
+                )
+        );
+    }
+
+    /**
+     * Saves formatted JSON to disk.
+     */
+    private void saveResult(
+            ApiTestResult result
+    ) throws Exception {
+
+        File output =
+                buildOutputFile(
+                        result.getEndpoint()
+                );
+
+        mapper.writeValue(
+
+                output,
+
+                readJson(
+                        result.getJson()
+                )
+        );
+
+        result.setOutputFile(
+
+                buildRelativePath(
+
+                        result.getEndpoint(),
+
+                        output.getName()
+
+                )
+        );
+    }
+
+    /**
+     * Saves and prints an endpoint.
+     */
+    public void saveAndPrint(
+            String endpoint
+    ) throws Exception {
+
+        ApiTestResult result =
+                execute(
+                        endpoint
+                );
+
+        saveResult(
+                result
+        );
+
+        printBanner();
+
+        printSummary(
+
+                result.getEndpoint(),
+
+                result.getElapsedTime(),
+
+                result.getResponseSize()
+
+        );
+
+        System.out.println();
+
+        System.out.println(
+                result.getFormattedJson()
+        );
+
+        System.out.println();
+
+        System.out.println(
+                "Saved:"
+        );
+
+        System.out.println(
+                result.getOutputFile()
+        );
+
+        printSeparator();
     }
 
 }

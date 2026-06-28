@@ -10,7 +10,10 @@ public class Main {
             ApiTester tester =
                     new ApiTester();
 
-        tester.print(
+//        tester.print(
+//                "teams/statistics?league=179&season=2024&team=257"
+//        );
+        tester.saveAndPrint(
                 "teams/statistics?league=179&season=2024&team=257"
         );
         } // End of main()

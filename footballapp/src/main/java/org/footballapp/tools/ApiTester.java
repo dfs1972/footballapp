@@ -70,6 +70,160 @@ public class ApiTester {
     }
 
     /**
+     * Validates an endpoint against
+     * a model class.
+     *
+     * @param endpoint API endpoint
+     * @param clazz Model class
+     * @return Validation result
+     */
+    public <T> ApiTestResult validate(
+
+            String endpoint,
+
+            Class<T> clazz
+
+    ) {
+
+        ApiTestResult result;
+
+        try {
+
+            result =
+                    execute(
+                            endpoint
+                    );
+
+            T object =
+                    mapper.readValue(
+                            result.getJson(),
+                            clazz
+                    );
+
+            result.setValid(
+                    true
+            );
+
+            result.setValidatedClass(
+                    clazz.getSimpleName()
+            );
+
+            result.setValidationMessage(
+                    "Validation successful."
+            );
+
+            result.setExceptionMessage(
+                    null
+            );
+
+        }
+        catch (Exception ex) {
+
+            result =
+                    new ApiTestResult();
+
+            result.setEndpoint(
+                    endpoint
+            );
+
+            result.setTimestamp(
+                    getTimestamp()
+            );
+
+            result.setValid(
+                    false
+            );
+
+            result.setValidatedClass(
+                    clazz.getSimpleName()
+            );
+
+            result.setValidationMessage(
+                    "Validation failed."
+            );
+
+            result.setExceptionMessage(
+                    ex.getMessage()
+            );
+        }
+
+        printValidationReport(
+                result
+        );
+
+        return result;
+    }
+
+    /**
+     * Prints validation results.
+     */
+    private void printValidationReport(
+
+            ApiTestResult result
+
+    ) {
+
+        printBanner();
+
+        System.out.println();
+
+        System.out.println(
+                "Validation Report"
+        );
+
+        printSeparator();
+
+        System.out.println(
+                "Endpoint : "
+                        + result.getEndpoint()
+        );
+
+        System.out.println(
+                "Model    : "
+                        + result.getValidatedClass()
+        );
+
+        System.out.println(
+                "Time     : "
+                        + result.getElapsedTime()
+                        + " ms"
+        );
+
+        System.out.println(
+                "Size     : "
+                        + result.getResponseSize()
+                        + " bytes"
+        );
+
+        System.out.println();
+
+        if (result.isValid()) {
+
+            System.out.println(
+                    "Status   : PASSED"
+            );
+        }
+        else {
+
+            System.out.println(
+                    "Status   : FAILED"
+            );
+
+            System.out.println();
+
+            System.out.println(
+                    "Reason"
+            );
+
+            System.out.println(
+                    result.getExceptionMessage()
+            );
+        }
+
+        printSeparator();
+    }
+
+    /**
      * Downloads raw JSON from an endpoint.
      *
      * @param endpoint API endpoint

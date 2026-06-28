@@ -51,10 +51,39 @@ public class ApiTestResult {
     private boolean valid;
 
     /**
+     * Model class used for validation.
+     */
+    private String validatedClass;
+
+    /**
+     * Exception message if validation fails.
+     */
+    private String exceptionMessage;
+
+    /**
      * Validation message.
      */
     private String validationMessage;
 
+    public String getValidatedClass() {
+        return validatedClass;
+    }
+
+    public void setValidatedClass(String validatedClass) {
+        this.validatedClass = validatedClass;
+    }
+
+    public String getExceptionMessage() {
+        return exceptionMessage;
+    }
+
+    public void setExceptionMessage(String exceptionMessage) {
+        this.exceptionMessage = exceptionMessage;
+    }
+
+    /**
+     * Getters and Setters
+     */
     public String getEndpoint() {
         return endpoint;
     }

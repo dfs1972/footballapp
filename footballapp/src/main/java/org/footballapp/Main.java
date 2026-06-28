@@ -10,9 +10,9 @@ public class Main {
             ApiTester tester =
                     new ApiTester();
 
-            System.out.println(
-                    "ApiTester initialised successfully."
-            );
+        tester.print(
+                "teams/statistics?league=179&season=2024&team=257"
+        );
         } // End of main()
 
 //        /**

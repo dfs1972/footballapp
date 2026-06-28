@@ -75,6 +75,128 @@ public class ApiTester {
     }
 
     /**
+     * Converts raw JSON into a Java object.
+     */
+    protected Object readJson(
+            String json
+    ) throws Exception {
+
+        return mapper.readValue(
+                json,
+                Object.class
+        );
+    }
+
+    /**
+     * Converts a Java object into
+     * formatted JSON.
+     */
+    protected String formatJson(
+            Object jsonObject
+    ) throws Exception {
+
+        return mapper.writeValueAsString(
+                jsonObject
+        );
+    }
+
+    /**
+     * Returns the response size in bytes.
+     */
+    protected int getResponseSize(
+            String json
+    ) {
+
+        return json.getBytes().length;
+    }
+
+    /**
+     * Prints a response summary.
+     */
+    protected void printSummary(
+
+            String endpoint,
+
+            long elapsedTime,
+
+            int responseSize
+
+    ) {
+
+        System.out.println();
+
+        System.out.println(
+                "Endpoint : " + endpoint
+        );
+
+        System.out.println(
+                "Time     : "
+                        + elapsedTime
+                        + " ms"
+        );
+
+        System.out.println(
+                "Size     : "
+                        + responseSize
+                        + " bytes"
+        );
+
+        printSeparator();
+    }
+
+    /**
+     * Prints formatted JSON
+     * returned by an endpoint.
+     */
+    public void print(
+            String endpoint
+    ) throws Exception {
+
+        printBanner();
+
+        long start =
+                System.currentTimeMillis();
+
+        String json =
+                getJson(
+                        endpoint
+                );
+
+        long elapsed =
+                System.currentTimeMillis()
+                        - start;
+
+        Object jsonObject =
+                readJson(
+                        json
+                );
+
+        String formatted =
+                formatJson(
+                        jsonObject
+                );
+
+        printSummary(
+
+                endpoint,
+
+                elapsed,
+
+                getResponseSize(
+                        json
+                )
+        );
+
+        System.out.println();
+
+        System.out.println(
+                formatted
+        );
+
+        printSeparator();
+    }
+
+    /**
      * Prints the ApiTester banner.
      */
     protected void printBanner() {

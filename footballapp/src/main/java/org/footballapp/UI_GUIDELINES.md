@@ -37,6 +37,10 @@ Fixture
 
 Avoid mixing unrelated information on the same screen.
 
+Compose components should be stateless whenever possible.
+
+Components receive all the data they need through parameters and communicate user interactions through callbacks (onClick, onSelected, etc.). They should not own application state or perform business logic.
+
 ---
 
 # Visual Style

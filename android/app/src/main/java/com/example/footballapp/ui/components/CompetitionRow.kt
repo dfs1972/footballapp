@@ -16,9 +16,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import com.example.footballapp.ui.model.CompetitionUiModel
+import com.example.footballapp.ui.previews.PreviewData
 import com.example.footballapp.ui.theme.AppDimensions
 import com.example.footballapp.ui.theme.AppSpacing
 import com.example.footballapp.ui.theme.AppTypography
@@ -26,10 +28,7 @@ import com.example.footballapp.ui.theme.AppTypography
 @Composable
 fun CompetitionRow(
 
-    name: String,
-
-    logo: Painter,
-
+    competition: CompetitionUiModel,
     onClick: () -> Unit
 
 ) {
@@ -62,21 +61,16 @@ fun CompetitionRow(
 
             ) {
 
-                androidx.compose.foundation.Image(
-
-                    painter = logo,
-
-                    contentDescription = name,
-
-                    modifier = Modifier.size(AppDimensions.CompetitionLogo)
-
+                AsyncImage(
+                    model = competition.logoUrl,
+                    contentDescription = competition.name
                 )
 
             }
 
             Text(
 
-                text = name,
+                text = competition.name,
 
                 style = AppTypography.Body,
 
@@ -105,14 +99,9 @@ private fun CompetitionRowPreview() {
 
     CompetitionRow(
 
-        name = "Scottish Premiership",
+        competition = PreviewData.ScottishPremiership,
 
-        logo = androidx.compose.ui.res.painterResource(
-            android.R.drawable.ic_menu_gallery
-        ),
-
-        onClick = { }
+        onClick = {}
 
     )
-
 }

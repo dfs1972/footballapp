@@ -1,4 +1,4 @@
-package org.footballapp.ui.components
+package com.example.footballapp.ui.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

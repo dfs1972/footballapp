@@ -230,3 +230,360 @@ FootballApp has now moved beyond backend development and entered the UI Assembly
 The backend architecture is considered stable.
 
 Future work will focus on building the Android application by composing reusable UI components into polished screens, following the agreed design system and screen-driven development process.
+
+# CURRENT STATE (End of Session)
+Project Status
+
+FootballApp has now entered the UI Assembly phase.
+
+The backend architecture (API layer, repositories, PostgreSQL, translation layer and REST API) is considered stable and complete for the current scope.
+
+Development focus has shifted almost entirely to the Android application.
+
+Architecture
+
+The project now follows a consistent layered architecture across both backend and Android.
+
+API-Football
+│
+▼
+Backend Translation Layer
+(Java Desktop)
+
+        │
+        ▼
+REST API
+
+        │
+        ▼
+Android Repository
+(future)
+
+        │
+        ▼
+UiModels
+
+        │
+        ▼
+Compose Components
+
+        │
+        ▼
+Screens
+
+The backend remains responsible for translating API-Football data into application-friendly models.
+
+Android never communicates directly with API-Football.
+
+UI Design System
+
+The reusable Compose design system is now largely complete.
+
+Theme
+
+Completed:
+
+AppSpacing
+AppDimensions
+AppShapes
+AppElevation
+AppTypography
+
+All new components should use these shared theme classes rather than hardcoded values.
+
+UI Models
+
+Created:
+
+CompetitionUiModel
+CompetitionGroupUiModel
+CompetitionType
+
+Decision:
+
+Compose components should receive UiModels rather than primitive values or backend DTOs.
+
+Example:
+
+CompetitionRow(
+competition = competition,
+onClick = { ... }
+)
+Reusable Components
+
+Completed:
+
+ScreenHeader
+SectionHeading
+CompetitionRow
+CompetitionList
+SectionCard
+
+Responsibilities:
+
+ScreenHeader
+
+Provides consistent screen title and subtitle.
+
+SectionHeading
+
+Displays section headings such as:
+
+Leagues
+Domestic Cups
+UEFA Competitions
+CompetitionRow
+
+Displays one competition.
+
+Receives:
+
+CompetitionUiModel
+
+Displays:
+
+Logo
+Competition name
+Navigation arrow
+Material ripple
+
+Entire row is clickable.
+
+CompetitionList
+
+Displays a list of competitions.
+
+Internally composes multiple CompetitionRow components.
+
+Removes repeated row-building code from screens.
+
+SectionCard
+
+Generic reusable Material 3 card.
+
+Provides:
+
+Rounded corners
+Elevation
+Padding
+Content slot
+
+Contains no football-specific logic.
+
+Preview Data
+
+Created:
+
+ui/previews/
+
+PreviewData.kt
+
+Contains sample UI data used by previews.
+
+Currently includes:
+
+Scottish leagues
+Scottish domestic cups
+Scotland CompetitionGroup
+
+Future preview data should remain independent from production repositories.
+
+Competitions Screen
+
+Created first complete screen:
+
+CompetitionsScreen
+
+Current structure:
+
+LazyColumn
+
+↓
+
+ScreenHeader
+
+↓
+
+SectionCard
+
+↓
+
+Country Heading
+
+↓
+
+SectionHeading
+
+↓
+
+CompetitionList
+
+↓
+
+SectionHeading
+
+↓
+
+CompetitionList
+
+Current implementation uses:
+
+PreviewData.Scotland
+
+through
+
+val groups = listOf(
+
+    PreviewData.Scotland
+
+)
+
+This structure allows future countries to be added without modifying the screen layout.
+
+Example:
+
+val groups = listOf(
+
+    PreviewData.Scotland,
+
+    PreviewData.England,
+
+    PreviewData.Spain,
+
+    PreviewData.Italy,
+
+    PreviewData.Uefa
+
+)
+
+Only PreviewData changes.
+
+Screen code remains unchanged.
+
+CompetitionGroupUiModel
+
+Introduced:
+
+displayOrder
+
+to support future sorting and user customisation.
+
+Current properties:
+
+displayOrder
+
+title
+
+headerIcon
+
+leagues
+
+domesticCups
+
+title intentionally replaces country, allowing support for sections such as:
+
+UEFA Competitions
+UI Architecture Principles
+
+The following principles are now established.
+
+Component-Driven UI
+
+Screens are assembled from reusable components.
+
+Stateless Components
+
+Components receive data via parameters and expose callbacks.
+
+They do not own application state.
+
+UiModels
+
+Components consume UiModels rather than primitive values or backend DTOs.
+
+Backend as Translation Layer
+
+Android never communicates directly with API-Football.
+
+Recognition before Reading
+
+Icons, logos and layout should communicate meaning before text.
+
+Material 3
+
+Material 3 is the design foundation throughout the application.
+
+Current UI Package Structure
+ui/
+
+components/
+
+model/
+
+previews/
+
+screens/
+competitions/
+
+theme/
+
+Future screens will be placed under:
+
+screens/
+
+league/
+
+fixtures/
+
+team/
+
+player/
+Next Development Phase
+
+The design system is now considered sufficiently mature.
+
+Development will move from creating infrastructure to building FootballApp's remaining screens.
+
+Recommended order:
+
+1. Refine Competitions screen
+
+2. Create ScreenScaffold component
+   (shared structure for all screens)
+
+3. Build League Overview screen
+
+4. Build League Table screen
+
+5. Build Fixtures screen
+
+6. Build Fixture Details screen
+
+7. Build Team screen
+
+8. Build Player screen
+
+9. Introduce ViewModels
+
+10. Connect Android to backend REST API
+
+11. Navigation
+
+12. Final UI polish
+    Overall Project Status
+
+The project has reached an important milestone.
+
+Previously, development focused on backend infrastructure:
+
+API-Football
+PostgreSQL
+Import Services
+Repositories
+REST API
+
+Current development is focused on delivering the user experience.
+
+The backend is now regarded as the stable foundation that supports the Android application.
+
+Future work will primarily consist of assembling reusable UI components into polished screens, followed by connecting those screens to the existing backend through UiModels and ViewModels.

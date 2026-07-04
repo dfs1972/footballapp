@@ -28,11 +28,6 @@ fun LeagueSelectionScreen(
     onLeagueClick: (Int, String) -> Unit
 ) {
 
-//    val repository =
-//        LeagueSelectionRepository()
-//
-//    val leagues =
-//        repository.getLeagues()
     var leagues by remember {
         mutableStateOf<List<LeagueUk>>(
             emptyList()

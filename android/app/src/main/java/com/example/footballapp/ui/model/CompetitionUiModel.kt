@@ -1,5 +1,7 @@
 package com.example.footballapp.ui.model
 
+import android.R
+
 /**
  * Represents a football competition as displayed by the UI.
  *
@@ -17,6 +19,11 @@ data class CompetitionUiModel(
      * Competition name displayed to the user.
      */
     val name: String,
+
+    /**
+     * Season displayed to user.
+     */
+    val season: String,
 
     /**
      * URL of the competition logo.

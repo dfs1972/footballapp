@@ -1,0 +1,109 @@
+package com.example.footballapp.ui.screens.league
+
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.footballapp.ui.components.NavigationCard
+import com.example.footballapp.ui.components.ScreenScaffold
+import com.example.footballapp.ui.components.TopStandingsCard
+import com.example.footballapp.ui.design.Strings
+import com.example.footballapp.ui.model.CompetitionUiModel
+import com.example.footballapp.ui.previews.PreviewData
+
+@Composable
+fun LeagueOverviewScreen(
+
+    competition: CompetitionUiModel,
+
+    onLeagueTableClick: () -> Unit = {},
+
+    onFixturesClick: () -> Unit = {},
+
+    onTeamsClick: () -> Unit = {},
+
+    onTeamClick: (Int) -> Unit = {}
+
+) {
+
+    ScreenScaffold(
+
+        title = competition.name,
+
+        subtitle = "Season ${competition.season}"
+
+    ) {
+
+        item {
+
+            TopStandingsCard(
+
+                standings = PreviewData.ScottishPremiershipStandings,
+
+                onTeamClick = {
+
+                    onTeamClick(it.teamId)
+
+                },
+
+                onViewFullTable = onLeagueTableClick
+
+            )
+
+        }
+
+        item {
+
+            NavigationCard(
+
+                title = Strings.LEAGUE_TABLE,
+
+                subtitle = Strings.VIEW_COMPLETE_STANDINGS,
+
+                onClick = onLeagueTableClick
+
+            )
+
+        }
+
+        item {
+
+            NavigationCard(
+
+                title = Strings.FIXTURES,
+
+                subtitle = Strings.UPCOMING_FIXTURES,
+
+                onClick = onFixturesClick
+
+            )
+
+        }
+
+        item {
+
+            NavigationCard(
+
+                title = Strings.TEAMS,
+
+                subtitle = Strings.BROWSE_ALL_CLUBS,
+
+                onClick = onTeamsClick
+
+            )
+
+        }
+
+    }
+
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun LeagueOverviewScreenPreview() {
+
+    LeagueOverviewScreen(
+
+        competition = PreviewData.ScottishPremiership
+
+    )
+
+}

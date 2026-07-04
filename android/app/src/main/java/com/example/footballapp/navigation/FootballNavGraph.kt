@@ -11,12 +11,14 @@ import com.example.footballapp.screens.LeagueSelectionScreen
 import com.example.footballapp.MainScreen
 import com.example.footballapp.screens.FixtureDetailsScreen
 import com.example.footballapp.screens.TeamFixturesScreen
-import com.example.footballapp.screens.LeagueOverviewScreen
+import com.example.footballapp.ui.screens.league.LeagueOverviewScreen
 import com.example.footballapp.screens.LeagueTableScreen
 import com.example.footballapp.screens.TeamScreen
 import com.example.footballapp.screens.TeamsScreen
 import com.example.footballapp.screens.SquadScreen
 import com.example.footballapp.screens.PlayerDetailsScreen
+
+import com.example.footballapp.ui.previews.PreviewData
 
 @Composable
 fun FootballNavGraph() {
@@ -250,6 +252,8 @@ fun FootballNavGraph() {
 
                 LeagueOverviewScreen(
 
+                    competition = AppState.selectedCompetition,
+
                     onLeagueTableClick = {
                         navController.navigate(
                             Screen.LeagueTable.route
@@ -273,7 +277,9 @@ fun FootballNavGraph() {
                         navController.navigate(
                             Screen.Team.createRoute(teamId)
                         )
+
                     }
+
                 )
             }
 

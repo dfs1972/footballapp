@@ -1,229 +1,473 @@
+# UI_GUIDELINES.md
+
 # FootballApp UI Guidelines
 
-## Purpose
+## Design Philosophy
 
-This document defines the visual design principles for FootballApp.
+FootballApp is designed as a modern football companion application.
 
-The goal is to create a clean, modern football application that is easy to navigate and enjoyable to use.
+The objective is not to display every available statistic, but to present football information in a way that is:
 
-FootballApp should prioritise clarity and usability over displaying the maximum amount of information.
+- clean
+- calm
+- consistent
+- immediately recognisable
+- easy to navigate
+
+The UI should always prioritise user experience over displaying more data.
 
 ---
 
-# Design Philosophy
+# Core Principles
 
-FootballApp is designed around one simple question:
+## Recognition before Reading
 
-**"What does the user want to know on this screen?"**
-
-Each screen should answer one primary question.
+Users should recognise information before they need to read it.
 
 Examples:
 
-Competition Selection
-→ Which competition do I want?
+- competition logos
+- club badges
+- national flags
+- typography hierarchy
+- spacing
+- colour
 
-League Table
-→ Who is top of the league?
-
-Team
-→ How is this team performing?
-
-Player
-→ How has this player performed?
-
-Fixture
-→ What happened in this match?
-
-Avoid mixing unrelated information on the same screen.
-
-Compose components should be stateless whenever possible.
-
-Components receive all the data they need through parameters and communicate user interactions through callbacks (onClick, onSelected, etc.). They should not own application state or perform business logic.
+Visual recognition should always take priority over additional text.
 
 ---
 
-# Visual Style
+## Progressive Disclosure
 
-Use Material Design 3 as the foundation.
+Screens should reveal information gradually.
 
-The app should feel modern, lightweight and uncluttered.
+Example:
 
-Prefer:
+```
+Competitions
 
-* Cards
-* Rounded corners
-* Generous spacing
-* Simple typography
-* Consistent iconography
+↓
+
+League Overview
+
+↓
+
+League Table
+
+↓
+
+Team
+
+↓
+
+Player
+```
+
+Users should never feel overwhelmed.
+
+Each screen answers one primary question.
+
+---
+
+## Meaningful Colour
+
+Colour communicates information.
+
+Never use colour simply for decoration.
+
+Examples:
+
+✓ Champion
+
+✓ Relegation
+
+✓ Errors
+
+Avoid colouring information that has no additional meaning.
+
+Subtle colour is preferred over strong colour.
+
+---
+
+## Simplicity
+
+When several designs are possible, prefer the simpler solution.
 
 Avoid:
 
-* Overly complex layouts
-* Excessive gradients
-* Visual clutter
+- unnecessary statistics
+- duplicated information
+- excessive buttons
+- multiple competing colours
 
-Club badges, competition logos and country flags provide enough colour without relying on decorative backgrounds.
+Football supporters already understand football.
+
+The application should assist rather than explain.
+
+---
+
+## Consistency
+
+Navigation should always feel familiar.
+
+Users should never need to learn different interaction patterns on different screens.
+
+Consistent:
+
+- spacing
+- typography
+- card design
+- navigation
+- icons
+- colours
+
+---
+
+# Visual Identity
+
+FootballApp uses a calm, modern visual style.
+
+Characteristics:
+
+- rounded cards
+- soft elevation
+- subtle colours
+- generous whitespace
+- minimal dividers
+- Material 3
+
+The interface should feel polished without drawing attention to itself.
+
+---
+
+# Layout Principles
+
+Every screen should follow approximately the same hierarchy.
+
+```
+Screen Header
+
+↓
+
+Primary Content
+
+↓
+
+Secondary Content
+
+↓
+
+Navigation
+```
+
+Screens should avoid unnecessary nesting.
+
+---
+
+# Component Philosophy
+
+Compose components should have a single responsibility.
+
+Examples:
+
+```
+ScreenScaffold
+
+Responsible for:
+
+- scrolling
+- overall layout
+- screen header
+```
+
+```
+SectionCard
+
+Responsible for:
+
+- grouped content
+```
+
+```
+NavigationCard
+
+Responsible for:
+
+- navigating to another screen
+```
+
+```
+LeagueTableRow
+
+Responsible for:
+
+- displaying one team
+```
+
+Components should not:
+
+- load data
+- contain business logic
+- understand API models
+
+---
+
+# Screen Design Workflow
+
+Every new screen follows the same workflow.
+
+1. Discuss purpose.
+2. Create ASCII wireframe.
+3. Identify reusable components.
+4. Create UiModels.
+5. Create PreviewData.
+6. Build components.
+7. Assemble screen.
+8. Preview.
+9. Polish.
+10. Connect backend.
+
+This process should be followed for all future screens.
+
+---
+
+# Theme
+
+Use project theme values.
+
+Never hardcode:
+
+- spacing
+- typography
+- corner radius
+- elevation
+
+Current theme objects:
+
+```
+AppSpacing
+
+AppDimensions
+
+AppShapes
+
+AppElevation
+
+AppTypography
+```
+
+---
+
+# Strings
+
+Visible UI text should come from:
+
+```
+Strings.kt
+```
+
+Avoid hardcoded text inside components.
+
+---
+
+# UiModels
+
+Screens and components consume UiModels.
+
+Never pass backend DTOs directly into Compose UI.
+
+UiModels represent presentation data.
+
+---
+
+# PreviewData
+
+PreviewData exists to support UI development.
+
+Purpose:
+
+- Compose previews
+- screen design
+- component previews
+- layout testing
+
+PreviewData should not contain application logic.
 
 ---
 
 # Cards
 
-Cards are the primary presentation component.
+Cards should:
 
-Cards should group related information together.
+- have rounded corners
+- use subtle elevation
+- avoid heavy borders
+- group related information
 
-Examples:
-
-Competition cards
-
-Fixture cards
-
-Player cards
-
-Statistics cards
-
-Cards should have comfortable spacing between them.
+Cards should never feel cluttered.
 
 ---
 
-# Visual Hierarchy
+# Navigation
 
-Each screen should have a clear reading order.
+Navigation should use NavigationCard.
 
-Large title
+Avoid using large buttons for navigation where a card is more appropriate.
+
+Navigation should feel lightweight.
+
+---
+
+# League Table
+
+The League Table is one of the primary screens of FootballApp.
+
+## Header
+
+Displays:
+
+- Team
+- Played
+- Wins
+- Draws
+- Losses
+- Points
+
+Headers align with their corresponding data.
+
+---
+
+## Team Identification
+
+Each row displays:
+
+- league position
+- club badge
+- team name
+
+Recognition before reading.
+
+---
+
+## Qualification
+
+Champion:
+
+- subtle green row tint
+
+Relegation / Play-off:
+
+- subtle red row tint
+
+Safe teams:
+
+- standard background
+
+European qualification:
+
+- indicated by a subtle divider
+
+Avoid excessive colour.
+
+---
+
+## Tables
+
+Football tables should:
+
+- maximise readability
+- minimise clutter
+- avoid unnecessary grid lines
+- align columns consistently
+- keep statistics right aligned
+
+Spacing should support quick visual scanning.
+
+---
+
+# Typography
+
+Use Material 3 typography.
+
+Hierarchy:
+
+```
+Headline
 
 ↓
 
-Important information
+Title
 
 ↓
 
-Supporting information
+Body
 
 ↓
 
-Actions
+Label
+```
 
-The most important information should always be visible without searching.
-
----
-
-# Icons and Images
-
-Use official competition logos whenever available.
-
-Use club badges whenever available.
-
-Use country flags where appropriate.
-
-Images should help users recognise information quickly rather than decorate the interface.
+Avoid introducing additional font sizes.
 
 ---
 
-# Lists
+# Icons
 
-Avoid long, unstructured lists.
+Icons should support recognition.
 
-Prefer grouping items into logical sections.
+Avoid decorative icons.
 
-Example:
-
-Scotland
-
-LEAGUES
-
-• Premiership
-
-• Championship
-
-DOMESTIC CUPS
-
-• Scottish Cup
-
-• League Cup
+Use icons only where they improve usability.
 
 ---
 
-# Spacing
+# Images
 
-Whitespace is an important part of the design.
+Competition logos
 
-Screens should never feel crowded.
+Club badges
 
-Comfortable spacing improves readability more than adding separators.
+Country flags
 
----
+Player photos
 
-# Status Indicators
+should be displayed wherever practical.
 
-Use small status chips where appropriate.
-
-Examples:
-
-LIVE
-
-FINAL
-
-HALF TIME
-
-SCHEDULED
-
-POSTPONED
-
-Status should be recognisable at a glance.
+Images improve recognition significantly.
 
 ---
 
-# Screen-Driven Development
+# Dividers
 
-Design the screen first.
+Use dividers sparingly.
 
-Identify the data required.
+Prefer whitespace wherever possible.
 
-Only then modify the backend if additional data is needed.
-
-The user experience drives development.
+Dividers should separate information, not decorate it.
 
 ---
 
-# Version 1.0 Principles
+# Future Screens
 
-FootballApp v1.0 focuses on quality rather than quantity.
+Future screens should reuse existing components whenever practical.
 
-Existing screens should be refined before introducing new features.
+Prefer composition over duplication.
 
-The objective is to build an application that football fans enjoy using rather than exposing every available API endpoint.
+Before creating a new component, ask:
 
-Future features such as lineups, transfers, injuries and historical seasons belong to later versions unless required for Version 1.0.
+"Can an existing component be reused?"
 
-# Recognition before reading
+---
 
-Users should recognise information before they read it.
+# When In Doubt
 
-Examples:
+Prefer:
 
-Club badge before club name.
-Competition logo before competition name.
-Country flag before country name.
-Status chip before status text.
+- simplicity over complexity
+- subtlety over decoration
+- recognition over reading
+- consistency over novelty
+- composition over duplication
+- reusable components over screen-specific code
 
-# Components are UI-only
-
-# A component should never know about:
-
-Retrofit
-REST
-ViewModels
-Repositories
-Navigation
-API models
-
-# Compose components should accept UI models rather than individual primitive values whenever they represent a domain object (Competition, Team, Player, Fixture).
-
-This gives us a consistent rule:
-
-CompetitionRow → CompetitionUiModel
-TeamRow → TeamUiModel
-PlayerRow → PlayerUiModel
-FixtureRow → FixtureUiModel
+The best UI is one that feels obvious to use.

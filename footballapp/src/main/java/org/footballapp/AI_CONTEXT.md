@@ -1,175 +1,563 @@
-FootballApp Architecture
+# AI_CONTEXT.md
 
-Backend
+# FootballApp - Project Context
 
-- Java 25
-- Spring Boot
-- PostgreSQL
+## Project Vision
 
-Database is the primary source of data.
+FootballApp is a football companion application designed to present league, team, fixture and player information in a clean, modern and intuitive interface.
 
-API-Football is used ONLY to import/update data.
+The project is **not** intended to expose every API endpoint available from API-Football. Instead, FootballApp presents carefully selected information that football supporters are most likely to want, using a consistent, component-driven UI.
 
-Android NEVER connects directly to API-Football.
+The goal is to build an application that people enjoy using, rather than a database browser.
 
--------------------------------------
+---
 
-Layers
+# Overall Architecture
 
+FootballApp consists of two independent applications.
+
+```
 API-Football
+        │
+        ▼
+Java Backend (Desktop)
+Translation Layer
+        │
+        ▼
+REST API
+        │
+        ▼
+Android Application
+```
 
-↓
+The Android application **never communicates directly with API-Football**.
 
+The backend is responsible for translating third-party API data into FootballApp models.
+
+---
+
+# Backend Architecture
+
+The Java backend is responsible for:
+
+- communicating with API-Football
+- importing data
+- caching data where appropriate
+- exposing a clean REST API
+- hiding API-Football implementation details from Android
+
+Architecture:
+
+```
+Main
+    │
+    ▼
+AppConfig
+    │
+    ▼
 ApiFootballService
-
-↓
-
+    │
+    ▼
 Import Services
-
-↓
-
+    │
+    ▼
 Repositories
-
-↓
-
+    │
+    ▼
 PostgreSQL
+```
 
-↓
+Android should never know how API-Football works.
 
-LeagueDataService
+Backend acts purely as a translation layer.
 
-↓
+---
 
-REST Controllers
+# Android Architecture
 
-↓
+Android follows a layered architecture.
 
-Android Repository
-
-↓
-
-Compose UI
-
--------------------------------------
-
-Repository Pattern
-
-One repository per table.
-
-Repositories never call the API.
-
-Repositories only access PostgreSQL.
-
--------------------------------------
-
-Import Pattern
-
-One import service per endpoint.
-
-Import services call ApiFootballService.
-
-Import services save via repositories.
-
--------------------------------------
-
-REST Pattern
-
-Controllers never access repositories directly.
-
-Controllers always call LeagueDataService.
-
--------------------------------------
-
-Android Pattern
-
-Android never calls API-Football.
-
-Android only calls the Spring REST API.
-
-Android contains:
-
-Model
-
+```
 Repository
 
-ViewModel
+↓
 
-Compose Screen
+UiModels
 
--------------------------------------
+↓
 
-Naming Conventions
+Compose Components
 
-Repository
+↓
 
-...Repository
+Screens
+```
 
-Import Service
+Screens display data.
 
-...ImportService
+Repositories retrieve data.
 
-Controller
+UiModels prepare data for presentation.
 
-...Controller
+Components display reusable UI.
 
-Android Model
+---
 
-Same as backend REST model.
+# UI Package Structure
 
--------------------------------------
+```
+ui/
 
-Development Workflow
+    components/
 
-1. Explore endpoint with ApiTester.
+    design/
 
-2. Create API model.
+    model/
 
-3. Import service.
+    previews/
 
-4. Repository.
+    screens/
 
-5. LeagueDataService.
+        competitions/
 
-6. REST Controller.
+        league/
 
-7. Android model.
+        fixtures/
 
-8. Android repository.
+        teams/
 
-9. ViewModel.
+        player/
 
-10. Compose UI.
+    theme/
+```
 
-## REST API Conventions
+The older package:
 
-* Android communicates only with the FootballApp Spring REST API.
-* Android never communicates directly with API-Football.
-* API-Football is used exclusively by the backend import services.
-* REST controllers expose backend data from PostgreSQL.
-* Controllers call `LeagueDataService`; they do not access repositories directly.
-* Each controller is responsible for a single feature area (Leagues, Teams, Fixtures, Players, Team Statistics, etc.).
-* Follow the existing URL conventions already established in the project when creating new endpoints.
+```
+com.example.footballapp.screens
+```
 
-## UI First Principle
+is considered **legacy UI** and will gradually be replaced.
 
-FootballApp v1.0 is developed from the user's perspective. Screens are designed first, data requirements are identified second, and backend changes are made only when the UI genuinely needs additional data.
+---
 
-## Backend as Translation Layer
+# Theme
 
-The backend is responsible for transforming API-Football data into models that best suit the FootballApp UI. Android should consume application-specific models and should not contain logic to reorganise or reinterpret API data.
+The application uses Material 3.
 
-Screen-Driven Development
+Project-specific theme classes:
 
-FootballApp development begins with the user interface.
+```
+AppSpacing
 
-For every new feature:
+AppDimensions
 
-1. Design the screen.
+AppShapes
 
-2. Identify the data required.
+AppElevation
 
-3. Use existing backend services whenever possible.
+AppTypography
+```
 
-4. Only extend the backend if the UI genuinely requires additional data.
+Avoid hardcoded spacing, typography and corner radius values.
 
-The goal is to minimise unnecessary backend work while maximising user value.
+---
+
+# Design Package
+
+```
+ui/design/
+```
+
+Contains project-wide UI resources such as:
+
+- Strings
+- Icons
+- Dimensions
+- Animation
+
+UI text should come from `Strings.kt` where appropriate.
+
+---
+
+# UI Models
+
+UI components consume UiModels.
+
+Never pass backend DTOs directly to Compose components.
+
+Current models include:
+
+```
+CompetitionUiModel
+
+CompetitionGroupUiModel
+
+CompetitionType
+
+StandingUiModel
+```
+
+Future UI models should follow the same pattern.
+
+---
+
+# Component-Driven UI
+
+FootballApp is built from reusable Compose components.
+
+Current components include:
+
+```
+ScreenScaffold
+
+ScreenHeader
+
+SectionCard
+
+SectionHeading
+
+CompetitionRow
+
+CompetitionList
+
+NavigationCard
+
+TopStandingsCard
+```
+
+Screens should be assembled from components rather than containing layout logic.
+
+---
+
+# Screen-Driven Development
+
+Development follows this process:
+
+```
+Design Screen
+
+↓
+
+ASCII Wireframe
+
+↓
+
+Identify reusable components
+
+↓
+
+Build components
+
+↓
+
+Assemble screen
+```
+
+Avoid building infrastructure without a screen that genuinely requires it.
+
+---
+
+# Design Principles
+
+## Recognition before Reading
+
+Prefer recognition over text.
+
+Use:
+
+- competition logos
+- country flags
+- icons
+- typography
+- spacing
+
+to help users identify information quickly.
+
+---
+
+## Progressive Disclosure
+
+Show the most important information first.
+
+Allow users to drill down for additional detail.
+
+Example:
+
+```
+Competitions
+
+↓
+
+League Overview
+
+↓
+
+League Table
+
+↓
+
+Team
+
+↓
+
+Player
+```
+
+Do not overwhelm users with every available statistic.
+
+---
+
+## Consistency
+
+Navigation should look the same throughout the application.
+
+Example:
+
+```
+League Table              >
+
+Fixtures                  >
+
+Teams                     >
+```
+
+Navigation cards are preferred over buttons.
+
+---
+
+## Simplicity
+
+Every screen should answer one question.
+
+Examples:
+
+Competitions
+
+> Which competition do I want?
+
+League Overview
+
+> What is happening in this competition?
+
+League Table
+
+> Where does every team currently stand?
+
+Fixtures
+
+> What matches are coming up?
+
+Team
+
+> Tell me about this club.
+
+---
+
+# Backend Philosophy
+
+Backend is a translation layer.
+
+Android should never:
+
+- call API-Football
+- understand API-Football DTOs
+- know API-Football endpoints
+
+Backend decides what Android needs.
+
+---
+
+# Current Development Strategy
+
+Current focus is **Track 1 — Finish the Product**.
+
+The objective is to complete every major screen using PreviewData before connecting the application to live backend data.
+
+Once all screens exist:
+
+- introduce ViewModels
+- replace PreviewData
+- connect repositories
+- connect REST API
+
+---
+
+# Migration Strategy
+
+Legacy screens are **not** being refactored.
+
+Instead:
+
+```
+Legacy Screen
+
+↓
+
+Design
+
+↓
+
+New Screen
+
+↓
+
+Switch Navigation
+
+↓
+
+Delete Legacy Screen
+```
+
+This keeps the project stable throughout migration.
+
+---
+
+# Current Screen Status
+
+Completed:
+
+```
+CompetitionsScreen
+
+LeagueOverviewScreen
+```
+
+Remaining:
+
+```
+LeagueTableScreen
+
+FixturesScreen
+
+TeamsScreen
+
+TeamScreen
+
+PlayerScreen
+
+FixtureDetailsScreen
+
+SquadScreen
+```
+
+---
+
+# PreviewData
+
+PreviewData is intentionally used during UI development.
+
+Purpose:
+
+- Compose previews
+- screen development
+- visual design
+- reusable sample data
+
+PreviewData will eventually be replaced by ViewModels.
+
+---
+
+# AppState
+
+Current AppState still contains some legacy values.
+
+Future direction is:
+
+```
+selectedCompetition : CompetitionUiModel
+```
+
+rather than storing:
+
+- leagueId
+- leagueName
+- season
+
+separately.
+
+---
+
+# PostgreSQL
+
+PostgreSQL remains part of the backend.
+
+Its purpose is:
+
+- caching
+- development
+- testing
+- reducing unnecessary API requests
+
+The application is **not** intended to become a historical football database.
+
+The focus remains on current football information.
+
+---
+
+# Coding Guidelines
+
+Prefer:
+
+- UiModels over primitive values
+- reusable components
+- stateless Compose components
+- Material 3
+- project theme values
+- Strings.kt for shared UI text
+
+Avoid:
+
+- duplicated UI
+- hardcoded spacing
+- hardcoded colours
+- backend DTOs inside UI
+- repository calls inside Compose screens
+
+---
+
+# Long-Term Goal
+
+FootballApp should feel like a polished football application.
+
+The user should never be aware that the data originated from API-Football.
+
+Every screen should feel focused, uncluttered and consistent.
+
+The application should prioritise user experience over exposing every available piece of data.
+
+# UI Evolution Strategy
+
+The existing screens under:
+
+com.example.footballapp.screens
+
+are considered prototype implementations.
+
+They should not be refactored.
+
+Instead:
+
+Prototype Screen
+
+↓
+
+Redesign
+
+↓
+
+Identify reusable components
+
+↓
+
+Create new screen under ui/screens
+
+↓
+
+Switch navigation
+
+↓
+
+Delete prototype screen
+
+This allows the application to evolve cleanly without mixing old and new architectures.

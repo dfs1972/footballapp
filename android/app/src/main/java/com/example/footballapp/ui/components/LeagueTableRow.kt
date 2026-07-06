@@ -68,12 +68,18 @@ fun LeagueTableRow(
             fontWeight = FontWeight.SemiBold
         )
 
-        AsyncImage(
-            model = row.teamLogo,
-            contentDescription = row.teamName,
-            modifier = Modifier
-                .size(24.dp)
-                .padding(end = AppSpacing.Small)
+//        AsyncImage(
+//            model = row.teamLogo,
+//            contentDescription = row.teamName,
+//            modifier = Modifier
+//                .size(24.dp)
+//                .padding(end = AppSpacing.Small)
+//        )
+
+        TeamBadge(
+
+            logoUrl = row.teamLogo
+
         )
 
         Text(

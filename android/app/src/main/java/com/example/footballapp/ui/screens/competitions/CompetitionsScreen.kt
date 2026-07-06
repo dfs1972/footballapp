@@ -1,20 +1,16 @@
 package com.example.footballapp.ui.screens.competitions
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.footballapp.ui.components.CompetitionList
-import com.example.footballapp.ui.components.ScreenHeader
+import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.SectionCard
 import com.example.footballapp.ui.components.SectionHeading
+import com.example.footballapp.ui.design.Strings
+import androidx.compose.foundation.lazy.items
 import com.example.footballapp.ui.previews.PreviewData
-import com.example.footballapp.ui.theme.AppSpacing
 
 @Composable
 fun CompetitionsScreen(
@@ -29,29 +25,13 @@ fun CompetitionsScreen(
 
     )
 
-    LazyColumn(
+    ScreenScaffold(
 
-        modifier = Modifier.fillMaxSize(),
+        title = Strings.COMPETITIONS,
 
-        contentPadding = PaddingValues(
-
-            vertical = AppSpacing.Medium
-
-        )
+        subtitle = Strings.CHOOSE_COMPETITION
 
     ) {
-
-        item {
-
-            ScreenHeader(
-
-                title = "Competitions",
-
-                subtitle = "Choose a competition to explore."
-
-            )
-
-        }
 
         items(groups) { group ->
 
@@ -69,7 +49,7 @@ fun CompetitionsScreen(
 
                     SectionHeading(
 
-                        text = "Leagues"
+                        text = Strings.LEAGUES
 
                     )
 
@@ -91,7 +71,7 @@ fun CompetitionsScreen(
 
                     SectionHeading(
 
-                        text = "Domestic Cups"
+                        text = Strings.DOMESTIC_CUPS
 
                     )
 

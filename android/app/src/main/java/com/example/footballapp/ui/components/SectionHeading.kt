@@ -19,7 +19,7 @@ fun SectionHeading(
 
     Text(
 
-        text = text.uppercase(),
+        text = text,
 
         style = AppTypography.SectionHeading,
 
@@ -28,6 +28,8 @@ fun SectionHeading(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
+                start = AppSpacing.Screen,
+                end = AppSpacing.Screen,
                 top = AppSpacing.Section,
                 bottom = AppSpacing.Small
             )

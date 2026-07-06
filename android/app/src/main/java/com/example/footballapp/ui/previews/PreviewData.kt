@@ -5,6 +5,9 @@ import com.example.footballapp.ui.model.CompetitionUiModel
 import com.example.footballapp.ui.model.LeagueTableRowUiModel
 import com.example.footballapp.ui.model.QualificationType
 import com.example.footballapp.ui.model.StandingUiModel
+import com.example.footballapp.ui.model.FixtureStatus
+import com.example.footballapp.ui.model.FixtureUiModel
+import com.example.footballapp.ui.model.FixtureDayUiModel
 
 object PreviewData {
 
@@ -122,6 +125,20 @@ object PreviewData {
             teamId = 5,
             teamName = "Hearts",
             points = 59
+        ),
+
+        StandingUiModel(
+            position = 6,
+            teamId = 11,
+            teamName = "Ross County",
+            points = 33
+        ),
+
+        StandingUiModel(
+            position = 7,
+            teamId = 12,
+            teamName = "St Johnstone",
+            points = 29
         )
 
     )
@@ -275,6 +292,224 @@ object PreviewData {
             points = 29,
             qualification = QualificationType.RELEGATION
         )
+
+    )
+
+    // -----------------------------------------------------------------------------
+// Fixture Preview Data
+// -----------------------------------------------------------------------------
+
+    val CelticVsRangers = FixtureUiModel(
+
+        fixtureId = 1001L,
+
+        homeTeamId = 1,
+        homeTeamName = "Celtic",
+        homeTeamLogo = null,
+
+        awayTeamId = 2,
+        awayTeamName = "Rangers",
+        awayTeamLogo = null,
+
+        kickOff = "15:00",
+
+        status = FixtureStatus.SCHEDULED
+
+    )
+
+    val HeartsVsAberdeen = FixtureUiModel(
+
+        fixtureId = 1002L,
+
+        homeTeamId = 5,
+        homeTeamName = "Hearts",
+        homeTeamLogo = null,
+
+        awayTeamId = 4,
+        awayTeamName = "Aberdeen",
+        awayTeamLogo = null,
+
+        kickOff = "15:00",
+
+        status = FixtureStatus.SCHEDULED
+
+    )
+
+    val HibernianVsDundeeUnited = FixtureUiModel(
+
+        fixtureId = 1003L,
+
+        homeTeamId = 3,
+        homeTeamName = "Hibernian",
+        homeTeamLogo = null,
+
+        awayTeamId = 8,
+        awayTeamName = "Dundee United",
+        awayTeamLogo = null,
+
+        kickOff = "17:30",
+
+        status = FixtureStatus.SCHEDULED
+
+    )
+
+    /**
+     * Postponed Game
+     */
+    val RossCountyVsStJohnstone = FixtureUiModel(
+
+        fixtureId = 4,
+
+        homeTeamId = 11,
+        homeTeamName = "Ross County",
+
+        awayTeamId = 12,
+        awayTeamName = "St Johnstone",
+
+        kickOff = "19:45",
+
+        status = FixtureStatus.POSTPONED
+
+    )
+
+    // Fixtures Heading
+    val ScottishPremiershipFixtures = FixtureDayUiModel(
+
+        heading = "Today - Saturday 20th June",
+
+        fixtures = listOf(
+
+            CelticVsRangers,
+
+            HeartsVsAberdeen,
+
+            HibernianVsDundeeUnited,
+
+            RossCountyVsStJohnstone
+
+        )
+
+    )
+
+    /**
+     * Today's Fixtures
+     */
+    val TodayFixtures = FixtureDayUiModel(
+
+        heading = "Today • Saturday 20th June",
+
+        fixtures = listOf(
+
+            HeartsVsAberdeen,        // LIVE
+
+            HibernianVsDundeeUnited  // FT
+
+        )
+
+    )
+
+    /**
+     * Tomorrow's Fixtures
+     */
+    val TomorrowFixtures = FixtureDayUiModel(
+
+        heading = "Tomorrow • Sunday 21st June",
+
+        fixtures = listOf(
+
+            CelticVsRangers,
+
+            RossCountyVsStJohnstone
+
+        )
+
+    )
+
+    /**
+     * Live Game
+     */
+    val CelticVsRangersLive = FixtureUiModel(
+
+        fixtureId = 1004L,
+
+        homeTeamId = 1,
+        homeTeamName = "Celtic",
+
+        awayTeamId = 2,
+        awayTeamName = "Rangers",
+
+        kickOff = "15:00",
+
+        status = FixtureStatus.LIVE,
+
+        homeScore = 2,
+
+        awayScore = 1
+
+    )
+
+    /**
+     * Scheduled Game
+     */
+    val CelticVRangers = FixtureUiModel(
+
+        fixtureId = 1,
+
+        homeTeamId = 1,
+        homeTeamName = "Celtic",
+
+        awayTeamId = 2,
+        awayTeamName = "Rangers",
+
+        kickOff = "15:00",
+
+        status = FixtureStatus.SCHEDULED
+
+    )
+
+    /**
+     * Finished Game
+     */
+    val CelticVsRangersFinished = FixtureUiModel(
+
+        fixtureId = 1005L,
+
+        homeTeamId = 1,
+        homeTeamName = "Celtic",
+
+        awayTeamId = 2,
+        awayTeamName = "Rangers",
+
+        kickOff = "15:00",
+
+        status = FixtureStatus.FINISHED,
+
+        homeScore = 3,
+
+        awayScore = 0
+
+    )
+
+    /**
+     * Penalty Shoot-out
+     */
+    val ScottishCupFinal = FixtureUiModel(
+
+        fixtureId = 5,
+
+        homeTeamId = 1,
+        homeTeamName = "Celtic",
+
+        awayTeamId = 2,
+        awayTeamName = "Rangers",
+
+        kickOff = "15:00",
+
+        status = FixtureStatus.PENALTIES,
+
+        homeScore = 4,
+
+        awayScore = 4
 
     )
 

@@ -21,7 +21,7 @@ import com.example.footballapp.R
 import com.example.footballapp.ui.theme.AppDimensions
 
 @Composable
-fun TeamBadge(
+fun ClubBadge(
 
     logoUrl: String?,
 
@@ -40,7 +40,7 @@ fun TeamBadge(
             contentDescription = null,
 
             modifier = modifier
-                .size(AppDimensions.TeamBadgeMedium)
+
                 .clip(CircleShape),
 
             contentScale = ContentScale.Fit
@@ -56,7 +56,7 @@ fun TeamBadge(
             contentDescription = null,
 
             modifier = modifier
-                .size(AppDimensions.TeamBadgeMedium)
+
                 .clip(CircleShape),
 
             contentScale = ContentScale.Fit
@@ -75,7 +75,7 @@ fun PreviewTeamBadge(
     Box(
 
         modifier = modifier
-            .size(AppDimensions.TeamBadgeMedium)
+            .size(AppDimensions.ClubBadgeMedium)
             .clip(CircleShape)
 
     ) {
@@ -110,7 +110,7 @@ private fun PlaceholderBadge(
     Box(
 
         modifier = modifier
-            .size(AppDimensions.TeamBadgeMedium)
+            .size(AppDimensions.ClubBadgeMedium)
             .clip(CircleShape)
             .background(
                 MaterialTheme.colorScheme.surfaceVariant

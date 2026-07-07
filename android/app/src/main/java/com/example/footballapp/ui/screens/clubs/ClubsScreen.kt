@@ -18,7 +18,7 @@ fun ClubsScreen(
 
     clubs: List<ClubUiModel>,
 
-    onClubSelected: (Int) -> Unit
+    onClubClick: (Int) -> Unit
 
 ) {
 
@@ -32,7 +32,7 @@ fun ClubsScreen(
 
         item {
 
-            SectionCard() {
+            SectionCard {
 
                 ClubList(
 
@@ -40,7 +40,7 @@ fun ClubsScreen(
 
                     onClubSelected = { club ->
 
-                        onClubSelected(
+                        onClubClick(
 
                             club.clubId
 
@@ -71,7 +71,7 @@ private fun ClubsScreenPreview() {
 
             clubs = PreviewData.ScottishPremiershipClubList,
 
-            onClubSelected = {}
+            onClubClick = {}
 
         )
 

@@ -1,5 +1,6 @@
 package com.example.footballapp.ui.previews
 
+import com.example.footballapp.ui.model.ClubDetailsUiModel
 import com.example.footballapp.ui.model.CompetitionGroupUiModel
 import com.example.footballapp.ui.model.CompetitionUiModel
 import com.example.footballapp.ui.model.LeagueTableRowUiModel
@@ -8,6 +9,7 @@ import com.example.footballapp.ui.model.StandingUiModel
 import com.example.footballapp.ui.model.FixtureStatus
 import com.example.footballapp.ui.model.FixtureUiModel
 import com.example.footballapp.ui.model.FixtureDayUiModel
+import com.example.footballapp.ui.model.ClubUiModel
 
 object PreviewData {
 
@@ -513,4 +515,162 @@ object PreviewData {
 
     )
 
+    /**
+     * Initialise Clubs
+     */
+    val Celtic = ClubUiModel(
+
+        clubId = 1,
+
+        name = "Celtic",
+
+        shortName = "Celtic",
+
+        badgeUrl = null,
+
+        stadium = "Celtic Park"
+
+    )
+
+    val Rangers = ClubUiModel(
+
+        clubId = 2,
+
+        name = "Rangers",
+
+        shortName = "Rangers",
+
+        badgeUrl = null,
+
+        stadium = "Ibrox Stadium"
+
+    )
+
+    val Hibernian = ClubUiModel(
+
+        clubId = 3,
+
+        name = "Hibernian",
+
+        shortName = "Hibernian",
+
+        badgeUrl = null,
+
+        stadium = "Easter Road"
+
+    )
+
+    val Hearts = ClubUiModel(
+
+        clubId = 4,
+
+        name = "Heart of Midlothian",
+
+        shortName = "Hearts",
+
+        badgeUrl = null,
+
+        stadium = "Tynecastle Park"
+
+    )
+
+    val Aberdeen = ClubUiModel(
+
+        clubId = 5,
+
+        name = "Aberdeen",
+
+        shortName = "Aberdeen",
+
+        badgeUrl = null,
+
+        stadium = "Pittodrie Stadium"
+
+    )
+
+    /**
+     * Clubs List
+     * Initialised above.
+     */
+    val ScottishPremiershipClubList = listOf(
+
+        Celtic,
+
+        Rangers,
+
+        Hibernian,
+
+        Hearts,
+
+        Aberdeen
+
+    )
+
+    /**
+     * Club Details
+     */
+    val CelticDetails = ClubDetailsUiModel(
+
+        clubId = 1,
+
+        name = "Celtic",
+
+        badgeUrl = null,
+
+        league = "Scottish Premiership",
+
+        founded = 1887,
+
+        stadium = "Celtic Park",
+
+        capacity = 60411,
+
+        manager = "Brendan Rodgers"
+
+    )
+
+    val RangersDetails = ClubDetailsUiModel(
+
+        clubId = 2,
+
+        name = "Rangers",
+
+        badgeUrl = null,
+
+        league = "Scottish Premiership",
+
+        founded = 1872,
+
+        stadium = "Ibrox Stadium",
+
+        capacity = 50817,
+
+        manager = "Russell Martin"
+
+    )
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

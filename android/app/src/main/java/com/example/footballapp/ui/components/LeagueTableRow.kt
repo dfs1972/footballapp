@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -15,10 +16,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.Alignment
 
 import com.example.footballapp.ui.model.LeagueTableRowUiModel
 import com.example.footballapp.ui.model.QualificationType
 import com.example.footballapp.ui.previews.PreviewData
+import com.example.footballapp.ui.theme.AppDimensions
 import com.example.footballapp.ui.theme.AppSpacing
 
 @Composable
@@ -28,7 +31,7 @@ fun LeagueTableRow(
 
     isEvenRow: Boolean,
 
-    onTeamClick: (Int) -> Unit
+    onClubClick: (Int) -> Unit
 
 ) {
 
@@ -46,14 +49,17 @@ fun LeagueTableRow(
                 shape = MaterialTheme.shapes.small
             )
             .clickable {
-                onTeamClick(row.teamId)
+                onClubClick(row.teamId)
             }
             .padding(
                 start = AppSpacing.Small,
                 end = AppSpacing.Medium,
                 top = AppSpacing.ExtraSmall,
                 bottom = AppSpacing.ExtraSmall
-            )
+            ),
+
+        verticalAlignment = Alignment.CenterVertically
+
     ) {
 
         Text(
@@ -62,17 +68,16 @@ fun LeagueTableRow(
             fontWeight = FontWeight.SemiBold
         )
 
-//        AsyncImage(
-//            model = row.teamLogo,
-//            contentDescription = row.teamName,
-//            modifier = Modifier
-//                .size(24.dp)
-//                .padding(end = AppSpacing.Small)
-//        )
-
         ClubBadge(
 
-            logoUrl = row.teamLogo
+            logoUrl = row.teamLogo,
+
+            modifier = Modifier
+                .size(AppDimensions.ImageSmall)
+                .padding(
+                    start = AppSpacing.ExtraSmall,
+                    end = AppSpacing.Small
+                )
 
         )
 
@@ -129,7 +134,7 @@ private fun LeagueTableRowPreview() {
 
             isEvenRow = true,
 
-            onTeamClick = {}
+            onClubClick = {}
 
         )
     }

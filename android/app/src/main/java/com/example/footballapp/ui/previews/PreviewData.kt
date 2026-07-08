@@ -10,6 +10,8 @@ import com.example.footballapp.ui.model.FixtureStatus
 import com.example.footballapp.ui.model.FixtureUiModel
 import com.example.footballapp.ui.model.FixtureDayUiModel
 import com.example.footballapp.ui.model.ClubUiModel
+import com.example.footballapp.ui.model.PlayerUiModel
+import com.example.footballapp.ui.model.PlayerDetailsUiModel
 
 object PreviewData {
 
@@ -646,6 +648,244 @@ object PreviewData {
         capacity = 50817,
 
         manager = "Russell Martin"
+
+    )
+
+    /**
+     * Rangers Squad
+     */
+    val RangersSquad = listOf(
+
+        // Goalkeepers
+
+        PlayerUiModel(
+            playerId = 1,
+            shirtNumber = 1,
+            name = "Jack Butland",
+            position = "Goalkeeper"
+        ),
+
+        PlayerUiModel(
+            playerId = 2,
+            shirtNumber = 31,
+            name = "Liam Kelly",
+            position = "Goalkeeper"
+        ),
+
+        // Defenders
+
+        PlayerUiModel(
+            playerId = 3,
+            shirtNumber = 2,
+            name = "James Tavernier",
+            position = "Defender"
+        ),
+
+        PlayerUiModel(
+            playerId = 4,
+            shirtNumber = 4,
+            name = "Robin Pröpper",
+            position = "Defender"
+        ),
+
+        PlayerUiModel(
+            playerId = 5,
+            shirtNumber = 5,
+            name = "John Souttar",
+            position = "Defender"
+        ),
+
+        PlayerUiModel(
+            playerId = 6,
+            shirtNumber = 19,
+            name = "Clinton Nsiala",
+            position = "Defender"
+        ),
+
+        PlayerUiModel(
+            playerId = 7,
+            shirtNumber = 22,
+            name = "Jefte",
+            position = "Defender"
+        ),
+
+        PlayerUiModel(
+            playerId = 8,
+            shirtNumber = 27,
+            name = "Dujon Sterling",
+            position = "Defender"
+        ),
+
+        PlayerUiModel(
+            playerId = 9,
+            shirtNumber = 33,
+            name = "Ridvan Yılmaz",
+            position = "Defender"
+        ),
+
+        PlayerUiModel(
+            playerId = 10,
+            shirtNumber = 45,
+            name = "Leon King",
+            position = "Defender"
+        ),
+
+        // Midfielders
+
+        PlayerUiModel(
+            playerId = 11,
+            shirtNumber = 8,
+            name = "Mohamed Diomande",
+            position = "Midfielder"
+        ),
+
+        PlayerUiModel(
+            playerId = 12,
+            shirtNumber = 10,
+            name = "Nicolas Raskin",
+            position = "Midfielder"
+        ),
+
+        PlayerUiModel(
+            playerId = 13,
+            shirtNumber = 43,
+            name = "Connor Barron",
+            position = "Midfielder"
+        ),
+
+        PlayerUiModel(
+            playerId = 14,
+            shirtNumber = 49,
+            name = "Bailey Rice",
+            position = "Midfielder"
+        ),
+
+        PlayerUiModel(
+            playerId = 15,
+            shirtNumber = 52,
+            name = "Findlay Curtis",
+            position = "Midfielder"
+        ),
+
+        // Forwards
+
+        PlayerUiModel(
+            playerId = 16,
+            shirtNumber = 9,
+            name = "Cyriel Dessers",
+            position = "Forward"
+        ),
+
+        PlayerUiModel(
+            playerId = 17,
+            shirtNumber = 11,
+            name = "Oscar Cortés",
+            position = "Forward"
+        ),
+
+        PlayerUiModel(
+            playerId = 18,
+            shirtNumber = 18,
+            name = "Vaclav Cerny",
+            position = "Forward"
+        ),
+
+        PlayerUiModel(
+            playerId = 19,
+            shirtNumber = 29,
+            name = "Hamza Igamane",
+            position = "Forward"
+        ),
+
+        PlayerUiModel(
+            playerId = 20,
+            shirtNumber = 99,
+            name = "Danilo",
+            position = "Forward"
+        )
+
+    )
+
+    /**
+     * Player Details
+     */
+    val JamesTavernierDetails = PlayerDetailsUiModel(
+
+        playerId = 1,
+
+        name = "James Tavernier",
+
+        photoUrl = null,
+
+        shirtNumber = 2,
+
+        position = "Defender",
+
+        nationality = "England",
+
+        dateOfBirth = "31 October 1991",
+
+        age = 34,
+
+        height = "182 cm",
+
+        weight = "76 kg",
+
+        preferredFoot = "Right",
+
+        captain = true,
+
+        appearances = 36,
+
+        goals = 5,
+
+        assists = 8,
+
+        yellowCards = 4,
+
+        redCards = 0,
+
+        minutesPlayed = 3142
+
+    )
+
+    val JackButlandDetails = PlayerDetailsUiModel(
+
+        playerId = 2,
+
+        name = "Jack Butland",
+
+        photoUrl = null,
+
+        shirtNumber = 1,
+
+        position = "Goalkeeper",
+
+        nationality = "England",
+
+        dateOfBirth = "10 March 1993",
+
+        age = 33,
+
+        height = "196 cm",
+
+        weight = "95 kg",
+
+        preferredFoot = "Right",
+
+        captain = false,
+
+        appearances = 34,
+
+        goals = 0,
+
+        assists = 0,
+
+        yellowCards = 1,
+
+        redCards = 0,
+
+        minutesPlayed = 3060
 
     )
 

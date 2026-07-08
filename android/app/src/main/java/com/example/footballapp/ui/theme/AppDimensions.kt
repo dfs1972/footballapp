@@ -6,10 +6,10 @@ object AppDimensions {
 
     val CompetitionLogo = 36.dp
 
-    val ClubBadgeSmall = 24.dp
-    val ClubBadgeMedium = 36.dp
+    val ImageSmall = 24.dp
+    val ImageMedium = 36.dp
 
-    val ClubBadgeLarge = 56.dp
+    val ImageLarge = 56.dp
 
     val PlayerPhoto = 96.dp
     val StatusChipHeight = 28.dp
@@ -23,5 +23,7 @@ object AppDimensions {
     val BadgeBorder = 1.dp
 
     val FixtureCentreWidth = 80.dp
+
+    val ShirtNumberWidth = 32.dp
 
 }

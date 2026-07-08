@@ -18,8 +18,6 @@ import com.example.footballapp.screens.TeamsScreen
 import com.example.footballapp.screens.SquadScreen
 import com.example.footballapp.screens.PlayerDetailsScreen
 
-import com.example.footballapp.ui.previews.PreviewData
-
 @Composable
 fun FootballNavGraph() {
 
@@ -260,7 +258,7 @@ fun FootballNavGraph() {
                         )
                     },
 
-                    onTeamsClick = {
+                    onClubsClick = {
                         navController.navigate(
                             Screen.Teams.route
                         )
@@ -272,7 +270,7 @@ fun FootballNavGraph() {
                         )
                     },
 
-                    onTeamClick = { teamId ->
+                    onClubClick = { teamId ->
 
                         navController.navigate(
                             Screen.Team.createRoute(teamId)

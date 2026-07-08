@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
@@ -19,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.footballapp.ui.model.ClubUiModel
 import com.example.footballapp.ui.previews.PreviewData
+import com.example.footballapp.ui.theme.AppDimensions
 import com.example.footballapp.ui.theme.AppSpacing
 
 @Composable
@@ -47,7 +49,11 @@ fun ClubRow(
 
         ClubBadge(
 
-            logoUrl = club.badgeUrl
+            logoUrl = club.badgeUrl,
+
+            modifier = Modifier
+                .size(AppDimensions.ImageMedium)
+                .padding(end = AppSpacing.Medium)
 
         )
 

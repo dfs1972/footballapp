@@ -16,7 +16,7 @@ object AppTypography {
 
     val SectionHeading: TextStyle
         @Composable
-        get() = MaterialTheme.typography.labelLarge
+        get() = MaterialTheme.typography.titleMedium
 
     val Body: TextStyle
         @Composable

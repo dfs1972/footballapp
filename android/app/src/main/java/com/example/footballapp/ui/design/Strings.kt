@@ -5,7 +5,7 @@ object Strings {
     const val VIEW_FULL_TABLE = "View Full Table"
     const val LEAGUE_TABLE = "League Table"
     const val FIXTURES = "Fixtures"
-    const val TEAMS = "Teams"
+    const val CLUBS = "Teams"
     const val TOP_FIVE = "Top 5"
     const val VIEW_COMPLETE_STANDINGS = "View complete standings"
     const val UPCOMING_FIXTURES = "Upcoming fixtures and results"

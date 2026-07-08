@@ -18,9 +18,9 @@ fun LeagueOverviewScreen(
 
     onFixturesClick: () -> Unit = {},
 
-    onTeamsClick: () -> Unit = {},
+    onClubsClick: () -> Unit = {},
 
-    onTeamClick: (Int) -> Unit = {}
+    onClubClick: (Int) -> Unit = {}
 
 ) {
 
@@ -40,7 +40,7 @@ fun LeagueOverviewScreen(
 
                 onTeamClick = {
 
-                    onTeamClick(it.teamId)
+                    onClubClick(it.teamId)
 
                 },
 
@@ -82,11 +82,11 @@ fun LeagueOverviewScreen(
 
             NavigationCard(
 
-                title = Strings.TEAMS,
+                title = Strings.CLUBS,
 
                 subtitle = Strings.BROWSE_ALL_CLUBS,
 
-                onClick = onTeamsClick
+                onClick = onClubsClick
 
             )
 

@@ -34,7 +34,7 @@ fun LeagueTableCard(
 
                 isEvenRow = false,
 
-                onTeamClick = onTeamClick
+                onClubClick = onTeamClick
 
             )
 

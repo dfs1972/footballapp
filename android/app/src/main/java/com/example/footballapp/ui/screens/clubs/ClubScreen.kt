@@ -58,7 +58,7 @@ fun ClubScreen(
                     logoUrl = club.badgeUrl,
 
                     modifier = Modifier.size(
-                        AppDimensions.ClubBadgeLarge
+                        AppDimensions.ImageLarge
                     )
 
                 )

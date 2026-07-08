@@ -14,9 +14,9 @@ fun LeagueTableScreen(
 
     competition: CompetitionUiModel,
 
-    table: List<LeagueTableRowUiModel>,
+    standings: List<LeagueTableRowUiModel>,
 
-    onTeamClick: (Int) -> Unit
+    onClubClick: (Int) -> Unit
 
 ) {
 
@@ -34,7 +34,7 @@ fun LeagueTableScreen(
 
                 table = PreviewData.ScottishPremiershipTable,
 
-                onTeamClick = onTeamClick
+                onTeamClick = onClubClick
 
             )
 
@@ -54,9 +54,9 @@ private fun LeagueTableScreenPreview() {
 
             competition = PreviewData.ScottishPremiership,
 
-            table = PreviewData.ScottishPremiershipTable,
+            standings = PreviewData.ScottishPremiershipTable,
 
-            onTeamClick = {}
+            onClubClick = {}
 
         )
 

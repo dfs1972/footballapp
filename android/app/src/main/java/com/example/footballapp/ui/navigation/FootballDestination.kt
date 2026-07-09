@@ -14,15 +14,6 @@ sealed class FootballDestination(
 
     data object LeagueTable : FootballDestination("league_table")
 
-    data object ClubDetails : FootballDestination(
-        "club_details"
-    ) {
-
-        fun createRoute(clubId: Int) =
-            "club_details/$clubId"
-
-    }
-
     data object Fixtures : FootballDestination("fixtures")
 
     data object Clubs : FootballDestination("clubs")

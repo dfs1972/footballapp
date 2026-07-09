@@ -1,4 +1,4 @@
-package com.example.footballapp.ui.screens.clubs
+package com.example.footballapp.ui.screens.club
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,7 +15,6 @@ import com.example.footballapp.ui.components.NavigationCard
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.SectionCard
 import com.example.footballapp.ui.model.ClubDetailsUiModel
-import com.example.footballapp.ui.components.ClubBadge
 import com.example.footballapp.ui.previews.PreviewData
 import com.example.footballapp.ui.theme.AppDimensions
 import com.example.footballapp.ui.theme.AppSpacing

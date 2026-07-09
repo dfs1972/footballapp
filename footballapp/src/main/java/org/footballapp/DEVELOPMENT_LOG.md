@@ -26,3 +26,19 @@ Next:
 □ Test scrolling on all screens
 □ Test dark mode
 □ Navigation back stack
+
+### Navigation Milestone
+
+Implemented Demo Mode navigation:
+
+✓ Competitions
+✓ League Overview
+✓ League Table
+✓ Fixtures
+✓ Clubs
+✓ Club Details
+
+Remaining:
+
+□ Squad
+□ Player Details

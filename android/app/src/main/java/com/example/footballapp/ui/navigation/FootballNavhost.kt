@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.footballapp.ui.previews.PreviewData
+import com.example.footballapp.ui.screens.club.ClubScreen
 import com.example.footballapp.ui.screens.clubs.ClubsScreen
 import com.example.footballapp.ui.screens.competitions.CompetitionsScreen
 import com.example.footballapp.ui.screens.fixtures.FixturesScreen
@@ -132,7 +133,9 @@ fun FootballNavHost() {
         // Clubs
         // ---------------------------------------------------------------------
 
-        composable(FootballDestination.Clubs.route) {
+        composable(
+            FootballDestination.Clubs.route
+        ) {
 
             ClubsScreen(
 
@@ -144,7 +147,9 @@ fun FootballNavHost() {
 
                 onClubClick = { _ ->
 
-                    // Stage 3
+                    navController.navigate(
+                        FootballDestination.Club.route
+                    )
 
                 }
 
@@ -152,6 +157,32 @@ fun FootballNavHost() {
 
         }
 
-    }
+        //---------------------------------------------------------------------
+        //Club
+        //---------------------------------------------------------------------
 
+        composable(
+            FootballDestination.Club.route
+        ) {
+
+            ClubScreen(
+
+                club = DemoData.club,
+
+                onFixturesClick = {
+
+                    // Stage 4
+
+                },
+
+                onSquadClick = {
+
+                    // Stage 3 - Step 2
+
+                }
+
+            )
+
+        }
+    }
 }

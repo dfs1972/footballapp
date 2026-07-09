@@ -38,7 +38,7 @@ fun ClubsScreen(
 
                     clubs = clubs,
 
-                    onClubSelected = { club ->
+                    onClubClick = { club ->
 
                         onClubClick(
 
@@ -78,3 +78,4 @@ private fun ClubsScreenPreview() {
     }
 
 }
+

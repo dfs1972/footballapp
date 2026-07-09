@@ -11,7 +11,7 @@ fun ClubList(
 
     clubs: List<ClubUiModel>,
 
-    onClubSelected: (ClubUiModel) -> Unit
+    onClubClick: (ClubUiModel) -> Unit
 
 ) {
 
@@ -21,7 +21,7 @@ fun ClubList(
 
             club = club,
 
-            onClick = onClubSelected
+            onClick = onClubClick
 
         )
 
@@ -41,7 +41,7 @@ private fun ClubListPreview() {
 
                 clubs = PreviewData.ScottishPremiershipClubList,
 
-                onClubSelected = {}
+                onClubClick = {}
 
             )
 

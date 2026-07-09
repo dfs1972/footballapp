@@ -36,7 +36,7 @@ fun LeagueOverviewScreen(
 
             TopStandingsCard(
 
-                standings = PreviewData.ScottishPremiershipStandings,
+                standings = PreviewData.ScottishPremiershipStandings.take(5),
 
                 onTeamClick = {
 

@@ -11,6 +11,8 @@ import com.example.footballapp.ui.screens.competitions.CompetitionsScreen
 import com.example.footballapp.ui.screens.fixtures.FixturesScreen
 import com.example.footballapp.ui.screens.league.LeagueOverviewScreen
 import com.example.footballapp.ui.screens.league.LeagueTableScreen
+import com.example.footballapp.ui.screens.player.PlayerDetailsScreen
+import com.example.footballapp.ui.screens.squad.SquadScreen
 
 @Composable
 fun FootballNavHost() {
@@ -74,6 +76,14 @@ fun FootballNavHost() {
                         FootballDestination.Clubs.route
                     )
 
+                },
+
+                onClubClick = { _ ->
+
+                    navController.navigate(
+                        FootballDestination.Club.route
+                    )
+
                 }
 
             )
@@ -91,7 +101,7 @@ fun FootballNavHost() {
                 onClubClick = { _ ->
 
                     navController.navigate(
-                        FootballDestination.Clubs.route
+                        FootballDestination.Club.route
                     )
 
                 }
@@ -121,7 +131,9 @@ fun FootballNavHost() {
 
                 onFixtureSelected = { _ ->
 
-                    // Stage 4
+                    navController.navigate(
+                        FootballDestination.Fixtures.route
+                    )
 
                 }
 
@@ -171,15 +183,63 @@ fun FootballNavHost() {
 
                 onFixturesClick = {
 
-                    // Stage 4
+                    navController.navigate(
+                        FootballDestination.Fixtures.route
+                    )
 
                 },
 
                 onSquadClick = {
 
-                    // Stage 3 - Step 2
+                    navController.navigate(
+                        FootballDestination.Squad.route
+                    )
 
                 }
+
+            )
+
+        }
+
+        // ---------------------------------------------------------------------
+// Squad
+// ---------------------------------------------------------------------
+
+        composable(
+            FootballDestination.Squad.route
+        ) {
+
+            SquadScreen(
+
+                clubName = DemoData.club.name,
+
+                season = DemoData.competition.season,
+
+                players = DemoData.squad,
+
+                onPlayerClick = { _ ->
+
+                    navController.navigate(
+                        FootballDestination.PlayerDetails.route
+                    )
+
+                }
+
+            )
+
+        }
+
+        // ---------------------------------------------------------------------
+// Player Details
+// ---------------------------------------------------------------------
+
+        composable(
+            FootballDestination.PlayerDetails.route
+        ) {
+
+            PlayerDetailsScreen(
+
+                player = DemoData.player
 
             )
 

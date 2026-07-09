@@ -20,6 +20,10 @@ fun ScreenScaffold(
 
     modifier: Modifier = Modifier,
 
+    showBackButton: Boolean = false,
+
+    onBackClick: (() -> Unit)? = null,
+
     content: LazyListScope.() -> Unit
 
 ) {
@@ -50,7 +54,11 @@ fun ScreenScaffold(
 
                     title = title,
 
-                    subtitle = subtitle
+                    subtitle = subtitle,
+
+                    showBackButton = showBackButton,
+
+                    onBackClick = onBackClick
 
                 )
 

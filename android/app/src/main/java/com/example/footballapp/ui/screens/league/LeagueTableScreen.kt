@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.footballapp.ui.components.LeagueTableCard
 import com.example.footballapp.ui.components.ScreenScaffold
+import com.example.footballapp.ui.design.AppConstants
 import com.example.footballapp.ui.model.CompetitionUiModel
 import com.example.footballapp.ui.model.LeagueTableRowUiModel
 import com.example.footballapp.ui.previews.PreviewData
@@ -24,7 +25,7 @@ fun LeagueTableScreen(
 
         title = competition.name,
 
-        subtitle = competition.season
+        subtitle = AppConstants.CURRENT_SEASON
 
     ) {
 

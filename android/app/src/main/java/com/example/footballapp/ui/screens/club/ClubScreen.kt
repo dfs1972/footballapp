@@ -17,7 +17,7 @@ import com.example.footballapp.ui.components.SectionCard
 import com.example.footballapp.ui.model.ClubDetailsUiModel
 import com.example.footballapp.ui.previews.PreviewData
 import com.example.footballapp.ui.theme.AppDimensions
-import com.example.footballapp.ui.theme.AppSpacing
+import com.example.footballapp.ui.design.AppSpacing
 
 @Composable
 fun ClubScreen(

@@ -1,16 +1,18 @@
-package com.example.footballapp.ui.screens.competitions
+package com.example.footballapp.ui.screens
 
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.footballapp.ui.components.CompetitionList
 import com.example.footballapp.ui.components.ScreenScaffold
-import com.example.footballapp.ui.components.SectionCard
-import com.example.footballapp.ui.components.SectionHeading
 import com.example.footballapp.ui.design.Strings
-import androidx.compose.foundation.lazy.items
-import com.example.footballapp.ui.previews.PreviewData
+import com.example.footballapp.ui.viewmodel.CompetitionViewModel
 
 @Composable
 fun CompetitionsScreen(
@@ -19,11 +21,9 @@ fun CompetitionsScreen(
 
 ) {
 
-    val groups = listOf(
+    val viewModel: CompetitionViewModel = viewModel()
 
-        PreviewData.Scotland
-
-    )
+    val uiState by viewModel.uiState.collectAsState()
 
     ScreenScaffold(
 
@@ -33,51 +33,41 @@ fun CompetitionsScreen(
 
     ) {
 
-        items(groups) { group ->
+        when {
 
-            SectionCard {
+            uiState.isLoading -> {
 
-                Text(
+                item {
 
-                    text = "${group.headerIcon} ${group.title}",
+                    CircularProgressIndicator()
 
-                    style = MaterialTheme.typography.titleLarge
+                }
 
-                )
+            }
 
-                if (group.leagues.isNotEmpty()) {
+            uiState.error != null -> {
 
-                    SectionHeading(
+                item {
 
-                        text = Strings.LEAGUES
+                    Text(
 
-                    )
+                        text = uiState.error!!,
 
-                    CompetitionList(
-
-                        competitions = group.leagues,
-
-                        onCompetitionSelected = {
-
-                            onCompetitionSelected(it.id)
-
-                        }
+                        color = MaterialTheme.colorScheme.error
 
                     )
 
                 }
 
-                if (group.domesticCups.isNotEmpty()) {
+            }
 
-                    SectionHeading(
+            else -> {
 
-                        text = Strings.DOMESTIC_CUPS
-
-                    )
+                item {
 
                     CompetitionList(
 
-                        competitions = group.domesticCups,
+                        competitions = uiState.competitions,
 
                         onCompetitionSelected = {
 
@@ -92,18 +82,6 @@ fun CompetitionsScreen(
             }
 
         }
-
-    }
-
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun CompetitionsScreenPreview() {
-
-    MaterialTheme {
-
-        CompetitionsScreen()
 
     }
 

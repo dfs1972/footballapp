@@ -5,6 +5,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.footballapp.ui.components.NavigationCard
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.TopStandingsCard
+import com.example.footballapp.ui.design.AppConstants
 import com.example.footballapp.ui.design.Strings
 import com.example.footballapp.ui.model.CompetitionUiModel
 import com.example.footballapp.ui.previews.PreviewData
@@ -28,7 +29,7 @@ fun LeagueOverviewScreen(
 
         title = competition.name,
 
-        subtitle = "Season ${competition.season}"
+        subtitle = "Season ${AppConstants.CURRENT_SEASON}"
 
     ) {
 

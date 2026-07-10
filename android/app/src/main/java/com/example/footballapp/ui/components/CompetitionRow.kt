@@ -22,7 +22,7 @@ import coil.compose.AsyncImage
 import com.example.footballapp.ui.model.CompetitionUiModel
 import com.example.footballapp.ui.previews.PreviewData
 import com.example.footballapp.ui.theme.AppDimensions
-import com.example.footballapp.ui.theme.AppSpacing
+import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.theme.AppTypography
 
 @Composable

@@ -21,11 +21,6 @@ data class CompetitionUiModel(
     val name: String,
 
     /**
-     * Season displayed to user.
-     */
-    val season: String,
-
-    /**
      * URL of the competition logo.
      */
     val logoUrl: String

@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.footballapp.ui.model.PlayerUiModel
 import com.example.footballapp.ui.previews.PreviewData
-import com.example.footballapp.ui.theme.AppSpacing
+import com.example.footballapp.ui.design.AppSpacing
 
 private val PositionOrder = listOf(
     "Goalkeeper",

@@ -4,10 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.footballapp.ui.design.AppConstants
 import com.example.footballapp.ui.previews.PreviewData
+import com.example.footballapp.ui.screens.CompetitionsScreen
 import com.example.footballapp.ui.screens.club.ClubScreen
 import com.example.footballapp.ui.screens.clubs.ClubsScreen
-import com.example.footballapp.ui.screens.competitions.CompetitionsScreen
 import com.example.footballapp.ui.screens.fixtures.FixturesScreen
 import com.example.footballapp.ui.screens.league.LeagueOverviewScreen
 import com.example.footballapp.ui.screens.league.LeagueTableScreen
@@ -120,7 +121,7 @@ fun FootballNavHost() {
 
                 competitionName = DemoData.competition.name,
 
-                season = DemoData.competition.season,
+                season = AppConstants.CURRENT_SEASON,
 
                 fixtureDays = listOf(
 
@@ -153,7 +154,7 @@ fun FootballNavHost() {
 
                 competitionName = DemoData.competition.name,
 
-                season = DemoData.competition.season,
+                season = AppConstants.CURRENT_SEASON,
 
                 clubs = DemoData.clubs,
 
@@ -213,7 +214,7 @@ fun FootballNavHost() {
 
                 clubName = DemoData.club.name,
 
-                season = DemoData.competition.season,
+                season = AppConstants.CURRENT_SEASON,
 
                 players = DemoData.squad,
 

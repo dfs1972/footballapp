@@ -22,28 +22,28 @@ object PreviewData {
     val ScottishPremiership = CompetitionUiModel(
         id = 179,
         name = "Scottish Premiership",
-        season = "2024/25",
+        //season = "2024/25",
         logoUrl = ""
     )
 
     val ScottishChampionship = CompetitionUiModel(
         id = 180,
         name = "Scottish Championship",
-        season = "2025/26",
+        //season = "2025/26",
         logoUrl = ""
     )
 
     val ScottishLeagueOne = CompetitionUiModel(
         id = 181,
         name = "Scottish League One",
-        season = "2025/26",
+        //season = "2025/26",
         logoUrl = ""
     )
 
     val ScottishLeagueTwo = CompetitionUiModel(
         id = 182,
         name = "Scottish League Two",
-        season = "2025/26",
+        //season = "2025/26",
         logoUrl = ""
     )
 
@@ -54,14 +54,14 @@ object PreviewData {
     val ScottishCup = CompetitionUiModel(
         id = 183,
         name = "Scottish Cup",
-        season = "2025/26",
+        //season = "2025/26",
         logoUrl = ""
     )
 
     val LeagueCup = CompetitionUiModel(
         id = 184,
         name = "League Cup",
-        season = "2025/26",
+        //season = "2025/26",
         logoUrl = ""
     )
 

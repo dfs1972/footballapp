@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.footballapp.ui.theme.AppElevation
 import com.example.footballapp.ui.theme.AppShapes
-import com.example.footballapp.ui.theme.AppSpacing
+import com.example.footballapp.ui.design.AppSpacing
 
 @Composable
 fun NavigationCard(

@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.footballapp.ui.design.Strings
 import com.example.footballapp.ui.model.StandingUiModel
 import com.example.footballapp.ui.previews.PreviewData
-import com.example.footballapp.ui.theme.AppSpacing
+import com.example.footballapp.ui.design.AppSpacing
 
 @Composable
 fun TopStandingsCard(

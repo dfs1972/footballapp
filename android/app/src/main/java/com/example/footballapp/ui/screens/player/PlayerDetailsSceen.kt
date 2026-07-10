@@ -17,7 +17,7 @@ import com.example.footballapp.ui.components.SectionHeading
 import com.example.footballapp.ui.model.PlayerDetailsUiModel
 import com.example.footballapp.ui.previews.PreviewData
 import com.example.footballapp.ui.theme.AppDimensions
-import com.example.footballapp.ui.theme.AppSpacing
+import com.example.footballapp.ui.design.AppSpacing
 
 @Composable
 fun PlayerDetailsScreen(

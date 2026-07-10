@@ -1,30 +1,42 @@
 package org.footballapp.database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.*;
 
 /*
  * Creates JDBC connections to the PostgreSQL database.
  *
- * All repositories use this class when reading or writing data.
+ * Connection details are supplied through environment variables.
  */
 public class DatabaseConnection {
 
     private static final String URL =
-            "jdbc:postgresql://192.168.1.200:5432/footballapp_db";
+            System.getenv("FOOTBALLAPP_DB_URL");
 
-    private static final String USER = "admin_dw";
-    private static final String PASSWORD = "1565";
+    private static final String USER =
+            System.getenv("FOOTBALLAPP_DB_USER");
+
+    private static final String PASSWORD =
+            System.getenv("FOOTBALLAPP_DB_PASSWORD");
 
     /*
-     * Opens a connection to footballapp_db.
+     * Opens a connection to the configured PostgreSQL database.
      */
-    public static Connection connect() throws Exception {
+    public static Connection connect() throws SQLException {
 
-        return DriverManager.getConnection(
+        if (URL == null || USER == null || PASSWORD == null) {
+
+            throw new IllegalStateException(
+                    "FootballApp database environment variables are not configured."
+            );
+
+        }
+
+        Connection connection = DriverManager.getConnection(
                 URL,
                 USER,
                 PASSWORD
         );
+
+        return connection;
     }
 }

@@ -1,5 +1,11 @@
 package org.footballapp.service;
 
+/**
+ * Spring Boot Service
+ */
+import org.springframework.stereotype.Service;
+
+
 /**Import repositories*/
 import org.footballapp.databaserepository.FixtureRepository;
 import org.footballapp.databaserepository.LeagueUkRepository;
@@ -9,13 +15,12 @@ import org.footballapp.databaserepository.TeamStatisticsRepository;
 import org.footballapp.databaserepository.VenueRepository;
 import org.footballapp.databaserepository.PlayerStatisticsRepository;
 import org.footballapp.databaserepository.PlayerRepository;
+import org.footballapp.model.club.ClubDetails;
 
 /**Import models*/
 import org.footballapp.model.fixtures.FixtureRow;
-import org.footballapp.model.fixtures.FixtureTeam;
 import org.footballapp.model.league.LeagueUk;
 import org.footballapp.model.playerdetails.PlayerSummary;
-import org.footballapp.model.standings.Standing;
 import org.footballapp.model.teamdetails.TeamDetails;
 import org.footballapp.model.teams.Team;
 import org.footballapp.model.teams.Venue;
@@ -26,6 +31,7 @@ import org.footballapp.model.teamstatistics.TeamStatistics;
 
 import java.util.List;
 
+@Service
 public class LeagueDataService {
 
     private final LeagueUkRepository leagueUkRepository;
@@ -138,6 +144,34 @@ public class LeagueDataService {
                 season
         );
     }
+
+    /**
+     * Retrieves details for a single club.
+     */
+    public ClubDetails getClubDetails(
+            int clubId
+    ) throws Exception {
+
+        return teamRepository.getClubDetails(
+                clubId
+        );
+
+    }
+
+    /**
+     *  Get Fixtures for that season.
+     */
+    public List<FixtureRow> getFixtures(
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        return fixtureRepository.getFixtures(
+                leagueId,
+                season
+        );
+    }
+
     /**
      *  Get a particular team's fixtures for that season.
      */

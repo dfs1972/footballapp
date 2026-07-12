@@ -1,6 +1,7 @@
 package org.footballapp.databaserepository;
 
 import org.footballapp.database.DatabaseConnection;
+import org.springframework.stereotype.Repository;
 import org.footballapp.model.league.League;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +12,7 @@ import java.sql.PreparedStatement;
  * Responsible for inserting and updating records
  * in the leagues table.
  */
+@Repository
 public class LeagueRepository {
 
     /**

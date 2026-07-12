@@ -3,73 +3,68 @@ package com.example.footballapp.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.footballapp.data.mapper.toUiModel
-import com.example.footballapp.data.repository.LeagueOverviewRepository
-import com.example.footballapp.data.repository.LeagueTableRepository
+import com.example.footballapp.data.repository.TeamRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class LeagueOverviewViewModel : ViewModel() {
+class ClubsViewModel : ViewModel() {
 
-    private val repository = LeagueOverviewRepository()
-
-    private val tableRepository = LeagueTableRepository()
+    private val repository =
+        TeamRepository()
 
     private val _uiState =
-        MutableStateFlow(LeagueOverviewUiState())
+        MutableStateFlow(
+            ClubsUiState()
+        )
 
-    val uiState: StateFlow<LeagueOverviewUiState> =
+    val uiState: StateFlow<ClubsUiState> =
         _uiState.asStateFlow()
 
-    fun loadLeagueOverview(
+    fun loadClubs(
         leagueId: Int,
         season: Int
     ) {
 
         viewModelScope.launch {
 
-            _uiState.value =
-                LeagueOverviewUiState(isLoading = true)
-
             try {
 
-                val overview =
-                    repository.getLeagueOverview(
-                        leagueId,
-                        season
-                    )
-
-                val topStandings =
-                    tableRepository
-                        .getLeagueTable(
+                val clubs =
+                    repository
+                        .getTeams(
                             leagueId,
                             season
                         )
                         .map {
                             it.toUiModel()
                         }
-                        .take(5)
 
                 _uiState.value =
-                    LeagueOverviewUiState(
+                    ClubsUiState(
 
                         isLoading = false,
 
-                        overview = overview,
-
-                        topStandings = topStandings
+                        clubs = clubs
 
                     )
 
             } catch (e: Exception) {
 
                 _uiState.value =
-                    LeagueOverviewUiState(
+                    ClubsUiState(
+
                         isLoading = false,
+
                         error = e.message
+
                     )
+
             }
+
         }
+
     }
+
 }

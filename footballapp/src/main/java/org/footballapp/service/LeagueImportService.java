@@ -1,6 +1,7 @@
 package org.footballapp.service;
 
 import org.footballapp.databaserepository.LeagueRepository;
+import org.springframework.stereotype.Service;
 import org.footballapp.model.league.League;
 
 /**
@@ -43,6 +44,7 @@ import org.footballapp.model.league.League;
  - Match events
  - Line-ups
  */
+@Service
 public class LeagueImportService {
 
     //private final LeagueRepository leagueRepository;

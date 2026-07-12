@@ -32,4 +32,5 @@ public class TeamResponse {
     public void setVenue(Venue venue) {
         this.venue = venue;
     }
+
 }

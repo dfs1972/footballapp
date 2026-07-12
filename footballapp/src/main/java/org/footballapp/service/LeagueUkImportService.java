@@ -1,5 +1,6 @@
 package org.footballapp.service;
 
+import org.springframework.stereotype.Service;
 import org.footballapp.api.ApiFootballService;
 import org.footballapp.databaserepository.LeagueUkRepository;
 import org.footballapp.model.league.LeagueApiResponse;
@@ -8,6 +9,7 @@ import org.footballapp.model.league.LeaguesApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Service
 public class LeagueUkImportService {
 
     private final ApiFootballService apiFootballService;

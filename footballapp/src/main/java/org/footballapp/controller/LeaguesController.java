@@ -11,13 +11,11 @@ public class LeaguesController {
     private final LeagueDataService
             leagueDataService;
 
-    public LeaguesController() {
-
-        AppConfig config =
-                new AppConfig();
-
-        leagueDataService =
-                config.getLeagueDataService();
+    public LeaguesController(
+            LeagueDataService leagueDataService
+    ) {
+        this.leagueDataService =
+                leagueDataService;
     }
 
     @GetMapping("/leagues")

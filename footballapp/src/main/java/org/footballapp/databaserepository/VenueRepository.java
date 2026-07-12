@@ -1,6 +1,7 @@
 package org.footballapp.databaserepository;
 
 import org.footballapp.database.DatabaseConnection;
+import org.springframework.stereotype.Repository;
 import org.footballapp.model.teams.Venue;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,6 +13,7 @@ import java.sql.ResultSet;
  * Responsible for inserting and updating records
  * in the venue table.
  */
+@Repository
 public class VenueRepository {
 
     /**

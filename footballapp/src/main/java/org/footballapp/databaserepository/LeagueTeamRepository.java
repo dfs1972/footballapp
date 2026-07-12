@@ -1,6 +1,7 @@
 package org.footballapp.databaserepository;
 
 import org.footballapp.database.DatabaseConnection;
+import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+@Repository
 public class LeagueTeamRepository {
 
     public void saveLeagueTeam(

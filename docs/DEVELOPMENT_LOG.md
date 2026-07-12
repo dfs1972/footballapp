@@ -114,3 +114,12 @@ or League Overview.
 
 Only the TopStandingsCard remains on PreviewData pending the League
 Table migration.
+
+# July 12th 2026
+## UI Polish
+
+Reposition fixture scores beside team names.
+Add club badges to fixture list.
+Improve LIVE/HT/FT presentation.
+Colour-code status chips (LIVE red, FT grey, etc.).
+Hide 0-0 for scheduled fixtures if no result exists.

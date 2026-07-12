@@ -4,6 +4,8 @@ data class FixtureUiModel(
 
     val fixtureId: Long,
 
+    val fixtureDate: String,
+
     val homeTeamId: Int,
     val homeTeamName: String,
     val homeTeamLogo: String? = null,

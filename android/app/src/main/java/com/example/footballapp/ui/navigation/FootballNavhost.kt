@@ -18,7 +18,9 @@ import com.example.footballapp.ui.screens.league.LeagueTableScreen
 import com.example.footballapp.ui.screens.player.PlayerDetailsScreen
 import com.example.footballapp.ui.screens.squad.SquadScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.footballapp.ui.viewmodel.ClubsViewModel
 import com.example.footballapp.ui.viewmodel.CompetitionViewModel
+import com.example.footballapp.ui.viewmodel.FixturesViewModel
 import com.example.footballapp.ui.viewmodel.LeagueOverviewViewModel
 import com.example.footballapp.ui.viewmodel.LeagueTableViewModel
 
@@ -33,10 +35,9 @@ fun FootballNavHost() {
         startDestination = FootballDestination.Competitions.route
     ) {
 
-        // ---------------------------------------------------------------------
-        // Competitions
-        // ---------------------------------------------------------------------
-
+        /**
+         * Competitions
+         */
         composable(
             FootballDestination.Competitions.route
         ) {
@@ -68,9 +69,9 @@ fun FootballNavHost() {
 
         }
 
-        // ---------------------------------------------------------------------
-        // League
-        // ---------------------------------------------------------------------
+        /**
+         * League Overview
+         */
 
         composable(
             route = FootballDestination.LeagueOverview.route
@@ -82,25 +83,19 @@ fun FootballNavHost() {
                     ?.toInt()
                     ?: return@composable
 
-            val season =
-                backStackEntry.arguments
-                    ?.getString("season")
-                    ?.toInt()
-                    ?: return@composable
-
-            val viewModel: LeagueOverviewViewModel = viewModel()
+            val overviewViewModel: LeagueOverviewViewModel = viewModel()
 
             LaunchedEffect(leagueId) {
 
-                viewModel.loadLeagueOverview(
+                overviewViewModel.loadLeagueOverview(
                     leagueId,
-                    season
+                    AppConstants.DEVELOPMENT_SEASON
                 )
 
             }
 
             val uiState by
-            viewModel.uiState.collectAsState()
+            overviewViewModel.uiState.collectAsState()
 
             uiState.overview?.let { overview ->
 
@@ -108,14 +103,14 @@ fun FootballNavHost() {
 
                     overview = overview,
 
+                    topStandings = uiState.topStandings,
+
                     onLeagueTableClick = {
 
                         navController.navigate(
-
                             FootballDestination
                                 .LeagueTable
                                 .createRoute(leagueId)
-
                         )
 
                     },
@@ -123,11 +118,9 @@ fun FootballNavHost() {
                     onFixturesClick = {
 
                         navController.navigate(
-
                             FootballDestination
                                 .Fixtures
                                 .createRoute(leagueId)
-
                         )
 
                     },
@@ -135,11 +128,9 @@ fun FootballNavHost() {
                     onClubsClick = {
 
                         navController.navigate(
-
                             FootballDestination
                                 .Clubs
                                 .createRoute(leagueId)
-
                         )
 
                     },
@@ -147,11 +138,9 @@ fun FootballNavHost() {
                     onClubClick = { clubId ->
 
                         navController.navigate(
-
                             FootballDestination
                                 .Club
                                 .createRoute(clubId)
-
                         )
 
                     }
@@ -161,6 +150,10 @@ fun FootballNavHost() {
             }
 
         }
+
+        /**
+         * League Table
+         */
 
         composable(
             route = FootballDestination.LeagueTable.route
@@ -172,12 +165,6 @@ fun FootballNavHost() {
                     ?.toInt()
                     ?: return@composable
 
-            val season =
-                backStackEntry.arguments
-                    ?.getString("season")
-                    ?.toInt()
-                    ?: return@composable
-
             val overviewViewModel: LeagueOverviewViewModel = viewModel()
             val tableViewModel: LeagueTableViewModel = viewModel()
 
@@ -185,12 +172,12 @@ fun FootballNavHost() {
 
                 overviewViewModel.loadLeagueOverview(
                     leagueId,
-                    season
+                    AppConstants.DEVELOPMENT_SEASON
                 )
 
                 tableViewModel.loadLeagueTable(
                     leagueId,
-                    season
+                    AppConstants.DEVELOPMENT_SEASON
                 )
 
             }
@@ -227,68 +214,132 @@ fun FootballNavHost() {
 
         }
 
-        // ---------------------------------------------------------------------
-        // Fixtures
-        // ---------------------------------------------------------------------
-
-        composable(FootballDestination.Fixtures.route) {
-
-            FixturesScreen(
-
-                competitionName = DemoData.competition.name,
-
-                season = AppConstants.CURRENT_SEASON,
-
-                fixtureDays = listOf(
-
-                    PreviewData.TodayFixtures,
-                    PreviewData.TomorrowFixtures
-
-                ),
-
-                onFixtureSelected = { _ ->
-
-                    navController.navigate(
-                        FootballDestination.Fixtures.route
-                    )
-
-                }
-
-            )
-
-        }
-
-        // ---------------------------------------------------------------------
-        // Clubs
-        // ---------------------------------------------------------------------
+        /**
+         * Fixtures
+         */
 
         composable(
-            FootballDestination.Clubs.route
-        ) {
+            route = FootballDestination.Fixtures.route
+        ) { backStackEntry ->
 
-            ClubsScreen(
+            val leagueId =
+                backStackEntry.arguments
+                    ?.getString("leagueId")
+                    ?.toInt()
+                    ?: return@composable
 
-                competitionName = DemoData.competition.name,
+            val overviewViewModel: LeagueOverviewViewModel = viewModel()
+            val fixturesViewModel: FixturesViewModel = viewModel()
 
-                season = AppConstants.CURRENT_SEASON,
+            LaunchedEffect(leagueId) {
 
-                clubs = DemoData.clubs,
+                overviewViewModel.loadLeagueOverview(
+                    leagueId,
+                    AppConstants.DEVELOPMENT_SEASON
+                )
 
-                onClubClick = { _ ->
+                fixturesViewModel.loadFixtures(
+                    leagueId,
+                    AppConstants.DEVELOPMENT_SEASON
+                )
 
-                    navController.navigate(
-                        FootballDestination.Club.route
-                    )
+            }
 
-                }
+            val overviewState by
+            overviewViewModel.uiState.collectAsState()
 
-            )
+            val fixturesState by
+            fixturesViewModel.uiState.collectAsState()
+
+            overviewState.overview?.let { overview ->
+
+                FixturesScreen(
+
+                    competitionName = overview.leagueName,
+
+                    season = overview.season,
+
+                    fixtureDays = fixturesState.fixtureDays,
+
+                    onFixtureSelected = { fixtureId ->
+
+                        // We'll wire this up later
+                    }
+
+                )
+
+            }
 
         }
 
-        //---------------------------------------------------------------------
-        //Club
-        //---------------------------------------------------------------------
+        /**
+         * Clubs
+         */
+
+        composable(
+            route = FootballDestination.Clubs.route
+        ) { backStackEntry ->
+
+            val leagueId =
+                backStackEntry.arguments
+                    ?.getString("leagueId")
+                    ?.toInt()
+                    ?: return@composable
+
+            val overviewViewModel: LeagueOverviewViewModel = viewModel()
+            val clubsViewModel: ClubsViewModel = viewModel()
+
+            LaunchedEffect(leagueId) {
+
+                overviewViewModel.loadLeagueOverview(
+                    leagueId,
+                    AppConstants.DEVELOPMENT_SEASON
+                )
+
+                clubsViewModel.loadClubs(
+                    leagueId,
+                    AppConstants.DEVELOPMENT_SEASON
+                )
+
+            }
+
+            val overviewState by
+            overviewViewModel.uiState.collectAsState()
+
+            val clubsState by
+            clubsViewModel.uiState.collectAsState()
+
+            overviewState.overview?.let { overview ->
+
+                ClubsScreen(
+
+                    competitionName = overview.leagueName,
+
+                    season = overview.season,
+
+                    clubs = clubsState.clubs,
+
+                    onClubClick = { clubId ->
+
+                        navController.navigate(
+
+                            FootballDestination
+                                .Club
+                                .createRoute(clubId)
+
+                        )
+
+                    }
+
+                )
+
+            }
+
+        }
+
+        /**
+         * Club
+         */
 
         composable(
             FootballDestination.Club.route
@@ -318,10 +369,9 @@ fun FootballNavHost() {
 
         }
 
-        // ---------------------------------------------------------------------
-// Squad
-// ---------------------------------------------------------------------
-
+       /**
+        * Squad
+        */
         composable(
             FootballDestination.Squad.route
         ) {
@@ -346,9 +396,9 @@ fun FootballNavHost() {
 
         }
 
-        // ---------------------------------------------------------------------
-// Player Details
-// ---------------------------------------------------------------------
+        /**
+         * Player Details
+         */
 
         composable(
             FootballDestination.PlayerDetails.route

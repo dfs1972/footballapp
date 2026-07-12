@@ -1,6 +1,7 @@
 package org.footballapp.databaserepository;
 
 import org.footballapp.database.DatabaseConnection;
+import org.springframework.stereotype.Repository;
 import org.footballapp.model.player.Player;
 import org.footballapp.model.playerdetails.PlayerDetails;
 
@@ -16,6 +17,7 @@ import java.sql.Types;
  * This repository only stores player details.
  * Season statistics are stored separately.
  */
+@Repository
 public class PlayerRepository {
 
     /**

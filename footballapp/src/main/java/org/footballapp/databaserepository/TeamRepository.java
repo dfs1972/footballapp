@@ -1,7 +1,9 @@
 package org.footballapp.databaserepository;
 
 import org.footballapp.database.DatabaseConnection;
+import org.springframework.stereotype.Repository;
 import org.footballapp.model.teams.Team;
+import org.footballapp.model.club.ClubDetails;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,6 +16,7 @@ import java.util.List;
  * Responsible for inserting and updating records
  * in the teams table.
  */
+@Repository
 public class TeamRepository {
 
     /**
@@ -31,13 +34,14 @@ public class TeamRepository {
 
                         """
                        INSERT INTO teams
-                       (id, name, country, founded)
-                       VALUES (?, ?, ?, ?)
+                       (id, name, country, founded, venue_id)
+                       VALUES (?, ?, ?, ?, ?)
                        ON CONFLICT (id)
                        DO UPDATE SET
                           name = EXCLUDED.name,
                           country = EXCLUDED.country,
-                          founded = EXCLUDED.founded
+                          founded = EXCLUDED.founded,
+                          venue_id = EXCLUDED.venue_id
                        """
                 );
 
@@ -45,6 +49,7 @@ public class TeamRepository {
         stmt.setString(2, team.getName());
         stmt.setString(3, team.getCountry());
         stmt.setInt(4, team.getFounded());
+        stmt.setInt(5, team.getVenueId());
 
         stmt.executeUpdate();
 
@@ -170,5 +175,84 @@ public class TeamRepository {
         conn.close();
 
         return teams;
+    }
+
+    /**
+     * Get Club Details - Retrieves full club details including venue information.
+     */
+    public ClubDetails getClubDetails(
+            int clubId
+    ) throws Exception {
+
+        Connection conn =
+                DatabaseConnection.connect();
+
+        PreparedStatement stmt =
+                conn.prepareStatement(
+                        """
+                        SELECT
+                            t.id,
+                            t.name,
+                            t.country,
+                            t.founded,
+                            v.name AS stadium,
+                            v.city,
+                            v.capacity
+    
+                        FROM teams t
+    
+                        LEFT JOIN venues v
+                            ON t.venue_id = v.id
+    
+                        WHERE t.id = ?
+                        """
+                );
+
+        stmt.setInt(1, clubId);
+
+        ResultSet rs =
+                stmt.executeQuery();
+
+        ClubDetails club = null;
+
+        if (rs.next()) {
+
+            club = new ClubDetails();
+
+            club.setClubId(
+                    rs.getInt("id")
+            );
+
+            club.setName(
+                    rs.getString("name")
+            );
+
+            club.setCountry(
+                    rs.getString("country")
+            );
+
+            club.setFounded(
+                    rs.getInt("founded")
+            );
+
+            club.setStadium(
+                    rs.getString("stadium")
+            );
+
+            club.setCity(
+                    rs.getString("city")
+            );
+
+            club.setCapacity(
+                    rs.getInt("capacity")
+            );
+
+        }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+
+        return club;
     }
 }

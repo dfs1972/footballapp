@@ -1,6 +1,7 @@
 package org.footballapp.service;
 
 //import org.footballapp.databaserepository.LeagueRepository;
+import org.springframework.stereotype.Service;
 import org.footballapp.api.ApiFootballService;
 import org.footballapp.databaserepository.LeagueTeamRepository;
 import org.footballapp.databaserepository.TeamRepository;
@@ -15,6 +16,7 @@ import org.footballapp.model.teams.TeamsApiResponse;
  * Uses TeamService to retrieve data and repositories
  * to persist it in footballapp_db.
  */
+@Service
 public class TeamImportService {
 
     private final ApiFootballService apiService;
@@ -51,6 +53,14 @@ public class TeamImportService {
                 );
 
         for (TeamResponse teamResponse : response.getResponse()) {
+
+            teamResponse.getTeam().setVenueId(
+
+                    teamResponse
+                            .getVenue()
+                            .getId()
+
+            );
 
             teamRepository.saveTeam(
                     teamResponse.getTeam()

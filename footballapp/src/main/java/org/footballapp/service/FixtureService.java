@@ -1,9 +1,11 @@
 package org.footballapp.service;
 
+import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.footballapp.api.ApiFootballClient;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 
+@Service
 public class FixtureService {
 
     private final ApiFootballClient apiClient;

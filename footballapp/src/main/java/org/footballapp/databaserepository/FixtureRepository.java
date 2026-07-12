@@ -1,6 +1,7 @@
 package org.footballapp.databaserepository;
 
 import org.footballapp.database.DatabaseConnection;
+import org.springframework.stereotype.Repository;
 import org.footballapp.model.fixtures.FixtureResponse;
 import org.footballapp.model.fixtures.FixtureRow;
 
@@ -14,6 +15,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
+@Repository
 public class FixtureRepository {
 
     public void saveFixture(FixtureResponse fixtureResponse)
@@ -107,6 +109,109 @@ public class FixtureRepository {
 
     /**
      * Get fixtures from a particular season
+     */
+    public List<FixtureRow> getFixtures(
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        Connection conn =
+                DatabaseConnection.connect();
+
+        PreparedStatement stmt =
+                conn.prepareStatement(
+                        """
+                        SELECT
+                            f.fixture_id,
+                            f.fixture_date,
+                            f.round,
+                            f.home_team_id,
+                            f.away_team_id,
+                            home.name AS home_team,
+                            away.name AS away_team,
+                            f.home_goals,
+                            f.away_goals
+    
+                        FROM fixtures f
+    
+                        JOIN teams home
+                            ON f.home_team_id = home.id
+    
+                        JOIN teams away
+                            ON f.away_team_id = away.id
+    
+                        WHERE f.league_id = ?
+                        AND f.season = ?
+    
+                        ORDER BY f.fixture_date
+                        """
+                );
+
+        stmt.setInt(1, leagueId);
+        stmt.setInt(2, season);
+
+        ResultSet rs =
+                stmt.executeQuery();
+
+        List<FixtureRow> fixtures =
+                new ArrayList<>();
+
+        while (rs.next()) {
+
+            FixtureRow row =
+                    new FixtureRow();
+
+            populateFixtureDateTime(
+                    row,
+                    rs.getString(
+                            "fixture_date"
+                    )
+            );
+
+            row.setFixtureId(
+                    rs.getLong("fixture_id")
+            );
+
+//            row.setRound(
+//                    rs.getString("round")
+//            );
+
+            row.setHomeTeamId(
+                    rs.getInt("home_team_id")
+            );
+
+            row.setAwayTeamId(
+                    rs.getInt("away_team_id")
+            );
+
+            row.setHomeTeam(
+                    rs.getString("home_team")
+            );
+
+            row.setAwayTeam(
+                    rs.getString("away_team")
+            );
+
+            row.setHomeGoals(
+                    rs.getInt("home_goals")
+            );
+
+            row.setAwayGoals(
+                    rs.getInt("away_goals")
+            );
+
+            fixtures.add(row);
+        }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+
+        return fixtures;
+    }
+
+    /**
+     * Get fixtures for a team from a particular season
      */
     public List<FixtureRow> getLeagueFixtures(
             int leagueId,

@@ -319,6 +319,8 @@ object PreviewData {
 
         fixtureId = 1001L,
 
+        fixtureDate = "Sat 03 Aug 2024",
+
         homeTeamId = 1,
         homeTeamName = "Celtic",
         homeTeamLogo = null,
@@ -337,6 +339,8 @@ object PreviewData {
 
         fixtureId = 1002L,
 
+        fixtureDate = "Sat 03 Aug 2024",
+
         homeTeamId = 5,
         homeTeamName = "Hearts",
         homeTeamLogo = null,
@@ -354,6 +358,8 @@ object PreviewData {
     val HibernianVsDundeeUnited = FixtureUiModel(
 
         fixtureId = 1003L,
+
+        fixtureDate = "Sat 03 Aug 2024",
 
         homeTeamId = 3,
         homeTeamName = "Hibernian",
@@ -375,6 +381,8 @@ object PreviewData {
     val RossCountyVsStJohnstone = FixtureUiModel(
 
         fixtureId = 4,
+
+        fixtureDate = "Sat 03 Aug 2024",
 
         homeTeamId = 11,
         homeTeamName = "Ross County",
@@ -448,6 +456,8 @@ object PreviewData {
 
         fixtureId = 1004L,
 
+        fixtureDate = "Sat 03 Aug 2024",
+
         homeTeamId = 1,
         homeTeamName = "Celtic",
 
@@ -471,6 +481,8 @@ object PreviewData {
 
         fixtureId = 1,
 
+        fixtureDate = "Sat 03 Aug 2024",
+
         homeTeamId = 1,
         homeTeamName = "Celtic",
 
@@ -489,6 +501,8 @@ object PreviewData {
     val CelticVsRangersFinished = FixtureUiModel(
 
         fixtureId = 1005L,
+
+        fixtureDate = "Sat 03 Aug 2024",
 
         homeTeamId = 1,
         homeTeamName = "Celtic",
@@ -512,6 +526,8 @@ object PreviewData {
     val ScottishCupFinal = FixtureUiModel(
 
         fixtureId = 5,
+
+        fixtureDate = "Sat 03 Aug 2024",
 
         homeTeamId = 1,
         homeTeamName = "Celtic",

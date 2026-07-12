@@ -5,8 +5,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.footballapp.ui.components.NavigationCard
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.TopStandingsCard
+import com.example.footballapp.ui.design.AppConstants
 import com.example.footballapp.ui.design.Strings
 import com.example.footballapp.ui.model.LeagueOverviewUiModel
+import com.example.footballapp.ui.model.LeagueTableRowUiModel
 import com.example.footballapp.ui.previews.PreviewData
 
 @Composable
@@ -15,6 +17,8 @@ fun LeagueOverviewScreen(
     overview: LeagueOverviewUiModel,
 
     onLeagueTableClick: () -> Unit = {},
+
+    topStandings: List<LeagueTableRowUiModel>,
 
     onFixturesClick: () -> Unit = {},
 
@@ -36,7 +40,7 @@ fun LeagueOverviewScreen(
 
             TopStandingsCard(
 
-                standings = PreviewData.ScottishPremiershipStandings.take(5),
+                standings = topStandings,
 
                 onTeamClick = {
 
@@ -106,13 +110,17 @@ private fun LeagueOverviewScreenPreview() {
 
             leagueName = "Scottish Premiership",
 
-            season = "2025",
+            season = AppConstants.CURRENT_SEASON,
 
             teamCount = 12,
 
             fixtureCount = 228
 
-        )
+        ),
+        topStandings =
+            PreviewData
+                .ScottishPremiershipTable
+                .take(5)
 
     )
 

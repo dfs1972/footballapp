@@ -1,5 +1,6 @@
 package org.footballapp.service;
 
+import org.springframework.stereotype.Service;
 import org.footballapp.api.ApiFootballService;
 import org.footballapp.databaserepository.StandingRepository;
 import org.footballapp.databaserepository.TeamStatisticsRepository;
@@ -9,6 +10,7 @@ import org.footballapp.model.teamstatistics.TeamStatisticsResponse;
 
 import java.util.List;
 
+@Service
 public class TeamStatisticsImportService {
 
     private final ApiFootballService apiFootballService;

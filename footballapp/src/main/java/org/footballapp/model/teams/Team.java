@@ -14,6 +14,7 @@ public class Team {
     private String name;
     private String country;
     private int founded;
+    private int venueId;
 
     public Team() {
     }
@@ -37,4 +38,8 @@ public class Team {
 
     public int getFounded() {return founded;}
     public void setFounded(int founded) {this.founded = founded;}
+
+    public int getVenueId() {return venueId;}
+    public void setVenueId(int venueId) {this.venueId = venueId;}
+
 }

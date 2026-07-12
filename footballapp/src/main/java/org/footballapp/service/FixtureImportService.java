@@ -1,5 +1,6 @@
 package org.footballapp.service;
 
+import org.springframework.stereotype.Service;
 import org.footballapp.databaserepository.FixtureRepository;
 import org.footballapp.model.fixtures.FixtureResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
@@ -9,6 +10,7 @@ import org.footballapp.api.ApiFootballService;
  * Imports fixtures for a given league and season
  * from API-Football into the PostgreSQL database.
  */
+@Service
 public class FixtureImportService {
 
     private final ApiFootballService apiFootballService;

@@ -1,6 +1,7 @@
 package org.footballapp.databaserepository;
 
 import org.footballapp.database.DatabaseConnection;
+import org.springframework.stereotype.Repository;
 import org.footballapp.model.teamstatistics.CardColour;
 import org.footballapp.model.teamstatistics.CardMinute;
 import org.footballapp.model.teamstatistics.TeamStatistics;
@@ -12,6 +13,7 @@ import java.sql.ResultSet;
 
 import static org.apache.logging.log4j.util.Lazy.value;
 
+@Repository
 public class TeamStatisticsRepository {
 
     /**

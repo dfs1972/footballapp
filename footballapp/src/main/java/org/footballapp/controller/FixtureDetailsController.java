@@ -1,27 +1,24 @@
 package org.footballapp.controller;
 
-import org.footballapp.config.AppConfig;
 import org.footballapp.service.LeagueDataService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Returns data from a single fixture
- * */
-
+ * Returns data from a single fixture.
+ */
 @RestController
 public class FixtureDetailsController {
 
-    private final LeagueDataService leagueDataService;
+    private final LeagueDataService
+            leagueDataService;
 
-    public FixtureDetailsController() {
-
-        AppConfig config =
-                new AppConfig();
-
-        leagueDataService =
-                config.getLeagueDataService();
+    public FixtureDetailsController(
+            LeagueDataService leagueDataService
+    ) {
+        this.leagueDataService =
+                leagueDataService;
     }
 
     @GetMapping("/fixture")
@@ -31,9 +28,10 @@ public class FixtureDetailsController {
 
     ) throws Exception {
 
-        return leagueDataService
-                .getFixtureDetails(
-                        fixtureId
-                );
+        return leagueDataService.getFixtureDetails(
+                fixtureId
+        );
+
     }
+
 }

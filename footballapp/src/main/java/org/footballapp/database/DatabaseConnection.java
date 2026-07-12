@@ -23,6 +23,10 @@ public class DatabaseConnection {
      */
     public static Connection connect() throws SQLException {
 
+        System.out.println("DB_URL  = " + URL);
+        System.out.println("DB_USER = " + USER);
+        System.out.println("DB_PASS = " + (PASSWORD == null ? "null" : "***"));
+
         if (URL == null || USER == null || PASSWORD == null) {
 
             throw new IllegalStateException(
@@ -31,12 +35,6 @@ public class DatabaseConnection {
 
         }
 
-        Connection connection = DriverManager.getConnection(
-                URL,
-                USER,
-                PASSWORD
-        );
-
-        return connection;
+        return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 }

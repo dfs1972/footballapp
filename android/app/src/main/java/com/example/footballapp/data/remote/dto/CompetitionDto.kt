@@ -8,6 +8,8 @@ data class CompetitionDto(
 
     val country: String,
 
-    val logoUrl: String
+    val logoUrl: String,
+
+    val  season: Int
 
 )

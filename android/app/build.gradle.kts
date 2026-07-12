@@ -5,11 +5,12 @@ plugins {
 
 android {
     namespace = "com.example.footballapp"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+//    compileSdk {
+//        version = release(36) {
+//            minorApiLevel = 1
+//        }
+//    }
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.example.footballapp"
@@ -38,6 +39,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.coil.compose)
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.1")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")

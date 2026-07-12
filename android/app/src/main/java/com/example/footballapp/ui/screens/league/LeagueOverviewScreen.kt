@@ -5,15 +5,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.footballapp.ui.components.NavigationCard
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.TopStandingsCard
-import com.example.footballapp.ui.design.AppConstants
 import com.example.footballapp.ui.design.Strings
-import com.example.footballapp.ui.model.CompetitionUiModel
+import com.example.footballapp.ui.model.LeagueOverviewUiModel
 import com.example.footballapp.ui.previews.PreviewData
 
 @Composable
 fun LeagueOverviewScreen(
 
-    competition: CompetitionUiModel,
+    overview: LeagueOverviewUiModel,
 
     onLeagueTableClick: () -> Unit = {},
 
@@ -27,9 +26,9 @@ fun LeagueOverviewScreen(
 
     ScreenScaffold(
 
-        title = competition.name,
+        title = overview.leagueName,
 
-        subtitle = "Season ${AppConstants.CURRENT_SEASON}"
+        subtitle = "Season ${overview.season}"
 
     ) {
 
@@ -92,9 +91,7 @@ fun LeagueOverviewScreen(
             )
 
         }
-
     }
-
 }
 
 @Preview(showBackground = true)
@@ -103,7 +100,19 @@ private fun LeagueOverviewScreenPreview() {
 
     LeagueOverviewScreen(
 
-        competition = PreviewData.ScottishPremiership
+        overview = LeagueOverviewUiModel(
+
+            leagueId = 179,
+
+            leagueName = "Scottish Premiership",
+
+            season = "2025",
+
+            teamCount = 12,
+
+            fixtureCount = 228
+
+        )
 
     )
 

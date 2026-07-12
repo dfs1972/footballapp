@@ -2,6 +2,7 @@ package com.example.footballapp.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.footballapp.data.mapper.toCompetitionGroups
 import com.example.footballapp.data.mapper.toUiModel
 import com.example.footballapp.data.repository.CompetitionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,15 +30,16 @@ class CompetitionViewModel : ViewModel() {
 
             try {
 
-                val competitions =
+                val competitionGroups =
                     repository
                         .getCompetitions()
                         .map { it.toUiModel() }
+                        .toCompetitionGroups()
 
                 _uiState.value =
                     CompetitionUiState(
                         isLoading = false,
-                        competitions = competitions
+                        competitionGroups = competitionGroups
                     )
 
             } catch (e: Exception) {

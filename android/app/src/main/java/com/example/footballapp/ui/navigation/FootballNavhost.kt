@@ -1,6 +1,9 @@
 package com.example.footballapp.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -14,6 +17,11 @@ import com.example.footballapp.ui.screens.league.LeagueOverviewScreen
 import com.example.footballapp.ui.screens.league.LeagueTableScreen
 import com.example.footballapp.ui.screens.player.PlayerDetailsScreen
 import com.example.footballapp.ui.screens.squad.SquadScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.footballapp.ui.viewmodel.CompetitionViewModel
+import com.example.footballapp.ui.viewmodel.LeagueOverviewViewModel
+import com.example.footballapp.ui.viewmodel.LeagueTableViewModel
+
 
 @Composable
 fun FootballNavHost() {
@@ -29,14 +37,29 @@ fun FootballNavHost() {
         // Competitions
         // ---------------------------------------------------------------------
 
-        composable(FootballDestination.Competitions.route) {
+        composable(
+            FootballDestination.Competitions.route
+        ) {
+
+            val viewModel: CompetitionViewModel = viewModel()
+
+            val uiState by
+            viewModel.uiState.collectAsState()
 
             CompetitionsScreen(
 
-                onCompetitionSelected = { _ ->
+                competitionGroups =
+                    uiState.competitionGroups,
+
+                onCompetitionSelected = { competition ->
 
                     navController.navigate(
-                        FootballDestination.LeagueOverview.route
+
+                        FootballDestination
+                            .LeagueOverview
+                            .createRoute(
+                                competition.id)
+
                     )
 
                 }
@@ -49,65 +72,158 @@ fun FootballNavHost() {
         // League
         // ---------------------------------------------------------------------
 
-        composable(FootballDestination.LeagueOverview.route) {
+        composable(
+            route = FootballDestination.LeagueOverview.route
+        ) { backStackEntry ->
 
-            LeagueOverviewScreen(
+            val leagueId =
+                backStackEntry.arguments
+                    ?.getString("leagueId")
+                    ?.toInt()
+                    ?: return@composable
 
-                competition = DemoData.competition,
+            val season =
+                backStackEntry.arguments
+                    ?.getString("season")
+                    ?.toInt()
+                    ?: return@composable
 
-                onLeagueTableClick = {
+            val viewModel: LeagueOverviewViewModel = viewModel()
 
-                    navController.navigate(
-                        FootballDestination.LeagueTable.route
-                    )
+            LaunchedEffect(leagueId) {
 
-                },
+                viewModel.loadLeagueOverview(
+                    leagueId,
+                    season
+                )
 
-                onFixturesClick = {
+            }
 
-                    navController.navigate(
-                        FootballDestination.Fixtures.route
-                    )
+            val uiState by
+            viewModel.uiState.collectAsState()
 
-                },
+            uiState.overview?.let { overview ->
 
-                onClubsClick = {
+                LeagueOverviewScreen(
 
-                    navController.navigate(
-                        FootballDestination.Clubs.route
-                    )
+                    overview = overview,
 
-                },
+                    onLeagueTableClick = {
 
-                onClubClick = { _ ->
+                        navController.navigate(
 
-                    navController.navigate(
-                        FootballDestination.Club.route
-                    )
+                            FootballDestination
+                                .LeagueTable
+                                .createRoute(leagueId)
 
-                }
+                        )
 
-            )
+                    },
+
+                    onFixturesClick = {
+
+                        navController.navigate(
+
+                            FootballDestination
+                                .Fixtures
+                                .createRoute(leagueId)
+
+                        )
+
+                    },
+
+                    onClubsClick = {
+
+                        navController.navigate(
+
+                            FootballDestination
+                                .Clubs
+                                .createRoute(leagueId)
+
+                        )
+
+                    },
+
+                    onClubClick = { clubId ->
+
+                        navController.navigate(
+
+                            FootballDestination
+                                .Club
+                                .createRoute(clubId)
+
+                        )
+
+                    }
+
+                )
+
+            }
 
         }
 
-        composable(FootballDestination.LeagueTable.route) {
+        composable(
+            route = FootballDestination.LeagueTable.route
+        ) { backStackEntry ->
 
-            LeagueTableScreen(
+            val leagueId =
+                backStackEntry.arguments
+                    ?.getString("leagueId")
+                    ?.toInt()
+                    ?: return@composable
 
-                competition = DemoData.competition,
+            val season =
+                backStackEntry.arguments
+                    ?.getString("season")
+                    ?.toInt()
+                    ?: return@composable
 
-                standings = PreviewData.ScottishPremiershipTable,
+            val overviewViewModel: LeagueOverviewViewModel = viewModel()
+            val tableViewModel: LeagueTableViewModel = viewModel()
 
-                onClubClick = { _ ->
+            LaunchedEffect(leagueId) {
 
-                    navController.navigate(
-                        FootballDestination.Club.route
-                    )
+                overviewViewModel.loadLeagueOverview(
+                    leagueId,
+                    season
+                )
 
-                }
+                tableViewModel.loadLeagueTable(
+                    leagueId,
+                    season
+                )
 
-            )
+            }
+
+            val overviewState by
+            overviewViewModel.uiState.collectAsState()
+
+            val tableState by
+            tableViewModel.uiState.collectAsState()
+
+            overviewState.overview?.let { overview ->
+
+                LeagueTableScreen(
+
+                    overview = overview,
+
+                    standings = tableState.table,
+
+                    onClubClick = { clubId ->
+
+                        navController.navigate(
+
+                            FootballDestination
+                                .Club
+                                .createRoute(clubId)
+
+                        )
+
+                    }
+
+                )
+
+            }
 
         }
 

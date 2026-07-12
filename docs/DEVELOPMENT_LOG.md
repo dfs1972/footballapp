@@ -98,3 +98,19 @@ CompetitionsScreen now retrieves competitions from the Spring Boot backend via R
 Verified end-to-end:
 
 Android → Retrofit → Spring Boot → Neon PostgreSQL.
+
+# Milestone
+
+Completed the first fully parameterised navigation flow.
+
+Competition selection now passes the selected leagueId through
+Navigation Compose.
+
+LeagueOverviewScreen is now populated from the Spring Boot backend
+via Retrofit, Repository and ViewModel.
+
+The app is no longer dependent on DemoData for Competition selection
+or League Overview.
+
+Only the TopStandingsCard remains on PreviewData pending the League
+Table migration.

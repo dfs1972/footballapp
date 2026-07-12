@@ -161,6 +161,7 @@ object PreviewData {
             wins = 29,
             draws = 4,
             losses = 5,
+            goalDifference = 42,
             points = 91,
             qualification = QualificationType.SAFE
         ),
@@ -173,6 +174,7 @@ object PreviewData {
             wins = 27,
             draws = 3,
             losses = 8,
+            goalDifference = 42,
             points = 84,
             qualification = QualificationType.SAFE
         ),
@@ -185,6 +187,7 @@ object PreviewData {
             wins = 18,
             draws = 11,
             losses = 9,
+            goalDifference = 42,
             points = 65,
             qualification = QualificationType.SAFE
         ),
@@ -197,6 +200,7 @@ object PreviewData {
             wins = 17,
             draws = 10,
             losses = 11,
+            goalDifference = 42,
             points = 61,
             qualification = QualificationType.SAFE
         ),
@@ -209,6 +213,7 @@ object PreviewData {
             wins = 16,
             draws = 8,
             losses = 14,
+            goalDifference = 42,
             points = 56,
             qualification = QualificationType.SAFE
         ),
@@ -221,6 +226,7 @@ object PreviewData {
             wins = 15,
             draws = 9,
             losses = 14,
+            goalDifference = 42,
             points = 54,
             qualification = QualificationType.SAFE
         ),
@@ -233,6 +239,7 @@ object PreviewData {
             wins = 13,
             draws = 11,
             losses = 14,
+            goalDifference = 42,
             points = 50,
             qualification = QualificationType.SAFE
         ),
@@ -245,6 +252,7 @@ object PreviewData {
             wins = 13,
             draws = 9,
             losses = 16,
+            goalDifference = 42,
             points = 48,
             qualification = QualificationType.SAFE
         ),
@@ -257,6 +265,7 @@ object PreviewData {
             wins = 11,
             draws = 10,
             losses = 17,
+            goalDifference = 42,
             points = 43,
             qualification = QualificationType.SAFE
         ),
@@ -269,6 +278,7 @@ object PreviewData {
             wins = 10,
             draws = 8,
             losses = 20,
+            goalDifference = 42,
             points = 38,
             qualification = QualificationType.SAFE
         ),
@@ -281,6 +291,7 @@ object PreviewData {
             wins = 8,
             draws = 9,
             losses = 21,
+            goalDifference = 42,
             points = 33,
             qualification = QualificationType.RELEGATION
         ),
@@ -293,6 +304,7 @@ object PreviewData {
             wins = 7,
             draws = 8,
             losses = 23,
+            goalDifference = 42,
             points = 29,
             qualification = QualificationType.RELEGATION
         )

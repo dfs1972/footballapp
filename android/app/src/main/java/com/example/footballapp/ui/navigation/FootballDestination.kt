@@ -4,30 +4,97 @@ sealed class FootballDestination(
     val route: String
 ) {
 
-    data object Competitions : FootballDestination(
-        "competitions"
-    )
+    object Competitions :
+        FootballDestination(
+            "competitions"
+        )
 
-    data object LeagueOverview : FootballDestination(
-        "league_overview"
-    )
+    // -------------------------------------------------------------------------
+    // Competition
+    // -------------------------------------------------------------------------
 
-    data object LeagueTable : FootballDestination("league_table")
+    object LeagueOverview :
+        FootballDestination(
+            "leagueOverview/{leagueId}"
+        ) {
 
-    data object Fixtures : FootballDestination("fixtures")
+        fun createRoute(
+            leagueId: Int
+        ) = "leagueOverview/$leagueId"
 
-    data object Clubs : FootballDestination("clubs")
+    }
 
-    data object Club : FootballDestination("club")
+    object LeagueTable :
+        FootballDestination(
+            "leagueTable/{leagueId}"
+        ) {
 
-    data object Squad : FootballDestination("squad")
+        fun createRoute(
+            leagueId: Int
+        ) = "leagueTable/$leagueId"
 
-    data object PlayerDetails : FootballDestination(
-        "player_details"
-    ) {
+    }
 
-        fun createRoute(playerId: Int) =
-            "player_details/$playerId"
+    object Fixtures :
+        FootballDestination(
+            "fixtures/{leagueId}"
+        ) {
+
+        fun createRoute(
+            leagueId: Int
+        ) = "fixtures/$leagueId"
+
+    }
+
+    object Clubs :
+        FootballDestination(
+            "clubs/{leagueId}"
+        ) {
+
+        fun createRoute(
+            leagueId: Int
+        ) = "clubs/$leagueId"
+
+    }
+
+    // -------------------------------------------------------------------------
+    // Club
+    // -------------------------------------------------------------------------
+
+    object Club :
+        FootballDestination(
+            "club/{clubId}"
+        ) {
+
+        fun createRoute(
+            clubId: Int
+        ) = "club/$clubId"
+
+    }
+
+    object Squad :
+        FootballDestination(
+            "squad/{clubId}"
+        ) {
+
+        fun createRoute(
+            clubId: Int
+        ) = "squad/$clubId"
+
+    }
+
+    // -------------------------------------------------------------------------
+    // Player
+    // -------------------------------------------------------------------------
+
+    object PlayerDetails :
+        FootballDestination(
+            "player/{playerId}"
+        ) {
+
+        fun createRoute(
+            playerId: Int
+        ) = "player/$playerId"
 
     }
 

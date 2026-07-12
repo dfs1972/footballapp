@@ -6,6 +6,7 @@ import com.example.footballapp.ui.components.LeagueTableCard
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.design.AppConstants
 import com.example.footballapp.ui.model.CompetitionUiModel
+import com.example.footballapp.ui.model.LeagueOverviewUiModel
 import com.example.footballapp.ui.model.LeagueTableRowUiModel
 import com.example.footballapp.ui.previews.PreviewData
 import com.example.footballapp.ui.theme.FootballAppTheme
@@ -13,7 +14,7 @@ import com.example.footballapp.ui.theme.FootballAppTheme
 @Composable
 fun LeagueTableScreen(
 
-    competition: CompetitionUiModel,
+    overview: LeagueOverviewUiModel,
 
     standings: List<LeagueTableRowUiModel>,
 
@@ -23,7 +24,7 @@ fun LeagueTableScreen(
 
     ScreenScaffold(
 
-        title = competition.name,
+        title = overview.leagueName,
 
         subtitle = AppConstants.CURRENT_SEASON
 
@@ -33,7 +34,7 @@ fun LeagueTableScreen(
 
             LeagueTableCard(
 
-                table = PreviewData.ScottishPremiershipTable,
+                table = standings,
 
                 onTeamClick = onClubClick
 
@@ -45,22 +46,22 @@ fun LeagueTableScreen(
 
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun LeagueTableScreenPreview() {
-
-    FootballAppTheme {
-
-        LeagueTableScreen(
-
-            competition = PreviewData.ScottishPremiership,
-
-            standings = PreviewData.ScottishPremiershipTable,
-
-            onClubClick = {}
-
-        )
-
-    }
-
-}
+//@Preview(showBackground = true)
+//@Composable
+//private fun LeagueTableScreenPreview() {
+//
+//    FootballAppTheme {
+//
+//        LeagueTableScreen(
+//
+//            competition = PreviewData.ScottishPremiership,
+//
+//            standings = PreviewData.ScottishPremiershipTable,
+//
+//            onClubClick = {}
+//
+//        )
+//
+//    }
+//
+//}

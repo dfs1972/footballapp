@@ -18,6 +18,8 @@ data class LeagueTableRowUiModel(
 
     val losses: Int,
 
+    val goalDifference: Int,
+
     val points: Int,
 
     val qualification: QualificationType,

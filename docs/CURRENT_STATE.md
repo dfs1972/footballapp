@@ -1,143 +1,136 @@
-## Current Progress
+# FootballApp - Current Project State
 
-### Backend
+## Last Updated: 13 July 2026
 
-- Java backend imports football data into a local PostgreSQL database.
-- Repository and service layers are established.
-- Local database remains the primary data source during UI development.
-- Future backend will expose a REST API consumed by the Android app.
+## Project Overview
 
-### Android UI
+### FootballApp consists of:
 
-The new Jetpack Compose UI is being developed using PreviewData before backend integration.
+Backend: Java 25 + Spring Boot (IntelliJ IDEA)
+Frontend: Android (Jetpack Compose, Android Studio)
+Database: Neon PostgreSQL
+Primary Data Source: API-Football
 
-Completed screens:
+During development the application uses a historical snapshot of the Scottish Premiership 2024 season. This provides a stable dataset and avoids repeated API requests while developing and testing the Android application.
 
-- ✅ Competitions
-- ✅ League Overview
-- ✅ League Table
-- ✅ Fixtures
-- ✅ Clubs
-- ✅ Club Details
+### Backend Status
 
-Reusable components completed:
+Architecture
 
-- ScreenScaffold
-- SectionCard
-- NavigationCard
-- ClubRow
-- ClubList
-- ClubBadge
-- InfoRow
-- LeagueTableCard
-- FixtureCard
-- TopStandingsCard
+The backend now uses Spring Boot dependency injection throughout.
 
-UI models added:
-
-- ClubUiModel
-- ClubDetailsUiModel
-- CompetitionUiModel
-- FixtureUiModel
-- LeagueTableRowUiModel
-- StandingUiModel
-
-Current navigation:
-
-Competitions
-→ League Overview
-→ Clubs
-→ Club Details
-
-# CURRENT_STATE.md (update)
-## Current Status (July 2026)
-## UI
-✅ Modern Jetpack Compose UI established.
-✅ Reusable component library completed.
-✅ Preview-driven development workflow established.
-✅ Consistent UiModel layer implemented.
-✅ Team → Club terminology refactor completed.
-Navigation
-
-### Demo Mode navigation is complete.
-
-Competitions
+Android App
 │
 ▼
+REST Controllers
+│
+▼
+LeagueDataService
+│
+▼
+Repositories
+│
+▼
+Neon PostgreSQL
+
+Manual object construction has been removed in favour of constructor injection.
+
+### Database
+
+Current database contains:
+
+Leagues
+Seasons
+Teams
+Venues
+League Teams
+Standings
+Fixtures
+Players
+Player Statistics
+Team Statistics
+Season Clubs
+
+The database is fully normalised.
+
+Examples:
+
+teams.venue_id → venues.id
+players stores player identity information.
+player_statistics stores season and competition specific data.
+REST API Status
+
+All primary REST endpoints have been verified after the Spring migration.
+
+Endpoint	Status
+/leagues	✅ Verified
+/leagueOverview	✅ Verified
+/leagueTable	✅ Verified
+/fixtures	✅ Verified
+/teams	✅ Verified
+/teamDetails	✅ Verified
+/teamFixtures	✅ Verified
+/teamPlayers	✅ Verified
+/playerDetails	✅ Verified
+/club	✅ Verified
+
+Backend JSON contracts have been confirmed compatible with the Android frontend.
+
+### Recent Backend Improvements
+
+Completed:
+
+Spring dependency injection migration.
+Repository refactoring.
+Shared Team ResultSet mapper introduced.
+Fixed missing venueId mappings.
+Verified repository and controller wiring.
+Verified Neon database integration.
+
+The backend is now considered stable for Android integration.
+
+### Frontend Status
+
+The Android application currently contains:
+
+Competitions
 League Overview
-┌────┼──────────────┐
-▼    ▼              ▼
-Table Fixtures     Clubs
-│                  │
-│                  ▼
-└──────────────► Club Details
-│
-┌─────────┴─────────┐
-▼                   ▼
-Squad              Fixtures
-│
-▼
+League Table
+Fixtures
+Clubs
+Club
+Squad
 Player Details
 
-### Documentation
-Repository documentation reorganised.
+Navigation between screens is complete.
 
-docs/
-AI_CONTEXT.md
-ARCHITECTURE.md
-CHANGELOG.md
-CURRENT_STATE.md
-DEVELOPMENT_LOG.md
-UI_GUIDELINES.md
+Preview data is still used in some areas and will now be replaced incrementally with live backend data.
 
-tools/
-repomix/
-Backend
+### Current Development Phase
 
-### Existing Java backend remains unchanged.
+The project is transitioning from backend development to frontend integration.
 
-PostgreSQL database
-Import services
-API-Football integration
-Repository layer
+### Next objective:
 
-Backend is ready for REST API integration.
+Connect Android repositories to the live Spring REST API.
+Replace PreviewData with Retrofit-backed data sources.
+Verify each screen against live backend responses.
+Complete end-to-end integration.
+Known Issues
 
-## Next Milestone
+No known backend issues.
 
-Phase 2 – Connect the Android application to the backend.
+Minor data differences (such as null player statistics) reflect the source data supplied by API-Football rather than application defects.
 
-Initial goals:
+### Immediate Next Steps
+Update project documentation.
+Commit verified backend state.
+Begin Retrofit integration.
+Replace Android preview data screen by screen.
+Perform end-to-end testing.
 
-Introduce ViewModels.
-Introduce Repository abstraction.
-Replace PreviewData with ViewModel state.
-Connect Android to the Spring Boot REST API.
-Continue using the existing Compose UI unchanged.
+### Project status:
 
-## July 10th 2026 – Cloud Database Migration Complete
+Backend: Feature complete and verified.
 
-- Replaced hardcoded JDBC credentials with environment variables.
-- Created FootballApp database on Neon.
-- Migrated schema and data from local PostgreSQL.
-- Verified Spring Boot REST API against Neon.
-- `/leagues` endpoint successfully returning live data from cloud database.
-
-## Live Data Integration
-
-Completed migration of Competitions screen from PreviewData to live REST data.
-
-Added:
-
-- FootballApiClient
-- FootballApiService
-- CompetitionRepository
-- CompetitionMapper
-- CompetitionViewModel
-- CompetitionUiState
-
-CompetitionsScreen now retrieves competitions from the Spring Boot backend via Retrofit.
-
-Verified end-to-end:
-
-Android → Retrofit → Spring Boot → Neon PostgreSQL.
+Frontend: UI complete, transitioning to live data integration.

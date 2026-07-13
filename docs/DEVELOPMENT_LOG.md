@@ -1,125 +1,122 @@
 # Development Log
+13 July 2026
+Spring Backend Migration Completed
 
-## 2026-07-07
+Completed migration of the backend from manual object construction to full Spring Boot dependency injection.
 
-Milestone: Club Details
+Backend Refactoring
 
-Completed:
-- ClubsScreen
-- ClubDetailsUiModel
-- ClubScreen
-- ClubBadge refactor
-- InfoRow
-- PreviewData updates
+## Completed:
 
-Next:
-- Squad feature
+Removed manual service and repository construction.
+Introduced constructor injection throughout the application.
+Simplified controller wiring.
+Verified Spring Boot startup with no dependency errors.
+Confirmed application launches successfully using the Spring Boot entry point.
+REST API Verification
 
-# Demo Mode Polish
+Performed full end-to-end verification of all backend REST endpoints against the Neon PostgreSQL development database.
 
-## 08/07/2026
+Verified endpoints:
 
-□ League table badge alignment
-□ Club row badge alignment
-□ Consistent spacing between badge and text
-□ Verify typography hierarchy
-□ Test scrolling on all screens
-□ Test dark mode
-□ Navigation back stack
+✅ /leagues
+✅ /leagueOverview
+✅ /leagueTable
+✅ /fixtures
+✅ /teams
+✅ /teamDetails
+✅ /teamFixtures
+✅ /teamPlayers
+✅ /playerDetails
+✅ /club
 
-### Navigation Milestone
+All endpoints returned valid JSON and matched the expected Android DTO structure.
 
-Implemented Demo Mode navigation:
+Repository Improvements
 
-✓ Competitions
-✓ League Overview
-✓ League Table
-✓ Fixtures
-✓ Clubs
-✓ Club Details
+Discovered two repository mapping issues during endpoint verification.
 
-Remaining:
+Team venue mapping
 
-□ Squad
-□ Player Details
+Issue:
 
-DEVELOPMENT_LOG.md (new entry)
-## July 2026 – Demo Mode Complete
+venueId always returned 0 despite correct database values.
 
-### Navigation
+Cause:
 
-- Completed FootballNavHost.
-- Connected all major application screens.
-- Standardised navigation around Club Details.
-- Added Club → Squad navigation.
-- Added Club → Fixtures navigation.
-- Added Squad → Player Details navigation.
-- Fixed Top 5 Clubs card to display five clubs.
+venue_id was not being mapped from the SQL ResultSet in multiple repository methods.
 
-### UI
+Resolution:
 
-- Refined ClubBadge sizing and alignment.
-- Continued Team → Club terminology refactor.
-- Completed reusable screen architecture.
+Added missing team.setVenueId(rs.getInt("venue_id")).
+Refactored duplicate mapping logic into a shared Team mapping helper.
+Verified /teams and /teamDetails now return the correct venue ID.
+Database Verification
 
-### Documentation
+Verified relationships within the Neon PostgreSQL database.
 
-- Added ARCHITECTURE.md.
-- Reorganised project documentation into /docs.
-- Moved RepoMix snapshots into /tools/repomix.
+### Confirmed:
 
-### Repository
+teams.venue_id correctly references venues.id.
+players stores player identity information.
+player_statistics stores season and competition statistics.
+Historical Scottish Premiership 2024 data is correctly linked across tables.
 
-- GitHub milestone commit created.
+No schema issues identified.
 
-## July 10th 2026 – Cloud Database Migration Complete
+## Player Data Verification
 
-- Replaced hardcoded JDBC credentials with environment variables.
-- Created FootballApp database on Neon.
-- Migrated schema and data from local PostgreSQL.
-- Verified Spring Boot REST API against Neon.
-- `/leagues` endpoint successfully returning live data from cloud database.
+### Verified:
 
-## Live Data Integration
+/teamPlayers returns the complete imported squad.
+/playerDetails correctly combines player identity with season statistics.
+Null statistics reflect the imported API data rather than application defects.
+Club Endpoint
 
-Completed migration of Competitions screen from PreviewData to live REST data.
+### Verified /club endpoint.
 
-Added:
+Confirmed it provides a lightweight club profile including:
 
-- FootballApiClient
-- FootballApiService
-- CompetitionRepository
-- CompetitionMapper
-- CompetitionViewModel
-- CompetitionUiState
+Club name
+Country
+Founded year
+Stadium
+City
+Capacity
 
-CompetitionsScreen now retrieves competitions from the Spring Boot backend via Retrofit.
+Decision:
 
-Verified end-to-end:
+Retain both /club and /teamDetails.
 
-Android → Retrofit → Spring Boot → Neon PostgreSQL.
+Although both describe a club, they serve different purposes:
 
-# Milestone
+/club provides static club information.
+/teamDetails provides season-specific information including form, league position and recent fixtures.
+Backend Status
 
-Completed the first fully parameterised navigation flow.
+Backend is now considered stable.
 
-Competition selection now passes the selected leagueId through
-Navigation Compose.
+### Completed:
 
-LeagueOverviewScreen is now populated from the Spring Boot backend
-via Retrofit, Repository and ViewModel.
+Spring migration
+Repository verification
+Database verification
+REST endpoint verification
 
-The app is no longer dependent on DemoData for Competition selection
-or League Overview.
+No known backend defects remain.
 
-Only the TopStandingsCard remains on PreviewData pending the League
-Table migration.
+Next Development Phase
 
-# July 12th 2026
-## UI Polish
+Focus now shifts to Android frontend integration.
 
-Reposition fixture scores beside team names.
-Add club badges to fixture list.
-Improve LIVE/HT/FT presentation.
-Colour-code status chips (LIVE red, FT grey, etc.).
-Hide 0-0 for scheduled fixtures if no result exists.
+### Next objectives:
+
+Replace PreviewData with Retrofit API calls.
+Connect ViewModels to backend repositories.
+Verify each screen against live backend data.
+Complete end-to-end testing between Android and Spring Boot backend.
+Milestone Reached
+
+This marks completion of the backend development phase.
+
+The project now transitions from backend implementation to frontend integration and live data consumption.

@@ -1,364 +1,217 @@
 # FootballApp Architecture
 
-## Overview
+### Last Updated: 13 July 2026
 
-FootballApp consists of three independent layers.
+### Overview
 
-```
-                ┌────────────────────────┐
-                │   Android Application  │
-                │   (Jetpack Compose)    │
-                └──────────┬─────────────┘
-                           │
-                     HTTP / JSON
-                           │
-                ┌──────────▼─────────────┐
-                │      Java REST API     │
-                │    (Spring Boot)       │
-                └──────────┬─────────────┘
-                           │
-                    PostgreSQL Database
-                           │
-                ┌──────────▼─────────────┐
-                │ footballapp_db         │
-                └────────────────────────┘
-```
+FootballApp is split into two independent applications:
 
-The Android application never communicates directly with API-Football.
+Backend – Java 25 + Spring Boot
+Frontend – Android (Jetpack Compose)
 
-Instead, all requests pass through the FootballApp backend, which provides a stable API regardless of where the data originally came from.
+The backend exposes a REST API consumed by the Android application.
 
----
+Development currently uses a historical snapshot of the Scottish Premiership 2024 season stored in a Neon PostgreSQL database.
 
-# Backend Architecture
+High-Level Architecture
+Android Application
+(Jetpack Compose + Retrofit)
+│
+HTTP / JSON REST
+│
+▼
+Spring Boot REST API
+│
+REST Controllers
+│
+▼
+LeagueDataService
+│
+┌──────────────────┼──────────────────┐
+│                  │                  │
+▼                  ▼                  ▼
+TeamRepository     FixtureRepository   PlayerRepository
+StandingRepository VenueRepository     LeagueRepository
+│
+▼
+Neon PostgreSQL
+Backend Layers
+## Controllers
 
-The backend follows a layered architecture.
+Controllers expose REST endpoints to the Android application.
 
-```
-                 REST Controllers
-                        │
-                        ▼
-               LeagueDataService
-                        │
-        ┌───────────────┼────────────────┐
-        ▼               ▼                ▼
-   TeamRepository  FixtureRepository  PlayerRepository
-        ▼               ▼                ▼
-             PostgreSQL Database
-```
+### Responsibilities:
 
-Data import follows a separate path.
+Receive HTTP requests.
+Validate request parameters.
+Delegate business logic to the service layer.
+Return JSON DTOs.
 
-```
-API-Football
-
-        │
-
-        ▼
-
-ApiFootballClient
-
-        │
-
-        ▼
-
-ApiFootballService
-
-        │
-
-        ▼
-
-Import Services
-
-        │
-
-        ▼
-
-Repositories
-
-        │
-
-        ▼
-
-PostgreSQL
-```
-
-The import pipeline is completely independent from the REST API.
-
-The database acts as the single source of truth for the Android application.
-
----
-
-# Backend Layers
-
-## API Layer
-
-Responsible for communicating with API-Football.
-
-Classes
-
-- ApiFootballClient
-- ApiFootballService
-
-Responsibilities
-
-- Send HTTP requests
-- Parse JSON
-- Return Java model objects
-
----
-
-## Import Layer
-
-Responsible for downloading data and storing it.
-
-Current import services include
-
-- LeagueImportService
-- LeagueUkImportService
-- TeamImportService
-- StandingsImportService
-- FixtureImportService
-- TeamStatisticsImportService
-- PlayerImportService
-
-Responsibilities
-
-- Retrieve API data
-- Transform into database models
-- Save through repositories
-
----
-
-## Repository Layer
-
-Repositories communicate directly with PostgreSQL.
-
-Current repositories
-
-- LeagueUkRepository
-- LeagueRepository
-- LeagueTeamRepository
-- TeamRepository
-- VenueRepository
-- StandingRepository
-- FixtureRepository
-- TeamStatisticsRepository
-- PlayerRepository
-- PlayerStatisticsRepository
-
-Responsibilities
-
-- SQL queries
-- Inserts
-- Updates
-- Reads
-- Mapping database rows into Java objects
-
----
+Controllers contain no database logic.
 
 ## Service Layer
 
-Application services provide business logic.
+The LeagueDataService acts as the primary application service.
 
-Current services
+### Responsibilities:
 
-- LeagueDataService
-- TeamService
-- FixtureService
-- StandingService
+Coordinate repository calls.
+Build complex response objects.
+Combine data from multiple tables.
+Isolate business logic from controllers.
 
-Responsibilities
+Examples include:
 
-- Combine repository data
-- Build response models
-- Hide database implementation from controllers
+Club Details
+Player Details
+League Overview
+Repository Layer
 
----
+Repositories provide all database access.
 
-## Controller Layer
+### Responsibilities:
 
-Controllers expose REST endpoints.
+Execute SQL queries.
+Map ResultSet objects into domain models.
+Hide SQL implementation from the service layer.
 
-Current endpoints
+Repositories never communicate directly with Android.
 
-| Endpoint | Purpose |
-|----------|----------|
-| /leagues | Enabled leagues |
-| /leagueOverview | League overview |
-| /leagueTable | League standings |
-| /fixtures | League fixtures |
-| /fixture | Fixture details |
-| /teams | Clubs in league |
-| /teamDetails | Club details |
-| /teamFixtures | Club fixtures |
-| /teamPlayers | Squad |
-| /playerDetails | Player profile |
+## Database
 
-Controllers should remain thin.
+Development database:
 
-Business logic belongs inside LeagueDataService.
+Neon PostgreSQL
 
----
+### Primary tables:
 
-# Database
+leagues
+seasons
+teams
+venues
+league_teams
+standings
+fixtures
+players
+player_statistics
+team_statistics
+season_clubs
 
-The backend uses PostgreSQL.
+### Key relationships:
 
-Current core tables
+teams
+│
+└── venue_id ─────────► venues
 
-- leagues
-- leagues_uk
-- teams
-- venues
-- league_teams
-- standings
-- fixtures
-- players
-- player_statistics
-- team_statistics
+players
+│
+└─────────────────────► player_statistics
 
-The database is considered the source of truth for the application.
+The schema is fully normalised to minimise duplicated data.
 
-Android never calls API-Football directly.
+### Dependency Injection
 
----
+The backend now uses Spring Boot constructor injection throughout.
 
-# Android Architecture
+Responsibilities managed by Spring include:
 
-The Android application follows modern Jetpack Compose architecture.
+Controller creation
+Service creation
+Repository creation
+Dependency management
 
-```
-Navigation
+Manual object construction has been removed.
 
-      │
+### REST API
 
-      ▼
+Current verified endpoints:
 
-Screens
+GET /leagues
+GET /leagueOverview
+GET /leagueTable
+GET /fixtures
+GET /teams
+GET /teamDetails
+GET /teamFixtures
+GET /teamPlayers
+GET /playerDetails
+GET /club
 
-      │
+All endpoints have been verified against the Neon development database.
 
-      ▼
+## Data Flow
 
-ViewModels (planned)
+Example request:
 
-      │
-
-      ▼
-
-Repository
-
-      │
-
-      ▼
-
-FootballApp REST API
-```
-
-UI is completely separated from data retrieval.
-
----
-
-# Design Principles
-
-The project follows several architectural principles.
-
-• Single Responsibility Principle
-
-Each class has one responsibility.
-
-Examples
-
-- Repository → database access
-- Controller → HTTP endpoints
-- Import Service → data import
-- LeagueDataService → business logic
-
----
-
-• Database First
-
-All application data is served from PostgreSQL.
-
-The external API is only used during import.
-
----
-
-• Thin Controllers
-
-Controllers should never contain SQL or business logic.
-
----
-
-• Repository Pattern
-
-All database access is isolated inside repository classes.
-
----
-
-• Service Layer
-
-Business logic belongs in services.
-
-Repositories should not know about REST.
-
-Controllers should not know about SQL.
-
----
-
-# Data Flow
-
-Import
-
-```
-API-Football
-        │
-ApiFootballService
-        │
-Import Service
-        │
-Repository
-        │
-PostgreSQL
-```
-
-Application
-
-```
 Android
-      │
-REST API
-      │
-Controller
-      │
+│
+GET /teamDetails
+│
+▼
+TeamController
+│
+▼
 LeagueDataService
-      │
-Repository
-      │
-PostgreSQL
-```
+│
+▼
+Repositories
+│
+▼
+Neon PostgreSQL
+│
+▼
+Repositories
+│
+▼
+LeagueDataService
+│
+▼
+JSON Response
+│
+▼
+Android UI
+Android Architecture
 
----
+The Android application follows a layered architecture:
 
-# Android Toolchain
+Compose UI
+│
+▼
+ViewModels
+│
+▼
+Repositories
+│
+▼
+Retrofit
+│
+▼
+Spring Boot Backend
 
-- Android Gradle Plugin: 9.2.1
-- Kotlin: 2.2.10
-- Compile SDK: 37
-- Target SDK: 36
-- Minimum SDK: 26
-- Jetpack Compose BOM: 2026.02.01
+During development, PreviewData is gradually being replaced by live Retrofit data.
 
-# Future Architecture
+### Current Development Phase
 
-Planned additions
+Backend implementation is complete.
 
-- ViewModels
-- Retrofit client
-- Offline caching
-- Player search
-- Match events
-- Live scores
-- Authentication (optional)
-- Cloud deployment
+### Current focus:
+
+Retrofit integration.
+Replace PreviewData.
+Connect ViewModels to live REST endpoints.
+Complete end-to-end testing.
+Future Expansion
+
+### The architecture is designed to support:
+
+Additional football leagues.
+Multiple seasons.
+Live API synchronisation.
+Scheduled background imports.
+User favourites.
+Player search.
+Match statistics.
+Caching.
+Authentication (if required).
+
+The current architecture is intended to scale without significant structural changes.

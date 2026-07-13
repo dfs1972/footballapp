@@ -1,0 +1,32 @@
+package org.footballapp.model.player;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+/**
+ * Represents API-Football paging information.
+ */
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Paging {
+
+    private int current;
+    private int total;
+
+    public Paging() {
+    }
+
+    public int getCurrent() {
+        return current;
+    }
+
+    public void setCurrent(int current) {
+        this.current = current;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+}

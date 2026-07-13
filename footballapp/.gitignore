@@ -37,3 +37,22 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+# Gradle
+.gradle/
+build/
+
+# Node
+node_modules/
+
+# Maven download
+apache-maven-*/
+
+# Installers
+*.msi
+
+# Local AI tools
+.agents/
+.claude/
+.neon/
+

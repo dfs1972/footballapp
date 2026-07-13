@@ -1,6 +1,6 @@
 package org.footballapp.controller;
 
-import org.footballapp.config.AppConfig;
+//import org.footballapp.config.AppConfig;
 import org.footballapp.service.LeagueDataService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

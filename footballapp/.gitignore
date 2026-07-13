@@ -39,20 +39,33 @@ build/
 .DS_Store
 
 # Gradle
-.gradle/
-build/
+**/.gradle/
+**/build/
 
 # Node
-node_modules/
+**/node_modules/
+
+# npm
+**/package-lock.json
+**/package.json
+
+# Local AI tools
+.agents/
+.claude/
+.neon/
+
+# Output folders
+OUTPUT_FOLDER/
+
+# Configuration cache
+**/configuration-cache/
+
+# Local lock files
+skills-lock.json
 
 # Maven download
 apache-maven-*/
 
 # Installers
 *.msi
-
-# Local AI tools
-.agents/
-.claude/
-.neon/
 

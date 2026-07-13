@@ -38,34 +38,3 @@ build/
 ### Mac OS ###
 .DS_Store
 
-# Gradle
-**/.gradle/
-**/build/
-
-# Node
-**/node_modules/
-
-# npm
-**/package-lock.json
-**/package.json
-
-# Local AI tools
-.agents/
-.claude/
-.neon/
-
-# Output folders
-OUTPUT_FOLDER/
-
-# Configuration cache
-**/configuration-cache/
-
-# Local lock files
-skills-lock.json
-
-# Maven download
-apache-maven-*/
-
-# Installers
-*.msi
-

@@ -7,6 +7,7 @@ import org.footballapp.model.club.ClubDetails;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,16 @@ import java.util.List;
  */
 @Repository
 public class TeamRepository {
+
+    private Team mapTeam(ResultSet rs) throws SQLException {
+        Team team = new Team();
+        team.setId(rs.getInt("id"));
+        team.setName(rs.getString("name"));
+        team.setCountry(rs.getString("country"));
+        team.setFounded(rs.getInt("founded"));
+        team.setVenueId(rs.getInt("venue_id"));
+        return team;
+    }
 
     /**
      * Saves a team to the database.
@@ -99,6 +110,10 @@ public class TeamRepository {
             team.setFounded(
                     rs.getInt("founded")
             );
+
+            team.setVenueId(
+                    rs.getInt("venue_id")
+            );
         }
 
         rs.close();
@@ -108,7 +123,7 @@ public class TeamRepository {
         return team;
     }
 
-    /** GET League & Season to JOIN with Team */
+    /** GET League, Season & Venue to JOIN with Team */
     public List<Team> getTeamsForLeague(
             int leagueId,
             int season
@@ -124,7 +139,8 @@ public class TeamRepository {
                             t.id,
                             t.name,
                             t.country,
-                            t.founded
+                            t.founded,
+                            t.venue_id
                         FROM teams t
     
                         JOIN standings lt
@@ -165,6 +181,10 @@ public class TeamRepository {
 
             team.setFounded(
                     rs.getInt("founded")
+            );
+
+            team.setVenueId(
+                    rs.getInt("venue_id")
             );
 
             teams.add(team);

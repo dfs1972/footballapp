@@ -61,14 +61,17 @@ public class ApiFootballService {
      */
     public PlayersApiResponse getPlayers(
             int teamId,
-            int season
+            int season,
+            int page
     ) throws Exception {
 
         String url =
                 "https://v3.football.api-sports.io/players?team="
                         + teamId
                         + "&season="
-                        + season;
+                        + season
+                        + "&page="
+                        + page;
 
         String json =
                 apiClient.get(url);

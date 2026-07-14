@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import org.footballapp.model.player.Player;
 import org.footballapp.model.playerdetails.PlayerDetails;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 
 import java.sql.Connection;
@@ -201,13 +202,17 @@ public class PlayerRepository {
                             p.display_name,
                             p.firstname,
                             p.lastname,
+                            p.birth_date,
                             p.age,
                             p.nationality,
+                            p.height,
+                            p.weight,
                             p.photo_url,
     
                             ps.position,
                             ps.shirt_number,
                             ps.captain,
+                            ps.starts,
                             ps.appearances,
                             ps.minutes,
                             ps.goals,
@@ -266,6 +271,18 @@ public class PlayerRepository {
                     rs.getString("lastname")
             );
 
+            details.setBirthDate(
+                    rs.getDate("birth_date")
+            );
+
+            details.setHeight(
+                    rs.getString("height")
+            );
+
+            details.setWeight(
+                    rs.getString("weight")
+            );
+
             details.setAge(
                     (Integer) rs.getObject("age")
             );
@@ -288,6 +305,10 @@ public class PlayerRepository {
 
             details.setCaptain(
                     (Boolean) rs.getObject("captain")
+            );
+
+            details.setStarts(
+                    (Integer) rs.getObject("starts")
             );
 
             details.setAppearances(
@@ -316,8 +337,12 @@ public class PlayerRepository {
                     (Integer) rs.getObject("red_cards")
             );
 
+            BigDecimal rating = rs.getBigDecimal("rating");
+
             details.setRating(
-                    (Double) rs.getObject("rating")
+                    rating != null
+                            ? rating.doubleValue()
+                            : null
             );
 
             details.setTeamId(

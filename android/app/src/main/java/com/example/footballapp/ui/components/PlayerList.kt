@@ -14,7 +14,7 @@ private val PositionOrder = listOf(
     "Goalkeeper",
     "Defender",
     "Midfielder",
-    "Forward"
+    "Attacker"
 )
 
 private fun positionHeading(position: String): String =
@@ -22,7 +22,7 @@ private fun positionHeading(position: String): String =
         "Goalkeeper" -> "Goalkeepers"
         "Defender" -> "Defenders"
         "Midfielder" -> "Midfielders"
-        "Forward" -> "Forwards"
+        "Attacker" -> "Attackers"
         else -> position
     }
 

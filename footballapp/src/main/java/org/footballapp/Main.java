@@ -1,6 +1,5 @@
 package org.footballapp;
 
-//import org.footballapp.config.AppConfig;
 import org.footballapp.model.teamstatistics.TeamStatisticsApiResponse;
 import org.footballapp.tools.ApiTester;
 

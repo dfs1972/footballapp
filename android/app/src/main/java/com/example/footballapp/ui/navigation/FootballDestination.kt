@@ -72,6 +72,9 @@ sealed class FootballDestination(
 
     }
 
+    //
+    // Squad
+    //
     object Squad :
         FootballDestination(
             "squad/{clubId}"
@@ -84,7 +87,7 @@ sealed class FootballDestination(
     }
 
     // -------------------------------------------------------------------------
-    // Player
+    // Player Details
     // -------------------------------------------------------------------------
 
     object PlayerDetails :

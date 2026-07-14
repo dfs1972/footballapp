@@ -12,6 +12,7 @@ import com.example.footballapp.ui.model.FixtureDayUiModel
 import com.example.footballapp.ui.model.ClubUiModel
 import com.example.footballapp.ui.model.PlayerUiModel
 import com.example.footballapp.ui.model.PlayerDetailsUiModel
+import com.example.footballapp.ui.design.AppConstants
 
 object PreviewData {
 
@@ -20,7 +21,7 @@ object PreviewData {
     // -------------------------------------------------------------------------
 
     val ScottishPremiership = CompetitionUiModel(
-        id = 179,
+        id = AppConstants.DEVELOPMENT_LEAGUE,
         name = "Scottish Premiership",
         //season = "2024/25",
         logoUrl = ""
@@ -801,35 +802,35 @@ object PreviewData {
             playerId = 16,
             shirtNumber = 9,
             name = "Cyriel Dessers",
-            position = "Forward"
+            position = "Attacker"
         ),
 
         PlayerUiModel(
             playerId = 17,
             shirtNumber = 11,
             name = "Oscar Cortés",
-            position = "Forward"
+            position = "Attacker"
         ),
 
         PlayerUiModel(
             playerId = 18,
             shirtNumber = 18,
             name = "Vaclav Cerny",
-            position = "Forward"
+            position = "Attacker"
         ),
 
         PlayerUiModel(
             playerId = 19,
             shirtNumber = 29,
             name = "Hamza Igamane",
-            position = "Forward"
+            position = "Attacker"
         ),
 
         PlayerUiModel(
             playerId = 20,
             shirtNumber = 99,
             name = "Danilo",
-            position = "Forward"
+            position = "Attacker"
         )
 
     )
@@ -864,6 +865,8 @@ object PreviewData {
         captain = true,
 
         appearances = 36,
+
+        starts = 36,
 
         goals = 5,
 
@@ -904,6 +907,8 @@ object PreviewData {
         captain = false,
 
         appearances = 34,
+
+        starts = 34,
 
         goals = 0,
 

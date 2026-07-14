@@ -1,5 +1,7 @@
 package org.footballapp.model.playerdetails;
 
+import java.sql.Date;
+
 public class PlayerDetails {
 
     private int playerId;
@@ -10,7 +12,13 @@ public class PlayerDetails {
 
     private String lastName;
 
+    private java.sql.Date birthDate;
+
     private Integer age;
+
+    private String height;
+
+    private String weight;
 
     private String nationality;
 
@@ -21,6 +29,8 @@ public class PlayerDetails {
     private Integer shirtNumber;
 
     private Boolean captain;
+
+    private Integer starts;
 
     private Integer appearances;
 
@@ -95,6 +105,30 @@ public class PlayerDetails {
         this.age = age;
     }
 
+    public String getHeight() {
+        return height;
+    }
+
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
+
     public String getNationality() {
         return nationality;
     }
@@ -133,6 +167,14 @@ public class PlayerDetails {
 
     public void setCaptain(Boolean captain) {
         this.captain = captain;
+    }
+
+    public Integer getStarts() {
+        return starts;
+    }
+
+    public void setStarts(Integer starts) {
+        this.starts = starts;
     }
 
     public Integer getAppearances() {

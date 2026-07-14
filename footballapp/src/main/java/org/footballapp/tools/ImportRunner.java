@@ -1,37 +1,72 @@
 package org.footballapp.tools;
 
-import org.footballapp.config.AppConfig;
-import org.footballapp.service.LeagueImportService;
+import org.footballapp.databaserepository.TeamRepository;
+import org.footballapp.model.teams.Team;
+import org.footballapp.service.PlayerImportService;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
-/**
- * Imports updated data from Database
- */
-public class ImportRunner {
+import java.util.List;
 
-    private static final int LEAGUE_ID = 179;
+@Component
+public class ImportRunner implements CommandLineRunner {
+
+    private static final boolean RUN_IMPORT = false;
+
+    private static final int TEAM_ID = 257;   // Rangers
     private static final int SEASON = 2024;
 
-    public static void main(String[] args)
+    private final PlayerImportService playerImportService;
+    private final TeamRepository teamRepository;
 
-            throws Exception {
-        System.out.println(
-                "API KEY = " +
-                        System.getenv("API_FOOTBALL_KEY")
-        );
+    public ImportRunner(
+            PlayerImportService playerImportService,
+            TeamRepository teamRepository
+    ) {
 
-        AppConfig config =
-                new AppConfig();
+        this.playerImportService = playerImportService;
 
-        LeagueImportService importer =
-                config.getLeagueImportService();
+        this.teamRepository = teamRepository;
 
-        importer.importLeague(
-                LEAGUE_ID,
-                SEASON
-        );
+    }
 
-        System.out.println(
-                "Import complete."
-        );
+    @Override
+    public void run(String... args) throws Exception {
+
+        List<Team> teams =
+                teamRepository.getTeamsForLeague(
+                        AppConstants.DEVELOPMENT_LEAGUE,
+                        AppConstants.DEVELOPMENT_SEASON
+                );
+
+        System.out.println();
+        System.out.println("========================================");
+        System.out.println("Importing Players");
+        System.out.println("========================================");
+        System.out.println();
+
+        for (Team team : teams) {
+
+            System.out.println(
+                    "Importing "
+                            + team.getName()
+            );
+
+            playerImportService.importPlayers(
+
+                    team.getId(),
+
+                    AppConstants.DEVELOPMENT_SEASON
+
+            );
+
+        }
+
+        System.out.println();
+        System.out.println("========================================");
+        System.out.println("Player Import Complete");
+        System.out.println("========================================");
+        System.out.println();
+
     }
 }

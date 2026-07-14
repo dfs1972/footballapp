@@ -8,7 +8,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.footballapp.ui.design.AppConstants
-import com.example.footballapp.ui.previews.PreviewData
 import com.example.footballapp.ui.screens.CompetitionsScreen
 import com.example.footballapp.ui.screens.club.ClubScreen
 import com.example.footballapp.ui.screens.clubs.ClubsScreen
@@ -18,11 +17,15 @@ import com.example.footballapp.ui.screens.league.LeagueTableScreen
 import com.example.footballapp.ui.screens.player.PlayerDetailsScreen
 import com.example.footballapp.ui.screens.squad.SquadScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.footballapp.ui.viewmodel.ClubViewModel
 import com.example.footballapp.ui.viewmodel.ClubsViewModel
 import com.example.footballapp.ui.viewmodel.CompetitionViewModel
 import com.example.footballapp.ui.viewmodel.FixturesViewModel
 import com.example.footballapp.ui.viewmodel.LeagueOverviewViewModel
 import com.example.footballapp.ui.viewmodel.LeagueTableViewModel
+import com.example.footballapp.ui.viewmodel.PlayerDetailsViewModel
+import com.example.footballapp.ui.viewmodel.SquadViewModel
+
 
 
 @Composable
@@ -337,78 +340,169 @@ fun FootballNavHost() {
 
         }
 
-        /**
-         * Club
-         */
-
         composable(
-            FootballDestination.Club.route
-        ) {
+            route = FootballDestination.Club.route
+        ) { backStackEntry ->
 
-            ClubScreen(
+            val clubId =
+                backStackEntry.arguments
+                    ?.getString("clubId")
+                    ?.toInt()
+                    ?: return@composable
 
-                club = DemoData.club,
+            val clubViewModel: ClubViewModel = viewModel()
 
-                onFixturesClick = {
+            LaunchedEffect(clubId) {
 
-                    navController.navigate(
-                        FootballDestination.Fixtures.route
-                    )
+                clubViewModel.loadClub(clubId)
 
-                },
+            }
 
-                onSquadClick = {
+            val uiState by
+            clubViewModel.uiState.collectAsState()
 
-                    navController.navigate(
-                        FootballDestination.Squad.route
-                    )
+            uiState.club?.let { club ->
 
-                }
+                ClubScreen(
 
-            )
+                    club = club,
+
+                    onFixturesClick = { selectedClubId ->
+
+                        // TODO
+                        // Team Fixtures screen
+
+                    },
+
+                    onSquadClick = { selectedClubId ->
+
+                        navController.navigate(
+
+                            FootballDestination
+                                .Squad
+                                .createRoute(
+                                    selectedClubId
+                                )
+
+                        )
+
+                    }
+
+                )
+
+            }
 
         }
 
-       /**
-        * Squad
-        */
+        /**
+         * Squad
+         */
         composable(
-            FootballDestination.Squad.route
-        ) {
+            route = FootballDestination.Squad.route
+        ) { backStackEntry ->
 
-            SquadScreen(
+            val clubId =
+                backStackEntry.arguments
+                    ?.getString("clubId")
+                    ?.toInt()
+                    ?: return@composable
 
-                clubName = DemoData.club.name,
+            val clubViewModel: ClubViewModel = viewModel()
+            val squadViewModel: SquadViewModel = viewModel()
 
-                season = AppConstants.CURRENT_SEASON,
+            LaunchedEffect(clubId) {
 
-                players = DemoData.squad,
+                clubViewModel.loadClub(clubId)
 
-                onPlayerClick = { _ ->
+                squadViewModel.loadPlayers(
 
-                    navController.navigate(
-                        FootballDestination.PlayerDetails.route
-                    )
+                    teamId = clubId,
 
-                }
+                    leagueId = AppConstants.DEVELOPMENT_LEAGUE,
 
-            )
+                    season = AppConstants.DEVELOPMENT_SEASON
+
+                )
+
+            }
+
+            val clubState by
+            clubViewModel.uiState.collectAsState()
+
+            val squadState by
+            squadViewModel.uiState.collectAsState()
+
+            clubState.club?.let { club ->
+
+                SquadScreen(
+
+                    clubName = club.name,
+
+                    season = AppConstants.DEVELOPMENT_SEASON_TEXT,
+
+                    players = squadState.players,
+
+                    onPlayerClick = { playerId ->
+
+                        navController.navigate(
+
+                            FootballDestination
+                                .PlayerDetails
+                                .createRoute(playerId)
+
+                        )
+
+                    }
+
+                )
+
+            }
 
         }
 
         /**
          * Player Details
          */
-
         composable(
-            FootballDestination.PlayerDetails.route
-        ) {
+            route = FootballDestination.PlayerDetails.route
+        ) { backStackEntry ->
 
-            PlayerDetailsScreen(
+            val playerId =
+                backStackEntry.arguments
+                    ?.getString("playerId")
+                    ?.toInt()
+                    ?: return@composable
 
-                player = DemoData.player
+            val playerDetailsViewModel: PlayerDetailsViewModel = viewModel()
 
-            )
+            LaunchedEffect(playerId) {
+
+                playerDetailsViewModel.loadPlayerDetails(
+
+                    playerId = playerId,
+
+                    leagueId = AppConstants.DEVELOPMENT_LEAGUE,
+
+                    season = AppConstants.DEVELOPMENT_SEASON
+
+                )
+
+            }
+
+            val playerState by
+            playerDetailsViewModel
+                .uiState
+                .collectAsState()
+
+            playerState.player?.let { player ->
+
+                PlayerDetailsScreen(
+
+                    player = player
+
+                )
+
+            }
 
         }
     }

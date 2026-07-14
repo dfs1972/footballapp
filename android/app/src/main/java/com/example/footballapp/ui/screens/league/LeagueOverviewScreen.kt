@@ -106,11 +106,11 @@ private fun LeagueOverviewScreenPreview() {
 
         overview = LeagueOverviewUiModel(
 
-            leagueId = 179,
+            leagueId = AppConstants.DEVELOPMENT_LEAGUE,
 
             leagueName = "Scottish Premiership",
 
-            season = AppConstants.CURRENT_SEASON,
+            season = AppConstants.DEVELOPMENT_SEASON_TEXT,
 
             teamCount = 12,
 

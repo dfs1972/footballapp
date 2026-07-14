@@ -54,7 +54,8 @@ public class PlayerImportService {
             PlayersApiResponse response =
                     apiFootballService.getPlayers(
                             teamId,
-                            season
+                            season,
+                            page
                     );
 
             for (PlayerResponse playerResponse

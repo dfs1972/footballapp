@@ -24,4 +24,6 @@ object Strings {
     const val CHOOSE_COMPETITION = "Choose a competition to explore."
     const val LEAGUES = "Leagues"
     const val DOMESTIC_CUPS = "Domestic Cups"
+
+    const val NOT_AVAILABLE = "N/A"
 }

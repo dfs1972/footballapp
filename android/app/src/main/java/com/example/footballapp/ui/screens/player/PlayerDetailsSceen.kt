@@ -169,6 +169,11 @@ fun PlayerDetailsScreen(
                     )
 
                     InfoRow(
+                        label = "Starts",
+                        value = player.starts?.toString()
+                    )
+
+                    InfoRow(
                         label = "Goals",
                         value = player.goals?.toString()
                     )

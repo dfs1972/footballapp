@@ -34,6 +34,8 @@ data class PlayerDetailsUiModel(
 
     val appearances: Int?,
 
+    val starts: Int?,
+
     val goals: Int?,
 
     val assists: Int?,

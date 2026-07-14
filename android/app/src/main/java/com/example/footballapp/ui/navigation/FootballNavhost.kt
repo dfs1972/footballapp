@@ -17,6 +17,7 @@ import com.example.footballapp.ui.screens.league.LeagueTableScreen
 import com.example.footballapp.ui.screens.player.PlayerDetailsScreen
 import com.example.footballapp.ui.screens.squad.SquadScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.footballapp.ui.screens.fixtures.TeamFixturesScreen
 import com.example.footballapp.ui.viewmodel.ClubViewModel
 import com.example.footballapp.ui.viewmodel.ClubsViewModel
 import com.example.footballapp.ui.viewmodel.CompetitionViewModel
@@ -25,7 +26,7 @@ import com.example.footballapp.ui.viewmodel.LeagueOverviewViewModel
 import com.example.footballapp.ui.viewmodel.LeagueTableViewModel
 import com.example.footballapp.ui.viewmodel.PlayerDetailsViewModel
 import com.example.footballapp.ui.viewmodel.SquadViewModel
-
+import com.example.footballapp.ui.viewmodel.TeamFixturesViewModel
 
 
 @Composable
@@ -62,7 +63,8 @@ fun FootballNavHost() {
                         FootballDestination
                             .LeagueOverview
                             .createRoute(
-                                competition.id)
+                                competition.id
+                            )
 
                     )
 
@@ -276,6 +278,81 @@ fun FootballNavHost() {
         }
 
         /**
+         * Team Fixtures
+         */
+
+        composable(
+            route = FootballDestination.TeamFixtures.route
+        ) { backStackEntry ->
+
+            val teamId =
+                backStackEntry.arguments
+                    ?.getString("teamId")
+                    ?.toInt()
+                    ?: return@composable
+
+            /*
+             * Club
+             */
+            val clubViewModel: ClubViewModel = viewModel()
+
+            LaunchedEffect(teamId) {
+
+                clubViewModel.loadClub(teamId)
+
+            }
+
+            val clubUiState by
+            clubViewModel.uiState.collectAsState()
+
+            /*
+             * Fixtures
+             */
+            val teamFixturesViewModel: TeamFixturesViewModel = viewModel()
+
+            val fixturesUiState by
+            teamFixturesViewModel.uiState.collectAsState()
+
+            LaunchedEffect(teamId) {
+
+                teamFixturesViewModel.loadFixtures(
+
+                    teamId = teamId,
+
+                    leagueId = AppConstants.DEVELOPMENT_LEAGUE,
+
+                    season = AppConstants.DEVELOPMENT_SEASON
+
+                )
+
+            }
+
+            clubUiState.club?.let { club ->
+
+                TeamFixturesScreen(
+
+                    clubName = club.name,
+
+                    season = AppConstants.DEVELOPMENT_SEASON_TEXT,
+
+                    fixtureDays = fixturesUiState.fixtureDays,
+
+                    onFixtureSelected = { fixtureId ->
+
+                        // Future:
+                        // Navigate to Fixture Details
+
+                    }
+
+                )
+
+            }
+
+        }
+
+
+
+        /**
          * Clubs
          */
 
@@ -340,6 +417,10 @@ fun FootballNavHost() {
 
         }
 
+        /**
+         * Club Screen
+         */
+
         composable(
             route = FootballDestination.Club.route
         ) { backStackEntry ->
@@ -369,8 +450,12 @@ fun FootballNavHost() {
 
                     onFixturesClick = { selectedClubId ->
 
-                        // TODO
-                        // Team Fixtures screen
+                        navController.navigate(
+
+                            FootballDestination.TeamFixtures
+                                .createRoute(selectedClubId)
+
+                        )
 
                     },
 

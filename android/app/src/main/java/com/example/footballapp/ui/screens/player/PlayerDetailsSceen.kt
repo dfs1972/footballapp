@@ -18,6 +18,7 @@ import com.example.footballapp.ui.model.PlayerDetailsUiModel
 import com.example.footballapp.ui.previews.PreviewData
 import com.example.footballapp.ui.theme.AppDimensions
 import com.example.footballapp.ui.design.AppSpacing
+import com.example.footballapp.util.DateFormatter
 
 @Composable
 fun PlayerDetailsScreen(
@@ -123,7 +124,9 @@ fun PlayerDetailsScreen(
 
                     InfoRow(
                         label = "Date of Birth",
-                        value = player.dateOfBirth
+                        value = DateFormatter.formatDate(
+                            player.dateOfBirth
+                        )
                     )
 
                     InfoRow(

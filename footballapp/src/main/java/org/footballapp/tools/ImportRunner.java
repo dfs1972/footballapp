@@ -11,7 +11,7 @@ import java.util.List;
 @Component
 public class ImportRunner implements CommandLineRunner {
 
-    private static final boolean RUN_IMPORT = false;
+    private static final boolean IMPORT_ENABLED = false;
 
     private static final int TEAM_ID = 257;   // Rangers
     private static final int SEASON = 2024;
@@ -32,6 +32,10 @@ public class ImportRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
+        if (!IMPORT_ENABLED) {
+            return;
+        }
 
         List<Team> teams =
                 teamRepository.getTeamsForLeague(

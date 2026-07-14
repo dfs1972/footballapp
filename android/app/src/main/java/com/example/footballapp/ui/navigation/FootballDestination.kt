@@ -86,6 +86,20 @@ sealed class FootballDestination(
 
     }
 
+    //
+    // Team Fixtures
+    //
+    object TeamFixtures :
+        FootballDestination(
+            "teamFixtures/{teamId}"
+        ) {
+
+        fun createRoute(
+            teamId: Int
+        ) = "teamFixtures/$teamId"
+
+    }
+
     // -------------------------------------------------------------------------
     // Player Details
     // -------------------------------------------------------------------------

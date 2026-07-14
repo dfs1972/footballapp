@@ -20,4 +20,21 @@ class FixtureRepository {
 
     }
 
+    /**
+     * Get fixtures for a single club.
+     */
+    suspend fun getTeamFixtures(
+        teamId: Int,
+        leagueId: Int,
+        season: Int
+    ): List<FixtureDto> {
+
+        return service.getTeamFixtures(
+            teamId,
+            leagueId,
+            season
+        )
+
+    }
+
 }

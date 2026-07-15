@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.footballapp.data.mapper.toUiModel
 import com.example.footballapp.data.repository.FixtureRepository
 import com.example.footballapp.ui.model.FixtureDayUiModel
+import com.example.footballapp.ui.model.extensions.groupByDay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -43,26 +44,7 @@ class TeamFixturesViewModel : ViewModel() {
                         .map {
                             it.toUiModel()
                         }
-                        .groupBy {
-
-                            /*
-                             * Group fixtures by the date
-                             * supplied by the backend.
-                             */
-                            it.fixtureDate
-
-                        }
-                        .map { (date, fixtures) ->
-
-                            FixtureDayUiModel(
-
-                                heading = date,
-
-                                fixtures = fixtures
-
-                            )
-
-                        }
+                        .groupByDay()
 
                 _uiState.value =
                     TeamFixturesUiState(

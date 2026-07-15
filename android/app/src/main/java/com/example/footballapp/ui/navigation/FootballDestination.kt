@@ -100,6 +100,20 @@ sealed class FootballDestination(
 
     }
 
+    /**
+     * Fixture Details
+     */
+
+    object FixtureDetails : FootballDestination(
+        "fixtureDetails/{fixtureId}"
+    ) {
+
+        fun createRoute(
+            fixtureId: Long
+        ) = "fixtureDetails/$fixtureId"
+
+    }
+
     // -------------------------------------------------------------------------
     // Player Details
     // -------------------------------------------------------------------------

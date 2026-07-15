@@ -3,6 +3,7 @@ package org.footballapp.service;
 /**
  * Spring Boot Service
  */
+import org.footballapp.model.fixtures.FixtureDetails;
 import org.springframework.stereotype.Service;
 
 
@@ -173,6 +174,20 @@ public class LeagueDataService {
     }
 
     /**
+     * Get Fixture Details
+     */
+
+    public FixtureDetails getFixtureDetails(
+            long fixtureId
+    ) throws Exception {
+
+        return fixtureRepository.getFixtureDetails(
+                fixtureId
+        );
+
+    }
+
+    /**
      *  Get a particular team's fixtures for that season.
      */
     public List<FixtureRow> getLeagueFixtures(
@@ -185,6 +200,7 @@ public class LeagueDataService {
                 season
         );
     }
+
     /** Get a list of all teams playing in a particular league in that season. */
     public List<Team> getTeamsForLeague(
             int leagueId,
@@ -352,19 +368,6 @@ public class LeagueDataService {
 
         return details;
     }
-
-    /**
-     *  Get a single fixture from league.
-     */
-    public FixtureRow getFixtureDetails(
-            long fixtureId
-    ) throws Exception {
-
-        return fixtureRepository
-                .getFixtureDetails(
-                        fixtureId
-                );
-    } // End of getFixturesDetails
 
     /**
      * Get League Overview

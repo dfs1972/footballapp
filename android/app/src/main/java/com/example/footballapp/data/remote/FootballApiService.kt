@@ -2,6 +2,7 @@ package com.example.footballapp.data.remote
 
 import com.example.footballapp.data.remote.dto.ClubDto
 import com.example.footballapp.data.remote.dto.CompetitionDto
+import com.example.footballapp.data.remote.dto.FixtureDetailsDto
 import com.example.footballapp.data.remote.dto.FixtureDto
 import com.example.footballapp.data.remote.dto.LeagueOverviewDto
 import com.example.footballapp.data.remote.dto.LeagueTableRowDto
@@ -122,5 +123,16 @@ interface FootballApiService {
         season: Int
 
     ): PlayerDetailsDto
+
+    /**
+     * Get Fixture Details
+     */
+    @GET("fixtureDetails")
+    suspend fun getFixtureDetails(
+
+        @Query("fixtureId")
+        fixtureId: Long
+
+    ): FixtureDetailsDto
 
 }

@@ -1,5 +1,6 @@
 package org.footballapp.controller;
 
+import org.footballapp.model.fixtures.FixtureDetails;
 import org.footballapp.model.fixtures.FixtureRow;
 import org.footballapp.service.LeagueDataService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * REST endpoints for league fixtures.
+ * REST endpoints for fixture data.
  */
 @RestController
 public class FixturesController {
@@ -39,6 +40,22 @@ public class FixturesController {
         return leagueDataService.getFixtures(
                 leagueId,
                 season
+        );
+
+    }
+
+    /**
+     * Returns details for a single fixture.
+     */
+    @GetMapping("/fixtureDetails")
+    public FixtureDetails getFixtureDetails(
+
+            @RequestParam long fixtureId
+
+    ) throws Exception {
+
+        return leagueDataService.getFixtureDetails(
+                fixtureId
         );
 
     }

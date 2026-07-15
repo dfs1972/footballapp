@@ -1,6 +1,7 @@
 package com.example.footballapp.data.repository
 
 import com.example.footballapp.data.remote.FootballApiClient
+import com.example.footballapp.data.remote.dto.FixtureDetailsDto
 import com.example.footballapp.data.remote.dto.FixtureDto
 
 class FixtureRepository {
@@ -8,6 +9,9 @@ class FixtureRepository {
     private val service =
         FootballApiClient.service
 
+    /**
+     * Get Fixtures
+     */
     suspend fun getFixtures(
         leagueId: Int,
         season: Int
@@ -33,6 +37,19 @@ class FixtureRepository {
             teamId,
             leagueId,
             season
+        )
+
+    }
+
+    /**
+     * Get Fixture Details
+     */
+    suspend fun getFixtureDetails(
+        fixtureId: Long
+    ): FixtureDetailsDto {
+
+        return service.getFixtureDetails(
+            fixtureId
         )
 
     }

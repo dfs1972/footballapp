@@ -31,6 +31,18 @@ object DateFormatter {
             Locale.UK
         )
 
+    private val fixtureDateOnlyFormatter =
+        DateTimeFormatter.ofPattern(
+            "d MMMM yyyy",
+            Locale.UK
+        )
+
+    private val fixtureTimeFormatter =
+        DateTimeFormatter.ofPattern(
+            "HH:mm",
+            Locale.UK
+        )
+
     /**
      * Example:
      * 2024-08-03T14:00:00+00:00
@@ -94,6 +106,44 @@ object DateFormatter {
         return java.time.LocalDate
             .parse(date)
             .format(dateFormatter)
+
+    }
+
+    /**
+     * Returns- 3 August 2024 for example.
+     */
+
+    fun formatFixtureDateOnly(
+        utcDateTime: String?
+    ): String {
+
+        if (utcDateTime.isNullOrBlank()) {
+            return ""
+        }
+
+        return OffsetDateTime
+            .parse(utcDateTime)
+            .atZoneSameInstant(ukZone)
+            .format(fixtureDateOnlyFormatter)
+
+    }
+
+    /**
+     * Returns- 12:30 for example..
+     */
+
+    fun formatFixtureTime(
+        utcDateTime: String?
+    ): String {
+
+        if (utcDateTime.isNullOrBlank()) {
+            return ""
+        }
+
+        return OffsetDateTime
+            .parse(utcDateTime)
+            .atZoneSameInstant(ukZone)
+            .format(fixtureTimeFormatter)
 
     }
 

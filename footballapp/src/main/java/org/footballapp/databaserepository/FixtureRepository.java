@@ -1,6 +1,7 @@
 package org.footballapp.databaserepository;
 
 import org.footballapp.database.DatabaseConnection;
+import org.footballapp.model.fixtures.FixtureDetails;
 import org.springframework.stereotype.Repository;
 import org.footballapp.model.fixtures.FixtureResponse;
 import org.footballapp.model.fixtures.FixtureRow;
@@ -608,7 +609,11 @@ public class FixtureRepository {
         return results;
     }
 
-    public FixtureRow getFixtureDetails(
+    /**
+     * Get Fixture Details
+     */
+
+    public FixtureDetails getFixtureDetails(
             long fixtureId
     ) throws Exception {
 
@@ -619,23 +624,41 @@ public class FixtureRepository {
                 conn.prepareStatement(
                         """
                         SELECT
+    
                             f.fixture_id,
                             f.fixture_date,
                             f.round,
+    
                             f.home_team_id,
-                            f.away_team_id,
                             home.name AS home_team,
+    
+                            f.away_team_id,
                             away.name AS away_team,
+    
                             f.home_goals,
-                            f.away_goals
+                            f.away_goals,
+    
+                            f.league_id,
+                            l.name AS league_name,
+    
+                            f.season,
+    
+                            f.venue_id,
+                            v.name AS venue_name
     
                         FROM fixtures f
     
                         JOIN teams home
-                            ON f.home_team_id = home.id
+                            ON home.id = f.home_team_id
     
                         JOIN teams away
-                            ON f.away_team_id = away.id
+                            ON away.id = f.away_team_id
+    
+                        JOIN leagues l
+                            ON l.league_id = f.league_id
+    
+                        LEFT JOIN venues v
+                            ON v.id = f.venue_id
     
                         WHERE f.fixture_id = ?
                         """
@@ -649,56 +672,73 @@ public class FixtureRepository {
         ResultSet rs =
                 stmt.executeQuery();
 
-        FixtureRow row =
-                new FixtureRow();
+        FixtureDetails details = null;
 
         if (rs.next()) {
 
-            row.setFixtureId(
+            details =
+                    new FixtureDetails();
+
+            details.setFixtureId(
                     rs.getLong("fixture_id")
             );
 
-            populateFixtureDateTime(
-                    row,
-                    rs.getString(
-                            "fixture_date"
-                    )
+            details.setFixtureDate(
+                    rs.getString("fixture_date")
             );
 
-//            row.setRound(
-//                    rs.getString("round")
-//            );
+            details.setRound(
+                    rs.getString("round")
+            );
 
-            row.setHomeTeamId(
+            details.setHomeTeamId(
                     rs.getInt("home_team_id")
             );
 
-            row.setAwayTeamId(
-                    rs.getInt("away_team_id")
-            );
-
-            row.setHomeTeam(
+            details.setHomeTeam(
                     rs.getString("home_team")
             );
 
-            row.setAwayTeam(
+            details.setAwayTeamId(
+                    rs.getInt("away_team_id")
+            );
+
+            details.setAwayTeam(
                     rs.getString("away_team")
             );
 
-            row.setHomeGoals(
-                    rs.getInt("home_goals")
+            details.setHomeGoals(
+                    (Integer) rs.getObject("home_goals")
             );
 
-            row.setAwayGoals(
-                    rs.getInt("away_goals")
+            details.setAwayGoals(
+                    (Integer) rs.getObject("away_goals")
             );
+
+            details.setLeagueId(
+                    rs.getInt("league_id")
+            );
+
+            details.setLeagueName(
+                    rs.getString("league_name")
+            );
+
+            details.setSeason(
+                    rs.getInt("season")
+            );
+
+            details.setVenueName(
+                    rs.getString("venue_name")
+            );
+
         }
 
         rs.close();
         stmt.close();
         conn.close();
 
-        return row;
+        return details;
+
     }
 
     /**

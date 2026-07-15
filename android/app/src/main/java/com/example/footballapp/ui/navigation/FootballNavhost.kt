@@ -17,10 +17,12 @@ import com.example.footballapp.ui.screens.league.LeagueTableScreen
 import com.example.footballapp.ui.screens.player.PlayerDetailsScreen
 import com.example.footballapp.ui.screens.squad.SquadScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.footballapp.ui.screens.fixtures.FixtureDetailsScreen
 import com.example.footballapp.ui.screens.fixtures.TeamFixturesScreen
 import com.example.footballapp.ui.viewmodel.ClubViewModel
 import com.example.footballapp.ui.viewmodel.ClubsViewModel
 import com.example.footballapp.ui.viewmodel.CompetitionViewModel
+import com.example.footballapp.ui.viewmodel.FixtureDetailsViewModel
 import com.example.footballapp.ui.viewmodel.FixturesViewModel
 import com.example.footballapp.ui.viewmodel.LeagueOverviewViewModel
 import com.example.footballapp.ui.viewmodel.LeagueTableViewModel
@@ -266,9 +268,18 @@ fun FootballNavHost() {
 
                     fixtureDays = fixturesState.fixtureDays,
 
+
+
                     onFixtureSelected = { fixtureId ->
 
-                        // We'll wire this up later
+                        navController.navigate(
+
+                            FootballDestination
+                                .FixtureDetails
+                                .createRoute(fixtureId)
+
+                        )
+
                     }
 
                 )
@@ -339,17 +350,61 @@ fun FootballNavHost() {
 
                     onFixtureSelected = { fixtureId ->
 
-                        // Future:
-                        // Navigate to Fixture Details
+                        navController.navigate(
+
+                            FootballDestination
+                                .FixtureDetails
+                                .createRoute(fixtureId)
+
+                        )
 
                     }
+
+                )
+            }
+        }
+
+
+        /**
+         * Fixture Details
+         */
+
+        composable(
+            route = FootballDestination.FixtureDetails.route
+        ) { backStackEntry ->
+
+            val fixtureId =
+                backStackEntry.arguments
+                    ?.getString("fixtureId")
+                    ?.toLong()
+                    ?: return@composable
+
+            val fixtureDetailsViewModel:
+                    FixtureDetailsViewModel = viewModel()
+
+            val uiState by fixtureDetailsViewModel
+                .uiState
+                .collectAsState()
+
+            LaunchedEffect(fixtureId) {
+
+                fixtureDetailsViewModel.loadFixture(
+                    fixtureId
+                )
+
+            }
+
+            uiState.fixture?.let { fixture ->
+
+                FixtureDetailsScreen(
+
+                    fixture = fixture
 
                 )
 
             }
 
         }
-
 
 
         /**

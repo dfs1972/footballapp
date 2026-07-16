@@ -84,13 +84,17 @@ public class FixtureLineupImportService {
                 lineup.getTeam().getId()
         );
 
-        fixtureLineup.setCoachId(
-                lineup.getCoach().getId()
-        );
+        if (lineup.getCoach() != null) {
 
-        fixtureLineup.setCoachName(
-                lineup.getCoach().getName()
-        );
+            fixtureLineup.setCoachId(
+                    lineup.getCoach().getId()
+            );
+
+            fixtureLineup.setCoachName(
+                    lineup.getCoach().getName()
+            );
+
+        }
 
         fixtureLineup.setFormation(
                 lineup.getFormation()

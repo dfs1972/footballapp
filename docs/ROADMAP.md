@@ -51,8 +51,14 @@ Replace PreviewData with Retrofit.
 Connect ViewModels to backend repositories.
 Verify each screen using live backend data.
 Complete end-to-end testing.
+UI Improvements.
 
-Completed.
+Group fixtures by month
+- Expand/collapse month sections 
+- Preserve day headings
+- Default current month expanded
+
+Complete repository migration to DataSource.
 
 
 ### Phase 6 — Polish

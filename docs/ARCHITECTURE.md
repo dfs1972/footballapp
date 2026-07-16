@@ -215,3 +215,13 @@ Caching.
 Authentication (if required).
 
 The current architecture is intended to scale without significant structural changes.
+
+### External APIs are treated as integration layers.
+The FootballApp database is designed around the application's needs,
+not around the structure of third-party JSON responses.
+During import, flexible API responses are mapped into strongly typed domain models.
+
+# Backend Update
+
+Repositories now use a Spring-managed DataSource with HikariCP,
+instead of obtaining connections directly from DatabaseConnection.

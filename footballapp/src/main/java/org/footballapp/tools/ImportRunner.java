@@ -5,6 +5,7 @@ import org.footballapp.model.teams.Team;
 import org.footballapp.service.PlayerImportService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.footballapp.service.importer.FixtureLineupImportService;
 
 import java.util.List;
 
@@ -13,20 +14,22 @@ public class ImportRunner implements CommandLineRunner {
 
     private static final boolean IMPORT_ENABLED = false;
 
-    private static final int TEAM_ID = 257;   // Rangers
-    private static final int SEASON = 2024;
-
     private final PlayerImportService playerImportService;
     private final TeamRepository teamRepository;
+    private final FixtureLineupImportService fixtureLineupImportService;
 
     public ImportRunner(
             PlayerImportService playerImportService,
-            TeamRepository teamRepository
+            TeamRepository teamRepository,
+            FixtureLineupImportService fixtureLineupImportService
     ) {
 
         this.playerImportService = playerImportService;
 
         this.teamRepository = teamRepository;
+
+        this.fixtureLineupImportService =
+                fixtureLineupImportService;
 
     }
 
@@ -36,6 +39,25 @@ public class ImportRunner implements CommandLineRunner {
         if (!IMPORT_ENABLED) {
             return;
         }
+
+        System.out.println();
+        System.out.println("========================================");
+        System.out.println("Importing Fixture Lineups");
+        System.out.println("========================================");
+        System.out.println();
+
+        fixtureLineupImportService.importFixtureLineups(
+                1220118L
+        );
+
+        System.out.println();
+        System.out.println("========================================");
+        System.out.println("Fixture Lineup Import Complete");
+        System.out.println("========================================");
+        System.out.println();
+
+
+        /*********************************/
 
         List<Team> teams =
                 teamRepository.getTeamsForLeague(

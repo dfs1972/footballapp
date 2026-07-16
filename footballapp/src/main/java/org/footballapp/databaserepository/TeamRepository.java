@@ -1,6 +1,6 @@
 package org.footballapp.databaserepository;
 
-import org.footballapp.database.DatabaseConnection;
+import javax.sql.DataSource;
 import org.springframework.stereotype.Repository;
 import org.footballapp.model.teams.Team;
 import org.footballapp.model.club.ClubDetails;
@@ -18,7 +18,12 @@ import java.util.List;
  * in the teams table.
  */
 @Repository
-public class TeamRepository {
+public class TeamRepository
+        extends BaseRepository {
+
+    protected TeamRepository(DataSource dataSource) {
+        super(dataSource);
+    }
 
     private Team mapTeam(ResultSet rs) throws SQLException {
         Team team = new Team();
@@ -38,7 +43,7 @@ public class TeamRepository {
     public void saveTeam(Team team) throws Exception {
 
         Connection conn =
-                DatabaseConnection.connect();
+                dataSource.getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(
@@ -73,7 +78,7 @@ public class TeamRepository {
             throws Exception {
 
         Connection conn =
-                DatabaseConnection.connect();
+                dataSource.getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(
@@ -130,7 +135,7 @@ public class TeamRepository {
     ) throws Exception {
 
         Connection conn =
-                DatabaseConnection.connect();
+                dataSource.getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(
@@ -205,7 +210,7 @@ public class TeamRepository {
     ) throws Exception {
 
         Connection conn =
-                DatabaseConnection.connect();
+                dataSource.getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(

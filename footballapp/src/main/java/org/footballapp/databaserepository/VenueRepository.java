@@ -1,6 +1,6 @@
 package org.footballapp.databaserepository;
 
-import org.footballapp.database.DatabaseConnection;
+import javax.sql.DataSource;
 import org.springframework.stereotype.Repository;
 import org.footballapp.model.teams.Venue;
 import java.sql.Connection;
@@ -14,7 +14,16 @@ import java.sql.ResultSet;
  * in the venue table.
  */
 @Repository
-public class VenueRepository {
+public class VenueRepository
+        extends BaseRepository {
+
+    public VenueRepository(
+            DataSource dataSource
+    ) {
+
+        super(dataSource);
+
+    }
 
     /**
      * Saves a venue to the database.
@@ -24,7 +33,7 @@ public class VenueRepository {
     public void saveVenue(Venue venues) throws Exception {
 
         Connection conn =
-                DatabaseConnection.connect();
+                dataSource.getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(
@@ -56,6 +65,7 @@ public class VenueRepository {
         conn.close();
     }
 
+
     public Venue getVenueForTeam(
             int leagueId,
             int season,
@@ -63,7 +73,7 @@ public class VenueRepository {
     ) throws Exception {
 
         Connection conn =
-                DatabaseConnection.connect();
+                dataSource.getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(

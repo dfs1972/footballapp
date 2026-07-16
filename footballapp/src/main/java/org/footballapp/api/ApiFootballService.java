@@ -8,11 +8,19 @@ import org.footballapp.model.teams.TeamsApiResponse;
 import org.footballapp.model.standings.StandingsApiResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.model.teamstatistics.TeamStatisticsApiResponse;
+import org.footballapp.api.dto.lineups.FixtureLineupsResponse;
+
 
 public class ApiFootballService {
 
     private final ApiFootballClient apiClient;
     private final ObjectMapper mapper;
+
+    /**
+     * Move this to ApiFootballClient:
+    private static final String BASE_URL =
+            "https://v3.football.api-sports.io";
+     */
 
     public ApiFootballService(ApiFootballClient apiClient) {
         this.apiClient = apiClient;
@@ -203,6 +211,28 @@ public class ApiFootballService {
         return mapper.readValue(
                 json,
                 TeamStatisticsApiResponse.class
+        );
+    }
+
+    /**
+     * Retrieves the lineups for a fixture.
+     */
+    public FixtureLineupsResponse getFixtureLineups(
+
+            long fixtureId
+
+    ) throws Exception {
+
+        String url =
+                "https://v3.football.api-sports.io/fixtures/lineups?fixture="
+                        + fixtureId;
+
+        String json =
+                apiClient.get(url);
+
+        return mapper.readValue(
+                json,
+                FixtureLineupsResponse.class
         );
     }
 }

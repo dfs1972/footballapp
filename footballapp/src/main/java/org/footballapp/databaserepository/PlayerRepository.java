@@ -1,6 +1,6 @@
 package org.footballapp.databaserepository;
 
-import org.footballapp.database.DatabaseConnection;
+import javax.sql.DataSource;
 import org.springframework.stereotype.Repository;
 import org.footballapp.model.player.Player;
 import org.footballapp.model.playerdetails.PlayerDetails;
@@ -19,7 +19,15 @@ import java.sql.Types;
  * Season statistics are stored separately.
  */
 @Repository
-public class PlayerRepository {
+public class PlayerRepository extends BaseRepository {
+
+    public PlayerRepository(
+            DataSource dataSource
+    ) {
+
+        super(dataSource);
+
+    }
 
     /**
      * Inserts or updates a player.
@@ -70,7 +78,7 @@ public class PlayerRepository {
         try (
 
                 Connection conn =
-                        DatabaseConnection.connect();
+                        getConnection();
 
                 PreparedStatement stmt =
                         conn.prepareStatement(sql)
@@ -191,7 +199,7 @@ public class PlayerRepository {
     ) throws Exception {
 
         Connection conn =
-                DatabaseConnection.connect();
+                getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(

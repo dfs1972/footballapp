@@ -1,6 +1,6 @@
 package org.footballapp.databaserepository;
 
-import org.footballapp.database.DatabaseConnection;
+import javax.sql.DataSource;
 import org.springframework.stereotype.Repository;
 import org.footballapp.model.league.League;
 import java.sql.Connection;
@@ -13,7 +13,16 @@ import java.sql.PreparedStatement;
  * in the leagues table.
  */
 @Repository
-public class LeagueRepository {
+public class LeagueRepository
+        extends BaseRepository {
+
+    public LeagueRepository(
+            DataSource dataSource
+    ) {
+
+        super(dataSource);
+
+    }
 
     /**
      * Saves a league to the database.
@@ -23,7 +32,7 @@ public class LeagueRepository {
     public void saveLeague(League league)
             throws Exception {
         Connection conn =
-                DatabaseConnection.connect();
+                getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(

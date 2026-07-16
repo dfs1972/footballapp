@@ -33,7 +33,7 @@ public class VenueRepository
     public void saveVenue(Venue venues) throws Exception {
 
         Connection conn =
-                dataSource.getConnection();
+                getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(
@@ -73,7 +73,7 @@ public class VenueRepository
     ) throws Exception {
 
         Connection conn =
-                dataSource.getConnection();
+                getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(

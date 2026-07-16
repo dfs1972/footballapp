@@ -43,7 +43,7 @@ public class TeamRepository
     public void saveTeam(Team team) throws Exception {
 
         Connection conn =
-                dataSource.getConnection();
+                getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(
@@ -78,7 +78,7 @@ public class TeamRepository
             throws Exception {
 
         Connection conn =
-                dataSource.getConnection();
+                getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(
@@ -135,7 +135,7 @@ public class TeamRepository
     ) throws Exception {
 
         Connection conn =
-                dataSource.getConnection();
+                getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(
@@ -210,7 +210,7 @@ public class TeamRepository
     ) throws Exception {
 
         Connection conn =
-                dataSource.getConnection();
+                getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(

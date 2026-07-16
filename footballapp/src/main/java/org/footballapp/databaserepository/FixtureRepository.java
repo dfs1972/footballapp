@@ -1,6 +1,6 @@
 package org.footballapp.databaserepository;
 
-import org.footballapp.database.DatabaseConnection;
+import javax.sql.DataSource;
 import org.footballapp.model.fixtures.FixtureDetails;
 import org.springframework.stereotype.Repository;
 import org.footballapp.model.fixtures.FixtureResponse;
@@ -17,13 +17,21 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 @Repository
-public class FixtureRepository {
+public class FixtureRepository extends BaseRepository {
+
+    public FixtureRepository(
+            DataSource dataSource
+    ) {
+
+        super(dataSource);
+
+    }
 
     public void saveFixture(FixtureResponse fixtureResponse)
             throws Exception {
 
         Connection conn =
-                DatabaseConnection.connect();
+                getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(
@@ -117,7 +125,7 @@ public class FixtureRepository {
     ) throws Exception {
 
         Connection conn =
-                DatabaseConnection.connect();
+                getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(
@@ -220,7 +228,7 @@ public class FixtureRepository {
     ) throws Exception {
 
         Connection conn =
-                DatabaseConnection.connect();
+                getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(
@@ -321,7 +329,7 @@ public class FixtureRepository {
     ) throws Exception {
 
         Connection conn =
-                DatabaseConnection.connect();
+                getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(
@@ -423,7 +431,7 @@ public class FixtureRepository {
     ) throws Exception {
 
         Connection conn =
-                DatabaseConnection.connect();
+                getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(
@@ -522,8 +530,10 @@ public class FixtureRepository {
             int teamId,
             int limit
     ) throws Exception {
+
         Connection conn =
-                DatabaseConnection.connect();
+                getConnection();
+
                 PreparedStatement stmt =
                         conn.prepareStatement(
                         """
@@ -618,7 +628,7 @@ public class FixtureRepository {
     ) throws Exception {
 
         Connection conn =
-                DatabaseConnection.connect();
+                getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(

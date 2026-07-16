@@ -1,6 +1,6 @@
 package org.footballapp.databaserepository;
 
-import org.footballapp.database.DatabaseConnection;
+import javax.sql.DataSource;
 import org.springframework.stereotype.Repository;
 import org.footballapp.model.standings.Standing;
 import org.footballapp.model.standings.LeagueTableRow;
@@ -11,7 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class StandingRepository {
+public class StandingRepository
+        extends BaseRepository  {
+
+    public StandingRepository(
+            DataSource dataSource
+    ) {
+
+        super(dataSource);
+
+    }
 
     public void saveStanding(
             int leagueId,
@@ -20,7 +29,7 @@ public class StandingRepository {
     ) throws Exception {
 
         Connection conn =
-                DatabaseConnection.connect();
+                getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(
@@ -155,7 +164,7 @@ public class StandingRepository {
             throws Exception {
 
         Connection conn =
-                DatabaseConnection.connect();
+                getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(
@@ -250,7 +259,7 @@ public class StandingRepository {
             throws Exception {
 
         Connection conn =
-                DatabaseConnection.connect();
+                getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(
@@ -313,7 +322,7 @@ public class StandingRepository {
                 new ArrayList<>();
 
         Connection conn =
-                DatabaseConnection.connect();
+                getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(

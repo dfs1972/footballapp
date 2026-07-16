@@ -10,18 +10,15 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 @Repository
-public class FixtureLineupRepository {
-
-    private final DataSource dataSource;
+public class FixtureLineupRepository extends BaseRepository{
 
     public FixtureLineupRepository(
             DataSource dataSource
     ) {
 
-        this.dataSource = dataSource;
+        super(dataSource);
 
     }
-
     /**
      * Saves a team's lineup for a fixture.
      */
@@ -62,11 +59,11 @@ public class FixtureLineupRepository {
 
         try (
 
-                Connection connection =
-                        dataSource.getConnection();
+                Connection conn =
+                        getConnection();
 
                 PreparedStatement statement =
-                        connection.prepareStatement(sql)
+                        conn.prepareStatement(sql)
 
         ) {
 
@@ -147,11 +144,11 @@ public class FixtureLineupRepository {
 
         try (
 
-                Connection connection =
-                        dataSource.getConnection();
+                Connection conn =
+                        getConnection();
 
                 PreparedStatement statement =
-                        connection.prepareStatement(sql)
+                        conn.prepareStatement(sql)
 
         ) {
 

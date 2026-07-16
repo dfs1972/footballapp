@@ -1,6 +1,7 @@
 package org.footballapp.databaserepository;
 
-import org.footballapp.database.DatabaseConnection;
+
+import javax.sql.DataSource;
 import org.springframework.stereotype.Repository;
 import org.footballapp.model.teamstatistics.CardColour;
 import org.footballapp.model.teamstatistics.CardMinute;
@@ -14,7 +15,16 @@ import java.sql.ResultSet;
 import static org.apache.logging.log4j.util.Lazy.value;
 
 @Repository
-public class TeamStatisticsRepository {
+public class TeamStatisticsRepository
+        extends BaseRepository {
+
+    public TeamStatisticsRepository(
+            DataSource dataSource
+    ) {
+
+        super(dataSource);
+
+    }
 
     /**
      * Saves team statistics to PostgreSQL.
@@ -81,7 +91,7 @@ public class TeamStatisticsRepository {
         try (
 
                 Connection conn =
-                        DatabaseConnection.connect();
+                        getConnection();
 
                 PreparedStatement statement =
                         conn.prepareStatement(sql)
@@ -227,7 +237,7 @@ public class TeamStatisticsRepository {
     ) throws Exception {
 
         Connection conn =
-                DatabaseConnection.connect();
+                getConnection();
 
         PreparedStatement stmt =
                 conn.prepareStatement(

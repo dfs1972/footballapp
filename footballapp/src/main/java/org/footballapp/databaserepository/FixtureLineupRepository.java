@@ -7,10 +7,13 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
-public class FixtureLineupRepository extends BaseRepository{
+public class FixtureLineupRepository extends BaseRepository {
 
     public FixtureLineupRepository(
             DataSource dataSource
@@ -19,13 +22,92 @@ public class FixtureLineupRepository extends BaseRepository{
         super(dataSource);
 
     }
+
+    /**
+     * Maps a fixture lineup row.
+     */
+    private FixtureLineup mapFixtureLineup(
+            ResultSet rs
+    ) throws SQLException {
+
+        FixtureLineup lineup =
+                new FixtureLineup();
+
+        lineup.setFixtureId(
+                rs.getLong("fixture_id")
+        );
+
+        lineup.setTeamId(
+                rs.getInt("team_id")
+        );
+
+        lineup.setCoachId(
+                rs.getInt("coach_id")
+        );
+
+        lineup.setCoachName(
+                rs.getString("coach_name")
+        );
+
+        lineup.setFormation(
+                rs.getString("formation")
+        );
+
+        return lineup;
+
+    }
+
+    /**
+     * Maps a fixture lineup player row.
+     */
+    private FixtureLineupPlayer mapFixtureLineupPlayer(
+            ResultSet rs
+    ) throws SQLException {
+
+        FixtureLineupPlayer player =
+                new FixtureLineupPlayer();
+
+        player.setFixtureId(
+                rs.getLong("fixture_id")
+        );
+
+        player.setTeamId(
+                rs.getInt("team_id")
+        );
+
+        player.setPlayerId(
+                rs.getInt("player_id")
+        );
+
+        player.setShirtNumber(
+                rs.getInt("shirt_number")
+        );
+
+        player.setPosition(
+                rs.getString("position")
+        );
+
+        player.setGrid(
+                rs.getString("grid")
+        );
+
+        player.setStarting(
+                rs.getBoolean("is_starting")
+        );
+
+        player.setDisplayOrder(
+                rs.getInt("display_order")
+        );
+
+        return player;
+
+    }
+
     /**
      * Saves a team's lineup for a fixture.
      */
     public void saveFixtureLineup(
-
             FixtureLineup lineup
-
     ) throws SQLException {
 
         String sql = """
@@ -102,9 +184,7 @@ public class FixtureLineupRepository extends BaseRepository{
      * Saves a player in a fixture lineup.
      */
     public void saveFixtureLineupPlayer(
-
             FixtureLineupPlayer player
-
     ) throws SQLException {
 
         String sql = """
@@ -195,6 +275,122 @@ public class FixtureLineupRepository extends BaseRepository{
             statement.executeUpdate();
 
         }
+
+    }
+
+    /**
+     * Retrieves the lineups for a fixture.
+     */
+    public List<FixtureLineup> getFixtureLineups(
+            long fixtureId
+    ) throws Exception {
+
+        String sql = """
+
+            SELECT *
+            FROM fixture_lineups
+            WHERE fixture_id = ?
+            ORDER BY team_id
+
+            """;
+
+        List<FixtureLineup> lineups =
+                new ArrayList<>();
+
+        try (
+
+                Connection conn =
+                        getConnection();
+
+                PreparedStatement statement =
+                        conn.prepareStatement(sql)
+
+        ) {
+
+            statement.setLong(
+                    1,
+                    fixtureId
+            );
+
+            ResultSet rs =
+                    statement.executeQuery();
+
+            while (rs.next()) {
+
+                lineups.add(
+                        mapFixtureLineup(rs)
+                );
+
+            }
+
+            rs.close();
+
+        }
+
+        return lineups;
+
+    }
+
+    /**
+     * Retrieves the players for a team's lineup.
+     */
+    public List<FixtureLineupPlayer> getFixtureLineupPlayers(
+
+            long fixtureId,
+
+            int teamId
+
+    ) throws Exception {
+
+        String sql = """
+
+            SELECT *
+            FROM fixture_lineup_players
+            WHERE fixture_id = ?
+            AND team_id = ?
+            ORDER BY display_order
+
+            """;
+
+        List<FixtureLineupPlayer> players =
+                new ArrayList<>();
+
+        try (
+
+                Connection conn =
+                        getConnection();
+
+                PreparedStatement statement =
+                        conn.prepareStatement(sql)
+
+        ) {
+
+            statement.setLong(
+                    1,
+                    fixtureId
+            );
+
+            statement.setInt(
+                    2,
+                    teamId
+            );
+
+            ResultSet rs =
+                    statement.executeQuery();
+
+            while (rs.next()) {
+
+                players.add(
+                        mapFixtureLineupPlayer(rs)
+                );
+
+            }
+
+            rs.close();
+
+        }
+
+        return players;
 
     }
 

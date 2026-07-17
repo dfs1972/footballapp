@@ -6,11 +6,7 @@ import org.footballapp.model.player.Player;
 import org.footballapp.model.playerdetails.PlayerDetails;
 
 import java.math.BigDecimal;
-import java.sql.ResultSet;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.Types;
+import java.sql.*;
 
 /**
  * Repository for storing player identity information.
@@ -28,6 +24,61 @@ public class PlayerRepository extends BaseRepository {
         super(dataSource);
 
     }
+
+    /**
+     * Maps a player row.
+     */
+    private Player mapPlayer(
+            ResultSet rs
+    ) throws SQLException {
+
+        Player player = new Player();
+
+        player.setPlayerId(
+                rs.getInt("player_id")
+        );
+
+        player.setFirstname(
+                rs.getString("firstname")
+        );
+
+        player.setLastname(
+                rs.getString("lastname")
+        );
+
+        player.setName(
+                rs.getString("display_name")
+        );
+
+        player.setNationality(
+                rs.getString("nationality")
+        );
+
+        player.setHeight(
+                rs.getString("height")
+        );
+
+        player.setWeight(
+                rs.getString("weight")
+        );
+
+        player.setAge(
+                (Integer) rs.getObject("age")
+        );
+
+        player.setInjured(
+                rs.getBoolean("injured")
+        );
+
+        player.setPhotoUrl(
+                rs.getString("photo_url")
+        );
+
+        return player;
+
+    }
+
+
 
     /**
      * Inserts or updates a player.
@@ -379,5 +430,58 @@ public class PlayerRepository extends BaseRepository {
         conn.close();
 
         return details;
+    }
+
+    /**
+     * Retrieves a player by ID.
+     */
+    public Player getPlayerById(
+            int playerId
+    ) throws Exception {
+
+        String sql = """
+
+        SELECT *
+
+        FROM players
+
+        WHERE player_id = ?
+
+        """;
+
+        try (
+
+                Connection conn =
+                        getConnection();
+
+                PreparedStatement stmt =
+                        conn.prepareStatement(sql)
+
+        ) {
+
+            stmt.setInt(
+                    1,
+                    playerId
+            );
+
+            ResultSet rs =
+                    stmt.executeQuery();
+
+            if (!rs.next()) {
+
+                rs.close();
+
+                return null;
+
+            }
+
+            Player player = mapPlayer(rs);
+
+            rs.close();
+
+            return player;
+
+        }
+
     }
 }

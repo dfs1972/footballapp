@@ -3,12 +3,15 @@ package org.footballapp.service;
 /**
  * Spring Boot Service
  */
-import org.footballapp.model.fixtures.FixtureDetails;
+import org.footballapp.api.response.lineups.FixtureLineupMapper;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**Import repositories*/
 import org.footballapp.databaserepository.FixtureRepository;
+import org.footballapp.databaserepository.FixtureLineupRepository;
 import org.footballapp.databaserepository.LeagueUkRepository;
 import org.footballapp.databaserepository.StandingRepository;
 import org.footballapp.databaserepository.TeamRepository;
@@ -19,6 +22,13 @@ import org.footballapp.databaserepository.PlayerRepository;
 import org.footballapp.model.club.ClubDetails;
 
 /**Import models*/
+import org.footballapp.model.fixtures.FixtureDetails;
+import org.footballapp.model.lineups.FixtureLineup;
+import org.footballapp.model.lineups.FixtureLineupPlayer;
+import org.footballapp.api.response.lineups.FixtureLineupResponse;
+import org.footballapp.api.response.lineups.FixtureTeamLineupResponse;
+import org.footballapp.api.response.lineups.PlayerLineupResponse;
+import org.footballapp.model.player.Player;
 import org.footballapp.model.fixtures.FixtureRow;
 import org.footballapp.model.league.LeagueUk;
 import org.footballapp.model.playerdetails.PlayerSummary;
@@ -43,6 +53,8 @@ public class LeagueDataService {
     private final FixtureRepository fixtureRepository;
     private final PlayerStatisticsRepository playerStatisticsRepository;
     private final PlayerRepository playerRepository;
+    private final FixtureLineupRepository fixtureLineupRepository;
+    private final FixtureLineupMapper fixtureLineupMapper;
 
     /**
      * Contructors
@@ -54,6 +66,8 @@ public class LeagueDataService {
             VenueRepository venueRepository,
             StandingRepository standingRepository,
             FixtureRepository fixtureRepository,
+            FixtureLineupRepository fixtureLineupRepository,
+            FixtureLineupMapper fixtureLineupMapper,
             PlayerStatisticsRepository playerStatisticsRepository,
             PlayerRepository playerRepository
     ) {
@@ -63,8 +77,10 @@ public class LeagueDataService {
         this.venueRepository = venueRepository;
         this.standingRepository = standingRepository;
         this.fixtureRepository = fixtureRepository;
+        this.fixtureLineupRepository = fixtureLineupRepository;
         this.playerStatisticsRepository = playerStatisticsRepository;
         this.playerRepository = playerRepository;
+        this.fixtureLineupMapper = fixtureLineupMapper;
     }
 
     /**
@@ -184,6 +200,135 @@ public class LeagueDataService {
         return fixtureRepository.getFixtureDetails(
                 fixtureId
         );
+
+    }
+
+    /**
+     * Retrieves the lineups for a fixture.
+     */
+    public List<FixtureLineup> getFixtureLineups(
+
+            long fixtureId
+
+    ) throws Exception {
+
+        return fixtureLineupRepository.getFixtureLineups(
+                fixtureId
+        );
+
+    }
+
+    /**
+     * Retrieves the players for a team's lineup.
+     */
+    public List<FixtureLineupPlayer> getFixtureLineupPlayers(
+
+            long fixtureId,
+
+            int teamId
+
+    ) throws Exception {
+
+        return fixtureLineupRepository.getFixtureLineupPlayers(
+
+                fixtureId,
+
+                teamId
+
+        );
+
+    }
+
+    /**
+     * Retrieves the complete lineup for a fixture.
+     */
+    public FixtureLineupResponse getFixtureLineupResponse(
+
+            long fixtureId
+
+    ) throws Exception {
+
+        FixtureLineupResponse response =
+                fixtureLineupMapper.createResponse(
+                        fixtureId
+                );
+
+        List<FixtureLineup> lineups =
+                fixtureLineupRepository.getFixtureLineups(
+                        fixtureId
+                );
+
+        for (FixtureLineup lineup : lineups) {
+
+            List<FixtureLineupPlayer> lineupPlayers =
+                    fixtureLineupRepository.getFixtureLineupPlayers(
+
+                            fixtureId,
+
+                            lineup.getTeamId()
+
+                    );
+
+            List<PlayerLineupResponse> playerResponses =
+                    new ArrayList<>();
+
+            for (FixtureLineupPlayer lineupPlayer : lineupPlayers) {
+
+                Player player =
+                        playerRepository.getPlayerById(
+
+                                lineupPlayer.getPlayerId()
+
+                        );
+
+                String playerName = "";
+                String photo = "";
+
+                if (player != null) {
+
+                    playerName =
+                            player.getName();
+
+                    photo =
+                            player.getPhotoUrl();
+
+                }
+
+                PlayerLineupResponse playerResponse =
+                        fixtureLineupMapper.mapPlayer(
+
+                                lineupPlayer,
+
+                                playerName
+
+                        );
+
+                playerResponse.setPhoto(
+                        photo
+                );
+
+                playerResponses.add(
+                        playerResponse
+                );
+
+            }
+
+            FixtureTeamLineupResponse teamResponse =
+                    fixtureLineupMapper.mapTeamLineup(
+
+                            lineup,
+
+                            playerResponses
+
+                    );
+
+            response.getTeams().add(
+                    teamResponse
+            );
+
+        }
+
+        return response;
 
     }
 

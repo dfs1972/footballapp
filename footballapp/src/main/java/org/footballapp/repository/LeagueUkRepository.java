@@ -1,4 +1,4 @@
-package org.footballapp.databaserepository;
+package org.footballapp.repository;
 
 
 import javax.sql.DataSource;

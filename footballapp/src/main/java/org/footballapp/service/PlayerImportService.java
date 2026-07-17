@@ -2,8 +2,8 @@ package org.footballapp.service;
 
 import org.springframework.stereotype.Service;
 import org.footballapp.api.ApiFootballService;
-import org.footballapp.databaserepository.PlayerRepository;
-import org.footballapp.databaserepository.PlayerStatisticsRepository;
+import org.footballapp.repository.PlayerRepository;
+import org.footballapp.repository.PlayerStatisticsRepository;
 import org.footballapp.model.player.Player;
 import org.footballapp.model.player.PlayerResponse;
 import org.footballapp.model.player.PlayersApiResponse;

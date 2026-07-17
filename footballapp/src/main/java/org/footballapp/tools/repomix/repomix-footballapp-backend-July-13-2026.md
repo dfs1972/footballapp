@@ -476,8 +476,7 @@ public class ApiConfig {
 //import org.springframework.context.annotation.Configuration;
 //import org.footballapp.api.ApiFootballClient;
 //import org.footballapp.api.ApiFootballService;
-//import org.footballapp.databaserepository.*;
-//import org.footballapp.model.teamstatistics.TeamStatistics;
+//import org.footballapp.repositoryport org.footballapp.model.teamstatistics.TeamStatistics;
 //import org.footballapp.service.*;
 //
 //@Configuration
@@ -1241,7 +1240,7 @@ public class DatabaseConnection {
 ## File: footballapp/src/main/java/org/footballapp/databaserepository/FixtureRepository.java
 
 ```java
-package org.footballapp.databaserepository;
+package org.footballapp.repository;
 
 import org.springframework.stereotype.Repository;
 import org.footballapp.model.fixtures.FixtureResponse;
@@ -1260,738 +1259,739 @@ import java.time.format.DateTimeFormatter;
 @Repository
 public class FixtureRepository {
 
-  public void saveFixture(FixtureResponse fixtureResponse)
-          throws Exception {
+    public void saveFixture(FixtureResponse fixtureResponse)
+            throws Exception {
 
-    Connection conn =
-            DatabaseConnection.connect();
+        Connection conn =
+                DatabaseConnection.connect();
 
-    PreparedStatement stmt =
-            conn.prepareStatement(
-                    """
-                            
-                                    INSERT INTO fixtures
-                            (
-                                fixture_id,
-                                league_id,
-                                season,
-                                round,
-                                fixture_date,
-                                venue_id,
-                                home_team_id,
-                                away_team_id,
-                                home_goals,
-                                away_goals
-                            )
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                            ON CONFLICT (fixture_id)
-                            DO UPDATE SET
-                                home_goals = EXCLUDED.home_goals,
-                                away_goals = EXCLUDED.away_goals
-                            """
-            );
+        PreparedStatement stmt =
+                conn.prepareStatement(
+                        """
+                                
+                                        INSERT INTO fixtures
+                                (
+                                    fixture_id,
+                                    league_id,
+                                    season,
+                                    round,
+                                    fixture_date,
+                                    venue_id,
+                                    home_team_id,
+                                    away_team_id,
+                                    home_goals,
+                                    away_goals
+                                )
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                ON CONFLICT (fixture_id)
+                                DO UPDATE SET
+                                    home_goals = EXCLUDED.home_goals,
+                                    away_goals = EXCLUDED.away_goals
+                                """
+                );
 
-    /**Setters*/
-    stmt.setLong(
-            1,
-            fixtureResponse.getFixture().getId()
-    );
+        /**Setters*/
+        stmt.setLong(
+                1,
+                fixtureResponse.getFixture().getId()
+        );
 
-    stmt.setInt(
-            2,
-            fixtureResponse.getLeague().getId()
-    );
+        stmt.setInt(
+                2,
+                fixtureResponse.getLeague().getId()
+        );
 
-    stmt.setInt(
-            3,
-            fixtureResponse.getLeague().getSeason()
-    );
+        stmt.setInt(
+                3,
+                fixtureResponse.getLeague().getSeason()
+        );
 
-    stmt.setString(
-            4,
-            fixtureResponse.getLeague().getRound()
-    );
+        stmt.setString(
+                4,
+                fixtureResponse.getLeague().getRound()
+        );
 
-    stmt.setString(
-            5,
-            fixtureResponse.getFixture().getDate()
-    );
+        stmt.setString(
+                5,
+                fixtureResponse.getFixture().getDate()
+        );
 
-    stmt.setInt(
-            6,
-            fixtureResponse.getFixture().getVenue().getId()
-    );
+        stmt.setInt(
+                6,
+                fixtureResponse.getFixture().getVenue().getId()
+        );
 
-    stmt.setInt(
-            7,
-            fixtureResponse.getTeams().getHome().getId()
-    );
+        stmt.setInt(
+                7,
+                fixtureResponse.getTeams().getHome().getId()
+        );
 
-    stmt.setInt(
-            8,
-            fixtureResponse.getTeams().getAway().getId()
-    );
+        stmt.setInt(
+                8,
+                fixtureResponse.getTeams().getAway().getId()
+        );
 
-    stmt.setObject(
-            9,
-            fixtureResponse.getGoals().getHome()
-    );
+        stmt.setObject(
+                9,
+                fixtureResponse.getGoals().getHome()
+        );
 
-    stmt.setObject(
-            10,
-            fixtureResponse.getGoals().getAway()
-    );
+        stmt.setObject(
+                10,
+                fixtureResponse.getGoals().getAway()
+        );
 
 
-    stmt.executeUpdate();
+        stmt.executeUpdate();
 
-    stmt.close();
-    conn.close();
-  }
-
-  /**
-   * Get fixtures from a particular season
-   */
-  public List<FixtureRow> getFixtures(
-          int leagueId,
-          int season
-  ) throws Exception {
-
-    Connection conn =
-            DatabaseConnection.connect();
-
-    PreparedStatement stmt =
-            conn.prepareStatement(
-                    """
-                            SELECT
-                                f.fixture_id,
-                                f.fixture_date,
-                                f.round,
-                                f.home_team_id,
-                                f.away_team_id,
-                                home.name AS home_team,
-                                away.name AS away_team,
-                                f.home_goals,
-                                f.away_goals
-                            
-                            FROM fixtures f
-                            
-                            JOIN teams home
-                                ON f.home_team_id = home.id
-                            
-                            JOIN teams away
-                                ON f.away_team_id = away.id
-                            
-                            WHERE f.league_id = ?
-                            AND f.season = ?
-                            
-                            ORDER BY f.fixture_date
-                            """
-            );
-
-    stmt.setInt(1, leagueId);
-    stmt.setInt(2, season);
-
-    ResultSet rs =
-            stmt.executeQuery();
-
-    List<FixtureRow> fixtures =
-            new ArrayList<>();
-
-    while (rs.next()) {
-
-      FixtureRow row =
-              new FixtureRow();
-
-      populateFixtureDateTime(
-              row,
-              rs.getString(
-                      "fixture_date"
-              )
-      );
-
-      row.setFixtureId(
-              rs.getLong("fixture_id")
-      );
-
-//            row.setRound(
-//                    rs.getString("round")
-//            );
-
-      row.setHomeTeamId(
-              rs.getInt("home_team_id")
-      );
-
-      row.setAwayTeamId(
-              rs.getInt("away_team_id")
-      );
-
-      row.setHomeTeam(
-              rs.getString("home_team")
-      );
-
-      row.setAwayTeam(
-              rs.getString("away_team")
-      );
-
-      row.setHomeGoals(
-              rs.getInt("home_goals")
-      );
-
-      row.setAwayGoals(
-              rs.getInt("away_goals")
-      );
-
-      fixtures.add(row);
+        stmt.close();
+        conn.close();
     }
 
-    rs.close();
-    stmt.close();
-    conn.close();
-
-    return fixtures;
-  }
-
-  /**
-   * Get fixtures for a team from a particular season
-   */
-  public List<FixtureRow> getLeagueFixtures(
-          int leagueId,
-          int season
-  ) throws Exception {
-
-    Connection conn =
-            DatabaseConnection.connect();
-
-    PreparedStatement stmt =
-            conn.prepareStatement(
-                    """
-                            SELECT
-                                f.fixture_id,
-                                f.fixture_date,
-                                f.round,
-                                f.home_team_id,
-                                f.away_team_id,
-                                home.name AS home_team,
-                                away.name AS away_team,
-                                f.home_goals,
-                                f.away_goals
-                            
-                            FROM fixtures f
-                            
-                            JOIN teams home
-                                ON f.home_team_id = home.id
-                            
-                            JOIN teams away
-                                ON f.away_team_id = away.id
-                            
-                            WHERE f.league_id = ?
-                            AND f.season = ?
-                            
-                            ORDER BY f.fixture_date
-                            """
-            );
-
-    stmt.setInt(1, leagueId);
-    stmt.setInt(2, season);
-
-    ResultSet rs =
-            stmt.executeQuery();
-
-    List<FixtureRow> fixtures =
-            new ArrayList<>();
-
-    while (rs.next()) {
-
-      FixtureRow row =
-              new FixtureRow();
-
-      populateFixtureDateTime(
-              row,
-              rs.getString(
-                      "fixture_date"
-              )
-      );
-
-      row.setFixtureId(
-              rs.getLong("fixture_id")
-      );
-
-//            row.setRound(
-//                    rs.getString("round")
-//            );
-
-      row.setHomeTeamId(
-              rs.getInt("home_team_id")
-      );
-
-      row.setAwayTeamId(
-              rs.getInt("away_team_id")
-      );
-
-      row.setHomeTeam(
-              rs.getString("home_team")
-      );
-
-      row.setAwayTeam(
-              rs.getString("away_team")
-      );
-
-      row.setHomeGoals(
-              rs.getInt("home_goals")
-      );
-
-      row.setAwayGoals(
-              rs.getInt("away_goals")
-      );
-
-      fixtures.add(row);
-    }
-
-    rs.close();
-    stmt.close();
-    conn.close();
-
-    return fixtures;
-  }
-
-  /**
-   * Get fixtures for a particular team.
-   */
-  public List<FixtureRow> getFixturesByTeam(
-          int teamId
-  ) throws Exception {
-
-    Connection conn =
-            DatabaseConnection.connect();
-
-    PreparedStatement stmt =
-            conn.prepareStatement(
-                    """
-                            SELECT
-                                f.fixture_id,
-                                f.fixture_date,
-                                f.round,
-                                f.home_team_id,
-                                f.away_team_id,
-                                home.name AS home_team,
-                                away.name AS away_team,
-                                f.home_goals,
-                                f.away_goals
-                            
-                            FROM fixtures f
-                            
-                            JOIN teams home
-                                ON f.home_team_id = home.id
-                            
-                            JOIN teams away
-                                ON f.away_team_id = away.id
-                            
-                            WHERE f.home_team_id = ?
-                               OR f.away_team_id = ?
-                            
-                            ORDER BY f.fixture_date
-                            """
-            );
-
-    stmt.setInt(1, teamId);
-    stmt.setInt(2, teamId);
-
-    ResultSet rs =
-            stmt.executeQuery();
-
-    List<FixtureRow> fixtures =
-            new ArrayList<>();
-
-    while (rs.next()) {
-
-      FixtureRow row =
-              new FixtureRow();
-
-      populateFixtureDateTime(
-              row,
-              rs.getString("fixture_date")
-      );
-
-      row.setFixtureId(
-              rs.getLong("fixture_id")
-      );
-
-//            row.setRound(
-//                    rs.getString("round")
-//            );
-
-      row.setHomeTeamId(
-              rs.getInt("home_team_id")
-      );
-
-      row.setAwayTeamId(
-              rs.getInt("away_team_id")
-      );
-
-      row.setHomeTeam(
-              rs.getString("home_team")
-      );
-
-      row.setAwayTeam(
-              rs.getString("away_team")
-      );
-
-      row.setHomeGoals(
-              rs.getInt("home_goals")
-      );
-
-      row.setAwayGoals(
-              rs.getInt("away_goals")
-      );
-
-      fixtures.add(row);
-    }
-
-    rs.close();
-    stmt.close();
-    conn.close();
-
-    return fixtures;
-  }
-
-  /**
-   * Get a particular team's recent results.
-   */
-  public List<FixtureRow> getRecentResults(
-          int leagueId,
-          int season,
-          int limit
-  ) throws Exception {
-
-    Connection conn =
-            DatabaseConnection.connect();
-
-    PreparedStatement stmt =
-            conn.prepareStatement(
-                    """
-                            SELECT
-                                f.fixture_id,
-                                f.fixture_date,
-                                f.round,
-                                home.name AS home_team,
-                                away.name AS away_team,
-                                f.home_goals,
-                                f.away_goals
-                            
-                            FROM fixtures f
-                            
-                            JOIN teams home
-                                ON f.home_team_id = home.id
-                            
-                            JOIN teams away
-                                ON f.away_team_id = away.id
-                            
-                            WHERE f.league_id = ?
-                            AND f.season = ?
-                            
-                            ORDER BY f.fixture_date DESC
-                            
-                            LIMIT ?
-                            """
-            );
-
-    stmt.setInt(1, leagueId);
-    stmt.setInt(2, season);
-    stmt.setInt(3, limit);
-
-    ResultSet rs =
-            stmt.executeQuery();
-
-    List<FixtureRow> results =
-            new ArrayList<>();
-
-    while (rs.next()) {
-
-      FixtureRow row =
-              new FixtureRow();
-
-      populateFixtureDateTime(
-              row,
-              rs.getString("fixture_date")
-      );
-
-      row.setFixtureId(
-              rs.getLong("fixture_id")
-      );
-
-//            row.setRound(
-//                    rs.getString("round")
-//            );
-
-      row.setHomeTeamId(
-              rs.getInt("home_team_id")
-      );
-
-      row.setAwayTeamId(
-              rs.getInt("away_team_id")
-      );
-
-      row.setHomeTeam(
-              rs.getString("home_team")
-      );
-
-      row.setAwayTeam(
-              rs.getString("away_team")
-      );
-
-      row.setHomeGoals(
-              rs.getInt("home_goals")
-      );
-
-      row.setAwayGoals(
-              rs.getInt("away_goals")
-      );
-
-      results.add(row);
-    }
-
-    rs.close();
-    stmt.close();
-    conn.close();
-
-    return results;
-  }
-
-  /**
-   * Get recent fixtures by Team.
-   */
-  public List<FixtureRow> getRecentFixturesByTeam(
-          int teamId,
-          int limit
-  ) throws Exception {
-    Connection conn =
-            DatabaseConnection.connect();
-    PreparedStatement stmt =
-            conn.prepareStatement(
-                    """
-                            
-                                              SELECT
-                                                  f.fixture_id,
-                                                  f.fixture_date,
-                                                  home.name AS home_team,
-                                                  away.name AS away_team,
-                                                  f.home_team_id,
-                                                  f.away_team_id,
-                                                  f.home_goals,
-                                                  f.away_goals
-                            
-                                              FROM fixtures f
-                            
-                                              JOIN teams home
-                                              ON f.home_team_id = home.id
-                            
-                                              JOIN teams away
-                                              ON f.away_team_id = away.id
-                            
-                                              WHERE f.home_team_id = ?
-                                              OR f.away_team_id = ?
-                            
-                                              ORDER BY f.fixture_date DESC
-                            
-                            LIMIT ?
-                            """
-            );
-    stmt.setInt(1, teamId);
-    stmt.setInt(2, teamId);
-    stmt.setInt(3, limit);
-
-    ResultSet rs =
-            stmt.executeQuery();
-
-    List<FixtureRow> results =
-            new ArrayList<>();
-
-    while (rs.next()) {
-
-      FixtureRow row =
-              new FixtureRow();
-
-      populateFixtureDateTime(
-              row,
-              rs.getString("fixture_date")
-      );
-
-      row.setFixtureId(
-              rs.getLong("fixture_id")
-      );
-
-      row.setHomeTeamId(
-              rs.getInt("home_team_id")
-      );
-
-      row.setAwayTeamId(
-              rs.getInt("away_team_id")
-      );
-
-      row.setHomeTeam(
-              rs.getString("home_team")
-      );
-
-      row.setAwayTeam(
-              rs.getString("away_team")
-      );
-      row.setHomeGoals(
-              rs.getInt("home_goals")
-      );
-      row.setAwayGoals(
-              rs.getInt("away_goals")
-      );
-      results.add(row);
-    }
-
-    rs.close();
-    stmt.close();
-    conn.close();
-
-    return results;
-  }
-
-  public FixtureRow getFixtureDetails(
-          long fixtureId
-  ) throws Exception {
-
-    Connection conn =
-            DatabaseConnection.connect();
-
-    PreparedStatement stmt =
-            conn.prepareStatement(
-                    """
-                            SELECT
-                                f.fixture_id,
-                                f.fixture_date,
-                                f.round,
-                                f.home_team_id,
-                                f.away_team_id,
-                                home.name AS home_team,
-                                away.name AS away_team,
-                                f.home_goals,
-                                f.away_goals
-                            
-                            FROM fixtures f
-                            
-                            JOIN teams home
-                                ON f.home_team_id = home.id
-                            
-                            JOIN teams away
-                                ON f.away_team_id = away.id
-                            
-                            WHERE f.fixture_id = ?
-                            """
-            );
-
-    stmt.setLong(
-            1,
-            fixtureId
-    );
-
-    ResultSet rs =
-            stmt.executeQuery();
-
-    FixtureRow row =
-            new FixtureRow();
-
-    if (rs.next()) {
-
-      row.setFixtureId(
-              rs.getLong("fixture_id")
-      );
-
-      populateFixtureDateTime(
-              row,
-              rs.getString(
-                      "fixture_date"
-              )
-      );
-
-//            row.setRound(
-//                    rs.getString("round")
-//            );
-
-      row.setHomeTeamId(
-              rs.getInt("home_team_id")
-      );
-
-      row.setAwayTeamId(
-              rs.getInt("away_team_id")
-      );
-
-      row.setHomeTeam(
-              rs.getString("home_team")
-      );
-
-      row.setAwayTeam(
-              rs.getString("away_team")
-      );
-
-      row.setHomeGoals(
-              rs.getInt("home_goals")
-      );
-
-      row.setAwayGoals(
-              rs.getInt("away_goals")
-      );
-    }
-
-    rs.close();
-    stmt.close();
-    conn.close();
-
-    return row;
-  }
-
-  /**
-   * Date & Time helper method for UK style format
-   */
-  private void populateFixtureDateTime(
-          FixtureRow row,
-          String rawDate
-  ) {
-
-    OffsetDateTime fixtureDate =
-            OffsetDateTime.parse(
-                    rawDate
-            );
-
-    ZonedDateTime ukDateTime =
-            fixtureDate
-                    .atZoneSameInstant(
-                            ZoneId.of(
-                                    "Europe/London"
-                            )
-                    );
-
-    row.setFixtureDate(
-            ukDateTime.format(
-                    DateTimeFormatter.ofPattern(
-                            "EEE dd MMM yyyy"
+    /**
+     * Get fixtures from a particular season
+     */
+    public List<FixtureRow> getFixtures(
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        Connection conn =
+                DatabaseConnection.connect();
+
+        PreparedStatement stmt =
+                conn.prepareStatement(
+                        """
+                                SELECT
+                                    f.fixture_id,
+                                    f.fixture_date,
+                                    f.round,
+                                    f.home_team_id,
+                                    f.away_team_id,
+                                    home.name AS home_team,
+                                    away.name AS away_team,
+                                    f.home_goals,
+                                    f.away_goals
+                                
+                                FROM fixtures f
+                                
+                                JOIN teams home
+                                    ON f.home_team_id = home.id
+                                
+                                JOIN teams away
+                                    ON f.away_team_id = away.id
+                                
+                                WHERE f.league_id = ?
+                                AND f.season = ?
+                                
+                                ORDER BY f.fixture_date
+                                """
+                );
+
+        stmt.setInt(1, leagueId);
+        stmt.setInt(2, season);
+
+        ResultSet rs =
+                stmt.executeQuery();
+
+        List<FixtureRow> fixtures =
+                new ArrayList<>();
+
+        while (rs.next()) {
+
+            FixtureRow row =
+                    new FixtureRow();
+
+            populateFixtureDateTime(
+                    row,
+                    rs.getString(
+                            "fixture_date"
                     )
-            )
-    );
+            );
 
-    row.setFixtureTime(
-            ukDateTime.format(
-                    DateTimeFormatter.ofPattern(
-                            "HH:mm"
+            row.setFixtureId(
+                    rs.getLong("fixture_id")
+            );
+
+//            row.setRound(
+//                    rs.getString("round")
+//            );
+
+            row.setHomeTeamId(
+                    rs.getInt("home_team_id")
+            );
+
+            row.setAwayTeamId(
+                    rs.getInt("away_team_id")
+            );
+
+            row.setHomeTeam(
+                    rs.getString("home_team")
+            );
+
+            row.setAwayTeam(
+                    rs.getString("away_team")
+            );
+
+            row.setHomeGoals(
+                    rs.getInt("home_goals")
+            );
+
+            row.setAwayGoals(
+                    rs.getInt("away_goals")
+            );
+
+            fixtures.add(row);
+        }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+
+        return fixtures;
+    }
+
+    /**
+     * Get fixtures for a team from a particular season
+     */
+    public List<FixtureRow> getLeagueFixtures(
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        Connection conn =
+                DatabaseConnection.connect();
+
+        PreparedStatement stmt =
+                conn.prepareStatement(
+                        """
+                                SELECT
+                                    f.fixture_id,
+                                    f.fixture_date,
+                                    f.round,
+                                    f.home_team_id,
+                                    f.away_team_id,
+                                    home.name AS home_team,
+                                    away.name AS away_team,
+                                    f.home_goals,
+                                    f.away_goals
+                                
+                                FROM fixtures f
+                                
+                                JOIN teams home
+                                    ON f.home_team_id = home.id
+                                
+                                JOIN teams away
+                                    ON f.away_team_id = away.id
+                                
+                                WHERE f.league_id = ?
+                                AND f.season = ?
+                                
+                                ORDER BY f.fixture_date
+                                """
+                );
+
+        stmt.setInt(1, leagueId);
+        stmt.setInt(2, season);
+
+        ResultSet rs =
+                stmt.executeQuery();
+
+        List<FixtureRow> fixtures =
+                new ArrayList<>();
+
+        while (rs.next()) {
+
+            FixtureRow row =
+                    new FixtureRow();
+
+            populateFixtureDateTime(
+                    row,
+                    rs.getString(
+                            "fixture_date"
                     )
-            )
-    );
-  }
+            );
+
+            row.setFixtureId(
+                    rs.getLong("fixture_id")
+            );
+
+//            row.setRound(
+//                    rs.getString("round")
+//            );
+
+            row.setHomeTeamId(
+                    rs.getInt("home_team_id")
+            );
+
+            row.setAwayTeamId(
+                    rs.getInt("away_team_id")
+            );
+
+            row.setHomeTeam(
+                    rs.getString("home_team")
+            );
+
+            row.setAwayTeam(
+                    rs.getString("away_team")
+            );
+
+            row.setHomeGoals(
+                    rs.getInt("home_goals")
+            );
+
+            row.setAwayGoals(
+                    rs.getInt("away_goals")
+            );
+
+            fixtures.add(row);
+        }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+
+        return fixtures;
+    }
+
+    /**
+     * Get fixtures for a particular team.
+     */
+    public List<FixtureRow> getFixturesByTeam(
+            int teamId
+    ) throws Exception {
+
+        Connection conn =
+                DatabaseConnection.connect();
+
+        PreparedStatement stmt =
+                conn.prepareStatement(
+                        """
+                                SELECT
+                                    f.fixture_id,
+                                    f.fixture_date,
+                                    f.round,
+                                    f.home_team_id,
+                                    f.away_team_id,
+                                    home.name AS home_team,
+                                    away.name AS away_team,
+                                    f.home_goals,
+                                    f.away_goals
+                                
+                                FROM fixtures f
+                                
+                                JOIN teams home
+                                    ON f.home_team_id = home.id
+                                
+                                JOIN teams away
+                                    ON f.away_team_id = away.id
+                                
+                                WHERE f.home_team_id = ?
+                                   OR f.away_team_id = ?
+                                
+                                ORDER BY f.fixture_date
+                                """
+                );
+
+        stmt.setInt(1, teamId);
+        stmt.setInt(2, teamId);
+
+        ResultSet rs =
+                stmt.executeQuery();
+
+        List<FixtureRow> fixtures =
+                new ArrayList<>();
+
+        while (rs.next()) {
+
+            FixtureRow row =
+                    new FixtureRow();
+
+            populateFixtureDateTime(
+                    row,
+                    rs.getString("fixture_date")
+            );
+
+            row.setFixtureId(
+                    rs.getLong("fixture_id")
+            );
+
+//            row.setRound(
+//                    rs.getString("round")
+//            );
+
+            row.setHomeTeamId(
+                    rs.getInt("home_team_id")
+            );
+
+            row.setAwayTeamId(
+                    rs.getInt("away_team_id")
+            );
+
+            row.setHomeTeam(
+                    rs.getString("home_team")
+            );
+
+            row.setAwayTeam(
+                    rs.getString("away_team")
+            );
+
+            row.setHomeGoals(
+                    rs.getInt("home_goals")
+            );
+
+            row.setAwayGoals(
+                    rs.getInt("away_goals")
+            );
+
+            fixtures.add(row);
+        }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+
+        return fixtures;
+    }
+
+    /**
+     * Get a particular team's recent results.
+     */
+    public List<FixtureRow> getRecentResults(
+            int leagueId,
+            int season,
+            int limit
+    ) throws Exception {
+
+        Connection conn =
+                DatabaseConnection.connect();
+
+        PreparedStatement stmt =
+                conn.prepareStatement(
+                        """
+                                SELECT
+                                    f.fixture_id,
+                                    f.fixture_date,
+                                    f.round,
+                                    home.name AS home_team,
+                                    away.name AS away_team,
+                                    f.home_goals,
+                                    f.away_goals
+                                
+                                FROM fixtures f
+                                
+                                JOIN teams home
+                                    ON f.home_team_id = home.id
+                                
+                                JOIN teams away
+                                    ON f.away_team_id = away.id
+                                
+                                WHERE f.league_id = ?
+                                AND f.season = ?
+                                
+                                ORDER BY f.fixture_date DESC
+                                
+                                LIMIT ?
+                                """
+                );
+
+        stmt.setInt(1, leagueId);
+        stmt.setInt(2, season);
+        stmt.setInt(3, limit);
+
+        ResultSet rs =
+                stmt.executeQuery();
+
+        List<FixtureRow> results =
+                new ArrayList<>();
+
+        while (rs.next()) {
+
+            FixtureRow row =
+                    new FixtureRow();
+
+            populateFixtureDateTime(
+                    row,
+                    rs.getString("fixture_date")
+            );
+
+            row.setFixtureId(
+                    rs.getLong("fixture_id")
+            );
+
+//            row.setRound(
+//                    rs.getString("round")
+//            );
+
+            row.setHomeTeamId(
+                    rs.getInt("home_team_id")
+            );
+
+            row.setAwayTeamId(
+                    rs.getInt("away_team_id")
+            );
+
+            row.setHomeTeam(
+                    rs.getString("home_team")
+            );
+
+            row.setAwayTeam(
+                    rs.getString("away_team")
+            );
+
+            row.setHomeGoals(
+                    rs.getInt("home_goals")
+            );
+
+            row.setAwayGoals(
+                    rs.getInt("away_goals")
+            );
+
+            results.add(row);
+        }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+
+        return results;
+    }
+
+    /**
+     * Get recent fixtures by Team.
+     */
+    public List<FixtureRow> getRecentFixturesByTeam(
+            int teamId,
+            int limit
+    ) throws Exception {
+        Connection conn =
+                DatabaseConnection.connect();
+        PreparedStatement stmt =
+                conn.prepareStatement(
+                        """
+                                
+                                                  SELECT
+                                                      f.fixture_id,
+                                                      f.fixture_date,
+                                                      home.name AS home_team,
+                                                      away.name AS away_team,
+                                                      f.home_team_id,
+                                                      f.away_team_id,
+                                                      f.home_goals,
+                                                      f.away_goals
+                                
+                                                  FROM fixtures f
+                                
+                                                  JOIN teams home
+                                                  ON f.home_team_id = home.id
+                                
+                                                  JOIN teams away
+                                                  ON f.away_team_id = away.id
+                                
+                                                  WHERE f.home_team_id = ?
+                                                  OR f.away_team_id = ?
+                                
+                                                  ORDER BY f.fixture_date DESC
+                                
+                                LIMIT ?
+                                """
+                );
+        stmt.setInt(1, teamId);
+        stmt.setInt(2, teamId);
+        stmt.setInt(3, limit);
+
+        ResultSet rs =
+                stmt.executeQuery();
+
+        List<FixtureRow> results =
+                new ArrayList<>();
+
+        while (rs.next()) {
+
+            FixtureRow row =
+                    new FixtureRow();
+
+            populateFixtureDateTime(
+                    row,
+                    rs.getString("fixture_date")
+            );
+
+            row.setFixtureId(
+                    rs.getLong("fixture_id")
+            );
+
+            row.setHomeTeamId(
+                    rs.getInt("home_team_id")
+            );
+
+            row.setAwayTeamId(
+                    rs.getInt("away_team_id")
+            );
+
+            row.setHomeTeam(
+                    rs.getString("home_team")
+            );
+
+            row.setAwayTeam(
+                    rs.getString("away_team")
+            );
+            row.setHomeGoals(
+                    rs.getInt("home_goals")
+            );
+            row.setAwayGoals(
+                    rs.getInt("away_goals")
+            );
+            results.add(row);
+        }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+
+        return results;
+    }
+
+    public FixtureRow getFixtureDetails(
+            long fixtureId
+    ) throws Exception {
+
+        Connection conn =
+                DatabaseConnection.connect();
+
+        PreparedStatement stmt =
+                conn.prepareStatement(
+                        """
+                                SELECT
+                                    f.fixture_id,
+                                    f.fixture_date,
+                                    f.round,
+                                    f.home_team_id,
+                                    f.away_team_id,
+                                    home.name AS home_team,
+                                    away.name AS away_team,
+                                    f.home_goals,
+                                    f.away_goals
+                                
+                                FROM fixtures f
+                                
+                                JOIN teams home
+                                    ON f.home_team_id = home.id
+                                
+                                JOIN teams away
+                                    ON f.away_team_id = away.id
+                                
+                                WHERE f.fixture_id = ?
+                                """
+                );
+
+        stmt.setLong(
+                1,
+                fixtureId
+        );
+
+        ResultSet rs =
+                stmt.executeQuery();
+
+        FixtureRow row =
+                new FixtureRow();
+
+        if (rs.next()) {
+
+            row.setFixtureId(
+                    rs.getLong("fixture_id")
+            );
+
+            populateFixtureDateTime(
+                    row,
+                    rs.getString(
+                            "fixture_date"
+                    )
+            );
+
+//            row.setRound(
+//                    rs.getString("round")
+//            );
+
+            row.setHomeTeamId(
+                    rs.getInt("home_team_id")
+            );
+
+            row.setAwayTeamId(
+                    rs.getInt("away_team_id")
+            );
+
+            row.setHomeTeam(
+                    rs.getString("home_team")
+            );
+
+            row.setAwayTeam(
+                    rs.getString("away_team")
+            );
+
+            row.setHomeGoals(
+                    rs.getInt("home_goals")
+            );
+
+            row.setAwayGoals(
+                    rs.getInt("away_goals")
+            );
+        }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+
+        return row;
+    }
+
+    /**
+     * Date & Time helper method for UK style format
+     */
+    private void populateFixtureDateTime(
+            FixtureRow row,
+            String rawDate
+    ) {
+
+        OffsetDateTime fixtureDate =
+                OffsetDateTime.parse(
+                        rawDate
+                );
+
+        ZonedDateTime ukDateTime =
+                fixtureDate
+                        .atZoneSameInstant(
+                                ZoneId.of(
+                                        "Europe/London"
+                                )
+                        );
+
+        row.setFixtureDate(
+                ukDateTime.format(
+                        DateTimeFormatter.ofPattern(
+                                "EEE dd MMM yyyy"
+                        )
+                )
+        );
+
+        row.setFixtureTime(
+                ukDateTime.format(
+                        DateTimeFormatter.ofPattern(
+                                "HH:mm"
+                        )
+                )
+        );
+    }
 }
 ```
 
 ## File: footballapp/src/main/java/org/footballapp/databaserepository/LeagueRepository.java
 
 ```java
-package org.footballapp.databaserepository;
+package org.footballapp.repository;
 
 import org.springframework.stereotype.Repository;
 import org.footballapp.model.league.League;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
@@ -2017,14 +2017,14 @@ public class LeagueRepository {
         PreparedStatement stmt =
                 conn.prepareStatement(
                         """
-                       INSERT INTO leagues
-                       (league_id, name, country, season)
-                       VALUES (?, ?, ?, ?)
-                       ON CONFLICT (league_id, season)
-                       DO UPDATE SET
-                           name = EXCLUDED.name,
-                           country = EXCLUDED.country
-                       """
+                                INSERT INTO leagues
+                                (league_id, name, country, season)
+                                VALUES (?, ?, ?, ?)
+                                ON CONFLICT (league_id, season)
+                                DO UPDATE SET
+                                    name = EXCLUDED.name,
+                                    country = EXCLUDED.country
+                                """
                 );
 
         stmt.setInt(1, league.getId());
@@ -2043,9 +2043,10 @@ public class LeagueRepository {
 ## File: footballapp/src/main/java/org/footballapp/databaserepository/LeagueTeamRepository.java
 
 ```java
-package org.footballapp.databaserepository;
+package org.footballapp.repository;
 
 import org.springframework.stereotype.Repository;
+
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -2068,22 +2069,22 @@ public class LeagueTeamRepository {
         PreparedStatement stmt =
                 conn.prepareStatement(
                         """
-                        INSERT INTO league_teams
-                        (
-                            league_id,
-                            season,
-                            team_id
-                        )
-                        VALUES (?, ?, ?)
-
-                        ON CONFLICT
-                        (
-                            league_id,
-                            season,
-                            team_id
-                        )
-                        DO NOTHING
-                        """
+                                INSERT INTO league_teams
+                                (
+                                    league_id,
+                                    season,
+                                    team_id
+                                )
+                                VALUES (?, ?, ?)
+                                
+                                ON CONFLICT
+                                (
+                                    league_id,
+                                    season,
+                                    team_id
+                                )
+                                DO NOTHING
+                                """
                 );
 
         stmt.setInt(1, leagueId);
@@ -2113,15 +2114,15 @@ public class LeagueTeamRepository {
         PreparedStatement stmt =
                 conn.prepareStatement(
                         """
-                        SELECT team_id
-    
-                        FROM league_teams
-    
-                        WHERE league_id = ?
-                          AND season = ?
-    
-                        ORDER BY team_id
-                        """
+                                SELECT team_id
+                                
+                                FROM league_teams
+                                
+                                WHERE league_id = ?
+                                  AND season = ?
+                                
+                                ORDER BY team_id
+                                """
                 );
 
         stmt.setInt(1, leagueId);
@@ -2149,7 +2150,7 @@ public class LeagueTeamRepository {
 ## File: footballapp/src/main/java/org/footballapp/databaserepository/LeagueUkRepository.java
 
 ```java
-package org.footballapp.databaserepository;
+package org.footballapp.repository;
 
 import org.springframework.stereotype.Repository;
 import org.footballapp.model.league.LeagueUk;
@@ -2176,27 +2177,27 @@ public class LeagueUkRepository {
         PreparedStatement stmt =
                 conn.prepareStatement(
                         """
-                        INSERT INTO leagues_uk
-                        (
-                            league_id,
-                            name,
-                            country,
-                            logo_url
-                        )
-                        VALUES (?, ?, ?, ?)
-
-                        ON CONFLICT (league_id)
-                        DO UPDATE SET
-
-                            name =
-                                EXCLUDED.name,
-
-                            country =
-                                EXCLUDED.country,
-
-                            logo_url =
-                                EXCLUDED.logo_url
-                        """
+                                INSERT INTO leagues_uk
+                                (
+                                    league_id,
+                                    name,
+                                    country,
+                                    logo_url
+                                )
+                                VALUES (?, ?, ?, ?)
+                                
+                                ON CONFLICT (league_id)
+                                DO UPDATE SET
+                                
+                                    name =
+                                        EXCLUDED.name,
+                                
+                                    country =
+                                        EXCLUDED.country,
+                                
+                                    logo_url =
+                                        EXCLUDED.logo_url
+                                """
                 );
 
         stmt.setInt(
@@ -2237,15 +2238,15 @@ public class LeagueUkRepository {
         PreparedStatement stmt =
                 conn.prepareStatement(
                         """
-                        SELECT
-                            league_id,
-                            name,
-                            country,
-                            logo_url
-                        FROM leagues_uk
-                        ORDER BY country,
-                                 name
-                        """
+                                SELECT
+                                    league_id,
+                                    name,
+                                    country,
+                                    logo_url
+                                FROM leagues_uk
+                                ORDER BY country,
+                                         name
+                                """
                 );
 
         ResultSet rs =
@@ -2307,16 +2308,16 @@ public class LeagueUkRepository {
         PreparedStatement stmt =
                 conn.prepareStatement(
                         """
-                        SELECT
-                            league_id,
-                            name,
-                            country,
-                            logo_url
-                        FROM leagues_uk
-                        WHERE enabled = TRUE
-                        ORDER BY country,
-                                 name
-                        """
+                                SELECT
+                                    league_id,
+                                    name,
+                                    country,
+                                    logo_url
+                                FROM leagues_uk
+                                WHERE enabled = TRUE
+                                ORDER BY country,
+                                         name
+                                """
                 );
 
         ResultSet rs =
@@ -2369,14 +2370,14 @@ public class LeagueUkRepository {
         PreparedStatement stmt =
                 conn.prepareStatement(
                         """
-                        SELECT
-                            league_id,
-                            name,
-                            country,
-                            logo_url
-                        FROM leagues_uk
-                        WHERE league_id = ?
-                        """
+                                SELECT
+                                    league_id,
+                                    name,
+                                    country,
+                                    logo_url
+                                FROM leagues_uk
+                                WHERE league_id = ?
+                                """
                 );
 
         stmt.setInt(
@@ -2431,7 +2432,7 @@ public class LeagueUkRepository {
 ## File: footballapp/src/main/java/org/footballapp/databaserepository/PlayerRepository.java
 
 ```java
-package org.footballapp.databaserepository;
+package org.footballapp.repository;
 
 import org.springframework.stereotype.Repository;
 import org.footballapp.model.player.Player;
@@ -2461,42 +2462,42 @@ public class PlayerRepository {
 
         String sql =
                 """
-                INSERT INTO players (
-                    player_id,
-                    firstname,
-                    lastname,
-                    display_name,
-                    birth_date,
-                    birth_place,
-                    birth_country,
-                    nationality,
-                    age,
-                    height,
-                    weight,
-                    injured,
-                    photo_url
-                )
-                VALUES (
-                    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
-                )
-
-                ON CONFLICT (player_id)
-
-                DO UPDATE SET
-
-                    firstname = EXCLUDED.firstname,
-                    lastname = EXCLUDED.lastname,
-                    display_name = EXCLUDED.display_name,
-                    birth_date = EXCLUDED.birth_date,
-                    birth_place = EXCLUDED.birth_place,
-                    birth_country = EXCLUDED.birth_country,
-                    nationality = EXCLUDED.nationality,
-                    age = EXCLUDED.age,
-                    height = EXCLUDED.height,
-                    weight = EXCLUDED.weight,
-                    injured = EXCLUDED.injured,
-                    photo_url = EXCLUDED.photo_url
-                """;
+                        INSERT INTO players (
+                            player_id,
+                            firstname,
+                            lastname,
+                            display_name,
+                            birth_date,
+                            birth_place,
+                            birth_country,
+                            nationality,
+                            age,
+                            height,
+                            weight,
+                            injured,
+                            photo_url
+                        )
+                        VALUES (
+                            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+                        )
+                        
+                        ON CONFLICT (player_id)
+                        
+                        DO UPDATE SET
+                        
+                            firstname = EXCLUDED.firstname,
+                            lastname = EXCLUDED.lastname,
+                            display_name = EXCLUDED.display_name,
+                            birth_date = EXCLUDED.birth_date,
+                            birth_place = EXCLUDED.birth_place,
+                            birth_country = EXCLUDED.birth_country,
+                            nationality = EXCLUDED.nationality,
+                            age = EXCLUDED.age,
+                            height = EXCLUDED.height,
+                            weight = EXCLUDED.weight,
+                            injured = EXCLUDED.injured,
+                            photo_url = EXCLUDED.photo_url
+                        """;
 
         try (
 
@@ -2627,47 +2628,47 @@ public class PlayerRepository {
         PreparedStatement stmt =
                 conn.prepareStatement(
                         """
-                        SELECT
-    
-                            p.player_id,
-                            p.display_name,
-                            p.firstname,
-                            p.lastname,
-                            p.age,
-                            p.nationality,
-                            p.photo_url,
-    
-                            ps.position,
-                            ps.shirt_number,
-                            ps.captain,
-                            ps.appearances,
-                            ps.minutes,
-                            ps.goals,
-                            ps.assists,
-                            ps.yellow_cards,
-                            ps.red_cards,
-                            ps.rating,
-                            ps.team_id,
-                            t.name AS team_name,
-                            ps.league_id,
-                            l.name AS league_name,
-                            ps.season
-    
-                        FROM players p
-    
-                        JOIN player_statistics ps
-                          ON p.player_id = ps.player_id
-                        
-                        JOIN teams t
-                          ON ps.team_id = t.id
-                        
-                        JOIN leagues l
-                          ON ps.league_id = l.league_id
-    
-                        WHERE p.player_id = ?
-                          AND ps.league_id = ?
-                          AND ps.season = ?
-                        """
+                                SELECT
+                                
+                                    p.player_id,
+                                    p.display_name,
+                                    p.firstname,
+                                    p.lastname,
+                                    p.age,
+                                    p.nationality,
+                                    p.photo_url,
+                                
+                                    ps.position,
+                                    ps.shirt_number,
+                                    ps.captain,
+                                    ps.appearances,
+                                    ps.minutes,
+                                    ps.goals,
+                                    ps.assists,
+                                    ps.yellow_cards,
+                                    ps.red_cards,
+                                    ps.rating,
+                                    ps.team_id,
+                                    t.name AS team_name,
+                                    ps.league_id,
+                                    l.name AS league_name,
+                                    ps.season
+                                
+                                FROM players p
+                                
+                                JOIN player_statistics ps
+                                  ON p.player_id = ps.player_id
+                                
+                                JOIN teams t
+                                  ON ps.team_id = t.id
+                                
+                                JOIN leagues l
+                                  ON ps.league_id = l.league_id
+                                
+                                WHERE p.player_id = ?
+                                  AND ps.league_id = ?
+                                  AND ps.season = ?
+                                """
                 );
 
         stmt.setInt(1, playerId);
@@ -2785,7 +2786,7 @@ public class PlayerRepository {
 ## File: footballapp/src/main/java/org/footballapp/databaserepository/PlayerStatisticsRepository.java
 
 ```java
-package org.footballapp.databaserepository;
+package org.footballapp.repository;
 
 import org.springframework.stereotype.Repository;
 import org.footballapp.model.playerdetails.PlayerSummary;
@@ -2812,65 +2813,65 @@ public class PlayerStatisticsRepository {
 
         String sql =
                 """
-                INSERT INTO player_statistics (
-
-                    player_id,
-                    team_id,
-                    league_id,
-                    season,
-
-                    position,
-                    shirt_number,
-                    captain,
-
-                    appearances,
-                    starts,
-                    minutes,
-
-                    goals,
-                    assists,
-
-                    yellow_cards,
-                    red_cards,
-
-                    rating
-
-                )
-
-                VALUES (
-
-                    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
-
-                )
-
-                ON CONFLICT (
-
-                    player_id,
-                    league_id,
-                    season
-
-                )
-
-                DO UPDATE SET
-
-                    team_id = EXCLUDED.team_id,
-
-                    position = EXCLUDED.position,
-                    shirt_number = EXCLUDED.shirt_number,
-                    captain = EXCLUDED.captain,
-
-                    appearances = EXCLUDED.appearances,
-                    starts = EXCLUDED.starts,
-                    minutes = EXCLUDED.minutes,
-
-                    goals = EXCLUDED.goals,
-                    assists = EXCLUDED.assists,
-
-                    yellow_cards = EXCLUDED.yellow_cards,
-                    red_cards = EXCLUDED.red_cards,
-
-                    rating = EXCLUDED.rating
-                """;
+                        INSERT INTO player_statistics (
+                        
+                            player_id,
+                            team_id,
+                            league_id,
+                            season,
+                        
+                            position,
+                            shirt_number,
+                            captain,
+                        
+                            appearances,
+                            starts,
+                            minutes,
+                        
+                            goals,
+                            assists,
+                        
+                            yellow_cards,
+                            red_cards,
+                        
+                            rating
+                        
+                        )
+                        
+                        VALUES (
+                        
+                            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+                        
+                        )
+                        
+                        ON CONFLICT (
+                        
+                            player_id,
+                            league_id,
+                            season
+                        
+                        )
+                        
+                        DO UPDATE SET
+                        
+                            team_id = EXCLUDED.team_id,
+                        
+                            position = EXCLUDED.position,
+                            shirt_number = EXCLUDED.shirt_number,
+                            captain = EXCLUDED.captain,
+                        
+                            appearances = EXCLUDED.appearances,
+                            starts = EXCLUDED.starts,
+                            minutes = EXCLUDED.minutes,
+                        
+                            goals = EXCLUDED.goals,
+                            assists = EXCLUDED.assists,
+                        
+                            yellow_cards = EXCLUDED.yellow_cards,
+                            red_cards = EXCLUDED.red_cards,
+                        
+                            rating = EXCLUDED.rating
+                        """;
 
         try (
 
@@ -3117,7 +3118,7 @@ public class PlayerStatisticsRepository {
             int teamId,
             int leagueId,
             int season
-    )throws Exception {
+    ) throws Exception {
 
         Connection conn =
                 DatabaseConnection.connect();
@@ -3125,44 +3126,44 @@ public class PlayerStatisticsRepository {
         PreparedStatement stmt =
                 conn.prepareStatement(
                         """
-                        SELECT
-    
-                            p.player_id,
-                            p.display_name,
-                            p.photo_url,
-                            p.nationality,
-                            p.age,
-    
-                            ps.position,
-                            ps.shirt_number,
-                            ps.captain,
-                            ps.appearances,
-                            ps.goals,
-                            ps.assists
-    
-                        FROM players p
-    
-                        JOIN player_statistics ps
-                          ON p.player_id = ps.player_id
-    
-                        WHERE ps.team_id = ?
-                          AND ps.league_id = ?
-                          AND ps.season = ?
-    
-                        ORDER BY
-                        CASE ps.position
-                            
-                            WHEN 'Goalkeeper' THEN 1
-                            WHEN 'Defender'   THEN 2
-                            WHEN 'Midfielder' THEN 3
-                            WHEN 'Attacker'   THEN 4
-                        
-                            ELSE 5
-                        END,
-                            
-                        p.display_name;
-                            
-                        """
+                                SELECT
+                                
+                                    p.player_id,
+                                    p.display_name,
+                                    p.photo_url,
+                                    p.nationality,
+                                    p.age,
+                                
+                                    ps.position,
+                                    ps.shirt_number,
+                                    ps.captain,
+                                    ps.appearances,
+                                    ps.goals,
+                                    ps.assists
+                                
+                                FROM players p
+                                
+                                JOIN player_statistics ps
+                                  ON p.player_id = ps.player_id
+                                
+                                WHERE ps.team_id = ?
+                                  AND ps.league_id = ?
+                                  AND ps.season = ?
+                                
+                                ORDER BY
+                                CASE ps.position
+                                
+                                    WHEN 'Goalkeeper' THEN 1
+                                    WHEN 'Defender'   THEN 2
+                                    WHEN 'Midfielder' THEN 3
+                                    WHEN 'Attacker'   THEN 4
+                                
+                                    ELSE 5
+                                END,
+                                
+                                p.display_name;
+                                
+                                """
                 );
 
         stmt.setInt(1, teamId);
@@ -3252,11 +3253,12 @@ public class PlayerStatisticsRepository {
 ## File: footballapp/src/main/java/org/footballapp/databaserepository/StandingRepository.java
 
 ```java
-package org.footballapp.databaserepository;
+package org.footballapp.repository;
 
 import org.springframework.stereotype.Repository;
 import org.footballapp.model.standings.Standing;
 import org.footballapp.model.standings.LeagueTableRow;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -3278,58 +3280,58 @@ public class StandingRepository {
         PreparedStatement stmt =
                 conn.prepareStatement(
                         """
-                        INSERT INTO standings
-                        (
-                            league_id,
-                            season,
-                            team_id,
-                            position,
-                            points,
-                            goal_difference,
-                            played,
-                            wins,
-                            draws,
-                            losses,
-                            goals_for,
-                            goals_against
-                        )
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-
-                        ON CONFLICT
-                        (
-                            league_id,
-                            season,
-                            team_id
-                        )
-                        DO UPDATE SET
-
-                            position =
-                                EXCLUDED.position,
-
-                            points =
-                                EXCLUDED.points,
-
-                            goal_difference =
-                                EXCLUDED.goal_difference,
-
-                            played =
-                                EXCLUDED.played,
-
-                            wins =
-                                EXCLUDED.wins,
-
-                            draws =
-                                EXCLUDED.draws,
-
-                            losses =
-                                EXCLUDED.losses,
-
-                            goals_for =
-                                EXCLUDED.goals_for,
-
-                            goals_against =
-                                EXCLUDED.goals_against
-                        """
+                                INSERT INTO standings
+                                (
+                                    league_id,
+                                    season,
+                                    team_id,
+                                    position,
+                                    points,
+                                    goal_difference,
+                                    played,
+                                    wins,
+                                    draws,
+                                    losses,
+                                    goals_for,
+                                    goals_against
+                                )
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                
+                                ON CONFLICT
+                                (
+                                    league_id,
+                                    season,
+                                    team_id
+                                )
+                                DO UPDATE SET
+                                
+                                    position =
+                                        EXCLUDED.position,
+                                
+                                    points =
+                                        EXCLUDED.points,
+                                
+                                    goal_difference =
+                                        EXCLUDED.goal_difference,
+                                
+                                    played =
+                                        EXCLUDED.played,
+                                
+                                    wins =
+                                        EXCLUDED.wins,
+                                
+                                    draws =
+                                        EXCLUDED.draws,
+                                
+                                    losses =
+                                        EXCLUDED.losses,
+                                
+                                    goals_for =
+                                        EXCLUDED.goals_for,
+                                
+                                    goals_against =
+                                        EXCLUDED.goals_against
+                                """
                 );
 
         stmt.setInt(1, leagueId);
@@ -3413,23 +3415,23 @@ public class StandingRepository {
         PreparedStatement stmt =
                 conn.prepareStatement(
                         """
-                        SELECT
-                            s.position,
-                            s.team_id,
-                            t.name,
-                            s.played,
-                            s.wins,
-                            s.draws,
-                            s.losses,
-                            s.goal_difference,
-                            s.points
-                        FROM standings s
-                        JOIN teams t
-                            ON s.team_id = t.id
-                        WHERE s.league_id = ?
-                        AND s.season = ?
-                        ORDER BY s.position
-                        """
+                                SELECT
+                                    s.position,
+                                    s.team_id,
+                                    t.name,
+                                    s.played,
+                                    s.wins,
+                                    s.draws,
+                                    s.losses,
+                                    s.goal_difference,
+                                    s.points
+                                FROM standings s
+                                JOIN teams t
+                                    ON s.team_id = t.id
+                                WHERE s.league_id = ?
+                                AND s.season = ?
+                                ORDER BY s.position
+                                """
                 );
 
         stmt.setInt(1, leagueId);
@@ -3508,17 +3510,17 @@ public class StandingRepository {
         PreparedStatement stmt =
                 conn.prepareStatement(
                         """
-                        SELECT
-                            s.position,
-                            t.name,
-                            s.points
-                        FROM standings s
-                        JOIN teams t
-                            ON s.team_id = t.id
-                        WHERE s.league_id = ?
-                        AND s.season = ?
-                        AND s.team_id = ?
-                        """
+                                SELECT
+                                    s.position,
+                                    t.name,
+                                    s.points
+                                FROM standings s
+                                JOIN teams t
+                                    ON s.team_id = t.id
+                                WHERE s.league_id = ?
+                                AND s.season = ?
+                                AND s.team_id = ?
+                                """
                 );
 
         stmt.setInt(1, leagueId);
@@ -3571,13 +3573,13 @@ public class StandingRepository {
         PreparedStatement stmt =
                 conn.prepareStatement(
                         """
-                        SELECT team_id
-        
-                        FROM standings
-        
-                        WHERE league_id = ?
-                          AND season = ?
-                        """
+                                SELECT team_id
+                                
+                                FROM standings
+                                
+                                WHERE league_id = ?
+                                  AND season = ?
+                                """
                 );
 
         stmt.setInt(1, leagueId);
@@ -3605,11 +3607,12 @@ public class StandingRepository {
 ## File: footballapp/src/main/java/org/footballapp/databaserepository/TeamRepository.java
 
 ```java
-package org.footballapp.databaserepository;
+package org.footballapp.repository;
 
 import org.springframework.stereotype.Repository;
 import org.footballapp.model.teams.Team;
 import org.footballapp.model.club.ClubDetails;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -3639,16 +3642,16 @@ public class TeamRepository {
                 conn.prepareStatement(
 
                         """
-                       INSERT INTO teams
-                       (id, name, country, founded, venue_id)
-                       VALUES (?, ?, ?, ?, ?)
-                       ON CONFLICT (id)
-                       DO UPDATE SET
-                          name = EXCLUDED.name,
-                          country = EXCLUDED.country,
-                          founded = EXCLUDED.founded,
-                          venue_id = EXCLUDED.venue_id
-                       """
+                                INSERT INTO teams
+                                (id, name, country, founded, venue_id)
+                                VALUES (?, ?, ?, ?, ?)
+                                ON CONFLICT (id)
+                                DO UPDATE SET
+                                   name = EXCLUDED.name,
+                                   country = EXCLUDED.country,
+                                   founded = EXCLUDED.founded,
+                                   venue_id = EXCLUDED.venue_id
+                                """
                 );
 
         stmt.setInt(1, team.getId());
@@ -3673,10 +3676,10 @@ public class TeamRepository {
         PreparedStatement stmt =
                 conn.prepareStatement(
                         """
-                        SELECT *
-                        FROM teams
-                        WHERE id = ?
-                        """
+                                SELECT *
+                                FROM teams
+                                WHERE id = ?
+                                """
                 );
 
         stmt.setInt(1, teamId);
@@ -3726,21 +3729,21 @@ public class TeamRepository {
         PreparedStatement stmt =
                 conn.prepareStatement(
                         """
-                        SELECT
-                            t.id,
-                            t.name,
-                            t.country,
-                            t.founded
-                        FROM teams t
-    
-                        JOIN standings lt
-                            ON t.id = lt.team_id
-    
-                        WHERE lt.league_id = ?
-                        AND lt.season = ?
-    
-                        ORDER BY t.name
-                        """
+                                SELECT
+                                    t.id,
+                                    t.name,
+                                    t.country,
+                                    t.founded
+                                FROM teams t
+                                
+                                JOIN standings lt
+                                    ON t.id = lt.team_id
+                                
+                                WHERE lt.league_id = ?
+                                AND lt.season = ?
+                                
+                                ORDER BY t.name
+                                """
                 );
 
         stmt.setInt(1, leagueId);
@@ -3796,22 +3799,22 @@ public class TeamRepository {
         PreparedStatement stmt =
                 conn.prepareStatement(
                         """
-                        SELECT
-                            t.id,
-                            t.name,
-                            t.country,
-                            t.founded,
-                            v.name AS stadium,
-                            v.city,
-                            v.capacity
-    
-                        FROM teams t
-    
-                        LEFT JOIN venues v
-                            ON t.venue_id = v.id
-    
-                        WHERE t.id = ?
-                        """
+                                SELECT
+                                    t.id,
+                                    t.name,
+                                    t.country,
+                                    t.founded,
+                                    v.name AS stadium,
+                                    v.city,
+                                    v.capacity
+                                
+                                FROM teams t
+                                
+                                LEFT JOIN venues v
+                                    ON t.venue_id = v.id
+                                
+                                WHERE t.id = ?
+                                """
                 );
 
         stmt.setInt(1, clubId);
@@ -3867,7 +3870,7 @@ public class TeamRepository {
 ## File: footballapp/src/main/java/org/footballapp/databaserepository/TeamStatisticsRepository.java
 
 ```java
-package org.footballapp.databaserepository;
+package org.footballapp.repository;
 
 import org.springframework.stereotype.Repository;
 import org.footballapp.model.teamstatistics.CardColour;
@@ -3878,8 +3881,6 @@ import org.footballapp.model.teamstatistics.TeamStatisticsResponse;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
-import static org.apache.logging.log4j.util.Lazy.value;
 
 @Repository
 public class TeamStatisticsRepository {
@@ -3893,55 +3894,55 @@ public class TeamStatisticsRepository {
 
         String sql = """
                 INSERT INTO team_statistics (
-
+                
                     team_id,
                     league_id,
                     season,
-
+                
                     played,
                     wins,
                     draws,
                     losses,
-
+                
                     goals_for,
                     goals_against,
-
+                
                     clean_sheets,
                     failed_to_score,
-
+                
                     yellow_cards,
                     red_cards
-
+                
                 )
                 VALUES (
-
+                
                     ?, ?, ?,
                     ?, ?, ?, ?,
                     ?, ?,
                     ?, ?,
                     ?, ?
-
+                
                 )
-
+                
                 ON CONFLICT (
                     team_id,
                     league_id,
                     season
                 )
-
+                
                 DO UPDATE SET
-
+                
                     played = EXCLUDED.played,
                     wins = EXCLUDED.wins,
                     draws = EXCLUDED.draws,
                     losses = EXCLUDED.losses,
-
+                
                     goals_for = EXCLUDED.goals_for,
                     goals_against = EXCLUDED.goals_against,
-
+                
                     clean_sheets = EXCLUDED.clean_sheets,
                     failed_to_score = EXCLUDED.failed_to_score,
-
+                
                     yellow_cards = EXCLUDED.yellow_cards,
                     red_cards = EXCLUDED.red_cards
                 """;
@@ -4040,6 +4041,7 @@ public class TeamStatisticsRepository {
             statement.executeUpdate();
         }
     }// End of save.
+
     private int getYellowCards(
             TeamStatisticsResponse stats
     ) {
@@ -4100,14 +4102,14 @@ public class TeamStatisticsRepository {
         PreparedStatement stmt =
                 conn.prepareStatement(
                         """
-                        SELECT *
-    
-                        FROM team_statistics
-    
-                        WHERE team_id = ?
-                          AND league_id = ?
-                          AND season = ?
-                        """
+                                SELECT *
+                                
+                                FROM team_statistics
+                                
+                                WHERE team_id = ?
+                                  AND league_id = ?
+                                  AND season = ?
+                                """
                 );
 
         stmt.setInt(1, teamId);
@@ -4189,10 +4191,11 @@ public class TeamStatisticsRepository {
 ## File: footballapp/src/main/java/org/footballapp/databaserepository/VenueRepository.java
 
 ```java
-package org.footballapp.databaserepository;
+package org.footballapp.repository;
 
 import org.springframework.stereotype.Repository;
 import org.footballapp.model.teams.Venue;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -4220,17 +4223,17 @@ public class VenueRepository {
                 conn.prepareStatement(
 
                         """
-                        INSERT INTO venues
-                        (id, name, address, city, capacity, surface)
-                        VALUES (?, ?, ?, ?, ?, ?)
-                        ON CONFLICT (id)
-                        DO UPDATE SET
-                           city = EXCLUDED.city,
-                           capacity = EXCLUDED.capacity,
-                           name = EXCLUDED.name,
-                           address = EXCLUDED.address,
-                           surface = EXCLUDED.surface
-                        """
+                                INSERT INTO venues
+                                (id, name, address, city, capacity, surface)
+                                VALUES (?, ?, ?, ?, ?, ?)
+                                ON CONFLICT (id)
+                                DO UPDATE SET
+                                   city = EXCLUDED.city,
+                                   capacity = EXCLUDED.capacity,
+                                   name = EXCLUDED.name,
+                                   address = EXCLUDED.address,
+                                   surface = EXCLUDED.surface
+                                """
                 );
 
         stmt.setInt(1, venues.getId());
@@ -4258,21 +4261,21 @@ public class VenueRepository {
         PreparedStatement stmt =
                 conn.prepareStatement(
                         """
-                        SELECT DISTINCT
-                            v.id,
-                            v.name,
-                            v.address,
-                            v.city,
-                            v.capacity,
-                            v.surface
-                        FROM venues v
-                        JOIN fixtures f
-                            ON v.id = f.venue_id
-                        WHERE f.league_id = ?
-                        AND f.season = ?
-                        AND f.home_team_id = ?
-                        LIMIT 1
-                        """
+                                SELECT DISTINCT
+                                    v.id,
+                                    v.name,
+                                    v.address,
+                                    v.city,
+                                    v.capacity,
+                                    v.surface
+                                FROM venues v
+                                JOIN fixtures f
+                                    ON v.id = f.venue_id
+                                WHERE f.league_id = ?
+                                AND f.season = ?
+                                AND f.home_team_id = ?
+                                LIMIT 1
+                                """
                 );
 
         stmt.setInt(1, leagueId);
@@ -7229,11 +7232,12 @@ public class TeamStatisticsResponse {
 ```
 
 ## File: footballapp/src/main/java/org/footballapp/service/FixtureImportService.java
+
 ```java
 package org.footballapp.service;
 
 import org.springframework.stereotype.Service;
-import org.footballapp.databaserepository.FixtureRepository;
+import org.footballapp.repository.FixtureRepository;
 import org.footballapp.model.fixtures.FixtureResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.api.ApiFootballService;
@@ -7327,24 +7331,26 @@ public class FixtureService {
 ```
 
 ## File: footballapp/src/main/java/org/footballapp/service/LeagueDataService.java
+
 ```java
 package org.footballapp.service;
 
 /**
  * Spring Boot Service
  */
+
 import org.springframework.stereotype.Service;
 
 
 /**Import repositories*/
-import org.footballapp.databaserepository.FixtureRepository;
-import org.footballapp.databaserepository.LeagueUkRepository;
-import org.footballapp.databaserepository.StandingRepository;
-import org.footballapp.databaserepository.TeamRepository;
-import org.footballapp.databaserepository.TeamStatisticsRepository;
-import org.footballapp.databaserepository.VenueRepository;
-import org.footballapp.databaserepository.PlayerStatisticsRepository;
-import org.footballapp.databaserepository.PlayerRepository;
+import org.footballapp.repository.FixtureRepository;
+import org.footballapp.repository.LeagueUkRepository;
+import org.footballapp.repository.StandingRepository;
+import org.footballapp.repository.TeamRepository;
+import org.footballapp.repository.TeamStatisticsRepository;
+import org.footballapp.repository.VenueRepository;
+import org.footballapp.repository.PlayerStatisticsRepository;
+import org.footballapp.repository.PlayerRepository;
 import org.footballapp.model.club.ClubDetails;
 
 /**Import models*/
@@ -7515,6 +7521,7 @@ public class LeagueDataService {
                 season
         );
     }
+
     /** Get a list of all teams playing in a particular league in that season. */
     public List<Team> getTeamsForLeague(
             int leagueId,
@@ -7526,6 +7533,7 @@ public class LeagueDataService {
                 season
         );
     }
+
     /**
      * Get a list of a team's fixtures for a season.
      */
@@ -7535,6 +7543,7 @@ public class LeagueDataService {
 
         return fixtureRepository.getFixturesByTeam(teamId);
     }
+
     /**
      * Get a list of a team's recent results.
      */
@@ -7550,6 +7559,7 @@ public class LeagueDataService {
                 limit
         );
     }
+
     /**
      * Get team's form from last 5 matches.
      */
@@ -7749,10 +7759,10 @@ public class LeagueDataService {
 ```
 
 ## File: footballapp/src/main/java/org/footballapp/service/LeagueImportService.java
+
 ```java
 package org.footballapp.service;
 
-import org.footballapp.databaserepository.LeagueRepository;
 import org.springframework.stereotype.Service;
 import org.footballapp.model.league.League;
 
@@ -7883,12 +7893,13 @@ public class LeagueImportService {
 ```
 
 ## File: footballapp/src/main/java/org/footballapp/service/LeagueUkImportService.java
+
 ```java
 package org.footballapp.service;
 
 import org.springframework.stereotype.Service;
 import org.footballapp.api.ApiFootballService;
-import org.footballapp.databaserepository.LeagueUkRepository;
+import org.footballapp.repository.LeagueUkRepository;
 import org.footballapp.model.league.LeagueApiResponse;
 import org.footballapp.model.league.LeagueUk;
 import org.footballapp.model.league.LeaguesApiResponse;
@@ -7911,7 +7922,6 @@ public class LeagueUkImportService {
         this.leagueUkRepository =
                 leagueUkRepository;
     }
-
 
 
     public void importUkLeagues()
@@ -7994,13 +8004,14 @@ public class LeagueUkImportService {
 ```
 
 ## File: footballapp/src/main/java/org/footballapp/service/PlayerImportService.java
+
 ```java
 package org.footballapp.service;
 
 import org.springframework.stereotype.Service;
 import org.footballapp.api.ApiFootballService;
-import org.footballapp.databaserepository.PlayerRepository;
-import org.footballapp.databaserepository.PlayerStatisticsRepository;
+import org.footballapp.repository.PlayerRepository;
+import org.footballapp.repository.PlayerStatisticsRepository;
 import org.footballapp.model.player.Player;
 import org.footballapp.model.player.PlayerResponse;
 import org.footballapp.model.player.PlayersApiResponse;
@@ -8163,11 +8174,12 @@ public class StandingService {
 ```
 
 ## File: footballapp/src/main/java/org/footballapp/service/StandingsImportService.java
+
 ```java
 package org.footballapp.service;
 
 import org.springframework.stereotype.Service;
-import org.footballapp.databaserepository.StandingRepository;
+import org.footballapp.repository.StandingRepository;
 import org.footballapp.model.standings.Standing;
 import org.footballapp.model.standings.StandingLeague;
 import org.footballapp.model.standings.StandingsApiResponse;
@@ -8189,6 +8201,7 @@ public class StandingsImportService {
         this.standingRepository =
                 standingRepository;
     }
+
     public void importLeagueStandings(
             int leagueId,
             int season
@@ -8251,15 +8264,17 @@ public class StandingsImportService {
 ```
 
 ## File: footballapp/src/main/java/org/footballapp/service/TeamImportService.java
+
 ```java
 package org.footballapp.service;
 
-//import org.footballapp.databaserepository.LeagueRepository;
+//import org.footballapp.repositoryepository;
+
 import org.springframework.stereotype.Service;
 import org.footballapp.api.ApiFootballService;
-import org.footballapp.databaserepository.LeagueTeamRepository;
-import org.footballapp.databaserepository.TeamRepository;
-import org.footballapp.databaserepository.VenueRepository;
+import org.footballapp.repository.LeagueTeamRepository;
+import org.footballapp.repository.TeamRepository;
+import org.footballapp.repository.VenueRepository;
 import org.footballapp.model.teams.TeamResponse;
 import org.footballapp.model.teams.TeamsApiResponse;
 
@@ -8383,16 +8398,15 @@ public class TeamService {
 ```
 
 ## File: footballapp/src/main/java/org/footballapp/service/TeamStatisticsImportService.java
+
 ```java
 package org.footballapp.service;
 
 import org.springframework.stereotype.Service;
 import org.footballapp.api.ApiFootballService;
-import org.footballapp.databaserepository.StandingRepository;
-import org.footballapp.databaserepository.TeamStatisticsRepository;
+import org.footballapp.repository.StandingRepository;
+import org.footballapp.repository.TeamStatisticsRepository;
 import org.footballapp.model.teamstatistics.TeamStatisticsApiResponse;
-import org.footballapp.databaserepository.LeagueTeamRepository;
-import org.footballapp.model.teamstatistics.TeamStatisticsResponse;
 
 import java.util.List;
 

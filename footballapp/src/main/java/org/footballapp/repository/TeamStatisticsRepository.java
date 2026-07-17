@@ -1,4 +1,4 @@
-package org.footballapp.databaserepository;
+package org.footballapp.repository;
 
 
 import javax.sql.DataSource;
@@ -11,8 +11,6 @@ import org.footballapp.model.teamstatistics.TeamStatisticsResponse;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
-import static org.apache.logging.log4j.util.Lazy.value;
 
 @Repository
 public class TeamStatisticsRepository

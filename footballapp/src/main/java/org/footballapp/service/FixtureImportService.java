@@ -1,7 +1,7 @@
 package org.footballapp.service;
 
 import org.springframework.stereotype.Service;
-import org.footballapp.databaserepository.FixtureRepository;
+import org.footballapp.repository.FixtureRepository;
 import org.footballapp.model.fixtures.FixtureResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.api.ApiFootballService;

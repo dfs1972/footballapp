@@ -3,7 +3,8 @@ package org.footballapp.service.importer;
 import org.footballapp.api.ApiFootballService;
 import org.footballapp.api.dto.lineups.FixtureLineupResponse;
 import org.footballapp.api.dto.lineups.FixtureLineupsResponse;
-import org.footballapp.databaserepository.FixtureLineupRepository;
+import org.footballapp.repository.FixtureLineupRepository;
+import org.footballapp.repository.FixtureRepository;
 import org.footballapp.model.lineups.FixtureLineup;
 import org.footballapp.model.lineups.FixtureLineupPlayer;
 import org.springframework.stereotype.Service;
@@ -11,23 +12,76 @@ import java.util.List;
 import org.footballapp.api.dto.lineups.FixturePlayer;
 import org.footballapp.api.dto.lineups.FixturePlayerWrapper;
 
+
 @Service
 public class FixtureLineupImportService {
+
 
     private final ApiFootballService apiFootballService;
 
     private final FixtureLineupRepository repository;
 
+    private final FixtureRepository fixtureRepository;
+
     public FixtureLineupImportService(
 
             ApiFootballService apiFootballService,
 
-            FixtureLineupRepository repository
+            FixtureLineupRepository repository,
+
+            FixtureRepository fixtureRepository
 
     ) {
 
         this.apiFootballService = apiFootballService;
         this.repository = repository;
+        this.fixtureRepository = fixtureRepository;
+
+    }
+
+    public void importLeagueFixtureLineups(
+
+            int leagueId,
+
+            int season
+
+    ) throws Exception {
+
+        List<Long> fixtureIds =
+                fixtureRepository.getFixtureIds(
+                        leagueId,
+                        season
+                );
+
+        int total = fixtureIds.size();
+        int current = 1;
+
+        for (Long fixtureId : fixtureIds) {
+
+            try {
+
+                System.out.printf(
+                        "[%d/%d] Importing fixture %d%n",
+                        current,
+                        total,
+                        fixtureId
+                );
+
+                importFixtureLineups(fixtureId);
+
+            } catch (Exception ex) {
+
+                System.err.printf(
+                        "Failed to import fixture %d : %s%n",
+                        fixtureId,
+                        ex.getMessage()
+                );
+
+            }
+
+            current++;
+
+        }
 
     }
 

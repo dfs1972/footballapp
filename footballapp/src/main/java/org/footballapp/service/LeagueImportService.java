@@ -1,6 +1,5 @@
 package org.footballapp.service;
 
-import org.footballapp.databaserepository.LeagueRepository;
 import org.springframework.stereotype.Service;
 import org.footballapp.model.league.League;
 

@@ -1,7 +1,7 @@
 package org.footballapp.service;
 
 import org.springframework.stereotype.Service;
-import org.footballapp.databaserepository.StandingRepository;
+import org.footballapp.repository.StandingRepository;
 import org.footballapp.model.standings.Standing;
 import org.footballapp.model.standings.StandingLeague;
 import org.footballapp.model.standings.StandingsApiResponse;

@@ -1,4 +1,4 @@
-package org.footballapp.databaserepository;
+package org.footballapp.repository;
 
 import org.footballapp.model.lineups.FixtureLineup;
 import org.footballapp.model.lineups.FixtureLineupPlayer;

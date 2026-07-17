@@ -1,4 +1,4 @@
-package org.footballapp.databaserepository;
+package org.footballapp.repository;
 
 import javax.sql.DataSource;
 import org.footballapp.model.fixtures.FixtureDetails;
@@ -9,6 +9,7 @@ import org.footballapp.model.fixtures.FixtureRow;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -749,6 +750,45 @@ public class FixtureRepository extends BaseRepository {
 
         return details;
 
+    }
+
+    public List<Long> getFixtureIds(
+            int leagueId,
+            int season
+    ) throws SQLException {
+
+        String sql = """
+            SELECT fixture_id
+            FROM fixtures
+            WHERE league_id = ?
+              AND season = ?
+            ORDER BY fixture_date
+            """;
+
+        List<Long> fixtureIds = new ArrayList<>();
+
+        try (
+                Connection connection = getConnection();
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+        ) {
+
+            statement.setInt(1, leagueId);
+            statement.setInt(2, season);
+
+            try (ResultSet rs = statement.executeQuery()) {
+
+                while (rs.next()) {
+
+                    fixtureIds.add(
+                            rs.getLong("fixture_id")
+                    );
+
+                }
+            }
+        }
+
+        return fixtureIds;
     }
 
     /**

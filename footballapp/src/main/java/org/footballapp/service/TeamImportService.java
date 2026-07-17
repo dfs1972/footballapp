@@ -1,11 +1,11 @@
 package org.footballapp.service;
 
-//import org.footballapp.databaserepository.LeagueRepository;
+//import org.footballapp.repository.LeagueRepository;
 import org.springframework.stereotype.Service;
 import org.footballapp.api.ApiFootballService;
-import org.footballapp.databaserepository.LeagueTeamRepository;
-import org.footballapp.databaserepository.TeamRepository;
-import org.footballapp.databaserepository.VenueRepository;
+import org.footballapp.repository.LeagueTeamRepository;
+import org.footballapp.repository.TeamRepository;
+import org.footballapp.repository.VenueRepository;
 import org.footballapp.model.teams.TeamResponse;
 import org.footballapp.model.teams.TeamsApiResponse;
 

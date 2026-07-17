@@ -2,11 +2,9 @@ package org.footballapp.service;
 
 import org.springframework.stereotype.Service;
 import org.footballapp.api.ApiFootballService;
-import org.footballapp.databaserepository.StandingRepository;
-import org.footballapp.databaserepository.TeamStatisticsRepository;
+import org.footballapp.repository.StandingRepository;
+import org.footballapp.repository.TeamStatisticsRepository;
 import org.footballapp.model.teamstatistics.TeamStatisticsApiResponse;
-import org.footballapp.databaserepository.LeagueTeamRepository;
-import org.footballapp.model.teamstatistics.TeamStatisticsResponse;
 
 import java.util.List;
 

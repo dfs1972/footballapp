@@ -9,6 +9,8 @@ import org.footballapp.model.standings.StandingsApiResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.model.teamstatistics.TeamStatisticsApiResponse;
 import org.footballapp.api.dto.lineups.FixtureLineupsResponse;
+import org.footballapp.api.dto.events.FixtureEventsResponse;
+import org.footballapp.api.dto.fixtures.FixtureStatisticsResponse;
 
 
 public class ApiFootballService {
@@ -235,5 +237,60 @@ public class ApiFootballService {
                 FixtureLineupsResponse.class
         );
     }
+
+    /**
+     * Get Fixture Events
+     */
+
+    public FixtureEventsResponse getFixtureEvents(
+
+            long fixtureId
+
+    ) throws Exception {
+
+        String url =
+
+                "https://v3.football.api-sports.io/fixtures/events?fixture="
+                        + fixtureId;
+
+        String json =
+
+                apiClient.get(url);
+
+        return mapper.readValue(
+
+                json,
+
+                FixtureEventsResponse.class
+
+        );
+
+    }
+
+    /***
+     * Get Fixture Statistics
+     */
+
+    public FixtureStatisticsResponse getFixtureStatistics(
+            long fixtureId,
+            int teamId
+    ) throws Exception {
+
+        String url =
+                "https://v3.football.api-sports.io/fixtures/statistics?fixture="
+                        + fixtureId
+                        + "&team="
+                        + teamId;
+
+        String json =
+                apiClient.get(url);
+
+        return mapper.readValue(
+                json,
+                FixtureStatisticsResponse.class
+        );
+
+    }
+
 }
 

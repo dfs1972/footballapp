@@ -10,15 +10,15 @@ import java.util.List;
 
 
 /**Import repositories*/
-import org.footballapp.databaserepository.FixtureRepository;
-import org.footballapp.databaserepository.FixtureLineupRepository;
-import org.footballapp.databaserepository.LeagueUkRepository;
-import org.footballapp.databaserepository.StandingRepository;
-import org.footballapp.databaserepository.TeamRepository;
-import org.footballapp.databaserepository.TeamStatisticsRepository;
-import org.footballapp.databaserepository.VenueRepository;
-import org.footballapp.databaserepository.PlayerStatisticsRepository;
-import org.footballapp.databaserepository.PlayerRepository;
+import org.footballapp.repository.FixtureRepository;
+import org.footballapp.repository.FixtureLineupRepository;
+import org.footballapp.repository.LeagueUkRepository;
+import org.footballapp.repository.StandingRepository;
+import org.footballapp.repository.TeamRepository;
+import org.footballapp.repository.TeamStatisticsRepository;
+import org.footballapp.repository.VenueRepository;
+import org.footballapp.repository.PlayerStatisticsRepository;
+import org.footballapp.repository.PlayerRepository;
 import org.footballapp.model.club.ClubDetails;
 
 /**Import models*/
@@ -39,8 +39,6 @@ import org.footballapp.model.standings.LeagueTableRow;
 import org.footballapp.model.league.LeagueOverview;
 import org.footballapp.model.playerdetails.PlayerDetails;
 import org.footballapp.model.teamstatistics.TeamStatistics;
-
-import java.util.List;
 
 @Service
 public class LeagueDataService {

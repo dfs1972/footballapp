@@ -1,15 +1,8 @@
 package org.footballapp.tools;
 
-/**
- * Temporary development constants used during backend testing.
- *
- * These will be removed or replaced when the application supports
- * dynamic league, season and team selection.
- */
 public final class AppConstants {
 
     private AppConstants() {
-        // Prevent instantiation
     }
 
     /**
@@ -27,4 +20,13 @@ public final class AppConstants {
      */
     public static final int DEVELOPMENT_TEAM = 257;
 
+    /**
+     * Development Fixture
+     */
+    public static final long DEVELOPMENT_FIXTURE = 1220118L;
+
+    /**
+     * Development Venue (Ibrox)
+     */
+    public static final int DEVELOPMENT_VENUE = 1401;
 }

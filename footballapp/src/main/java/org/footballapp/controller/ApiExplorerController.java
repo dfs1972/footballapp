@@ -1,6 +1,6 @@
 package org.footballapp.controller;
 
-import org.footballapp.tools.apiexplorer.ApiExplorerService;
+import org.footballapp.tools.development.ApiExplorerService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,7 +28,7 @@ public class ApiExplorerController {
 
     ) throws Exception {
 
-        return explorer.download(
+        explorer.download(
 
                 endpoint,
 
@@ -37,6 +37,8 @@ public class ApiExplorerController {
                 output
 
         );
+
+        return "Download complete.";
 
     }
 

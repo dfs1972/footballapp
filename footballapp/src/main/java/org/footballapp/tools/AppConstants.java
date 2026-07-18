@@ -21,6 +21,11 @@ public final class AppConstants {
     public static final int DEVELOPMENT_TEAM = 257;
 
     /**
+     * Development Player J. Hogarth - Rangers Goalkeeper.
+     */
+    public static final int DEVELOPMENT_PLAYER = 162283;
+
+    /**
      * Development Fixture
      */
     public static final long DEVELOPMENT_FIXTURE = 1220118L;

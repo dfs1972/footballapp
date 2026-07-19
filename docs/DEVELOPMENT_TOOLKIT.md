@@ -301,3 +301,22 @@ Summary
 The Development Toolkit provides a lightweight development layer that accelerates API exploration and Android UI development while remaining independent of the production backend.
 
 It is intended to become the primary environment for investigating new API-Football endpoints before integrating them into the backend or Android application.
+
+
+# DEVELOPMENT_TOOLKIT.md
+
+## Version 2
+
+General-purpose API exploration framework
+
+Supports:
+
+• League
+• Club
+• Fixture
+• Player
+
+All domains support:
+
+• Convenience wrappers
+• Parameterised methods

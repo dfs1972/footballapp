@@ -54,8 +54,8 @@ build/
 **/node_modules/
 
 # npm
-**/package-lock.json
-**/package.json
+#**/package-lock.json
+#**/package.json
 
 # Local AI tools
 .agents/
@@ -69,7 +69,7 @@ OUTPUT_FOLDER/
 **/configuration-cache/
 
 # Local lock files
-skills-lock.json
+#skills-lock.json
 
 # Maven download
 apache-maven-*/

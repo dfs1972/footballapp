@@ -2,7 +2,6 @@ package com.example.footballapp.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.footballapp.data.mapper.toUiModel
 import com.example.footballapp.data.repository.LeagueTableRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,16 +28,18 @@ class LeagueTableViewModel : ViewModel() {
 
         viewModelScope.launch {
 
+            _uiState.value =
+                LeagueTableUiState(
+                    isLoading = true
+                )
+
             try {
 
-                val table = repository
-                    .getLeagueTable(
+                val table =
+                    repository.getLeagueTable(
                         leagueId,
                         season
                     )
-                    .map {
-                        it.toUiModel()
-                    }
 
                 _uiState.value =
                     LeagueTableUiState(
@@ -48,7 +49,6 @@ class LeagueTableViewModel : ViewModel() {
                         table = table
 
                     )
-                //println("League table size = ${table.size}")
 
             } catch (e: Exception) {
 

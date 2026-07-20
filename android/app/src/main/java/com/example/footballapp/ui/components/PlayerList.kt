@@ -26,7 +26,7 @@ private fun positionHeading(position: String): String =
         else -> position
     }
 
-fun LazyListScope.playerList(
+fun LazyListScope.PlayerList(
 
     players: List<PlayerUiModel>,
 
@@ -101,7 +101,7 @@ private fun PlayerListPreview() {
 
     ) {
 
-        playerList(
+        PlayerList(
 
             players = PreviewData.RangersSquad,
 

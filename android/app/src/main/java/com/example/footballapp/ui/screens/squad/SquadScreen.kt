@@ -5,7 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.footballapp.ui.components.ScreenScaffold
-import com.example.footballapp.ui.components.playerList
+import com.example.footballapp.ui.components.PlayerList
 import com.example.footballapp.ui.previews.PreviewData
 
 @Composable
@@ -29,7 +29,7 @@ fun SquadScreen(
 
     ) {
 
-        playerList(
+        PlayerList(
 
             players = players,
 

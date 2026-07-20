@@ -1,6 +1,6 @@
 package com.example.footballapp.repositories
 
-import com.example.footballapp.ApiConfig
+import com.example.footballapp.api.ApiConfig
 import com.example.footballapp.model.LeagueUk
 import com.example.footballapp.model.TableRow
 import com.example.footballapp.model.LeagueOverview

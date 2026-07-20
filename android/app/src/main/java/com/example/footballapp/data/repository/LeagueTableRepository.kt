@@ -1,7 +1,8 @@
 package com.example.footballapp.data.repository
 
 import com.example.footballapp.data.remote.FootballApiClient
-import com.example.footballapp.data.remote.dto.LeagueTableRowDto
+import com.example.footballapp.data.mapper.toUiModel
+import com.example.footballapp.ui.model.LeagueTableRowUiModel
 
 /**
  * Repository for retrieving league standings.
@@ -14,13 +15,15 @@ class LeagueTableRepository {
     suspend fun getLeagueTable(
         leagueId: Int,
         season: Int
-    ): List<LeagueTableRowDto> {
+    ): List<LeagueTableRowUiModel> {
 
-        return service.getLeagueTable(
-            leagueId = leagueId,
-            season = season
-        )
-
+        return service
+            .getLeagueTable(
+                leagueId = leagueId,
+                season = season
+            )
+            .map {
+                it.toUiModel()
+            }
     }
-
 }

@@ -41,9 +41,6 @@ class TeamFixturesViewModel : ViewModel() {
                             leagueId,
                             season
                         )
-                        .map {
-                            it.toUiModel()
-                        }
                         .groupByDay()
 
                 _uiState.value =

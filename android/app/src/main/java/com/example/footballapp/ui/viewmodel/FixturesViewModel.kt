@@ -2,7 +2,6 @@ package com.example.footballapp.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.footballapp.data.mapper.toUiModel
 import com.example.footballapp.data.repository.FixtureRepository
 import com.example.footballapp.ui.model.FixtureDayUiModel
 import com.example.footballapp.ui.model.extensions.groupByDay
@@ -31,6 +30,11 @@ class FixturesViewModel : ViewModel() {
 
         viewModelScope.launch {
 
+            _uiState.value =
+                FixturesUiState(
+                    isLoading = true
+                )
+
             try {
 
                 val fixtureDays =
@@ -39,9 +43,6 @@ class FixturesViewModel : ViewModel() {
                             leagueId,
                             season
                         )
-                        .map {
-                            it.toUiModel()
-                        }
                         .groupByDay()
 
                 _uiState.value =

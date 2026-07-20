@@ -2,7 +2,6 @@ package com.example.footballapp.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.footballapp.data.mapper.toUiModel
 import com.example.footballapp.data.repository.TeamRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,17 +28,18 @@ class ClubsViewModel : ViewModel() {
 
         viewModelScope.launch {
 
+            _uiState.value =
+                ClubsUiState(
+                    isLoading = true
+                )
+
             try {
 
                 val clubs =
-                    repository
-                        .getTeams(
-                            leagueId,
-                            season
-                        )
-                        .map {
-                            it.toUiModel()
-                        }
+                    repository.getTeams(
+                        leagueId,
+                        season
+                    )
 
                 _uiState.value =
                     ClubsUiState(

@@ -3,6 +3,7 @@ package com.example.footballapp.ui.design
 object Strings {
 
     const val VIEW_FULL_TABLE = "View Full Table"
+    const val SEASON_PREFIX = ""
     const val LEAGUE_TABLE = "League Table"
     const val FIXTURES = "Fixtures"
     const val CLUBS = "Teams"

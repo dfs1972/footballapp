@@ -2,7 +2,6 @@ package com.example.footballapp.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.footballapp.data.mapper.toUiModel
 import com.example.footballapp.data.repository.LeagueOverviewRepository
 import com.example.footballapp.data.repository.LeagueTableRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,9 +45,6 @@ class LeagueOverviewViewModel : ViewModel() {
                             leagueId,
                             season
                         )
-                        .map {
-                            it.toUiModel()
-                        }
                         .take(5)
 
                 _uiState.value =

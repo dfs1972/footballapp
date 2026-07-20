@@ -1,6 +1,6 @@
 package com.example.footballapp.repositories
 
-import com.example.footballapp.ApiConfig
+import com.example.footballapp.api.ApiConfig
 import com.example.footballapp.model.FixtureRow
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue

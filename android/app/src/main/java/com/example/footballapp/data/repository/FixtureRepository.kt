@@ -1,26 +1,34 @@
 package com.example.footballapp.data.repository
 
+import com.example.footballapp.data.mapper.toUiModel
 import com.example.footballapp.data.remote.FootballApiClient
 import com.example.footballapp.data.remote.dto.FixtureDetailsDto
-import com.example.footballapp.data.remote.dto.FixtureDto
+import com.example.footballapp.ui.model.FixtureUiModel
 
+/**
+ * Repository for retrieving fixture data.
+ */
 class FixtureRepository {
 
     private val service =
         FootballApiClient.service
 
     /**
-     * Get Fixtures
+     * Get all fixtures for a league season.
      */
     suspend fun getFixtures(
         leagueId: Int,
         season: Int
-    ): List<FixtureDto> {
+    ): List<FixtureUiModel> {
 
-        return service.getFixtures(
-            leagueId,
-            season
-        )
+        return service
+            .getFixtures(
+                leagueId,
+                season
+            )
+            .map {
+                it.toUiModel()
+            }
 
     }
 
@@ -31,18 +39,25 @@ class FixtureRepository {
         teamId: Int,
         leagueId: Int,
         season: Int
-    ): List<FixtureDto> {
+    ): List<FixtureUiModel> {
 
-        return service.getTeamFixtures(
-            teamId,
-            leagueId,
-            season
-        )
+        return service
+            .getTeamFixtures(
+                teamId,
+                leagueId,
+                season
+            )
+            .map {
+                it.toUiModel()
+            }
 
     }
 
     /**
-     * Get Fixture Details
+     * Get fixture details.
+     *
+     * Left returning DTO for now until the Fixture Details
+     * feature is migrated.
      */
     suspend fun getFixtureDetails(
         fixtureId: Long

@@ -19,7 +19,10 @@ data class LeagueOverviewUiState(
     val overview: LeagueOverviewUiModel? = null,
 
     /**
-     * List of Top 5(?) Clubs in the League
+     * Standings displayed on the League Overview screen.
+     *
+     * Currently the top five clubs are shown, although
+     * the UI decides how many rows to display.
      */
 
     val topStandings: List<LeagueTableRowUiModel> = emptyList(),

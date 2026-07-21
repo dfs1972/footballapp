@@ -37,12 +37,20 @@ class FixtureDetailsViewModel : ViewModel() {
                         )
                         .toUiModel()
 
+                val lineup =
+                    repository
+                        .getFixtureLineup(
+                            fixtureId
+                        )
+
                 _uiState.value =
                     FixtureDetailsUiState(
 
                         isLoading = false,
 
-                        fixture = fixture
+                        fixture = fixture,
+
+                        lineup = lineup
 
                     )
 

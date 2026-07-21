@@ -10,17 +10,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.footballapp.ui.components.FixtureLineupCard
 import com.example.footballapp.ui.components.InfoRow
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.SectionCard
 import com.example.footballapp.ui.model.FixtureDetailsUiModel
 import com.example.footballapp.ui.design.AppSpacing
+import com.example.footballapp.ui.model.FixtureLineupUiModel
 import com.example.footballapp.util.DateFormatter
 
 @Composable
 fun FixtureDetailsScreen(
 
-    fixture: FixtureDetailsUiModel
+    fixture: FixtureDetailsUiModel,
+
+    lineup: FixtureLineupUiModel? = null
 
 ) {
 
@@ -134,6 +138,23 @@ fun FixtureDetailsScreen(
                     label = "Venue",
 
                     value = fixture.venueName ?: "N/A"
+
+                )
+
+            }
+
+        }
+
+        /**
+         * Fixture Lineup
+         */
+        item {
+
+            lineup?.let {
+
+                FixtureLineupCard(
+
+                    lineup = it
 
                 )
 

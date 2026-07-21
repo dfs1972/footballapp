@@ -398,7 +398,9 @@ fun FootballNavHost() {
 
                 FixtureDetailsScreen(
 
-                    fixture = fixture
+                    fixture = fixture,
+
+                    lineup = uiState.lineup
 
                 )
 

@@ -3,6 +3,7 @@ package com.example.footballapp.data.repository
 import com.example.footballapp.data.mapper.toUiModel
 import com.example.footballapp.data.remote.FootballApiClient
 import com.example.footballapp.data.remote.dto.FixtureDetailsDto
+import com.example.footballapp.ui.model.FixtureLineupUiModel
 import com.example.footballapp.ui.model.FixtureUiModel
 
 /**
@@ -66,6 +67,23 @@ class FixtureRepository {
         return service.getFixtureDetails(
             fixtureId
         )
+
+    }
+
+
+    /**
+     * Get fixture lineups.
+     */
+
+    suspend fun getFixtureLineup(
+        fixtureId: Long
+    ): FixtureLineupUiModel {
+
+        return service
+            .getFixtureLineup(
+                fixtureId
+            )
+            .toUiModel()
 
     }
 

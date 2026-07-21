@@ -3,48 +3,36 @@ package org.footballapp.service.importer;
 import org.footballapp.api.ApiFootballService;
 import org.footballapp.api.dto.lineups.FixtureLineupResponse;
 import org.footballapp.api.dto.lineups.FixtureLineupsResponse;
-import org.footballapp.repository.FixtureLineupRepository;
-import org.footballapp.repository.FixtureRepository;
-import org.footballapp.model.lineups.FixtureLineup;
-import org.footballapp.model.lineups.FixtureLineupPlayer;
-import org.springframework.stereotype.Service;
-import java.util.List;
 import org.footballapp.api.dto.lineups.FixturePlayer;
 import org.footballapp.api.dto.lineups.FixturePlayerWrapper;
+import org.footballapp.model.lineups.FixtureLineup;
+import org.footballapp.model.lineups.FixtureLineupPlayer;
+import org.footballapp.repository.FixtureLineupRepository;
+import org.footballapp.repository.FixtureRepository;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
 
 @Service
 public class FixtureLineupImportService {
 
-
     private final ApiFootballService apiFootballService;
-
     private final FixtureLineupRepository repository;
-
     private final FixtureRepository fixtureRepository;
 
     public FixtureLineupImportService(
-
             ApiFootballService apiFootballService,
-
             FixtureLineupRepository repository,
-
             FixtureRepository fixtureRepository
-
     ) {
-
         this.apiFootballService = apiFootballService;
         this.repository = repository;
         this.fixtureRepository = fixtureRepository;
-
     }
 
     public void importLeagueFixtureLineups(
-
             int leagueId,
-
             int season
-
     ) throws Exception {
 
         List<Long> fixtureIds =
@@ -67,15 +55,18 @@ public class FixtureLineupImportService {
                         fixtureId
                 );
 
-                importFixtureLineups(fixtureId);
+                importFixtureLineups(
+                        fixtureId
+                );
 
             } catch (Exception ex) {
 
                 System.err.printf(
-                        "Failed to import fixture %d : %s%n",
-                        fixtureId,
-                        ex.getMessage()
+                        "Failed to import fixture %d%n",
+                        fixtureId
                 );
+
+                ex.printStackTrace();
 
             }
 
@@ -86,9 +77,7 @@ public class FixtureLineupImportService {
     }
 
     public void importFixtureLineups(
-
             long fixtureId
-
     ) throws Exception {
 
         FixtureLineupsResponse response =
@@ -104,15 +93,11 @@ public class FixtureLineupImportService {
         }
 
         for (FixtureLineupResponse lineup :
-
                 response.getResponse()) {
 
             saveLineup(
-
                     fixtureId,
-
                     lineup
-
             );
 
         }
@@ -120,12 +105,18 @@ public class FixtureLineupImportService {
     }
 
     private void saveLineup(
-
             long fixtureId,
-
             FixtureLineupResponse lineup
-
     ) throws Exception {
+
+        if (lineup == null ||
+                lineup.getTeam() == null) {
+
+            return;
+
+        }
+
+        int teamId = lineup.getTeam().getId();
 
         FixtureLineup fixtureLineup =
                 new FixtureLineup();
@@ -135,7 +126,7 @@ public class FixtureLineupImportService {
         );
 
         fixtureLineup.setTeamId(
-                lineup.getTeam().getId()
+                teamId
         );
 
         if (lineup.getCoach() != null) {
@@ -161,47 +152,29 @@ public class FixtureLineupImportService {
         int displayOrder = 1;
 
         displayOrder = savePlayerList(
-
                 fixtureId,
-
-                lineup.getTeam().getId(),
-
+                teamId,
                 lineup.getStartXI(),
-
                 true,
-
                 displayOrder
-
         );
 
         savePlayerList(
-
                 fixtureId,
-
-                lineup.getTeam().getId(),
-
+                teamId,
                 lineup.getSubstitutes(),
-
                 false,
-
                 displayOrder
-
         );
 
     }
 
     private int savePlayerList(
-
             long fixtureId,
-
             int teamId,
-
             List<FixturePlayerWrapper> players,
-
             boolean starting,
-
             int displayOrder
-
     ) throws Exception {
 
         if (players == null) {
@@ -211,6 +184,13 @@ public class FixtureLineupImportService {
         }
 
         for (FixturePlayerWrapper wrapper : players) {
+
+            if (wrapper == null ||
+                    wrapper.getPlayer() == null) {
+
+                continue;
+
+            }
 
             FixturePlayer dto =
                     wrapper.getPlayer();

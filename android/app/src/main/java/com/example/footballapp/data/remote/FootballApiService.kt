@@ -4,6 +4,7 @@ import com.example.footballapp.data.remote.dto.ClubDto
 import com.example.footballapp.data.remote.dto.CompetitionDto
 import com.example.footballapp.data.remote.dto.FixtureDetailsDto
 import com.example.footballapp.data.remote.dto.FixtureDto
+import com.example.footballapp.data.remote.dto.FixtureLineupDto
 import com.example.footballapp.data.remote.dto.LeagueOverviewDto
 import com.example.footballapp.data.remote.dto.LeagueTableRowDto
 import com.example.footballapp.data.remote.dto.PlayerDetailsDto
@@ -69,6 +70,16 @@ interface FootballApiService {
         season: Int
 
     ): List<FixtureDto>
+
+    /**
+     * Get Fixture Lineups
+     */
+
+    @GET("fixtureLineup")
+    suspend fun getFixtureLineup(
+        @Query("fixtureId")
+        fixtureId: Long
+    ): FixtureLineupDto
 
     /**
      * Get League Teams

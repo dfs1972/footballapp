@@ -73,7 +73,7 @@ public class ApiExplorerRunner implements CommandLineRunner {
 //
 //        apiExplorerService.downloadPlayerTransfers();
 
-          apiExplorerService.downloadPlayerData(162283, 2024);
+          //apiExplorerService.downloadPlayerData(162283, 2024);
 
         //printSectionFooter("Player Data download");
 
@@ -84,7 +84,8 @@ public class ApiExplorerRunner implements CommandLineRunner {
         // ====================================
 
         //apiExplorerService.downloadFixtureStatistics();
-        //apiExplorerService.downloadFixtureData(1220118L);
+        //apiExplorerService.downloadFixtureData(1220118L)
+        apiExplorerService.downloadFixtureLineups();
 
 //        System.out.println();
 //        System.out.println("========================================");

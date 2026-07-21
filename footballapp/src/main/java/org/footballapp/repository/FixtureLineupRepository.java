@@ -15,6 +15,7 @@ import java.util.List;
 @Repository
 public class FixtureLineupRepository extends BaseRepository {
 
+
     public FixtureLineupRepository(
             DataSource dataSource
     ) {

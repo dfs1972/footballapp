@@ -2,9 +2,7 @@ package com.example.footballapp.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.footballapp.data.mapper.toUiModel
 import com.example.footballapp.data.repository.FixtureRepository
-import com.example.footballapp.ui.model.FixtureDayUiModel
 import com.example.footballapp.ui.model.extensions.groupByDay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

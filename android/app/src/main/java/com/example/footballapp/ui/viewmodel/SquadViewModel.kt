@@ -44,8 +44,6 @@ class SquadViewModel : ViewModel() {
                             season
                         )
 
-                println("Squad size = ${players.size}")
-
                 _uiState.value =
                     SquadUiState(
 

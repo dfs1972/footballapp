@@ -1,7 +1,6 @@
 package com.example.footballapp.ui.viewmodel
 
 import com.example.footballapp.ui.model.FixtureDayUiModel
-import com.example.footballapp.ui.model.FixtureUiModel
 
 data class TeamFixturesUiState(
 

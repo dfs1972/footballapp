@@ -258,6 +258,11 @@ public class LeagueDataService {
 
         for (FixtureLineup lineup : lineups) {
 
+            Team team =
+                    teamRepository.getTeamById(
+                            lineup.getTeamId()
+                    );
+
             List<FixtureLineupPlayer> lineupPlayers =
                     fixtureLineupRepository.getFixtureLineupPlayers(
 
@@ -315,6 +320,8 @@ public class LeagueDataService {
                     fixtureLineupMapper.mapTeamLineup(
 
                             lineup,
+
+                            team,
 
                             playerResponses
 

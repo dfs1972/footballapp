@@ -11,6 +11,7 @@ fun FixtureLineupDto.toUiModel(): FixtureLineupUiModel =
         teams = teams.map { team ->
             FixtureTeamLineupUiModel(
                 teamId = team.teamId,
+                teamName = team.teamName,
                 coachId = team.coachId,
                 coachName = team.coachName,
                 formation = team.formation,

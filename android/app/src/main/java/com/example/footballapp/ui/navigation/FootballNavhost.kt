@@ -400,7 +400,15 @@ fun FootballNavHost() {
 
                     fixture = fixture,
 
-                    lineup = uiState.lineup
+                    lineup = uiState.lineup,
+
+                    onPlayerClick = { playerId ->
+
+                        navController.navigate(
+                            FootballDestination.PlayerDetails.createRoute(playerId)
+                        )
+
+                    }
 
                 )
 

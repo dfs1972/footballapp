@@ -12,7 +12,9 @@ import com.example.footballapp.ui.model.FixtureLineupUiModel
 @Composable
 fun FixtureLineupCard(
 
-    lineup: FixtureLineupUiModel
+    lineup: FixtureLineupUiModel,
+
+    onPlayerClick: (Int) -> Unit
 
 ) {
 
@@ -30,15 +32,9 @@ fun FixtureLineupCard(
             ) {
 
                 Text(
-
-                    text = team.teamId.toString(),
-
-                    style =
-                        MaterialTheme.typography.titleMedium,
-
-                    fontWeight =
-                        FontWeight.Bold
-
+                    text = team.teamName,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
                 )
 
                 InfoRow(
@@ -69,14 +65,39 @@ fun FixtureLineupCard(
 
                 )
 
-                team.players.forEach { player ->
+                val groupedPlayers = team.players.groupBy { player ->
+                    when (player.position) {
+                        "G" -> "Goalkeeper"
+                        "D" -> "Defenders"
+                        "M" -> "Midfielders"
+                        "F" -> "Forwards"
+                        else -> "Other"
+                    }
+                }
+
+                groupedPlayers.forEach { (position, players) ->
 
                     Text(
-
-                        text =
-                            "${player.shirtNumber ?: "-"}  ${player.playerName}"
-
+                        text = position,
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.SemiBold
                     )
+
+                    players.forEach { player ->
+
+                        PlayerLineupRow(
+
+                            player = player,
+
+                            onClick = {
+
+                                onPlayerClick(player.playerId)
+
+                            }
+
+                        )
+
+                    }
 
                 }
 

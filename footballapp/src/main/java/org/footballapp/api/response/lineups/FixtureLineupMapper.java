@@ -2,6 +2,7 @@ package org.footballapp.api.response.lineups;
 
 import org.footballapp.model.lineups.FixtureLineup;
 import org.footballapp.model.lineups.FixtureLineupPlayer;
+import org.footballapp.model.teams.Team;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -34,6 +35,8 @@ public class FixtureLineupMapper {
 
             FixtureLineup lineup,
 
+            Team team,
+
             List<PlayerLineupResponse> players
 
     ) {
@@ -44,6 +47,14 @@ public class FixtureLineupMapper {
         response.setTeamId(
                 lineup.getTeamId()
         );
+
+        if (team != null) {
+
+            response.setTeamName(
+                    team.getName()
+            );
+
+        }
 
         response.setCoachId(
                 lineup.getCoachId()

@@ -24,7 +24,9 @@ fun FixtureDetailsScreen(
 
     fixture: FixtureDetailsUiModel,
 
-    lineup: FixtureLineupUiModel? = null
+    lineup: FixtureLineupUiModel? = null,
+
+    onPlayerClick: (Int) -> Unit
 
 ) {
 
@@ -154,52 +156,50 @@ fun FixtureDetailsScreen(
 
                 FixtureLineupCard(
 
-                    lineup = it
+                    lineup = it,
+
+                    onPlayerClick = onPlayerClick
 
                 )
 
             }
-
         }
-
-    }
-
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun FixtureDetailsScreenPreview() {
-
-    MaterialTheme {
-
-        FixtureDetailsScreen(
-
-            fixture = FixtureDetailsUiModel(
-
-                fixtureId = 1220110L,
-
-                fixtureDate = "2024-08-03T11:30:00+00:00",
-
-                homeTeam = "Heart Of Midlothian",
-
-                awayTeam = "Rangers",
-
-                homeGoals = 0,
-
-                awayGoals = 0,
-
-                venueName = "Tynecastle Park",
-
-                leagueName = "Scottish Premiership",
-
-                season = "2024/25",
-
-                round = ""
-
-            )
-
-        )
-
-    }
+//@Preview(showBackground = true)
+//@Composable
+//private fun FixtureDetailsScreenPreview() {
+//
+//    MaterialTheme {
+//
+//        FixtureDetailsScreen(
+//
+//            fixture = FixtureDetailsUiModel(
+//
+//                fixtureId = 1220110L,
+//
+//                fixtureDate = "2024-08-03T11:30:00+00:00",
+//
+//                homeTeam = "Heart Of Midlothian",
+//
+//                awayTeam = "Rangers",
+//
+//                homeGoals = 0,
+//
+//                awayGoals = 0,
+//
+//                venueName = "Tynecastle Park",
+//
+//                leagueName = "Scottish Premiership",
+//
+//                season = "2024/25",
+//
+//                round = ""
+//
+//            )
+//
+//        )
+//
+//    }
 
 }

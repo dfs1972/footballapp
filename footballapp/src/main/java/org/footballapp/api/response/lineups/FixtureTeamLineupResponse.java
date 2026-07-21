@@ -6,6 +6,7 @@ import java.util.List;
 public class FixtureTeamLineupResponse {
 
     private int teamId;
+    private String teamName;
     private int coachId;
     private String coachName;
     private String formation;
@@ -20,6 +21,10 @@ public class FixtureTeamLineupResponse {
     public void setTeamId(int teamId) {
         this.teamId = teamId;
     }
+
+    public String getTeamName() {return teamName;}
+
+    public void setTeamName(String teamName) {this.teamName = teamName;}
 
     public int getCoachId() {
         return coachId;

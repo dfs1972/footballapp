@@ -4,6 +4,8 @@ data class FixtureTeamLineupDto(
 
     val teamId: Int,
 
+    val teamName: String,
+
     val coachId: Int?,
 
     val coachName: String?,

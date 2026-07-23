@@ -18,6 +18,7 @@ object AppTypography {
         @Composable
         get() = MaterialTheme.typography.titleMedium
 
+
     val Body: TextStyle
         @Composable
         get() = MaterialTheme.typography.bodyLarge

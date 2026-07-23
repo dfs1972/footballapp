@@ -7,5 +7,6 @@ fun CompetitionDto.toUiModel() =
     CompetitionUiModel(
         id = leagueId,
         name = name,
+        country = country,
         logoUrl = logoUrl
     )

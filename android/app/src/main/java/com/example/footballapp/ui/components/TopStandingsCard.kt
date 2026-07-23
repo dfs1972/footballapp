@@ -18,7 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.footballapp.ui.design.Strings
 import com.example.footballapp.ui.model.LeagueTableRowUiModel
-import com.example.footballapp.ui.previews.PreviewData
+//import com.example.footballapp.ui.previews.PreviewData
 import com.example.footballapp.ui.design.AppSpacing
 
 @Composable
@@ -133,22 +133,22 @@ fun TopStandingsCard(
 
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun TopStandingsCardPreview() {
-
-    MaterialTheme {
-
-        TopStandingsCard(
-
-            standings = PreviewData.ScottishPremiershipTable,
-
-            onTeamClick = {},
-
-            onViewFullTable = {}
-
-        )
-
-    }
-
-}
+//@Preview(showBackground = true)
+//@Composable
+//private fun TopStandingsCardPreview() {
+//
+//    MaterialTheme {
+//
+//        TopStandingsCard(
+//
+//            standings = PreviewData.ScottishPremiershipTable,
+//
+//            onTeamClick = {},
+//
+//            onViewFullTable = {}
+//
+//        )
+//
+//    }
+//
+//}

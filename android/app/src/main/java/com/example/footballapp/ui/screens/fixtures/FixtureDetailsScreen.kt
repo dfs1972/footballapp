@@ -9,13 +9,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.footballapp.ui.components.FixtureLineupCard
 import com.example.footballapp.ui.components.InfoRow
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.SectionCard
-import com.example.footballapp.ui.model.FixtureDetailsUiModel
+import com.example.footballapp.ui.components.SectionHeading
 import com.example.footballapp.ui.design.AppSpacing
+import com.example.footballapp.ui.model.FixtureDetailsUiModel
 import com.example.footballapp.ui.model.FixtureLineupUiModel
 import com.example.footballapp.util.DateFormatter
 
@@ -44,58 +44,65 @@ fun FixtureDetailsScreen(
 
         item {
 
-            Column(
+            SectionCard {
 
-                modifier = Modifier.fillMaxWidth(),
+                Column(
 
-                horizontalAlignment =
-                    Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxWidth(),
 
-                verticalArrangement =
-                    Arrangement.spacedBy(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+
+                    verticalArrangement = Arrangement.spacedBy(
                         AppSpacing.Medium
                     )
 
-            ) {
+                ) {
 
-                Text(
+                    Text(
 
-                    text = fixture.homeTeam,
+                        text = fixture.homeTeam,
 
-                    style =
-                        MaterialTheme.typography.titleLarge
+                        style = MaterialTheme.typography.titleLarge
 
-                )
+                    )
 
-                Text(
+                    Text(
 
-                    text =
-                        "${fixture.homeGoals ?: "-"} - ${fixture.awayGoals ?: "-"}",
+                        text = "${fixture.homeGoals ?: "-"} – ${fixture.awayGoals ?: "-"}",
 
-                    style =
-                        MaterialTheme.typography.headlineMedium,
+                        style = MaterialTheme.typography.headlineLarge,
 
-                    fontWeight =
-                        FontWeight.Bold
+                        fontWeight = FontWeight.Bold
 
-                )
+                    )
 
-                Text(
+                    Text(
 
-                    text = fixture.awayTeam,
+                        text = fixture.awayTeam,
 
-                    style =
-                        MaterialTheme.typography.titleLarge
+                        style = MaterialTheme.typography.titleLarge
 
-                )
+                    )
+
+                }
 
             }
 
         }
 
         /*
-         * Fixture Information
+         * Match Information
          */
+
+        item {
+
+            SectionHeading(
+
+                text = "Match Information"
+
+            )
+
+        }
 
         item {
 
@@ -111,14 +118,21 @@ fun FixtureDetailsScreen(
 
                 InfoRow(
 
+                    label = "Round",
+
+                    value = fixture.round
+
+                )
+
+                InfoRow(
+
                     label = "Date",
 
-                    value = DateFormatter
-                        .formatFixtureDateOnly(
+                    value = DateFormatter.formatFixtureDateOnly(
 
-                            fixture.fixtureDate
+                        fixture.fixtureDate
 
-                        )
+                    )
 
                 )
 
@@ -126,12 +140,11 @@ fun FixtureDetailsScreen(
 
                     label = "Kick-off",
 
-                    value = DateFormatter
-                        .formatFixtureTime(
+                    value = DateFormatter.formatFixtureTime(
 
-                            fixture.fixtureDate
+                        fixture.fixtureDate
 
-                        )
+                    )
 
                 )
 
@@ -147,9 +160,10 @@ fun FixtureDetailsScreen(
 
         }
 
-        /**
+        /*
          * Fixture Lineup
          */
+
         item {
 
             lineup?.let {
@@ -163,43 +177,9 @@ fun FixtureDetailsScreen(
                 )
 
             }
-        }
-}
 
-//@Preview(showBackground = true)
-//@Composable
-//private fun FixtureDetailsScreenPreview() {
-//
-//    MaterialTheme {
-//
-//        FixtureDetailsScreen(
-//
-//            fixture = FixtureDetailsUiModel(
-//
-//                fixtureId = 1220110L,
-//
-//                fixtureDate = "2024-08-03T11:30:00+00:00",
-//
-//                homeTeam = "Heart Of Midlothian",
-//
-//                awayTeam = "Rangers",
-//
-//                homeGoals = 0,
-//
-//                awayGoals = 0,
-//
-//                venueName = "Tynecastle Park",
-//
-//                leagueName = "Scottish Premiership",
-//
-//                season = "2024/25",
-//
-//                round = ""
-//
-//            )
-//
-//        )
-//
-//    }
+        }
+
+    }
 
 }

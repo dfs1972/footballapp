@@ -10,7 +10,11 @@ import retrofit2.converter.jackson.JacksonConverterFactory
 object FootballApiClient {
 
     private const val BASE_URL =
+        //"http://192.168.1.65:8081/"
         "http://10.0.2.2:8081/"
+
+    private const val LAN =
+        "http://192.168.1.65:8081/"
 
     private val logging =
         HttpLoggingInterceptor().apply {

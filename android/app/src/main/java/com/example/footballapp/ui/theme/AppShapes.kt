@@ -5,7 +5,7 @@ import androidx.compose.ui.unit.dp
 
 object AppShapes {
 
-    val Card = RoundedCornerShape(20.dp)
+    val Card = RoundedCornerShape(16.dp)
 
     val Button = RoundedCornerShape(12.dp)
 

@@ -1,22 +1,22 @@
 package com.example.footballapp.ui.components
 
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.footballapp.ui.design.AppSpacing
 
 @Composable
 fun ScreenScaffold(
 
-    title: String,
+    title: String? = null,
 
-    subtitle: String,
+    subtitle: String? = null,
 
     modifier: Modifier = Modifier,
 
@@ -24,75 +24,69 @@ fun ScreenScaffold(
 
     onBackClick: (() -> Unit)? = null,
 
+    backgroundContent: (@Composable BoxScope.() -> Unit)? = null,
+
     content: LazyListScope.() -> Unit
 
 ) {
 
-    Surface(
+    val listState = rememberLazyListState()
 
-        modifier = modifier.fillMaxSize(),
+    Box(
 
-        color = MaterialTheme.colorScheme.background
+        modifier = modifier
+            .fillMaxSize()
 
     ) {
 
+        /*
+         * Decorative background.
+         *
+         * This is completely outside the LazyColumn,
+         * so it never affects measurement or spacing.
+         */
+
+        backgroundContent?.invoke(this)
+
+        /*
+         * Foreground content.
+         */
+
         LazyColumn(
 
-            modifier = Modifier.fillMaxSize(),
+            state = listState,
 
-            contentPadding = PaddingValues(
-
-                vertical = AppSpacing.Medium
-
-            )
+            modifier = Modifier.fillMaxSize()
 
         ) {
 
-            item {
+            if (title != null || subtitle != null) {
 
-                ScreenHeader(
+                item {
 
-                    title = title,
+                    if (title != null) {
 
-                    subtitle = subtitle,
+                        Text(
+                            text = title,
+                            style = MaterialTheme.typography.headlineMedium
+                        )
 
-                    showBackButton = showBackButton,
+                    }
 
-                    onBackClick = onBackClick
+                    if (subtitle != null) {
 
-                )
+                        Text(
+                            text = subtitle,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+
+                    }
+
+                }
 
             }
 
             content()
-
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun ScreenScaffoldPreview() {
-
-    ScreenScaffold(
-
-        title = "Preview",
-
-        subtitle = "Reusable screen scaffold"
-
-    ) {
-
-        item {
-
-            SectionCard {
-
-                SectionHeading(
-
-                    text = "Example"
-
-                )
-
-            }
 
         }
 

@@ -8,7 +8,11 @@ object AppSpacing {
 
     val Small = 8.dp
 
+    val Twelve = 12.dp
+
     val Medium = 16.dp
+
+    val Twenty = 20.dp
 
     val Large = 24.dp
 

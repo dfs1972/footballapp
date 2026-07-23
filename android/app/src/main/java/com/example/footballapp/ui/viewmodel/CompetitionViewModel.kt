@@ -1,5 +1,6 @@
 package com.example.footballapp.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.footballapp.data.mapper.toCompetitionGroups
@@ -49,7 +50,6 @@ class CompetitionViewModel : ViewModel() {
                         isLoading = false,
                         error = e.message
                     )
-
             }
 
         }

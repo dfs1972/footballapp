@@ -21,6 +21,11 @@ data class CompetitionUiModel(
     val name: String,
 
     /**
+     * Competition Country
+     */
+    val country: String,
+
+    /**
      * URL of the competition logo.
      */
     val logoUrl: String

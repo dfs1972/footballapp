@@ -4,7 +4,7 @@ import androidx.compose.ui.unit.dp
 
 object AppElevation {
 
-    val Card = 4.dp
+    val Card = 3.dp
 
     val Dialog = 8.dp
 

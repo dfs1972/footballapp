@@ -20,7 +20,7 @@ import androidx.compose.ui.Alignment
 
 import com.example.footballapp.ui.model.LeagueTableRowUiModel
 import com.example.footballapp.ui.model.QualificationType
-import com.example.footballapp.ui.previews.PreviewData
+//import com.example.footballapp.ui.previews.PreviewData
 import com.example.footballapp.ui.theme.AppDimensions
 import com.example.footballapp.ui.design.AppSpacing
 
@@ -122,24 +122,24 @@ private fun ValueCell(
 
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun LeagueTableRowPreview() {
-
-    MaterialTheme {
-
-        LeagueTableRow(
-
-            row = PreviewData.ScottishPremiershipTable.first(),
-
-            isEvenRow = true,
-
-            onClubClick = {}
-
-        )
-    }
-}
-
+//@Preview(showBackground = true)
+//@Composable
+//private fun LeagueTableRowPreview() {
+//
+//    MaterialTheme {
+//
+//        LeagueTableRow(
+//
+//            row = PreviewData.ScottishPremiershipTable.first(),
+//
+//            isEvenRow = true,
+//
+//            onClubClick = {}
+//
+//        )
+//    }
+//}
+//
 @Composable
 private fun QualificationType.backgroundColor(
     isEvenRow: Boolean

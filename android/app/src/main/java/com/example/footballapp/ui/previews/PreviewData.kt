@@ -23,6 +23,7 @@ object PreviewData {
     val ScottishPremiership = CompetitionUiModel(
         id = AppConstants.DEVELOPMENT_LEAGUE,
         name = "Scottish Premiership",
+        country = "Scotland",
         //season = "2024/25",
         logoUrl = ""
     )
@@ -30,6 +31,7 @@ object PreviewData {
     val ScottishChampionship = CompetitionUiModel(
         id = 180,
         name = "Scottish Championship",
+        country = "Scotland",
         //season = "2025/26",
         logoUrl = ""
     )
@@ -37,6 +39,7 @@ object PreviewData {
     val ScottishLeagueOne = CompetitionUiModel(
         id = 181,
         name = "Scottish League One",
+        country = "Scotland",
         //season = "2025/26",
         logoUrl = ""
     )
@@ -44,6 +47,7 @@ object PreviewData {
     val ScottishLeagueTwo = CompetitionUiModel(
         id = 182,
         name = "Scottish League Two",
+        country = "Scotland",
         //season = "2025/26",
         logoUrl = ""
     )
@@ -55,6 +59,7 @@ object PreviewData {
     val ScottishCup = CompetitionUiModel(
         id = 183,
         name = "Scottish Cup",
+        country = "Scotland",
         //season = "2025/26",
         logoUrl = ""
     )
@@ -62,6 +67,7 @@ object PreviewData {
     val LeagueCup = CompetitionUiModel(
         id = 184,
         name = "League Cup",
+        country = "Scotland",
         //season = "2025/26",
         logoUrl = ""
     )

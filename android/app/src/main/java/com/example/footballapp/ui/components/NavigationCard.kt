@@ -1,10 +1,11 @@
 package com.example.footballapp.ui.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -16,10 +17,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.theme.AppElevation
 import com.example.footballapp.ui.theme.AppShapes
-import com.example.footballapp.ui.design.AppSpacing
 
 @Composable
 fun NavigationCard(
@@ -34,20 +37,19 @@ fun NavigationCard(
 
     Card(
 
+        onClick = onClick,
+
         modifier = Modifier
             .fillMaxWidth()
             .padding(
                 horizontal = AppSpacing.Screen,
                 vertical = AppSpacing.Small
-            )
-            .clickable(onClick = onClick),
+            ),
 
         shape = AppShapes.Card,
 
         elevation = CardDefaults.cardElevation(
-
             defaultElevation = AppElevation.Card
-
         )
 
     ) {
@@ -56,7 +58,10 @@ fun NavigationCard(
 
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(AppSpacing.Medium),
+                .padding(
+                    horizontal = AppSpacing.Large,
+                    vertical = AppSpacing.Medium
+                ),
 
             verticalAlignment = Alignment.CenterVertically,
 
@@ -64,13 +69,27 @@ fun NavigationCard(
 
         ) {
 
-            Column {
+            Column(
+
+                modifier = Modifier.weight(1f)
+
+            ) {
 
                 Text(
 
                     text = title,
 
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
+
+                    fontWeight = FontWeight.SemiBold
+
+                )
+
+                Spacer(
+
+                    modifier = Modifier.height(
+                        AppSpacing.ExtraSmall
+                    )
 
                 )
 
@@ -80,7 +99,11 @@ fun NavigationCard(
 
                     style = MaterialTheme.typography.bodyMedium,
 
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+
+                    maxLines = 2,
+
+                    overflow = TextOverflow.Ellipsis
 
                 )
 
@@ -90,7 +113,9 @@ fun NavigationCard(
 
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
 
-                contentDescription = null
+                contentDescription = null,
+
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
 
             )
 
@@ -110,7 +135,7 @@ private fun NavigationCardPreview() {
 
             title = "League Table",
 
-            subtitle = "View complete standings",
+            subtitle = "Current standings after every match",
 
             onClick = {}
 

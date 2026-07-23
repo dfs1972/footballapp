@@ -13,7 +13,7 @@ import com.example.footballapp.ui.theme.AppTypography
 @Composable
 fun SectionHeading(
 
-    text: String
+    text: String,
 
 ) {
 
@@ -23,7 +23,7 @@ fun SectionHeading(
 
         style = AppTypography.SectionHeading,
 
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        color = MaterialTheme.colorScheme.onSurface,
 
         modifier = Modifier
             .fillMaxWidth()

@@ -7,7 +7,7 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.footballapp.ui.model.PlayerUiModel
-import com.example.footballapp.ui.previews.PreviewData
+//import com.example.footballapp.ui.previews.PreviewData
 import com.example.footballapp.ui.design.AppSpacing
 
 private val PositionOrder = listOf(
@@ -89,26 +89,26 @@ fun LazyListScope.PlayerList(
 
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun PlayerListPreview() {
-
-    ScreenScaffold(
-
-        title = "Rangers",
-
-        subtitle = "Squad"
-
-    ) {
-
-        PlayerList(
-
-            players = PreviewData.RangersSquad,
-
-            onPlayerClick = {}
-
-        )
-
-    }
-
-}
+//@Preview(showBackground = true)
+//@Composable
+//private fun PlayerListPreview() {
+//
+//    ScreenScaffold(
+//
+//        title = "Rangers",
+//
+//        subtitle = "Squad"
+//
+//    ) {
+//
+//        PlayerList(
+//
+//            players = PreviewData.RangersSquad,
+//
+//            onPlayerClick = {}
+//
+//        )
+//
+//    }
+//
+//}

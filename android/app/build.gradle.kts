@@ -39,6 +39,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.coil.compose)
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.1")
@@ -61,6 +62,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.espresso.core)
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)

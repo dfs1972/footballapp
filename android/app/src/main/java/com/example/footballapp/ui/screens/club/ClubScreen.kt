@@ -1,23 +1,24 @@
 package com.example.footballapp.ui.screens.club
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.footballapp.ui.components.ClubBadge
 import com.example.footballapp.ui.components.InfoRow
 import com.example.footballapp.ui.components.NavigationCard
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.SectionCard
+import com.example.footballapp.ui.components.SectionHeading
 import com.example.footballapp.ui.model.ClubDetailsUiModel
 import com.example.footballapp.ui.previews.PreviewData
 import com.example.footballapp.ui.theme.AppDimensions
-import com.example.footballapp.ui.design.AppSpacing
 
 @Composable
 fun ClubScreen(
@@ -34,35 +35,37 @@ fun ClubScreen(
 
         title = club.name,
 
-        subtitle = club.league
+        subtitle = club.league,
+
+        backgroundContent = {
+
+            ClubBadge(
+
+                logoUrl = club.badgeUrl,
+
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .offset(x = (-24).dp, y = (-24).dp)
+                    .size(AppDimensions.ImageLarge *8.5f)
+                    .alpha(0.04f)
+
+            )
+
+        }
 
     ) {
 
+        /*
+         * Club Information
+         */
+
         item {
 
-            Column(
+            SectionHeading(
 
-                modifier = Modifier.fillMaxWidth(),
+                text = "Club Information"
 
-                horizontalAlignment = Alignment.CenterHorizontally,
-
-                verticalArrangement = Arrangement.spacedBy(
-                    AppSpacing.Medium
-                )
-
-            ) {
-
-                ClubBadge(
-
-                    logoUrl = club.badgeUrl,
-
-                    modifier = Modifier.size(
-                        AppDimensions.ImageLarge
-                    )
-
-                )
-
-            }
+            )
 
         }
 
@@ -71,28 +74,44 @@ fun ClubScreen(
             SectionCard {
 
                 InfoRow(
+
                     label = "Founded",
+
                     value = club.founded?.toString()
+
                 )
 
                 InfoRow(
+
                     label = "Stadium",
+
                     value = club.stadium
+
                 )
 
                 InfoRow(
+
                     label = "Capacity",
+
                     value = club.capacity?.toString()
+
                 )
 
                 InfoRow(
+
                     label = "Manager",
+
                     value = club.manager
+
                 )
 
             }
 
         }
+
+        /*
+         * Navigation
+         */
 
         item {
 
@@ -100,7 +119,7 @@ fun ClubScreen(
 
                 title = "Squad",
 
-                subtitle = "Browse players",
+                subtitle = "View first-team squad",
 
                 onClick = {
 
@@ -122,7 +141,7 @@ fun ClubScreen(
 
                 title = "Fixtures",
 
-                subtitle = "View club fixtures",
+                subtitle = "Current and upcoming matches",
 
                 onClick = {
 

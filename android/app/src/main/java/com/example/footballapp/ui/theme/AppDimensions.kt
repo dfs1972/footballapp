@@ -11,6 +11,8 @@ object AppDimensions {
 
     val ImageLarge = 56.dp
 
+    val ImageExtraLarge = 76.dp
+
     val PlayerPhoto = 96.dp
     val StatusChipHeight = 28.dp
     val StatusChipWidth = 64.dp

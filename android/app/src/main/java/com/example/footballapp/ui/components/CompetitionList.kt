@@ -1,5 +1,6 @@
 package com.example.footballapp.ui.components
 
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.example.footballapp.ui.model.CompetitionUiModel
 
@@ -11,13 +12,12 @@ fun CompetitionList(
 
     competitions.forEach { competition ->
 
-        CompetitionRow(
+        CompetitionCard(
+
             competition = competition,
-            onClick = {
-                onCompetitionSelected(competition)
-            }
+
+            onClick = onCompetitionSelected
+
         )
-
     }
-
 }

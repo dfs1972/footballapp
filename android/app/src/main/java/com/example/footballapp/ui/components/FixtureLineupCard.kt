@@ -2,9 +2,12 @@ package com.example.footballapp.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.model.FixtureLineupUiModel
@@ -31,6 +34,15 @@ fun FixtureLineupCard(
 
             ) {
 
+                Spacer(
+
+                    modifier = Modifier.height(
+                        AppSpacing.ExtraLarge
+                    )
+
+                )
+
+
                 Text(
                     text = team.teamName,
                     style = MaterialTheme.typography.titleMedium,
@@ -53,17 +65,35 @@ fun FixtureLineupCard(
 
                 )
 
+                Spacer(
+
+                    modifier = Modifier.height(
+                        AppSpacing.ExtraSmall
+                    )
+
+                )
+
+
                 Text(
 
                     text = "Players",
 
                     style =
-                        MaterialTheme.typography.titleSmall,
+                        MaterialTheme.typography.titleMedium,
 
                     fontWeight =
                         FontWeight.Bold
 
                 )
+
+                Spacer(
+
+                    modifier = Modifier.height(
+                        AppSpacing.ExtraSmall
+                    )
+
+                )
+
 
                 val groupedPlayers = team.players.groupBy { player ->
                     when (player.position) {

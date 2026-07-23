@@ -8,6 +8,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.example.footballapp.ui.theme.AppElevation
 import com.example.footballapp.ui.theme.AppShapes
 import com.example.footballapp.ui.design.AppSpacing
@@ -27,7 +28,7 @@ fun SectionCard(
             .fillMaxWidth()
             .padding(
                 horizontal = AppSpacing.Screen,
-                vertical = AppSpacing.Small
+                vertical = AppSpacing.Twelve
             ),
 
         shape = AppShapes.Card,
@@ -40,7 +41,7 @@ fun SectionCard(
 
         colors = CardDefaults.cardColors(
 
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = Color.White
 
         )
 
@@ -50,7 +51,7 @@ fun SectionCard(
 
             modifier = Modifier.padding(
 
-                AppSpacing.Medium
+                AppSpacing.Twenty
 
             )
 

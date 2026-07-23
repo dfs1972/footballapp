@@ -16,7 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+//import androidx.compose.ui.tooling.preview.Preview
 import com.example.footballapp.ui.model.PlayerUiModel
 import com.example.footballapp.ui.theme.AppDimensions
 import com.example.footballapp.ui.design.AppSpacing
@@ -129,34 +129,34 @@ fun PlayerRow(
 
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun PlayerRowPreview() {
-
-    MaterialTheme {
-
-        SectionCard {
-
-            PlayerRow(
-
-                player = PlayerUiModel(
-
-                    playerId = 1,
-
-                    shirtNumber = 2,
-
-                    name = "James Tavernier",
-
-                    position = "Defender"
-
-                ),
-
-                onClick = {}
-
-            )
-
-        }
-
-    }
-
-}
+//@Preview(showBackground = true)
+//@Composable
+//private fun PlayerRowPreview() {
+//
+//    MaterialTheme {
+//
+//        SectionCard {
+//
+//            PlayerRow(
+//
+//                player = PlayerUiModel(
+//
+//                    playerId = 1,
+//
+//                    shirtNumber = 2,
+//
+//                    name = "James Tavernier",
+//
+//                    position = "Defender"
+//
+//                ),
+//
+//                onClick = {}
+//
+//            )
+//
+//        }
+//
+//    }
+//
+//}

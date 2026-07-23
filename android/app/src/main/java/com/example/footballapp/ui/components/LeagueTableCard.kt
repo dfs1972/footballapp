@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.footballapp.ui.model.LeagueTableRowUiModel
-import com.example.footballapp.ui.previews.PreviewData
+//import com.example.footballapp.ui.previews.PreviewData
 import com.example.footballapp.ui.design.AppSpacing
 
 @Composable
@@ -50,17 +50,17 @@ fun LeagueTableCard(
     }
 
 }
-
-@Preview(showBackground = true)
-@Composable
-private fun LeagueTableCardPreview() {
-
-    LeagueTableCard(
-
-        table = PreviewData.ScottishPremiershipTable,
-
-        onTeamClick = {}
-
-    )
-
-}
+//
+//@Preview(showBackground = true)
+//@Composable
+//private fun LeagueTableCardPreview() {
+//
+//    LeagueTableCard(
+//
+//        table = PreviewData.ScottishPremiershipTable,
+//
+//        onTeamClick = {}
+//
+//    )
+//
+//}

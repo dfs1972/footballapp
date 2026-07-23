@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.footballapp.ui.model.CompetitionUiModel
-import com.example.footballapp.ui.previews.PreviewData
+//import com.example.footballapp.ui.previews.PreviewData
 import com.example.footballapp.ui.theme.AppDimensions
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.theme.AppTypography
@@ -93,15 +93,15 @@ fun CompetitionRow(
         )
     }
 }
-@Preview(showBackground = true)
-@Composable
-private fun CompetitionRowPreview() {
-
-    CompetitionRow(
-
-        competition = PreviewData.ScottishPremiership,
-
-        onClick = {}
-
-    )
-}
+//@Preview(showBackground = true)
+//@Composable
+//private fun CompetitionRowPreview() {
+//
+//    CompetitionRow(
+//
+//        competition = PreviewData.ScottishPremiership,
+//
+//        onClick = {}
+//
+//    )
+//}

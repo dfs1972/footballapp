@@ -17,7 +17,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.footballapp.ui.model.FixtureStatus
 import com.example.footballapp.ui.model.FixtureUiModel
-import com.example.footballapp.ui.previews.PreviewData
+//import com.example.footballapp.ui.previews.PreviewData
 import com.example.footballapp.ui.theme.AppDimensions
 import com.example.footballapp.ui.design.AppSpacing
 
@@ -187,74 +187,74 @@ private fun FixtureCentre(
 
 }
 
-@Preview(name = "Scheduled", showBackground = true)
-@Composable
-private fun ScheduledPreview() {
-
-    MaterialTheme {
-
-        FixtureCard(
-
-            fixture = PreviewData.CelticVsRangers,
-
-            onClick = {}
-
-        )
-
-    }
-
-}
-
-@Preview(name = "Live", showBackground = true)
-@Composable
-private fun LivePreview() {
-
-    MaterialTheme {
-
-        FixtureCard(
-
-            fixture = PreviewData.HeartsVsAberdeen,
-
-            onClick = {}
-
-        )
-
-    }
-
-}
-
-@Preview(name = "Finished", showBackground = true)
-@Composable
-private fun FinishedPreview() {
-
-    MaterialTheme {
-
-        FixtureCard(
-
-            fixture = PreviewData.HibernianVsDundeeUnited,
-
-            onClick = {}
-
-        )
-
-    }
-
-}
-
-@Preview(name = "Postponed", showBackground = true)
-@Composable
-private fun PostponedPreview() {
-
-    MaterialTheme {
-
-        FixtureCard(
-
-            fixture = PreviewData.RossCountyVsStJohnstone,
-
-            onClick = {}
-
-        )
-
-    }
-
-}
+//@Preview(name = "Scheduled", showBackground = true)
+//@Composable
+//private fun ScheduledPreview() {
+//
+//    MaterialTheme {
+//
+//        FixtureCard(
+//
+//            fixture = PreviewData.CelticVsRangers,
+//
+//            onClick = {}
+//
+//        )
+//
+//    }
+//
+//}
+//
+//@Preview(name = "Live", showBackground = true)
+//@Composable
+//private fun LivePreview() {
+//
+//    MaterialTheme {
+//
+//        FixtureCard(
+//
+//            fixture = PreviewData.HeartsVsAberdeen,
+//
+//            onClick = {}
+//
+//        )
+//
+//    }
+//
+//}
+//
+//@Preview(name = "Finished", showBackground = true)
+//@Composable
+//private fun FinishedPreview() {
+//
+//    MaterialTheme {
+//
+//        FixtureCard(
+//
+//            fixture = PreviewData.HibernianVsDundeeUnited,
+//
+//            onClick = {}
+//
+//        )
+//
+//    }
+//
+//}
+//
+//@Preview(name = "Postponed", showBackground = true)
+//@Composable
+//private fun PostponedPreview() {
+//
+//    MaterialTheme {
+//
+//        FixtureCard(
+//
+//            fixture = PreviewData.RossCountyVsStJohnstone,
+//
+//            onClick = {}
+//
+//        )
+//
+//    }
+//
+//}

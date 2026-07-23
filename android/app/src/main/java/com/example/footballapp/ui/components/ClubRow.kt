@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.footballapp.ui.model.ClubUiModel
-import com.example.footballapp.ui.previews.PreviewData
+//import com.example.footballapp.ui.previews.PreviewData
 import com.example.footballapp.ui.theme.AppDimensions
 import com.example.footballapp.ui.design.AppSpacing
 
@@ -118,24 +118,24 @@ fun ClubRow(
 /**
  * Preview
  */
-@Preview(showBackground = true)
-@Composable
-private fun ClubRowPreview() {
-
-    MaterialTheme {
-
-        SectionCard {
-
-            ClubRow(
-
-                club = PreviewData.Celtic,
-
-                onClick = {}
-
-            )
-
-        }
-
-    }
-
-}
+//@Preview(showBackground = true)
+//@Composable
+//private fun ClubRowPreview() {
+//
+//    MaterialTheme {
+//
+//        SectionCard {
+//
+//            ClubRow(
+//
+//                club = PreviewData.Celtic,
+//
+//                onClick = {}
+//
+//            )
+//
+//        }
+//
+//    }
+//
+//}

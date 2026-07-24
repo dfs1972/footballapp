@@ -1,4 +1,4 @@
-package org.footballapp.ui.components
+package com.example.footballapp.ui.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -21,9 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.text.font.FontWeight
 import com.example.footballapp.ui.design.AppSpacing
-import com.example.footballapp.ui.theme.AppDimensions
 import com.example.footballapp.ui.theme.AppElevation
-import com.example.footballapp.ui.theme.AppTypography
 
 @Composable
 fun CountryCard(

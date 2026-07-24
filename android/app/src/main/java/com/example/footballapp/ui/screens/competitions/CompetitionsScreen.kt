@@ -12,6 +12,12 @@ import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.model.CompetitionGroupUiModel
 import com.example.footballapp.ui.model.CompetitionUiModel
 import com.example.footballapp.ui.theme.HeaderBlue
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import com.example.footballapp.ui.components.CountryCard
 
 @Composable
 fun CompetitionsScreen(
@@ -21,6 +27,10 @@ fun CompetitionsScreen(
     onCompetitionSelected: (CompetitionUiModel) -> Unit = {}
 
 ) {
+
+    var expandedCountry by rememberSaveable {
+        mutableStateOf<String?>(competitionGroups.firstOrNull()?.title)
+    }
 
     ScreenScaffold {
 
@@ -45,28 +55,52 @@ fun CompetitionsScreen(
         items(competitionGroups) { group ->
 
 
-            if (group.leagues.isNotEmpty()) {
+            CountryCard(
+                countryName = group.title,
+                competitionCount = group.leagues.size + group.domesticCups.size,
+                expanded = expandedCountry == group.title,
+                onClick = {
+                    expandedCountry =
+                        if (expandedCountry == group.title)
+                            null
+                        else
+                            group.title
+                }
+            )
 
+            AnimatedVisibility(
 
-                CompetitionList(
+                visible = expandedCountry == group.title
 
-                    competitions = group.leagues,
+            ) {
 
-                    onCompetitionSelected = onCompetitionSelected
+                androidx.compose.foundation.layout.Column {
 
-                )
+                    if (group.leagues.isNotEmpty()) {
 
-            }
+                        CompetitionList(
 
-            if (group.domesticCups.isNotEmpty()) {
+                            competitions = group.leagues,
 
-                CompetitionList(
+                            onCompetitionSelected = onCompetitionSelected
 
-                    competitions = group.domesticCups,
+                        )
 
-                    onCompetitionSelected = onCompetitionSelected
+                    }
 
-                )
+                    if (group.domesticCups.isNotEmpty()) {
+
+                        CompetitionList(
+
+                            competitions = group.domesticCups,
+
+                            onCompetitionSelected = onCompetitionSelected
+
+                        )
+
+                    }
+
+                }
 
             }
 

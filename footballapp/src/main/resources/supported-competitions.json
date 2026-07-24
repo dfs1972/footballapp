@@ -1,0 +1,210 @@
+[
+  {
+    "country": "England",
+    "displayOrder": 1,
+    "headerIcon": "🏴",
+    "competitions": [
+      {
+        "competitionId": 39,
+        "name": "Premier League",
+        "type": "LEAGUE",
+        "enabled": true
+      },
+      {
+        "competitionId": 40,
+        "name": "Championship",
+        "type": "LEAGUE",
+        "enabled": true
+      },
+      {
+        "competitionId": 41,
+        "name": "League One",
+        "type": "LEAGUE",
+        "enabled": true
+      },
+      {
+        "competitionId": 42,
+        "name": "League Two",
+        "type": "LEAGUE",
+        "enabled": true
+      },
+      {
+        "competitionId": 43,
+        "name": "National League",
+        "type": "LEAGUE",
+        "enabled": true
+      },
+      {
+        "competitionId": 44,
+        "name": "FA WSL",
+        "type": "LEAGUE",
+        "enabled": true
+      },
+      {
+        "competitionId": 45,
+        "name": "FA Cup",
+        "type": "CUP",
+        "enabled": true
+      },
+      {
+        "competitionId": 46,
+        "name": "EFL Trophy",
+        "type": "CUP",
+        "enabled": true
+      },
+      {
+        "competitionId": 47,
+        "name": "FA Trophy",
+        "type": "CUP",
+        "enabled": true
+      },
+      {
+        "competitionId": 48,
+        "name": "League Cup",
+        "type": "CUP",
+        "enabled": true
+      },
+      {
+        "competitionId": 528,
+        "name": "Community Shield",
+        "type": "CUP",
+        "enabled": true
+      },
+      {
+        "competitionId": 670,
+        "name": "Community Shield Women",
+        "type": "CUP",
+        "enabled": true
+      },
+      {
+        "competitionId": 697,
+        "name": "WSL Cup",
+        "type": "CUP",
+        "enabled": true
+      },
+      {
+        "competitionId": 698,
+        "name": "FA Women's Cup",
+        "type": "CUP",
+        "enabled": true
+      },
+      {
+        "competitionId": 1156,
+        "name": "National League Cup",
+        "type": "CUP",
+        "enabled": true
+      }
+    ]
+  },
+  {
+    "country": "Scotland",
+    "displayOrder": 2,
+    "headerIcon": "🏴",
+    "competitions": [
+      {
+        "competitionId": 179,
+        "name": "Premiership",
+        "type": "LEAGUE",
+        "enabled": true
+      },
+      {
+        "competitionId": 180,
+        "name": "Championship",
+        "type": "LEAGUE",
+        "enabled": true
+      },
+      {
+        "competitionId": 183,
+        "name": "League One",
+        "type": "LEAGUE",
+        "enabled": true
+      },
+      {
+        "competitionId": 184,
+        "name": "League Two",
+        "type": "LEAGUE",
+        "enabled": true
+      },
+      {
+        "competitionId": 181,
+        "name": "FA Cup",
+        "type": "CUP",
+        "enabled": true
+      },
+      {
+        "competitionId": 182,
+        "name": "Challenge Cup",
+        "type": "CUP",
+        "enabled": true
+      },
+      {
+        "competitionId": 185,
+        "name": "League Cup",
+        "type": "CUP",
+        "enabled": true
+      }
+    ]
+  },
+  {
+    "country": "Wales",
+    "displayOrder": 3,
+    "headerIcon": "🏴",
+    "competitions": [
+      {
+        "competitionId": 110,
+        "name": "Premier League",
+        "type": "LEAGUE",
+        "enabled": true
+      },
+      {
+        "competitionId": 111,
+        "name": "FAW Championship",
+        "type": "LEAGUE",
+        "enabled": true
+      },
+      {
+        "competitionId": 112,
+        "name": "Welsh Cup",
+        "type": "CUP",
+        "enabled": true
+      },
+      {
+        "competitionId": 738,
+        "name": "League Cup",
+        "type": "CUP",
+        "enabled": true
+      }
+    ]
+  },
+  {
+    "country": "Europe",
+    "displayOrder": 4,
+    "headerIcon": "🇪🇺",
+    "competitions": [
+      {
+        "competitionId": 2,
+        "name": "UEFA Champions League",
+        "type": "CUP",
+        "enabled": true
+      },
+      {
+        "competitionId": 3,
+        "name": "UEFA Europa League",
+        "type": "CUP",
+        "enabled": true
+      },
+      {
+        "competitionId": 848,
+        "name": "UEFA Europa Conference League",
+        "type": "CUP",
+        "enabled": true
+      },
+      {
+        "competitionId": 525,
+        "name": "UEFA Champions League Women",
+        "type": "CUP",
+        "enabled": true
+      }
+    ]
+  }
+]

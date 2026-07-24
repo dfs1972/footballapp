@@ -1,44 +1,41 @@
 package org.footballapp.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.footballapp.api.ApiFootballClient;
+import org.footballapp.api.ApiFootballService;
 import org.footballapp.model.teams.TeamResponse;
 import org.footballapp.model.teams.TeamsApiResponse;
+import org.springframework.stereotype.Service;
 
-/**
- * @deprecated Use ApiFootballService instead
- */
+@Service
 public class TeamService {
 
-    private final ApiFootballClient apiClient;
-    private final ObjectMapper mapper;
+    private final ApiFootballService apiFootballService;
 
-    public TeamService(ApiFootballClient apiClient) {
-        this.apiClient = apiClient;
-        this.mapper = new ObjectMapper();
+    public TeamService(
+            ApiFootballService apiFootballService
+    ) {
+        this.apiFootballService = apiFootballService;
     }
 
     /**
-     * Retrieves all teams associated with a league
-     * and season from API-Football and maps the
-     * response to TeamsApiResponse.
+     * Retrieves a single team from API-Football.
      */
-    public TeamsApiResponse getLeagueTeams(
-            int leagueId,
-            int season
+    public TeamResponse getTeam(
+            int teamId
     ) throws Exception {
 
-        String url =
-                "https://v3.football.api-sports.io/teams?league="
-                        + leagueId
-                        + "&season="
-                        + season;
+        TeamsApiResponse response =
+                apiFootballService.getTeam(teamId);
 
-        String json = apiClient.get(url);
+        if (response.getResponse() == null
+                || response.getResponse().isEmpty()) {
 
-        return mapper.readValue(
-                json,
-                TeamsApiResponse.class
-        );
+            throw new RuntimeException(
+                    "Team not found: " + teamId
+            );
+        }
+
+        return response
+                .getResponse()
+                .get(0);
     }
 }

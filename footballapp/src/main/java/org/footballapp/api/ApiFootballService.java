@@ -67,6 +67,26 @@ public class ApiFootballService {
     }
 
     /**
+     * Gets a single team by its API-Football team id.
+     */
+    public TeamsApiResponse getTeam(
+            int teamId
+    ) throws Exception {
+
+        String url =
+                "https://v3.football.api-sports.io/teams?id="
+                        + teamId;
+
+        String json =
+                apiClient.get(url);
+
+        return mapper.readValue(
+                json,
+                TeamsApiResponse.class
+        );
+    }
+
+    /**
      * Retrieves all players for a team in a season.
      */
     public PlayersApiResponse getPlayers(

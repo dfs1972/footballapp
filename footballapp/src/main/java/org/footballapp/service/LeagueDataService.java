@@ -12,7 +12,6 @@ import java.util.List;
 /**Import repositories*/
 import org.footballapp.repository.FixtureRepository;
 import org.footballapp.repository.FixtureLineupRepository;
-import org.footballapp.repository.LeagueUkRepository;
 import org.footballapp.repository.StandingRepository;
 import org.footballapp.repository.TeamRepository;
 import org.footballapp.repository.TeamStatisticsRepository;
@@ -43,7 +42,6 @@ import org.footballapp.model.teamstatistics.TeamStatistics;
 @Service
 public class LeagueDataService {
 
-    private final LeagueUkRepository leagueUkRepository;
     private final TeamRepository teamRepository;
     private final TeamStatisticsRepository teamStatisticsRepository;
     private final VenueRepository venueRepository;
@@ -53,12 +51,12 @@ public class LeagueDataService {
     private final PlayerRepository playerRepository;
     private final FixtureLineupRepository fixtureLineupRepository;
     private final FixtureLineupMapper fixtureLineupMapper;
+    private final SupportedCompetitionsService supportedCompetitionsService;
 
     /**
      * Contructors
      */
     public LeagueDataService(
-            LeagueUkRepository leagueUkRepository,
             TeamRepository teamRepository,
             TeamStatisticsRepository teamStatisticsRepository,
             VenueRepository venueRepository,
@@ -67,9 +65,9 @@ public class LeagueDataService {
             FixtureLineupRepository fixtureLineupRepository,
             FixtureLineupMapper fixtureLineupMapper,
             PlayerStatisticsRepository playerStatisticsRepository,
-            PlayerRepository playerRepository
+            PlayerRepository playerRepository,
+            SupportedCompetitionsService supportedCompetitionsService
     ) {
-        this.leagueUkRepository = leagueUkRepository;
         this.teamRepository = teamRepository;
         this.teamStatisticsRepository = teamStatisticsRepository;
         this.venueRepository = venueRepository;
@@ -79,27 +77,8 @@ public class LeagueDataService {
         this.playerStatisticsRepository = playerStatisticsRepository;
         this.playerRepository = playerRepository;
         this.fixtureLineupMapper = fixtureLineupMapper;
+        this.supportedCompetitionsService = supportedCompetitionsService;
     }
-
-    /**
-     * Get Leagues
-     */
-    public List<LeagueUk> getLeagues()
-            throws Exception {
-
-        return leagueUkRepository
-                .getLeagues();
-    }
-
-//    /**
-//     * Get Enabled Leagues
-//     */
-//    public List<LeagueUk> getEnabledLeagues()
-//            throws Exception {
-//
-//        return leagueUkRepository
-//                .getEnabledLeagues();
-//    }
 
     /**
      *  Get team by ID method
@@ -530,18 +509,14 @@ public class LeagueDataService {
         LeagueOverview overview =
                 new LeagueOverview();
 
-        LeagueUk league =
-                leagueUkRepository
-                        .getLeagueById(
-                                leagueId
-                        );
-
         overview.setLeagueId(
                 leagueId
         );
 
         overview.setLeagueName(
-                league.getName()
+                supportedCompetitionsService
+                        .getCompetitionById(leagueId)
+                        .getName()
         );
 
         overview.setSeason(

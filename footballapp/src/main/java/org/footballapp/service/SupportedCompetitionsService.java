@@ -47,4 +47,21 @@ public class SupportedCompetitionsService {
             }
         }
     }
+
+    public SupportedCompetition getCompetitionById(int competitionId) {
+
+        for (SupportedCompetitionGroup group : competitionGroups) {
+
+            for (SupportedCompetition competition : group.getCompetitions()) {
+
+                if (competition.getCompetitionId() == competitionId) {
+                    return competition;
+                }
+            }
+        }
+
+        throw new IllegalArgumentException(
+                "Unsupported competition: " + competitionId
+        );
+    }
 }

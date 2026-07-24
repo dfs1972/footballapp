@@ -4,6 +4,8 @@ package org.footballapp.service;
  * Spring Boot Service
  */
 import org.footballapp.api.response.lineups.FixtureLineupMapper;
+import org.footballapp.model.standings.Standing;
+import org.footballapp.model.standings.StandingsApiResponse;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +54,7 @@ public class LeagueDataService {
     private final FixtureLineupRepository fixtureLineupRepository;
     private final FixtureLineupMapper fixtureLineupMapper;
     private final SupportedCompetitionsService supportedCompetitionsService;
+    private final StandingService standingService;
 
     /**
      * Contructors
@@ -61,6 +64,7 @@ public class LeagueDataService {
             TeamStatisticsRepository teamStatisticsRepository,
             VenueRepository venueRepository,
             StandingRepository standingRepository,
+            StandingService standingService,
             FixtureRepository fixtureRepository,
             FixtureLineupRepository fixtureLineupRepository,
             FixtureLineupMapper fixtureLineupMapper,
@@ -72,6 +76,7 @@ public class LeagueDataService {
         this.teamStatisticsRepository = teamStatisticsRepository;
         this.venueRepository = venueRepository;
         this.standingRepository = standingRepository;
+        this.standingService = standingService;
         this.fixtureRepository = fixtureRepository;
         this.fixtureLineupRepository = fixtureLineupRepository;
         this.playerStatisticsRepository = playerStatisticsRepository;
@@ -133,10 +138,65 @@ public class LeagueDataService {
             int season
     ) throws Exception {
 
-        return standingRepository.getLeagueTable(
-                leagueId,
-                season
-        );
+        StandingsApiResponse response =
+                standingService.getStandings(
+                        leagueId,
+                        season
+                );
+
+        List<LeagueTableRow> table =
+                new ArrayList<>();
+
+        for (Standing standing :
+                response.getResponse()
+                        .getFirst()
+                        .getLeague()
+                        .getStandings()
+                        .getFirst()) {
+
+            LeagueTableRow row =
+                    new LeagueTableRow();
+
+            row.setPosition(
+                    standing.getRank()
+            );
+
+            row.setTeamId(
+                    standing.getTeam().getId()
+            );
+
+            row.setTeamName(
+                    standing.getTeam().getName()
+            );
+
+            row.setPlayed(
+                    standing.getAll().getPlayed()
+            );
+
+            row.setWins(
+                    standing.getAll().getWin()
+            );
+
+            row.setDraws(
+                    standing.getAll().getDraw()
+            );
+
+            row.setLosses(
+                    standing.getAll().getLose()
+            );
+
+            row.setGoalDifference(
+                    standing.getGoalsDiff()
+            );
+
+            row.setPoints(
+                    standing.getPoints()
+            );
+
+            table.add(row);
+        }
+
+        return table;
     }
 
     /**

@@ -157,96 +157,96 @@ public class StandingRepository
         conn.close();
     }
 
-    public List<LeagueTableRow> getLeagueTable(
-            int leagueId,
-            int season
-    )
-            throws Exception {
-
-        Connection conn =
-                getConnection();
-
-        PreparedStatement stmt =
-                conn.prepareStatement(
-                        """
-                        SELECT
-                            s.position,
-                            s.team_id,
-                            t.name,
-                            s.played,
-                            s.wins,
-                            s.draws,
-                            s.losses,
-                            s.goal_difference,
-                            s.points
-                        FROM standings s
-                        JOIN teams t
-                            ON s.team_id = t.id
-                        WHERE s.league_id = ?
-                        AND s.season = ?
-                        ORDER BY s.position
-                        """
-                );
-
-        stmt.setInt(1, leagueId);
-        stmt.setInt(2, season);
-
-        ResultSet rs =
-                stmt.executeQuery();
-
-        List<LeagueTableRow> table =
-                new ArrayList<>();
-
-        while (rs.next()) {
-
-            LeagueTableRow row =
-                    new LeagueTableRow();
-
-            row.setPosition(
-                    rs.getInt("position")
-            );
-
-            row.setTeamId(
-                    rs.getInt("team_id")
-            );
-
-            row.setTeamName(
-                    rs.getString("name")
-            );
-
-            row.setPlayed(
-                    rs.getInt("played")
-            );
-
-            row.setWins(
-                    rs.getInt("wins")
-            );
-
-            row.setDraws(
-                    rs.getInt("draws")
-            );
-
-            row.setLosses(
-                    rs.getInt("losses")
-            );
-
-            row.setGoalDifference(
-                    rs.getInt("goal_difference")
-            );
-
-            row.setPoints(
-                    rs.getInt("points")
-            );
-
-            table.add(row);
-        }
-
-        rs.close();
-        stmt.close();
-        conn.close();
-
-        return table;
-    }
+//    public List<LeagueTableRow> getLeagueTable(
+//            int leagueId,
+//            int season
+//    )
+//            throws Exception {
+//
+//        Connection conn =
+//                getConnection();
+//
+//        PreparedStatement stmt =
+//                conn.prepareStatement(
+//                        """
+//                        SELECT
+//                            s.position,
+//                            s.team_id,
+//                            t.name,
+//                            s.played,
+//                            s.wins,
+//                            s.draws,
+//                            s.losses,
+//                            s.goal_difference,
+//                            s.points
+//                        FROM standings s
+//                        JOIN teams t
+//                            ON s.team_id = t.id
+//                        WHERE s.league_id = ?
+//                        AND s.season = ?
+//                        ORDER BY s.position
+//                        """
+//                );
+//
+//        stmt.setInt(1, leagueId);
+//        stmt.setInt(2, season);
+//
+//        ResultSet rs =
+//                stmt.executeQuery();
+//
+//        List<LeagueTableRow> table =
+//                new ArrayList<>();
+//
+//        while (rs.next()) {
+//
+//            LeagueTableRow row =
+//                    new LeagueTableRow();
+//
+//            row.setPosition(
+//                    rs.getInt("position")
+//            );
+//
+//            row.setTeamId(
+//                    rs.getInt("team_id")
+//            );
+//
+//            row.setTeamName(
+//                    rs.getString("name")
+//            );
+//
+//            row.setPlayed(
+//                    rs.getInt("played")
+//            );
+//
+//            row.setWins(
+//                    rs.getInt("wins")
+//            );
+//
+//            row.setDraws(
+//                    rs.getInt("draws")
+//            );
+//
+//            row.setLosses(
+//                    rs.getInt("losses")
+//            );
+//
+//            row.setGoalDifference(
+//                    rs.getInt("goal_difference")
+//            );
+//
+//            row.setPoints(
+//                    rs.getInt("points")
+//            );
+//
+//            table.add(row);
+//        }
+//
+//        rs.close();
+//        stmt.close();
+//        conn.close();
+//
+//        return table;
+//    }
 
     /**
      * Returns a team's league standing

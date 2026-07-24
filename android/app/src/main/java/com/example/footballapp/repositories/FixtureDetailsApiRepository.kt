@@ -7,6 +7,10 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
+/**
+ * FixtureDetailsApiRepository
+ */
+
 class FixtureDetailsApiRepository {
 
     fun getFixture(

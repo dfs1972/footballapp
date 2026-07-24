@@ -2,6 +2,10 @@ package com.example.footballapp.repositories
 
 import com.example.footballapp.model.TeamFixtureRow
 
+/**
+ * TeamFixturesRepository
+ */
+
 class TeamFixturesRepository {
 
     fun getFixtures(

@@ -6,6 +6,7 @@ package org.footballapp.service;
 import org.footballapp.api.response.lineups.FixtureLineupMapper;
 import org.footballapp.model.standings.Standing;
 import org.footballapp.model.standings.StandingsApiResponse;
+import org.footballapp.model.teams.TeamResponse;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,12 +56,14 @@ public class LeagueDataService {
     private final FixtureLineupMapper fixtureLineupMapper;
     private final SupportedCompetitionsService supportedCompetitionsService;
     private final StandingService standingService;
+    private final TeamService teamService;
 
     /**
      * Contructors
      */
     public LeagueDataService(
             TeamRepository teamRepository,
+            TeamService teamService,
             TeamStatisticsRepository teamStatisticsRepository,
             VenueRepository venueRepository,
             StandingRepository standingRepository,
@@ -73,6 +76,7 @@ public class LeagueDataService {
             SupportedCompetitionsService supportedCompetitionsService
     ) {
         this.teamRepository = teamRepository;
+        this.teamService = teamService;
         this.teamStatisticsRepository = teamStatisticsRepository;
         this.venueRepository = venueRepository;
         this.standingRepository = standingRepository;
@@ -505,26 +509,17 @@ public class LeagueDataService {
         TeamDetails details =
                 new TeamDetails();
 
-        Team team =
-                teamRepository.getTeamById(
+        TeamResponse teamResponse =
+                teamService.getTeam(
                         teamId
                 );
 
-        details.setTeam(team);
+        details.setTeam(
+                teamResponse.getTeam()
+        );
 
-        Venue venue =
-                venueRepository.getVenueForTeam(
-                        leagueId,
-                        season,
-                        teamId
-                );
-
-        details.setVenue(venue);
-
-        System.out.println(
-                "leagueId=" + leagueId +
-                        ", season=" + season +
-                        ", teamId=" + teamId
+        details.setVenue(
+                teamResponse.getVenue()
         );
 
         LeagueTableRow standing =

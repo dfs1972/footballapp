@@ -2,62 +2,49 @@ package org.footballapp.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.PostConstruct;
+import org.footballapp.config.competitions.SupportedCompetition;
 import org.footballapp.config.competitions.SupportedCompetitionGroup;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import java.io.InputStream;
-import java.util.Collections;
+import java.io.IOException;
 import java.util.List;
 
 @Service
 public class SupportedCompetitionsService {
 
-    private final ObjectMapper objectMapper;
+    private static final String LOGO_BASE_URL =
+            "https://media.api-sports.io/football/leagues/";
 
-    private List<SupportedCompetitionGroup> competitionGroups;
+    private final List<SupportedCompetitionGroup> competitionGroups;
 
-    public SupportedCompetitionsService(
-            ObjectMapper objectMapper
-    ) {
-        this.objectMapper = objectMapper;
-    }
+    public SupportedCompetitionsService(ObjectMapper objectMapper)
+            throws IOException {
 
-    @PostConstruct
-    public void loadCompetitions() {
+        competitionGroups = objectMapper.readValue(
+                new ClassPathResource("supported-competitions.json").getInputStream(),
+                new TypeReference<List<SupportedCompetitionGroup>>() {}
+        );
 
-        try {
-
-            InputStream inputStream =
-                    new ClassPathResource(
-                            "supported-competitions.json"
-                    ).getInputStream();
-
-            competitionGroups =
-                    objectMapper.readValue(
-                            inputStream,
-                            new TypeReference<List<SupportedCompetitionGroup>>() {
-                            }
-                    );
-
-        } catch (Exception ex) {
-
-            throw new IllegalStateException(
-                    "Failed to load supported competitions configuration",
-                    ex
-            );
-
-        }
-
+        populateLogoUrls();
     }
 
     public List<SupportedCompetitionGroup> getCompetitionGroups() {
-
-        return Collections.unmodifiableList(
-                competitionGroups
-        );
-
+        return competitionGroups;
     }
 
+    private void populateLogoUrls() {
+
+        for (SupportedCompetitionGroup group : competitionGroups) {
+
+            for (SupportedCompetition competition : group.getCompetitions()) {
+
+                competition.setLogoUrl(
+                        LOGO_BASE_URL
+                                + competition.getCompetitionId()
+                                + ".png"
+                );
+            }
+        }
+    }
 }

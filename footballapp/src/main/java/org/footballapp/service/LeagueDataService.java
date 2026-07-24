@@ -91,15 +91,15 @@ public class LeagueDataService {
                 .getLeagues();
     }
 
-    /**
-     * Get Enabled Leagues
-     */
-    public List<LeagueUk> getEnabledLeagues()
-            throws Exception {
-
-        return leagueUkRepository
-                .getEnabledLeagues();
-    }
+//    /**
+//     * Get Enabled Leagues
+//     */
+//    public List<LeagueUk> getEnabledLeagues()
+//            throws Exception {
+//
+//        return leagueUkRepository
+//                .getEnabledLeagues();
+//    }
 
     /**
      *  Get team by ID method

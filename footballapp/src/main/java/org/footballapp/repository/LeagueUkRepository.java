@@ -155,66 +155,66 @@ public class LeagueUkRepository
         return leagues;
     } // End of get all leagues in league_uk table in DB.
 
-    /**
-     *Get specified leagues in league_uk table in DB.
-     */
-    public List<LeagueUk> getEnabledLeagues()
-            throws Exception {
-
-        Connection conn =
-                getConnection();
-
-        PreparedStatement stmt =
-                conn.prepareStatement(
-                        """
-                        SELECT
-                            league_id,
-                            name,
-                            country,
-                            logo_url
-                        FROM leagues_uk
-                        WHERE enabled = TRUE
-                        ORDER BY country,
-                                 name
-                        """
-                );
-
-        ResultSet rs =
-                stmt.executeQuery();
-
-        List<LeagueUk> leagues =
-                new ArrayList<>();
-
-        while (rs.next()) {
-
-            LeagueUk league =
-                    new LeagueUk();
-
-            league.setLeagueId(
-                    rs.getInt("league_id")
-            );
-
-            league.setName(
-                    rs.getString("name")
-            );
-
-            league.setCountry(
-                    rs.getString("country")
-            );
-
-            league.setLogoUrl(
-                    rs.getString("logo_url")
-            );
-
-            leagues.add(league);
-        }
-
-        rs.close();
-        stmt.close();
-        conn.close();
-
-        return leagues;
-    } // End of getEnabledLeagues().
+//    /**
+//     *Get specified leagues in league_uk table in DB.
+//     */
+//    public List<LeagueUk> getEnabledLeagues()
+//            throws Exception {
+//
+//        Connection conn =
+//                getConnection();
+//
+//        PreparedStatement stmt =
+//                conn.prepareStatement(
+//                        """
+//                        SELECT
+//                            league_id,
+//                            name,
+//                            country,
+//                            logo_url
+//                        FROM leagues_uk
+//                        WHERE enabled = TRUE
+//                        ORDER BY country,
+//                                 name
+//                        """
+//                );
+//
+//        ResultSet rs =
+//                stmt.executeQuery();
+//
+//        List<LeagueUk> leagues =
+//                new ArrayList<>();
+//
+//        while (rs.next()) {
+//
+//            LeagueUk league =
+//                    new LeagueUk();
+//
+//            league.setLeagueId(
+//                    rs.getInt("league_id")
+//            );
+//
+//            league.setName(
+//                    rs.getString("name")
+//            );
+//
+//            league.setCountry(
+//                    rs.getString("country")
+//            );
+//
+//            league.setLogoUrl(
+//                    rs.getString("logo_url")
+//            );
+//
+//            leagues.add(league);
+//        }
+//
+//        rs.close();
+//        stmt.close();
+//        conn.close();
+//
+//        return leagues;
+//    } // End of getEnabledLeagues().
 
     /**
      * Get league by id

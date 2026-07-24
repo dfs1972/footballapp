@@ -6,6 +6,7 @@ public class SupportedCompetition {
     private String name;
     private CompetitionType type;
     private boolean enabled;
+    private String logoUrl;
 
     public SupportedCompetition() {
     }
@@ -41,4 +42,9 @@ public class SupportedCompetition {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
+
+    public String getLogoUrl() {return logoUrl;}
+
+    public void setLogoUrl(String logoUrl) {this.logoUrl = logoUrl;}
+
 }

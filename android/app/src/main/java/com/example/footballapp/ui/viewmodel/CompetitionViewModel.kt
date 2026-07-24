@@ -28,30 +28,22 @@ class CompetitionViewModel : ViewModel() {
     private fun loadCompetitions() {
 
         viewModelScope.launch {
-
             try {
-
                 val competitionGroups =
                     repository
                         .getCompetitions()
                         .map { it.toUiModel() }
-                        .toCompetitionGroups()
 
-                _uiState.value =
-                    CompetitionUiState(
-                        isLoading = false,
-                        competitionGroups = competitionGroups
-                    )
+                Log.d("CompetitionVM", "Loaded ${competitionGroups.size} groups")
+
+                _uiState.value = CompetitionUiState(
+                    isLoading = false,
+                    competitionGroups = competitionGroups
+                )
 
             } catch (e: Exception) {
-
-                _uiState.value =
-                    CompetitionUiState(
-                        isLoading = false,
-                        error = e.message
-                    )
+                Log.e("CompetitionVM", "Failed to load competitions", e)
             }
-
         }
 
     }

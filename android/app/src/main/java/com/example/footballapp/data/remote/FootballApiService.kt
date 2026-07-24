@@ -1,7 +1,7 @@
 package com.example.footballapp.data.remote
 
 import com.example.footballapp.data.remote.dto.ClubDto
-import com.example.footballapp.data.remote.dto.CompetitionDto
+import com.example.footballapp.data.remote.dto.CompetitionGroupDto
 import com.example.footballapp.data.remote.dto.FixtureDetailsDto
 import com.example.footballapp.data.remote.dto.FixtureDto
 import com.example.footballapp.data.remote.dto.FixtureLineupDto
@@ -20,7 +20,7 @@ interface FootballApiService {
      * Get Leagues
      */
     @GET("leagues")
-    suspend fun getLeagues(): Response<List<CompetitionDto>>
+    suspend fun getLeagues(): Response<List<CompetitionGroupDto>>
 
     /**
      * Get LeagueOverview

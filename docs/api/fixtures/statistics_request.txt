@@ -1,0 +1,3 @@
+GET
+
+https://v3.football.api-sports.io/fixtures/statistics?fixture=1220118

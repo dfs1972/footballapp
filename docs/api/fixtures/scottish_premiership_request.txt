@@ -1,0 +1,3 @@
+GET
+
+https://v3.football.api-sports.io/fixtures?league=179&season=2024

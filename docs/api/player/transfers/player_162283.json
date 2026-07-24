@@ -1,0 +1,155 @@
+{
+  "get" : "transfers",
+  "parameters" : {
+    "player" : "162283"
+  },
+  "errors" : [ ],
+  "results" : 1,
+  "paging" : {
+    "current" : 1,
+    "total" : 1
+  },
+  "response" : [ {
+    "player" : {
+      "id" : 162283,
+      "name" : "J. Hogarth"
+    },
+    "update" : "2026-07-13T02:15:29+00:00",
+    "transfers" : [ {
+      "date" : "2024-07-03",
+      "type" : "Loan",
+      "teams" : {
+        "in" : {
+          "id" : 1384,
+          "name" : "Queen of the South",
+          "logo" : "https://media.api-sports.io/football/teams/1384.png"
+        },
+        "out" : {
+          "id" : 257,
+          "name" : "Rangers",
+          "logo" : "https://media.api-sports.io/football/teams/257.png"
+        }
+      }
+    }, {
+      "date" : "2024-07-01",
+      "type" : "N/A",
+      "teams" : {
+        "in" : {
+          "id" : 257,
+          "name" : "Rangers",
+          "logo" : "https://media.api-sports.io/football/teams/257.png"
+        },
+        "out" : {
+          "id" : 1382,
+          "name" : "Dumbarton",
+          "logo" : "https://media.api-sports.io/football/teams/1382.png"
+        }
+      }
+    }, {
+      "date" : "2022-07-08",
+      "type" : "Loan",
+      "teams" : {
+        "in" : {
+          "id" : 1391,
+          "name" : "Alloa Athletic",
+          "logo" : "https://media.api-sports.io/football/teams/1391.png"
+        },
+        "out" : {
+          "id" : 257,
+          "name" : "Rangers",
+          "logo" : "https://media.api-sports.io/football/teams/257.png"
+        }
+      }
+    }, {
+      "date" : "2025-02-21",
+      "type" : "Loan",
+      "teams" : {
+        "in" : {
+          "id" : 1388,
+          "name" : "Dunfermline",
+          "logo" : "https://media.api-sports.io/football/teams/1388.png"
+        },
+        "out" : {
+          "id" : 257,
+          "name" : "Rangers",
+          "logo" : "https://media.api-sports.io/football/teams/257.png"
+        }
+      }
+    }, {
+      "date" : "2025-01-01",
+      "type" : "Back from Loan",
+      "teams" : {
+        "in" : {
+          "id" : 257,
+          "name" : "Rangers",
+          "logo" : "https://media.api-sports.io/football/teams/257.png"
+        },
+        "out" : {
+          "id" : 1384,
+          "name" : "Queen of the South",
+          "logo" : "https://media.api-sports.io/football/teams/1384.png"
+        }
+      }
+    }, {
+      "date" : "2026-06-30",
+      "type" : "Free agent",
+      "teams" : {
+        "in" : {
+          "id" : 1389,
+          "name" : "Falkirk",
+          "logo" : "https://media.api-sports.io/football/teams/1389.png"
+        },
+        "out" : {
+          "id" : 6762,
+          "name" : "Clyde",
+          "logo" : "https://media.api-sports.io/football/teams/6762.png"
+        }
+      }
+    }, {
+      "date" : "2026-06-30",
+      "type" : "Loan",
+      "teams" : {
+        "in" : {
+          "id" : 6762,
+          "name" : "Clyde",
+          "logo" : "https://media.api-sports.io/football/teams/6762.png"
+        },
+        "out" : {
+          "id" : 1389,
+          "name" : "Falkirk",
+          "logo" : "https://media.api-sports.io/football/teams/1389.png"
+        }
+      }
+    }, {
+      "date" : "2025-07-23",
+      "type" : "Free agent",
+      "teams" : {
+        "in" : {
+          "id" : 6762,
+          "name" : "Clyde",
+          "logo" : "https://media.api-sports.io/football/teams/6762.png"
+        },
+        "out" : {
+          "id" : 257,
+          "name" : "Rangers",
+          "logo" : "https://media.api-sports.io/football/teams/257.png"
+        }
+      }
+    }, {
+      "date" : "2026-06-29",
+      "type" : "Free agent",
+      "teams" : {
+        "in" : {
+          "id" : 1389,
+          "name" : "Falkirk",
+          "logo" : "https://media.api-sports.io/football/teams/1389.png"
+        },
+        "out" : {
+          "id" : 6762,
+          "name" : "Clyde",
+          "logo" : "https://media.api-sports.io/football/teams/6762.png"
+        }
+      }
+    } ]
+  } ]
+}

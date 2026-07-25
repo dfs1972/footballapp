@@ -1,0 +1,74 @@
+package org.footballapp.service.json;
+
+import org.footballapp.model.fixtures.FixturesApiResponse;
+import org.footballapp.model.league.LeaguesApiResponse;
+import org.footballapp.model.player.PlayersApiResponse;
+import org.footballapp.model.standings.StandingsApiResponse;
+import org.footballapp.model.teams.TeamsApiResponse;
+import org.footballapp.model.teamstatistics.TeamStatisticsApiResponse;
+import org.footballapp.service.FootballDataProvider;
+import org.footballapp.service.json.JsonLoader;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
+
+@Service
+@Profile("json")
+public class JsonFootballDataProvider implements FootballDataProvider {
+
+    private final JsonLoader jsonLoader;
+
+    public JsonFootballDataProvider(JsonLoader jsonLoader) {
+        this.jsonLoader = jsonLoader;
+    }
+
+    @Override
+    public StandingsApiResponse getStandings(
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        return jsonLoader.load(
+                "standings.json",
+                StandingsApiResponse.class
+        );
+    }
+
+    @Override
+    public LeaguesApiResponse getLeagues() throws Exception {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public TeamsApiResponse getTeams(int leagueId, int season) throws Exception {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public FixturesApiResponse getFixtures(int leagueId, int season) throws Exception {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public FixturesApiResponse getFixture(long fixtureId) throws Exception {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public PlayersApiResponse getPlayers(int teamId, int season) throws Exception {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public PlayersApiResponse getPlayer(int playerId, int season) throws Exception {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public TeamStatisticsApiResponse getTeamStatistics(
+            int teamId,
+            int leagueId,
+            int season
+    ) throws Exception {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+}

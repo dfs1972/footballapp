@@ -146,12 +146,6 @@ public class LeagueDataService {
             int season
     ) throws Exception {
 
-        StandingsApiResponse response =
-                standingService.getStandings(
-                        leagueId,
-                        season
-                );
-
         List<LeagueTableRow> table =
                 new ArrayList<>();
 

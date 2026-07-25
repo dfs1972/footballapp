@@ -1,5 +1,6 @@
 package org.footballapp.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.footballapp.api.ApiFootballClient;
 import org.footballapp.api.ApiFootballService;
 import org.springframework.context.annotation.Bean;
@@ -28,11 +29,13 @@ public class ApiConfig {
 
     @Bean
     public ApiFootballService apiFootballService(
-            ApiFootballClient apiFootballClient
+            ApiFootballClient apiFootballClient,
+            ObjectMapper objectMapper
     ) {
 
         return new ApiFootballService(
-                apiFootballClient
+                apiFootballClient,
+                objectMapper
         );
 
     }

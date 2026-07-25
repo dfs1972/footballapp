@@ -11,12 +11,12 @@ import java.util.List;
 @Service
 public class StandingService {
 
-    private final ApiFootballClient apiClient;
-    private final ObjectMapper mapper;
+    private final FootballDataProvider footballDataProvider;
 
-    public StandingService(ApiFootballClient apiClient) {
-        this.apiClient = apiClient;
-        this.mapper = new ObjectMapper();
+    public StandingService(
+            FootballDataProvider footballDataProvider
+    ) {
+        this.footballDataProvider = footballDataProvider;
     }
 
     public StandingsApiResponse getStandings(
@@ -24,22 +24,9 @@ public class StandingService {
             int season
     ) throws Exception {
 
-        String url =
-                "https://v3.football.api-sports.io/standings?league="
-                        + leagueId
-                        + "&season="
-                        + season;
-
-        System.out.println(url);
-
-        String json =
-                apiClient.get(url);
-
-        System.out.println(json);
-
-        return mapper.readValue(
-                json,
-                StandingsApiResponse.class
+        return footballDataProvider.getStandings(
+                leagueId,
+                season
         );
     }
 

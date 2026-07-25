@@ -16,6 +16,10 @@ public class FixtureService {
         this.mapper = new ObjectMapper();
     }
 
+    /**
+     * Returns all the Fixtures for that league & season
+     */
+
     public FixturesApiResponse getFixtures(
             int leagueId,
             int season
@@ -26,6 +30,30 @@ public class FixtureService {
                         + leagueId
                         + "&season="
                         + season;
+
+        String json =
+                apiClient.get(url);
+
+        return mapper.readValue(
+                json,
+                FixturesApiResponse.class
+        );
+    }
+
+    /**
+     * Returns the team's last 5 fixtures
+     */
+
+    public FixturesApiResponse getTeamFixtures(
+            int teamId,
+            int last
+    ) throws Exception {
+
+        String url =
+                "https://v3.football.api-sports.io/fixtures?team="
+                        + teamId
+                        + "&last="
+                        + last;
 
         String json =
                 apiClient.get(url);

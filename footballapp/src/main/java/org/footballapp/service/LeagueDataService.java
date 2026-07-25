@@ -4,6 +4,8 @@ package org.footballapp.service;
  * Spring Boot Service
  */
 import org.footballapp.api.response.lineups.FixtureLineupMapper;
+import org.footballapp.model.fixtures.FixtureResponse;
+import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.model.standings.Standing;
 import org.footballapp.model.standings.StandingsApiResponse;
 import org.footballapp.model.teams.TeamResponse;
@@ -29,6 +31,7 @@ import org.footballapp.model.lineups.FixtureLineup;
 import org.footballapp.model.lineups.FixtureLineupPlayer;
 import org.footballapp.api.response.lineups.FixtureLineupResponse;
 import org.footballapp.api.response.lineups.FixtureTeamLineupResponse;
+import org.footballapp.service.FixtureService;
 import org.footballapp.api.response.lineups.PlayerLineupResponse;
 import org.footballapp.model.player.Player;
 import org.footballapp.model.fixtures.FixtureRow;
@@ -52,6 +55,7 @@ public class LeagueDataService {
     private final PlayerRepository playerRepository;
     private final FixtureLineupRepository fixtureLineupRepository;
     private final FixtureLineupMapper fixtureLineupMapper;
+    private final FixtureService fixtureService;
     private final SupportedCompetitionsService supportedCompetitionsService;
     private final StandingService standingService;
     private final TeamService teamService;
@@ -69,6 +73,7 @@ public class LeagueDataService {
             FixtureRepository fixtureRepository,
             FixtureLineupRepository fixtureLineupRepository,
             FixtureLineupMapper fixtureLineupMapper,
+            FixtureService fixtureService,
             PlayerStatisticsRepository playerStatisticsRepository,
             PlayerRepository playerRepository,
             SupportedCompetitionsService supportedCompetitionsService
@@ -80,6 +85,7 @@ public class LeagueDataService {
         this.standingRepository = standingRepository;
         this.standingService = standingService;
         this.fixtureRepository = fixtureRepository;
+        this.fixtureService = fixtureService;
         this.fixtureLineupRepository = fixtureLineupRepository;
         this.playerStatisticsRepository = playerStatisticsRepository;
         this.playerRepository = playerRepository;
@@ -195,6 +201,7 @@ public class LeagueDataService {
             );
 
             table.add(row);
+
         }
 
         return table;
@@ -464,31 +471,41 @@ public class LeagueDataService {
             int teamId
     ) throws Exception {
 
-        List<FixtureRow> fixtures =
-                fixtureRepository
-                        .getRecentFixturesByTeam(
-                                teamId,
-                                5
-                        );
+        FixturesApiResponse fixtures =
+                fixtureService.getTeamFixtures(
+                        teamId,
+                        5
+                );
 
         StringBuilder form =
                 new StringBuilder();
 
-        for (FixtureRow fixture : fixtures) {
+        for (FixtureResponse fixture : fixtures.getResponse()) {
 
             boolean homeTeam =
-                    fixture.getHomeTeamId()
-                            == teamId;
+                    fixture.getTeams()
+                            .getHome()
+                            .getId() == teamId;
+
+            Integer homeGoals =
+                    fixture.getGoals().getHome();
+
+            Integer awayGoals =
+                    fixture.getGoals().getAway();
+
+            if (homeGoals == null || awayGoals == null) {
+                continue;
+            }
 
             int goalsFor =
                     homeTeam
-                            ? fixture.getHomeGoals()
-                            : fixture.getAwayGoals();
+                            ? homeGoals
+                            : awayGoals;
 
             int goalsAgainst =
                     homeTeam
-                            ? fixture.getAwayGoals()
-                            : fixture.getHomeGoals();
+                            ? awayGoals
+                            : homeGoals;
 
             if (goalsFor > goalsAgainst) {
 

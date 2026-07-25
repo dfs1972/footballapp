@@ -30,8 +30,12 @@ public class StandingService {
                         + "&season="
                         + season;
 
+        System.out.println(url);
+
         String json =
                 apiClient.get(url);
+
+        System.out.println(json);
 
         return mapper.readValue(
                 json,
@@ -91,6 +95,8 @@ public class StandingService {
                         season
                 );
 
+        System.out.println("Responses = " + response.getResponse().size());
+
         if (response.getResponse() == null
                 || response.getResponse().isEmpty()) {
             return List.of();
@@ -102,12 +108,15 @@ public class StandingService {
                         .getLeague()
                         .getStandings();
 
+        System.out.println("Groups = " + groups.size());
+
         if (groups == null || groups.isEmpty()) {
             return List.of();
         }
 
         // Normal league
         if (groups.size() == 1) {
+            System.out.println("Returning normal league: " + groups.getFirst().size());
             return groups.getFirst();
         }
 
@@ -128,7 +137,7 @@ public class StandingService {
                 standing.setRank(rank++);
                 merged.add(standing);
             }
-
+            System.out.println("Returning Scottish merged: " + merged.size());
             return merged;
         }
 
@@ -139,7 +148,7 @@ public class StandingService {
         for (List<Standing> group : groups) {
             merged.addAll(group);
         }
-
+        System.out.println("Returning fallback: " + merged.size());
         return merged;
     }
 }

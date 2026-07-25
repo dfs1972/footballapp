@@ -32,11 +32,9 @@ import org.footballapp.api.response.lineups.FixtureTeamLineupResponse;
 import org.footballapp.api.response.lineups.PlayerLineupResponse;
 import org.footballapp.model.player.Player;
 import org.footballapp.model.fixtures.FixtureRow;
-import org.footballapp.model.league.LeagueUk;
 import org.footballapp.model.playerdetails.PlayerSummary;
 import org.footballapp.model.teamdetails.TeamDetails;
 import org.footballapp.model.teams.Team;
-import org.footballapp.model.teams.Venue;
 import org.footballapp.model.standings.LeagueTableRow;
 import org.footballapp.model.league.LeagueOverview;
 import org.footballapp.model.playerdetails.PlayerDetails;
@@ -96,9 +94,9 @@ public class LeagueDataService {
             int teamId
     ) throws Exception {
 
-        return teamRepository.getTeamById(
-                teamId
-        );
+        return teamService
+                .getTeam(teamId)
+                .getTeam();
     }
 
     /**
@@ -152,11 +150,10 @@ public class LeagueDataService {
                 new ArrayList<>();
 
         for (Standing standing :
-                response.getResponse()
-                        .getFirst()
-                        .getLeague()
-                        .getStandings()
-                        .getFirst()) {
+                standingService.getLeagueStandings(
+                        leagueId,
+                        season
+                )) {
 
             LeagueTableRow row =
                     new LeagueTableRow();
@@ -210,10 +207,41 @@ public class LeagueDataService {
             int clubId
     ) throws Exception {
 
-        return teamRepository.getClubDetails(
-                clubId
+        TeamResponse response =
+                teamService.getTeam(clubId);
+
+        ClubDetails club =
+                new ClubDetails();
+
+        club.setClubId(
+                response.getTeam().getId()
         );
 
+        club.setName(
+                response.getTeam().getName()
+        );
+
+        club.setCountry(
+                response.getTeam().getCountry()
+        );
+
+        club.setFounded(
+                response.getTeam().getFounded()
+        );
+
+        club.setStadium(
+                response.getVenue().getName()
+        );
+
+        club.setCity(
+                response.getVenue().getCity()
+        );
+
+        club.setCapacity(
+                response.getVenue().getCapacity()
+        );
+
+        return club;
     }
 
     /**
@@ -522,21 +550,24 @@ public class LeagueDataService {
                 teamResponse.getVenue()
         );
 
-        LeagueTableRow standing =
-                standingRepository
-                        .getTeamStanding(
-                                leagueId,
-                                season,
-                                teamId
-                        );
+        Standing standing =
+                standingService.getTeamStanding(
+                        leagueId,
+                        season,
+                        teamId
+                );
 
-        details.setLeaguePosition(
-                standing.getPosition()
-        );
+        if (standing != null) {
 
-        details.setPoints(
-                standing.getPoints()
-        );
+            details.setLeaguePosition(
+                    standing.getRank()
+            );
+
+            details.setPoints(
+                    standing.getPoints()
+            );
+
+        }
 
         details.setForm(
                 getTeamForm(teamId)

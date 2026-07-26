@@ -8,12 +8,12 @@ import org.footballapp.model.fixtures.FixturesApiResponse;
 @Service
 public class FixtureService {
 
-    private final ApiFootballClient apiClient;
-    private final ObjectMapper mapper;
+    private final FootballDataProvider footballDataProvider;
 
-    public FixtureService(ApiFootballClient apiClient) {
-        this.apiClient = apiClient;
-        this.mapper = new ObjectMapper();
+    public FixtureService(
+            FootballDataProvider footballDataProvider
+    ) {
+        this.footballDataProvider = footballDataProvider;
     }
 
     /**
@@ -25,18 +25,9 @@ public class FixtureService {
             int season
     ) throws Exception {
 
-        String url =
-                "https://v3.football.api-sports.io/fixtures?league="
-                        + leagueId
-                        + "&season="
-                        + season;
-
-        String json =
-                apiClient.get(url);
-
-        return mapper.readValue(
-                json,
-                FixturesApiResponse.class
+        return footballDataProvider.getFixtures(
+                leagueId,
+                season
         );
     }
 
@@ -49,18 +40,9 @@ public class FixtureService {
             int last
     ) throws Exception {
 
-        String url =
-                "https://v3.football.api-sports.io/fixtures?team="
-                        + teamId
-                        + "&last="
-                        + last;
-
-        String json =
-                apiClient.get(url);
-
-        return mapper.readValue(
-                json,
-                FixturesApiResponse.class
+        return footballDataProvider.getTeamFixtures(
+                teamId,
+                last
         );
     }
 }

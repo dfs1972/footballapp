@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class TeamService {
 
-    private final ApiFootballService apiFootballService;
+    private final FootballDataProvider footballDataProvider;
 
     public TeamService(
-            ApiFootballService apiFootballService
+            FootballDataProvider footballDataProvider
     ) {
-        this.apiFootballService = apiFootballService;
+        this.footballDataProvider = footballDataProvider;
     }
 
     /**
@@ -24,7 +24,7 @@ public class TeamService {
     ) throws Exception {
 
         TeamsApiResponse response =
-                apiFootballService.getTeam(teamId);
+                footballDataProvider.getTeam(teamId);
 
         if (response.getResponse() == null
                 || response.getResponse().isEmpty()) {

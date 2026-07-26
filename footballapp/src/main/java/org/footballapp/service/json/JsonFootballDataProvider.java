@@ -38,10 +38,39 @@ public class JsonFootballDataProvider implements FootballDataProvider {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
+
+    /**
+     ********* TEAMS SECTION *********
+     */
+
     @Override
     public TeamsApiResponse getTeams(int leagueId, int season) throws Exception {
         throw new UnsupportedOperationException("Not implemented yet");
     }
+
+    @Override
+    public TeamsApiResponse getTeam(
+            int teamId
+    ) throws Exception {
+
+        throw new UnsupportedOperationException(
+                "getTeam() not implemented yet."
+        );
+    }
+
+    @Override
+    public TeamStatisticsApiResponse getTeamStatistics(
+            int teamId,
+            int leagueId,
+            int season
+    ) throws Exception {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+
+    /**
+     ********* FIXTURES SECTION *********
+     */
 
     @Override
     public FixturesApiResponse getFixtures(int leagueId, int season) throws Exception {
@@ -54,6 +83,22 @@ public class JsonFootballDataProvider implements FootballDataProvider {
     }
 
     @Override
+    public FixturesApiResponse getTeamFixtures(
+            int teamId,
+            int last
+    ) throws Exception {
+
+        throw new UnsupportedOperationException(
+                "getTeamFixtures() not implemented yet."
+        );
+    }
+
+
+    /**
+     ********* PLAYERS SECTION ********
+     */
+
+    @Override
     public PlayersApiResponse getPlayers(int teamId, int season) throws Exception {
         throw new UnsupportedOperationException("Not implemented yet");
     }
@@ -63,12 +108,4 @@ public class JsonFootballDataProvider implements FootballDataProvider {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
-    @Override
-    public TeamStatisticsApiResponse getTeamStatistics(
-            int teamId,
-            int leagueId,
-            int season
-    ) throws Exception {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
 }

@@ -16,6 +16,10 @@ public interface FootballDataProvider {
             int season
     ) throws Exception;
 
+    TeamsApiResponse getTeam(
+            int teamId
+    ) throws Exception;
+
     StandingsApiResponse getStandings(
             int leagueId,
             int season
@@ -28,6 +32,11 @@ public interface FootballDataProvider {
 
     FixturesApiResponse getFixture(
             long fixtureId
+    ) throws Exception;
+
+    FixturesApiResponse getTeamFixtures(
+            int teamId,
+            int last
     ) throws Exception;
 
     PlayersApiResponse getPlayers(

@@ -154,39 +154,6 @@ public class ApiFootballService implements FootballDataProvider {
         );
     }
 
-    /**
-     * Gets all fixtures from a league in specified season
-     */
-
-
-    public FixturesApiResponse getFixtures(
-            int leagueId,
-            int season
-    ) throws Exception {
-
-        String url =
-                "https://v3.football.api-sports.io/fixtures?league="
-                        + leagueId
-                        + "&season="
-                        + season;
-
-        String json = apiClient.get(url);
-
-        return mapper.readValue(
-                json,
-                FixturesApiResponse.class
-        );
-    }
-
-    @Override
-    public FixturesApiResponse getFixture(
-            long fixtureId
-    ) {
-        throw new UnsupportedOperationException(
-                "getFixture() not implemented yet."
-        );
-    }
-
     @Override
     public PlayersApiResponse getPlayers(
             int teamId,
@@ -288,6 +255,56 @@ public class ApiFootballService implements FootballDataProvider {
                 json,
                 TeamStatisticsApiResponse.class
         );
+    }
+
+    /**************************************************************************************************
+
+      FIXTURES SECTION
+
+      *************************************************************************************************
+     */
+
+
+    /**
+     * Gets all fixtures from a league in specified season
+     */
+
+
+    public FixturesApiResponse getFixtures(
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        String url =
+                "https://v3.football.api-sports.io/fixtures?league="
+                        + leagueId
+                        + "&season="
+                        + season;
+
+        String json = apiClient.get(url);
+
+        return mapper.readValue(
+                json,
+                FixturesApiResponse.class
+        );
+    }
+
+    @Override
+    public FixturesApiResponse getFixture(
+            long fixtureId
+    ) {
+        throw new UnsupportedOperationException(
+                "getFixture() not implemented yet."
+        );
+    }
+
+    /**
+     * Get a team's fixtures
+     */
+
+    @Override
+    public FixturesApiResponse getTeamFixtures(int teamId, int last) throws Exception {
+        return null;
     }
 
     /**

@@ -47,7 +47,7 @@ public class TeamImportService {
     ) throws Exception {
 
         TeamsApiResponse response =
-                apiService.getLeagueTeams(
+                apiService.getTeams(
                         leagueId,
                         season
                 );

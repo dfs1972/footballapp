@@ -32,6 +32,15 @@ public class ApiFootballService implements FootballDataProvider {
 
     }
 
+
+    /**************************************************+************************************************
+
+     LEAGUES SECTION
+
+     *************************************************************************************************
+     */
+
+    @Override
     public LeaguesApiResponse getLeagues()
             throws Exception {
 
@@ -44,86 +53,6 @@ public class ApiFootballService implements FootballDataProvider {
         return mapper.readValue(
                 json,
                 LeaguesApiResponse.class
-        );
-    }
-
-    @Override
-    public TeamsApiResponse getTeams(
-            int leagueId,
-            int season
-    ) throws Exception {
-
-        return getLeagueTeams(
-                leagueId,
-                season
-        );
-    }
-
-    /**
-     * Gets all teams from a league in requested season
-     */
-    public TeamsApiResponse getLeagueTeams(
-            int leagueId,
-            int season
-    ) throws Exception {
-
-        String url =
-                "https://v3.football.api-sports.io/teams?league="
-                        + leagueId
-                        + "&season="
-                        + season;
-
-        String json = apiClient.get(url);
-
-        return mapper.readValue(
-                json,
-                TeamsApiResponse.class
-        );
-    }
-
-    /**
-     * Gets a single team by its API-Football team id.
-     */
-    public TeamsApiResponse getTeam(
-            int teamId
-    ) throws Exception {
-
-        String url =
-                "https://v3.football.api-sports.io/teams?id="
-                        + teamId;
-
-        String json =
-                apiClient.get(url);
-
-        return mapper.readValue(
-                json,
-                TeamsApiResponse.class
-        );
-    }
-
-    /**
-     * Retrieves all players for a team in a season.
-     */
-    public PlayersApiResponse getPlayers(
-            int teamId,
-            int season,
-            int page
-    ) throws Exception {
-
-        String url =
-                "https://v3.football.api-sports.io/players?team="
-                        + teamId
-                        + "&season="
-                        + season
-                        + "&page="
-                        + page;
-
-        String json =
-                apiClient.get(url);
-
-        return mapper.readValue(
-                json,
-                PlayersApiResponse.class
         );
     }
 
@@ -151,6 +80,124 @@ public class ApiFootballService implements FootballDataProvider {
         return mapper.readValue(
                 json,
                 StandingsApiResponse.class
+        );
+    }
+
+
+    /**************************************************+************************************************
+
+     TEAMS SECTION
+
+     *************************************************************************************************
+     */
+
+
+    /**
+     * Get Teams from a league & season
+     */
+
+    @Override
+    public TeamsApiResponse getTeams(
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        String url =
+                "https://v3.football.api-sports.io/teams?league="
+                        + leagueId
+                        + "&season="
+                        + season;
+
+        String json = apiClient.get(url);
+
+        return mapper.readValue(
+                json,
+                TeamsApiResponse.class
+        );
+    }
+
+    /**
+     * Gets a single team by its API-Football team id.
+     */
+
+    @Override
+    public TeamsApiResponse getTeam(
+            int teamId
+    ) throws Exception {
+
+        String url =
+                "https://v3.football.api-sports.io/teams?id="
+                        + teamId;
+
+        String json =
+                apiClient.get(url);
+
+        return mapper.readValue(
+                json,
+                TeamsApiResponse.class
+        );
+    }
+
+    /**
+     * Gets team statistics for a league and season.
+     */
+
+    @Override
+    public TeamStatisticsApiResponse getTeamStatistics(
+            int teamId,
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        String url =
+                "https://v3.football.api-sports.io/teams/statistics?league="
+                        + leagueId
+                        + "&season="
+                        + season
+                        + "&team="
+                        + teamId;
+
+        String json =
+                apiClient.get(url);
+
+        return mapper.readValue(
+                json,
+                TeamStatisticsApiResponse.class
+        );
+    }
+
+
+    /**************************************************+************************************************
+
+     PLAYERS SECTION
+
+     *************************************************************************************************
+     */
+
+
+    /**
+     * Retrieves all players for a team in a season.
+     */
+    public PlayersApiResponse getPlayers(
+            int teamId,
+            int season,
+            int page
+    ) throws Exception {
+
+        String url =
+                "https://v3.football.api-sports.io/players?team="
+                        + teamId
+                        + "&season="
+                        + season
+                        + "&page="
+                        + page;
+
+        String json =
+                apiClient.get(url);
+
+        return mapper.readValue(
+                json,
+                PlayersApiResponse.class
         );
     }
 
@@ -231,31 +278,6 @@ public class ApiFootballService implements FootballDataProvider {
         return apiClient.get(url);
     }
 
-    /**
-     * Gets team statistics for a league and season.
-     */
-    public TeamStatisticsApiResponse getTeamStatistics(
-            int teamId,
-            int leagueId,
-            int season
-    ) throws Exception {
-
-        String url =
-                "https://v3.football.api-sports.io/teams/statistics?league="
-                        + leagueId
-                        + "&season="
-                        + season
-                        + "&team="
-                        + teamId;
-
-        String json =
-                apiClient.get(url);
-
-        return mapper.readValue(
-                json,
-                TeamStatisticsApiResponse.class
-        );
-    }
 
     /**************************************************************************************************
 
@@ -270,6 +292,7 @@ public class ApiFootballService implements FootballDataProvider {
      */
 
 
+    @Override
     public FixturesApiResponse getFixtures(
             int leagueId,
             int season
@@ -303,8 +326,24 @@ public class ApiFootballService implements FootballDataProvider {
      */
 
     @Override
-    public FixturesApiResponse getTeamFixtures(int teamId, int last) throws Exception {
-        return null;
+    public FixturesApiResponse getTeamFixtures(
+            int teamId,
+            int last
+    ) throws Exception {
+
+        String url =
+                "https://v3.football.api-sports.io/fixtures?team="
+                        + teamId
+                        + "&last="
+                        + last;
+
+        String json =
+                apiClient.get(url);
+
+        return mapper.readValue(
+                json,
+                FixturesApiResponse.class
+        );
     }
 
     /**

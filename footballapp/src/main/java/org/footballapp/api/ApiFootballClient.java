@@ -3,6 +3,7 @@ package org.footballapp.api;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /*
  * Handles all HTTP communication with API-Football.
@@ -16,6 +17,9 @@ public class ApiFootballClient {
     private final String apiKey;
     private final HttpClient client;
 
+    private static final AtomicInteger requestCount =
+            new AtomicInteger();
+
     public ApiFootballClient(String apiKey) {
         this.apiKey = apiKey;
         this.client = HttpClient.newHttpClient();
@@ -27,6 +31,12 @@ public class ApiFootballClient {
      */
 
     public String get(String url) throws IOException, InterruptedException {
+
+        System.out.printf(
+                "[%03d] %s%n",
+                requestCount.incrementAndGet(),
+                url
+        );
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))

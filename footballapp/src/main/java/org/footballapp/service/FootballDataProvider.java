@@ -9,7 +9,9 @@ import org.footballapp.model.teams.TeamsApiResponse;
 
 public interface FootballDataProvider {
 
-    LeaguesApiResponse getLeagues() throws Exception;
+    LeaguesApiResponse getLeague(
+            int leagueId
+    ) throws Exception;
 
     TeamsApiResponse getTeams(
             int leagueId,

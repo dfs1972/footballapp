@@ -40,12 +40,18 @@ public class ApiFootballService implements FootballDataProvider {
      *************************************************************************************************
      */
 
+    /**
+     * Get league details
+     */
+
     @Override
-    public LeaguesApiResponse getLeagues()
-            throws Exception {
+    public LeaguesApiResponse getLeague(
+            int leagueId
+    ) throws Exception {
 
         String url =
-                "https://v3.football.api-sports.io/leagues";
+                "https://v3.football.api-sports.io/leagues?id="
+                        + leagueId;
 
         String json =
                 apiClient.get(url);

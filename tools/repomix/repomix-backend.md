@@ -154,9 +154,12 @@ footballapp/src/main/java/org/footballapp/repository/TeamStatisticsRepository.ja
 footballapp/src/main/java/org/footballapp/repository/VenueRepository.java
 footballapp/src/main/java/org/footballapp/service/FixtureImportService.java
 footballapp/src/main/java/org/footballapp/service/FixtureService.java
+footballapp/src/main/java/org/footballapp/service/FootballDataProvider.java
 footballapp/src/main/java/org/footballapp/service/importer/FixtureEventImportService.java
 footballapp/src/main/java/org/footballapp/service/importer/FixtureLineupImportService.java
 footballapp/src/main/java/org/footballapp/service/importer/FixtureStatisticImportService.java
+footballapp/src/main/java/org/footballapp/service/json/JsonFootballDataProvider.java
+footballapp/src/main/java/org/footballapp/service/json/JsonLoader.java
 footballapp/src/main/java/org/footballapp/service/LeagueDataService.java
 footballapp/src/main/java/org/footballapp/service/LeagueImportService.java
 footballapp/src/main/java/org/footballapp/service/PlayerImportService.java
@@ -185,6 +188,7 @@ package org.footballapp.api;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /*
  * Handles all HTTP communication with API-Football.
@@ -198,6 +202,9 @@ public class ApiFootballClient {
     private final String apiKey;
     private final HttpClient client;
 
+    private static final AtomicInteger requestCount =
+            new AtomicInteger();
+
     public ApiFootballClient(String apiKey) {
         this.apiKey = apiKey;
         this.client = HttpClient.newHttpClient();
@@ -209,6 +216,12 @@ public class ApiFootballClient {
      */
 
     public String get(String url) throws IOException, InterruptedException {
+
+        System.out.printf(
+                "[%03d] %s%n",
+                requestCount.incrementAndGet(),
+                url
+        );
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
@@ -242,24 +255,36 @@ import org.footballapp.model.teamstatistics.TeamStatisticsApiResponse;
 import org.footballapp.api.dto.lineups.FixtureLineupsResponse;
 import org.footballapp.api.dto.events.FixtureEventsResponse;
 import org.footballapp.api.dto.fixtures.FixtureStatisticsResponse;
+import org.footballapp.service.FootballDataProvider;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
-
-public class ApiFootballService {
+@Service
+@Profile("live")
+public class ApiFootballService implements FootballDataProvider {
 
     private final ApiFootballClient apiClient;
     private final ObjectMapper mapper;
 
-    /**
-     * Move this to ApiFootballClient:
-    private static final String BASE_URL =
-            "https://v3.football.api-sports.io";
-     */
-
-    public ApiFootballService(ApiFootballClient apiClient) {
+    public ApiFootballService(
+            ApiFootballClient apiClient,
+            ObjectMapper mapper
+    )
+    {
         this.apiClient = apiClient;
-        this.mapper = new ObjectMapper();
+        this.mapper = mapper;
+
     }
 
+
+    /**************************************************+************************************************
+
+     LEAGUES SECTION
+
+     *************************************************************************************************
+     */
+
+    @Override
     public LeaguesApiResponse getLeagues()
             throws Exception {
 
@@ -276,9 +301,47 @@ public class ApiFootballService {
     }
 
     /**
-     * Gets all teams from a league in requested season
+     * gets league standings from a specified season
      */
-    public TeamsApiResponse getLeagueTeams(
+    @Override
+    public StandingsApiResponse getStandings(
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        String url =
+                "https://v3.football.api-sports.io/standings?league="
+                        + leagueId
+                        + "&season="
+                        + season;
+
+        System.out.println(url);
+
+        String json = apiClient.get(url);
+
+        System.out.println(json);
+
+        return mapper.readValue(
+                json,
+                StandingsApiResponse.class
+        );
+    }
+
+
+    /**************************************************+************************************************
+
+     TEAMS SECTION
+
+     *************************************************************************************************
+     */
+
+
+    /**
+     * Get Teams from a league & season
+     */
+
+    @Override
+    public TeamsApiResponse getTeams(
             int leagueId,
             int season
     ) throws Exception {
@@ -300,6 +363,8 @@ public class ApiFootballService {
     /**
      * Gets a single team by its API-Football team id.
      */
+
+    @Override
     public TeamsApiResponse getTeam(
             int teamId
     ) throws Exception {
@@ -316,6 +381,43 @@ public class ApiFootballService {
                 TeamsApiResponse.class
         );
     }
+
+    /**
+     * Gets team statistics for a league and season.
+     */
+
+    @Override
+    public TeamStatisticsApiResponse getTeamStatistics(
+            int teamId,
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        String url =
+                "https://v3.football.api-sports.io/teams/statistics?league="
+                        + leagueId
+                        + "&season="
+                        + season
+                        + "&team="
+                        + teamId;
+
+        String json =
+                apiClient.get(url);
+
+        return mapper.readValue(
+                json,
+                TeamStatisticsApiResponse.class
+        );
+    }
+
+
+    /**************************************************+************************************************
+
+     PLAYERS SECTION
+
+     *************************************************************************************************
+     */
+
 
     /**
      * Retrieves all players for a team in a season.
@@ -343,47 +445,26 @@ public class ApiFootballService {
         );
     }
 
-    /**
-     * gets league standings from a specified season
-     */
-    public StandingsApiResponse getStandings(
-            int leagueId,
+    @Override
+    public PlayersApiResponse getPlayers(
+            int teamId,
             int season
     ) throws Exception {
 
-        String url =
-                "https://v3.football.api-sports.io/standings?league="
-                        + leagueId
-                        + "&season="
-                        + season;
-
-        String json = apiClient.get(url);
-
-        return mapper.readValue(
-                json,
-                StandingsApiResponse.class
+        return getPlayers(
+                teamId,
+                season,
+                1
         );
     }
 
-    /**
-     * Gets all fixtures from a league in specified season
-     */
-    public FixturesApiResponse getFixtures(
-            int leagueId,
+    @Override
+    public PlayersApiResponse getPlayer(
+            int playerId,
             int season
-    ) throws Exception {
-
-        String url =
-                "https://v3.football.api-sports.io/fixtures?league="
-                        + leagueId
-                        + "&season="
-                        + season;
-
-        String json = apiClient.get(url);
-
-        return mapper.readValue(
-                json,
-                FixturesApiResponse.class
+    ) {
+        throw new UnsupportedOperationException(
+                "getPlayer() not implemented yet."
         );
     }
 
@@ -441,29 +522,71 @@ public class ApiFootballService {
         return apiClient.get(url);
     }
 
-    /**
-     * Gets team statistics for a league and season.
+
+    /**************************************************************************************************
+
+      FIXTURES SECTION
+
+      *************************************************************************************************
      */
-    public TeamStatisticsApiResponse getTeamStatistics(
+
+
+    /**
+     * Gets all fixtures from a league in specified season
+     */
+
+
+    @Override
+    public FixturesApiResponse getFixtures(
             int leagueId,
-            int season,
-            int teamId
+            int season
     ) throws Exception {
 
         String url =
-                "https://v3.football.api-sports.io/teams/statistics?league="
+                "https://v3.football.api-sports.io/fixtures?league="
                         + leagueId
                         + "&season="
-                        + season
-                        + "&team="
-                        + teamId;
+                        + season;
+
+        String json = apiClient.get(url);
+
+        return mapper.readValue(
+                json,
+                FixturesApiResponse.class
+        );
+    }
+
+    @Override
+    public FixturesApiResponse getFixture(
+            long fixtureId
+    ) {
+        throw new UnsupportedOperationException(
+                "getFixture() not implemented yet."
+        );
+    }
+
+    /**
+     * Get a team's fixtures
+     */
+
+    @Override
+    public FixturesApiResponse getTeamFixtures(
+            int teamId,
+            int last
+    ) throws Exception {
+
+        String url =
+                "https://v3.football.api-sports.io/fixtures?team="
+                        + teamId
+                        + "&last="
+                        + last;
 
         String json =
                 apiClient.get(url);
 
         return mapper.readValue(
                 json,
-                TeamStatisticsApiResponse.class
+                FixturesApiResponse.class
         );
     }
 
@@ -1585,6 +1708,7 @@ public class PlayerLineupResponse {
 ```java
 package org.footballapp.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.footballapp.api.ApiFootballClient;
 import org.footballapp.api.ApiFootballService;
 import org.springframework.context.annotation.Bean;
@@ -1613,11 +1737,13 @@ public class ApiConfig {
 
     @Bean
     public ApiFootballService apiFootballService(
-            ApiFootballClient apiFootballClient
+            ApiFootballClient apiFootballClient,
+            ObjectMapper objectMapper
     ) {
 
         return new ApiFootballService(
-                apiFootballClient
+                apiFootballClient,
+                objectMapper
         );
 
     }
@@ -10138,12 +10264,12 @@ import org.footballapp.model.fixtures.FixturesApiResponse;
 @Service
 public class FixtureService {
 
-    private final ApiFootballClient apiClient;
-    private final ObjectMapper mapper;
+    private final FootballDataProvider footballDataProvider;
 
-    public FixtureService(ApiFootballClient apiClient) {
-        this.apiClient = apiClient;
-        this.mapper = new ObjectMapper();
+    public FixtureService(
+            FootballDataProvider footballDataProvider
+    ) {
+        this.footballDataProvider = footballDataProvider;
     }
 
     /**
@@ -10155,18 +10281,9 @@ public class FixtureService {
             int season
     ) throws Exception {
 
-        String url =
-                "https://v3.football.api-sports.io/fixtures?league="
-                        + leagueId
-                        + "&season="
-                        + season;
-
-        String json =
-                apiClient.get(url);
-
-        return mapper.readValue(
-                json,
-                FixturesApiResponse.class
+        return footballDataProvider.getFixtures(
+                leagueId,
+                season
         );
     }
 
@@ -10179,20 +10296,72 @@ public class FixtureService {
             int last
     ) throws Exception {
 
-        String url =
-                "https://v3.football.api-sports.io/fixtures?team="
-                        + teamId
-                        + "&last="
-                        + last;
-
-        String json =
-                apiClient.get(url);
-
-        return mapper.readValue(
-                json,
-                FixturesApiResponse.class
+        return footballDataProvider.getTeamFixtures(
+                teamId,
+                last
         );
     }
+}
+```
+
+## File: footballapp/src/main/java/org/footballapp/service/FootballDataProvider.java
+```java
+package org.footballapp.service;
+
+import org.footballapp.model.fixtures.FixturesApiResponse;
+import org.footballapp.model.league.LeaguesApiResponse;
+import org.footballapp.model.player.PlayersApiResponse;
+import org.footballapp.model.standings.StandingsApiResponse;
+import org.footballapp.model.teamstatistics.TeamStatisticsApiResponse;
+import org.footballapp.model.teams.TeamsApiResponse;
+
+public interface FootballDataProvider {
+
+    LeaguesApiResponse getLeagues() throws Exception;
+
+    TeamsApiResponse getTeams(
+            int leagueId,
+            int season
+    ) throws Exception;
+
+    TeamsApiResponse getTeam(
+            int teamId
+    ) throws Exception;
+
+    StandingsApiResponse getStandings(
+            int leagueId,
+            int season
+    ) throws Exception;
+
+    FixturesApiResponse getFixtures(
+            int leagueId,
+            int season
+    ) throws Exception;
+
+    FixturesApiResponse getFixture(
+            long fixtureId
+    ) throws Exception;
+
+    FixturesApiResponse getTeamFixtures(
+            int teamId,
+            int last
+    ) throws Exception;
+
+    PlayersApiResponse getPlayers(
+            int teamId,
+            int season
+    ) throws Exception;
+
+    PlayersApiResponse getPlayer(
+            int playerId,
+            int season
+    ) throws Exception;
+
+    TeamStatisticsApiResponse getTeamStatistics(
+            int teamId,
+            int leagueId,
+            int season
+    ) throws Exception;
 }
 ```
 
@@ -10869,6 +11038,164 @@ public class FixtureStatisticImportService {
 }
 ```
 
+## File: footballapp/src/main/java/org/footballapp/service/json/JsonFootballDataProvider.java
+```java
+package org.footballapp.service.json;
+
+import org.footballapp.model.fixtures.FixturesApiResponse;
+import org.footballapp.model.league.LeaguesApiResponse;
+import org.footballapp.model.player.PlayersApiResponse;
+import org.footballapp.model.standings.StandingsApiResponse;
+import org.footballapp.model.teams.TeamsApiResponse;
+import org.footballapp.model.teamstatistics.TeamStatisticsApiResponse;
+import org.footballapp.service.FootballDataProvider;
+import org.footballapp.service.json.JsonLoader;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
+
+@Service
+@Profile("json")
+public class JsonFootballDataProvider implements FootballDataProvider {
+
+    private final JsonLoader jsonLoader;
+
+    public JsonFootballDataProvider(JsonLoader jsonLoader) {
+        this.jsonLoader = jsonLoader;
+    }
+
+    @Override
+    public StandingsApiResponse getStandings(
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        return jsonLoader.load(
+                "standings.json",
+                StandingsApiResponse.class
+        );
+    }
+
+    @Override
+    public LeaguesApiResponse getLeagues() throws Exception {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+
+    /**
+     ********* TEAMS SECTION *********
+     */
+
+    @Override
+    public TeamsApiResponse getTeams(int leagueId, int season) throws Exception {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public TeamsApiResponse getTeam(
+            int teamId
+    ) throws Exception {
+
+        throw new UnsupportedOperationException(
+                "getTeam() not implemented yet."
+        );
+    }
+
+    @Override
+    public TeamStatisticsApiResponse getTeamStatistics(
+            int teamId,
+            int leagueId,
+            int season
+    ) throws Exception {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+
+    /**
+     ********* FIXTURES SECTION *********
+     */
+
+    @Override
+    public FixturesApiResponse getFixtures(int leagueId, int season) throws Exception {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public FixturesApiResponse getFixture(long fixtureId) throws Exception {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public FixturesApiResponse getTeamFixtures(
+            int teamId,
+            int last
+    ) throws Exception {
+
+        throw new UnsupportedOperationException(
+                "getTeamFixtures() not implemented yet."
+        );
+    }
+
+
+    /**
+     ********* PLAYERS SECTION ********
+     */
+
+    @Override
+    public PlayersApiResponse getPlayers(int teamId, int season) throws Exception {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public PlayersApiResponse getPlayer(int playerId, int season) throws Exception {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+}
+```
+
+## File: footballapp/src/main/java/org/footballapp/service/json/JsonLoader.java
+```java
+package org.footballapp.service.json;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+@Component
+public class JsonLoader {
+
+    private final ObjectMapper mapper;
+
+    public JsonLoader(ObjectMapper mapper) {
+        this.mapper = mapper;
+    }
+
+    public <T> T load(
+            String filename,
+            Class<T> clazz
+    ) throws IOException {
+
+        ClassPathResource resource =
+                new ClassPathResource(
+                        "mockapi/" + filename
+                );
+
+        try (InputStream inputStream =
+                     resource.getInputStream()) {
+
+            return mapper.readValue(
+                    inputStream,
+                    clazz
+            );
+        }
+    }
+
+}
+```
+
 ## File: footballapp/src/main/java/org/footballapp/service/LeagueDataService.java
 ```java
 package org.footballapp.service;
@@ -11018,12 +11345,6 @@ public class LeagueDataService {
             int leagueId,
             int season
     ) throws Exception {
-
-        StandingsApiResponse response =
-                standingService.getStandings(
-                        leagueId,
-                        season
-                );
 
         List<LeagueTableRow> table =
                 new ArrayList<>();
@@ -11798,12 +12119,12 @@ import java.util.List;
 @Service
 public class StandingService {
 
-    private final ApiFootballClient apiClient;
-    private final ObjectMapper mapper;
+    private final FootballDataProvider footballDataProvider;
 
-    public StandingService(ApiFootballClient apiClient) {
-        this.apiClient = apiClient;
-        this.mapper = new ObjectMapper();
+    public StandingService(
+            FootballDataProvider footballDataProvider
+    ) {
+        this.footballDataProvider = footballDataProvider;
     }
 
     public StandingsApiResponse getStandings(
@@ -11811,22 +12132,9 @@ public class StandingService {
             int season
     ) throws Exception {
 
-        String url =
-                "https://v3.football.api-sports.io/standings?league="
-                        + leagueId
-                        + "&season="
-                        + season;
-
-        System.out.println(url);
-
-        String json =
-                apiClient.get(url);
-
-        System.out.println(json);
-
-        return mapper.readValue(
-                json,
-                StandingsApiResponse.class
+        return footballDataProvider.getStandings(
+                leagueId,
+                season
         );
     }
 
@@ -12151,7 +12459,7 @@ public class TeamImportService {
     ) throws Exception {
 
         TeamsApiResponse response =
-                apiService.getLeagueTeams(
+                apiService.getTeams(
                         leagueId,
                         season
                 );
@@ -12196,12 +12504,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class TeamService {
 
-    private final ApiFootballService apiFootballService;
+    private final FootballDataProvider footballDataProvider;
 
     public TeamService(
-            ApiFootballService apiFootballService
+            FootballDataProvider footballDataProvider
     ) {
-        this.apiFootballService = apiFootballService;
+        this.footballDataProvider = footballDataProvider;
     }
 
     /**
@@ -12212,7 +12520,7 @@ public class TeamService {
     ) throws Exception {
 
         TeamsApiResponse response =
-                apiFootballService.getTeam(teamId);
+                footballDataProvider.getTeam(teamId);
 
         if (response.getResponse() == null
                 || response.getResponse().isEmpty()) {

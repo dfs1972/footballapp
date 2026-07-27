@@ -8,6 +8,7 @@ import org.footballapp.model.teams.TeamsApiResponse;
 import org.footballapp.model.teamstatistics.TeamStatisticsApiResponse;
 import org.footballapp.service.FootballDataProvider;
 import org.footballapp.service.json.JsonLoader;
+import org.footballapp.util.MockApiPaths;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -28,14 +29,24 @@ public class JsonFootballDataProvider implements FootballDataProvider {
     ) throws Exception {
 
         return jsonLoader.load(
-                "standings.json",
+                MockApiPaths.standings(
+                        leagueId,
+                        season
+                ),
                 StandingsApiResponse.class
         );
     }
 
     @Override
-    public LeaguesApiResponse getLeagues() throws Exception {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public LeaguesApiResponse getLeague(
+            int leagueId
+    ) throws Exception {
+
+        return jsonLoader.load(
+                "league/league_" + leagueId + ".json",
+                LeaguesApiResponse.class
+        );
+
     }
 
 
@@ -44,8 +55,18 @@ public class JsonFootballDataProvider implements FootballDataProvider {
      */
 
     @Override
-    public TeamsApiResponse getTeams(int leagueId, int season) throws Exception {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public TeamsApiResponse getTeams(
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        return jsonLoader.load(
+                MockApiPaths.teams(
+                        leagueId,
+                        season
+                ),
+                TeamsApiResponse.class
+        );
     }
 
     @Override
@@ -53,8 +74,11 @@ public class JsonFootballDataProvider implements FootballDataProvider {
             int teamId
     ) throws Exception {
 
-        throw new UnsupportedOperationException(
-                "getTeam() not implemented yet."
+        return jsonLoader.load(
+                MockApiPaths.team(
+                        teamId
+                ),
+                TeamsApiResponse.class
         );
     }
 
@@ -64,22 +88,47 @@ public class JsonFootballDataProvider implements FootballDataProvider {
             int leagueId,
             int season
     ) throws Exception {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
 
+        return jsonLoader.load(
+                MockApiPaths.statistics(
+                        teamId,
+                        leagueId,
+                        season
+                ),
+                TeamStatisticsApiResponse.class
+        );
+    }
 
     /**
      ********* FIXTURES SECTION *********
      */
 
     @Override
-    public FixturesApiResponse getFixtures(int leagueId, int season) throws Exception {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public FixturesApiResponse getFixtures(
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        return jsonLoader.load(
+                MockApiPaths.fixtures(
+                        leagueId,
+                        season
+                ),
+                FixturesApiResponse.class
+        );
     }
 
     @Override
-    public FixturesApiResponse getFixture(long fixtureId) throws Exception {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public FixturesApiResponse getFixture(
+            long fixtureId
+    ) throws Exception {
+
+        return jsonLoader.load(
+                MockApiPaths.fixture(
+                        fixtureId
+                ),
+                FixturesApiResponse.class
+        );
     }
 
     @Override
@@ -88,8 +137,12 @@ public class JsonFootballDataProvider implements FootballDataProvider {
             int last
     ) throws Exception {
 
-        throw new UnsupportedOperationException(
-                "getTeamFixtures() not implemented yet."
+        return jsonLoader.load(
+                MockApiPaths.teamFixtures(
+                        teamId,
+                        last
+                ),
+                FixturesApiResponse.class
         );
     }
 
@@ -99,13 +152,32 @@ public class JsonFootballDataProvider implements FootballDataProvider {
      */
 
     @Override
-    public PlayersApiResponse getPlayers(int teamId, int season) throws Exception {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public PlayersApiResponse getPlayers(
+            int teamId,
+            int season
+    ) throws Exception {
+
+        return jsonLoader.load(
+                MockApiPaths.players(
+                        teamId,
+                        season
+                ),
+                PlayersApiResponse.class
+        );
     }
 
     @Override
-    public PlayersApiResponse getPlayer(int playerId, int season) throws Exception {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
+    public PlayersApiResponse getPlayer(
+            int playerId,
+            int season
+    ) throws Exception {
 
+        return jsonLoader.load(
+                MockApiPaths.player(
+                        playerId,
+                        season
+                ),
+                PlayersApiResponse.class
+        );
+    }
 }

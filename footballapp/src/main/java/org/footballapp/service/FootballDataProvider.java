@@ -38,6 +38,12 @@ public interface FootballDataProvider {
 
     FixturesApiResponse getTeamFixtures(
             int teamId,
+            int leagueId,
+            int season
+    ) throws Exception;
+
+    FixturesApiResponse getRecentTeamFixtures(
+            int teamId,
             int last
     ) throws Exception;
 

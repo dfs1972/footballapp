@@ -2,9 +2,14 @@ package org.footballapp.service.snapshot;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.footballapp.api.ApiFootballClient;
+import org.footballapp.model.teams.TeamsApiResponse;
 import org.footballapp.util.MockApiPaths;
 import org.springframework.stereotype.Service;
 import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import org.footballapp.service.json.JsonLoader;
+import org.footballapp.service.snapshot.SnapshotLoader;
 
 @Service
 public class JsonSnapshotService {
@@ -17,10 +22,16 @@ public class JsonSnapshotService {
 
     private final ApiFootballClient apiFootballClient;
     private final ObjectMapper objectMapper;
+    private final JsonLoader jsonLoader;
+    private final SnapshotLoader snapshotLoader;
+
+
 
     public JsonSnapshotService(
             ApiFootballClient apiFootballClient,
-            ObjectMapper objectMapper
+            ObjectMapper objectMapper,
+            JsonLoader jsonLoader,
+            SnapshotLoader snapshotLoader
     ) {
 
         this.apiFootballClient =
@@ -28,6 +39,12 @@ public class JsonSnapshotService {
 
         this.objectMapper =
                 objectMapper;
+
+        this.jsonLoader =
+                jsonLoader;
+
+        this.snapshotLoader =
+                snapshotLoader;
     }
 
 
@@ -128,7 +145,7 @@ public class JsonSnapshotService {
         save(
                 "teams?league=" + leagueId
                         + "&season=" + season,
-                MockApiPaths.standings(
+                MockApiPaths.teams(
                         leagueId,
                         season
                 )
@@ -161,7 +178,7 @@ public class JsonSnapshotService {
         save(
                 "fixtures?league=" + leagueId
                         + "&season=" + season,
-                MockApiPaths.standings(
+                MockApiPaths.fixtures(
                         leagueId,
                         season
                 )
@@ -188,13 +205,19 @@ public class JsonSnapshotService {
 
     public void saveTeamFixtures(
             int teamId,
-            int last
+            int leagueId,
+            int season
     ) throws Exception {
 
         save(
                 "fixtures?team=" + teamId
-                        + "&last=" + last,
-                MockApiPaths.teamFixtures(teamId, last)
+                        + "&league=" + leagueId
+                        + "&season=" + season,
+                MockApiPaths.teamFixtures(
+                        teamId,
+                        leagueId,
+                        season
+                )
         );
     }
 
@@ -246,6 +269,98 @@ public class JsonSnapshotService {
                         + "&season=" + season,
                 MockApiPaths.statistics(teamId, leagueId, season)
         );
+    }
+
+    /**
+     * Generates a complete league snapshot package.
+     *
+     * This downloads all league-level resources required
+     * for offline development.
+     */
+    public void saveLeaguePackage(
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        saveLeague(
+                leagueId
+        );
+
+        saveStandings(
+                leagueId,
+                season
+        );
+
+        saveTeams(
+                leagueId,
+                season
+        );
+
+        saveFixtures(
+                leagueId,
+                season
+        );
+
+        List<Integer> teamIds =
+                getTeamIds(
+                        leagueId,
+                        season
+                );
+
+        for (int teamId : teamIds) {
+
+            saveTeam(teamId);
+
+        }
+
+    }
+
+    public void saveTeamPackage(
+            int teamId,
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        saveTeam(teamId);
+
+        savePlayers(
+                teamId,
+                season
+        );
+
+        saveTeamFixtures(
+                teamId,
+                leagueId,
+                season
+        );
+
+        saveStatistics(
+                teamId,
+                leagueId,
+                season
+        );
+    }
+
+    private List<Integer> getTeamIds(
+            int leagueId,
+            int season
+    ) throws IOException {
+
+        TeamsApiResponse teams =
+                snapshotLoader.load(
+                        MockApiPaths.teams(
+                                leagueId,
+                                season
+                        ),
+                        TeamsApiResponse.class
+                );
+
+        return teams.getResponse()
+                .stream()
+                .map(team ->
+                        team.getTeam().getId()
+                )
+                .toList();
     }
 
 }

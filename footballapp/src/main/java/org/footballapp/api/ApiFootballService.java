@@ -334,6 +334,33 @@ public class ApiFootballService implements FootballDataProvider {
     @Override
     public FixturesApiResponse getTeamFixtures(
             int teamId,
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        String url =
+                "https://v3.football.api-sports.io/fixtures?team="
+                        + teamId
+                        + "&league="
+                        + leagueId
+                        + "&season="
+                        + season;
+
+        String json =
+                apiClient.get(url);
+
+        return mapper.readValue(
+                json,
+                FixturesApiResponse.class
+        );
+    }
+    /**
+     * Get team's last N fixtures
+     */
+
+    @Override
+    public FixturesApiResponse getRecentTeamFixtures(
+            int teamId,
             int last
     ) throws Exception {
 

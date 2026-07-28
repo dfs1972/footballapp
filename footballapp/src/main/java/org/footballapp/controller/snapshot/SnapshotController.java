@@ -88,18 +88,26 @@ public class SnapshotController {
         return "Fixture " + fixtureId + " snapshot created.";
     }
 
-    @GetMapping("/snapshot/teamFixtures/{teamId}/{last}")
+    @GetMapping("/snapshot/teamFixtures/{teamId}/{leagueId}/{season}")
     public String saveTeamFixtures(
             @PathVariable int teamId,
-            @PathVariable int last
+            @PathVariable int leagueId,
+            @PathVariable int season
     ) throws Exception {
 
-        snapshotService.saveTeamFixtures(teamId, last);
+        snapshotService.saveTeamFixtures(
+                teamId,
+                leagueId,
+                season
+        );
 
-        return "Last "
-                + last
-                + " fixtures snapshot created for team "
-                + teamId + ".";
+        return "Team fixtures snapshot created for team "
+                + teamId
+                + ", league "
+                + leagueId
+                + ", season "
+                + season
+                + ".";
     }
 
     @GetMapping("/snapshot/players/{teamId}/{season}")
@@ -150,4 +158,46 @@ public class SnapshotController {
                 + ", season "
                 + season + ".";
     }
+
+    @GetMapping("/snapshot/leaguePackage/{leagueId}/{season}")
+    public String saveLeaguePackage(
+            @PathVariable int leagueId,
+            @PathVariable int season
+    ) throws Exception {
+
+        snapshotService.saveLeaguePackage(
+                leagueId,
+                season
+        );
+
+        return "League package created for league "
+                + leagueId
+                + ", season "
+                + season + ".";
+
+    }
+
+    @GetMapping("/snapshot/teamPackage/{teamId}/{leagueId}/{season}")
+    public String saveTeamPackage(
+            @PathVariable int teamId,
+            @PathVariable int leagueId,
+            @PathVariable int season
+    ) throws Exception {
+
+        snapshotService.saveTeamPackage(
+                teamId,
+                leagueId,
+                season
+        );
+
+        return "Team package created for team "
+                + teamId
+                + ", league "
+                + leagueId
+                + ", season "
+                + season + ".";
+    }
+
 }
+
+

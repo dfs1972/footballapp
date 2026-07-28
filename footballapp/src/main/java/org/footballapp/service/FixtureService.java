@@ -37,12 +37,14 @@ public class FixtureService {
 
     public FixturesApiResponse getTeamFixtures(
             int teamId,
-            int last
+            int leagueId,
+            int season
     ) throws Exception {
 
         return footballDataProvider.getTeamFixtures(
                 teamId,
-                last
+                leagueId,
+                season
         );
     }
 }

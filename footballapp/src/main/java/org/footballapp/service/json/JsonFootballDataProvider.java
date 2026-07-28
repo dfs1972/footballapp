@@ -1,5 +1,6 @@
 package org.footballapp.service.json;
 
+import org.footballapp.config.AppConfig;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.model.league.LeaguesApiResponse;
 import org.footballapp.model.player.PlayersApiResponse;
@@ -134,13 +135,31 @@ public class JsonFootballDataProvider implements FootballDataProvider {
     @Override
     public FixturesApiResponse getTeamFixtures(
             int teamId,
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        return jsonLoader.load(
+                MockApiPaths.teamFixtures(
+                        teamId,
+                        leagueId,
+                        season
+                ),
+                FixturesApiResponse.class
+        );
+    }
+
+    @Override
+    public FixturesApiResponse getRecentTeamFixtures(
+            int teamId,
             int last
     ) throws Exception {
 
         return jsonLoader.load(
                 MockApiPaths.teamFixtures(
                         teamId,
-                        last
+                        AppConfig.DEVELOPMENT_LEAGUE,
+                        AppConfig.DEVELOPMENT_SEASON
                 ),
                 FixturesApiResponse.class
         );

@@ -55,7 +55,7 @@ public class LeagueDataService {
     private final PlayerRepository playerRepository;
     private final FixtureLineupRepository fixtureLineupRepository;
     private final FixtureLineupMapper fixtureLineupMapper;
-    private final FixtureService fixtureService;
+    private final FootballDataProvider  fixtureService;
     private final SupportedCompetitionsService supportedCompetitionsService;
     private final StandingService standingService;
     private final TeamService teamService;
@@ -73,7 +73,7 @@ public class LeagueDataService {
             FixtureRepository fixtureRepository,
             FixtureLineupRepository fixtureLineupRepository,
             FixtureLineupMapper fixtureLineupMapper,
-            FixtureService fixtureService,
+            FootballDataProvider  fixtureService,
             PlayerStatisticsRepository playerStatisticsRepository,
             PlayerRepository playerRepository,
             SupportedCompetitionsService supportedCompetitionsService
@@ -85,7 +85,7 @@ public class LeagueDataService {
         this.standingRepository = standingRepository;
         this.standingService = standingService;
         this.fixtureRepository = fixtureRepository;
-        this.fixtureService = fixtureService;
+        this.fixtureService  = fixtureService;
         this.fixtureLineupRepository = fixtureLineupRepository;
         this.playerStatisticsRepository = playerStatisticsRepository;
         this.playerRepository = playerRepository;
@@ -466,7 +466,7 @@ public class LeagueDataService {
     ) throws Exception {
 
         FixturesApiResponse fixtures =
-                fixtureService.getTeamFixtures(
+                fixtureService.getRecentTeamFixtures(
                         teamId,
                         5
                 );

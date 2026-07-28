@@ -64,12 +64,15 @@ public final class MockApiPaths {
 
     public static String teamFixtures(
             int teamId,
-            int last
+            int leagueId,
+            int season
     ) {
         return "fixtures/teamfixtures_"
                 + teamId
                 + "_"
-                + last
+                + leagueId
+                + "_"
+                + season
                 + ".json";
     }
 

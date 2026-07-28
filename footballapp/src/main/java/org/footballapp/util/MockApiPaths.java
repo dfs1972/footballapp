@@ -67,12 +67,36 @@ public final class MockApiPaths {
             int leagueId,
             int season
     ) {
-        return "fixtures/teamfixtures_"
+        return "fixtures/team_fixtures_"
                 + teamId
                 + "_"
                 + leagueId
                 + "_"
                 + season
+                + ".json";
+    }
+
+    public static String fixtureEvents(
+            long fixtureId
+    ) {
+        return "fixtures/fixture_events_"
+                + fixtureId
+                + ".json";
+    }
+
+    public static String fixtureLineups(
+            long fixtureId
+    ) {
+        return "fixtures/fixture_lineups_"
+                + fixtureId
+                + ".json";
+    }
+
+    public static String fixtureStatistics(
+            long fixtureId
+    ) {
+        return "fixtures/fixture_statistics_"
+                + fixtureId
                 + ".json";
     }
 

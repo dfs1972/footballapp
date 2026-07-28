@@ -222,6 +222,45 @@ public class JsonSnapshotService {
     }
 
     /**
+     * Save Fixture Events
+     */
+    public void saveFixtureEvents(
+            long fixtureId
+    ) throws Exception {
+
+        save(
+                "fixtures/events?fixture=" + fixtureId,
+                MockApiPaths.fixtureEvents(fixtureId)
+        );
+    }
+
+    /**
+     * Save Fixture Lineups
+     */
+    public void saveFixtureLineups(
+            long fixtureId
+    ) throws Exception {
+
+        save(
+                "fixtures/lineups?fixture=" + fixtureId,
+                MockApiPaths.fixtureLineups(fixtureId)
+        );
+    }
+
+    /**
+     * Save Fixture Statistics
+     */
+    public void saveFixtureStatistics(
+            long fixtureId
+    ) throws Exception {
+
+        save(
+                "fixtures/statistics?fixture=" + fixtureId,
+                MockApiPaths.fixtureStatistics(fixtureId)
+        );
+    }
+
+    /**
      * Save Players
      */
 
@@ -315,6 +354,10 @@ public class JsonSnapshotService {
 
     }
 
+    /**
+     * Save Team Package
+     */
+
     public void saveTeamPackage(
             int teamId,
             int leagueId,
@@ -340,6 +383,27 @@ public class JsonSnapshotService {
                 season
         );
     }
+
+    /**
+     * Save Fixture Package
+     */
+    public void saveFixturePackage(
+            long fixtureId
+    ) throws Exception {
+
+        saveFixture(fixtureId);
+
+        saveFixtureEvents(fixtureId);
+
+        saveFixtureLineups(fixtureId);
+
+        saveFixtureStatistics(fixtureId);
+    }
+
+
+    /**
+     * Get Team IDs
+     */
 
     private List<Integer> getTeamIds(
             int leagueId,

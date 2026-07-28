@@ -40,6 +40,14 @@ public class SnapshotController {
                 + season + ".";
     }
 
+
+    /*********************************************************************
+     *
+     * TEAMS SECTION
+     *
+     * *******************************************************************
+     */
+
     @GetMapping("/snapshot/teams/{leagueId}/{season}")
     public String saveTeams(
             @PathVariable int leagueId,
@@ -63,6 +71,14 @@ public class SnapshotController {
 
         return "Team " + teamId + " snapshot created.";
     }
+
+
+    /*********************************************************************
+     *
+     * FIXTURES SECTION
+     *
+     * *******************************************************************
+     */
 
     @GetMapping("/snapshot/fixtures/{leagueId}/{season}")
     public String saveFixtures(
@@ -109,6 +125,49 @@ public class SnapshotController {
                 + season
                 + ".";
     }
+
+    @GetMapping("/snapshot/fixtureEvents/{fixtureId}")
+    public String saveFixtureEvents(
+            @PathVariable long fixtureId
+    ) throws Exception {
+
+        snapshotService.saveFixtureEvents(fixtureId);
+
+        return "Fixture events snapshot created for fixture "
+                + fixtureId
+                + ".";
+    }
+
+    @GetMapping("/snapshot/fixtureLineups/{fixtureId}")
+    public String saveFixtureLineups(
+            @PathVariable long fixtureId
+    ) throws Exception {
+
+        snapshotService.saveFixtureLineups(fixtureId);
+
+        return "Fixture lineups snapshot created for fixture "
+                + fixtureId
+                + ".";
+    }
+
+    @GetMapping("/snapshot/fixtureStatistics/{fixtureId}")
+    public String saveFixtureStatistics(
+            @PathVariable long fixtureId
+    ) throws Exception {
+
+        snapshotService.saveFixtureStatistics(fixtureId);
+
+        return "Fixture statistics snapshot created for fixture "
+                + fixtureId
+                + ".";
+    }
+
+    /*********************************************************************
+     *
+     * PLAYERS SECTION
+     *
+     * *******************************************************************
+     */
 
     @GetMapping("/snapshot/players/{teamId}/{season}")
     public String savePlayers(
@@ -159,6 +218,18 @@ public class SnapshotController {
                 + season + ".";
     }
 
+
+    /*********************************************************************
+     *
+     * PACKAGES
+     *
+     * *******************************************************************
+     */
+
+    /**
+     * Save league package
+     */
+
     @GetMapping("/snapshot/leaguePackage/{leagueId}/{season}")
     public String saveLeaguePackage(
             @PathVariable int leagueId,
@@ -176,6 +247,10 @@ public class SnapshotController {
                 + season + ".";
 
     }
+
+    /**
+     * Save Team package
+     */
 
     @GetMapping("/snapshot/teamPackage/{teamId}/{leagueId}/{season}")
     public String saveTeamPackage(
@@ -196,6 +271,22 @@ public class SnapshotController {
                 + leagueId
                 + ", season "
                 + season + ".";
+    }
+
+    /**
+     * Save Fixture package
+     */
+
+    @GetMapping("/snapshot/fixturePackage/{fixtureId}")
+    public String saveFixturePackage(
+            @PathVariable long fixtureId
+    ) throws Exception {
+
+        snapshotService.saveFixturePackage(fixtureId);
+
+        return "Fixture package created for fixture "
+                + fixtureId
+                + ".";
     }
 
 }

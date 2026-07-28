@@ -1,5 +1,6 @@
 package org.footballapp.service.snapshot;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.footballapp.api.ApiFootballClient;
 import org.footballapp.model.teams.TeamsApiResponse;
@@ -382,7 +383,93 @@ public class JsonSnapshotService {
                 leagueId,
                 season
         );
+
+        saveFixturePackages(
+                teamId,
+                leagueId,
+                season
+        );
     }
+
+    private void saveFixturePackages(
+            int teamId,
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        File file = new File(
+                OUTPUT_DIRECTORY,
+                MockApiPaths.teamFixtures(
+                        teamId,
+                        leagueId,
+                        season
+                )
+        );
+
+        JsonNode root =
+                objectMapper.readTree(file);
+
+        System.out.println(
+                "Loaded " + file.getPath()
+        );
+
+        JsonNode response =
+                root.get("response");
+
+        if (response == null || !response.isArray()) {
+
+            System.out.println(
+                    "No fixtures found."
+            );
+
+            return;
+        }
+
+        int total = response.size();
+
+        System.out.printf(
+                "Found %d fixtures%n",
+                total
+        );
+
+        int current = 1;
+
+        for (JsonNode fixtureNode : response) {
+
+            JsonNode fixture =
+                    fixtureNode.get("fixture");
+
+            if (fixture == null) {
+                continue;
+            }
+
+            JsonNode fixtureIdNode = fixture.get("id");
+
+            if (fixtureIdNode == null) {
+                continue;
+            }
+
+            long fixtureId = fixtureIdNode.asLong();
+
+            System.out.printf(
+                    "[%d/%d] Fixture %d%n",
+                    current,
+                    total,
+                    fixtureId
+            );
+
+            saveFixturePackage(
+                    fixtureId
+            );
+
+            current++;
+        }
+
+        System.out.println(
+                "Fixture packages complete."
+        );
+    }
+
 
     /**
      * Save Fixture Package

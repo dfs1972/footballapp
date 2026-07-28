@@ -8,297 +8,79 @@ The backend acts as an abstraction layer between external football data provider
 
 ---
 
-# Technology Stack
+The backend provides a single abstraction (FootballDataProvider) for supplying football data to the Android application.
 
-* Java
-* Spring Boot
-* PostgreSQL
-* JDBC
-* Jackson
-* Gradle
-* API-Football
+Two implementations are available:
 
----
+Live API (ApiFootballService)
+Offline snapshots (JsonFootballDataProvider)
 
-# Backend Responsibilities
+No controller depends directly on a specific implementation.
 
-The backend is responsible for:
+Snapshot API
 
-* Importing football data from API-Football
-* Validating and transforming imported data
-* Persisting data in PostgreSQL
-* Providing REST endpoints for client applications
-* Combining related information through repository queries
-* Returning lightweight DTOs for Android
+Snapshot endpoints are intended for development only.
 
----
+Generated snapshots are stored under:
 
-# High-Level Architecture
+mockapi/
 
-```text
-                API-Football
-                     │
-                     ▼
-           ApiFootballClient
-                     │
-                     ▼
-          ApiFootballService
-                     │
-                     ▼
-           Import Services
-                     │
-                     ▼
-              PostgreSQL
-                     │
-                     ▼
-             Repository Layer
-                     │
-                     ▼
-          LeagueDataService
-                     │
-                     ▼
-             REST Controllers
-                     │
-                     ▼
-          Android Application
-```
+Snapshots mirror the application's navigation hierarchy.
 
----
+League
+/snapshot/leaguePackage/{leagueId}/{season}
 
-# Application Layers
+Generates:
 
-## API Layer
+League
+Standings
+Teams
+Fixtures
+Team packages
+Team
+/snapshot/teamPackage/{teamId}/{leagueId}/{season}
 
-### ApiFootballClient
+Generates:
 
-Responsible for HTTP communication with API-Football.
+Team
+Players
+Team fixtures
+Team statistics
+Fixture
+/snapshot/fixturePackage/{fixtureId}
 
-Responsibilities:
+Generates:
 
-* Authentication
-* HTTP requests
-* Returning raw JSON
+Fixture
+Events
+Lineups
+Statistics
+Snapshot Naming Convention
 
----
+League
 
-### ApiFootballService
+league_179.json
+standings_179_2024.json
+fixtures_179_2024.json
+teams_179_2024.json
 
-Converts raw API responses into Java model classes using Jackson.
+Team
 
-Responsibilities:
+team_247.json
+team_fixtures_247_179_2024.json
+players_247_2024.json
+statistics_247_179_2024.json
 
-* Build endpoint URLs
-* Deserialize JSON
-* Return strongly typed objects
+Fixture
 
----
-
-# Import Services
-
-Each importer has a single responsibility.
-
-Current import services include:
-
-* LeagueImportService
-* TeamImportService
-* StandingsImportService
-* FixtureImportService
-* PlayerImportService
-
-Each importer:
-
-* Calls API-Football
-* Maps JSON
-* Persists data
-* Avoids duplicate records where appropriate
-
----
-
-# Repository Layer
-
-Repositories communicate directly with PostgreSQL.
-
-Responsibilities:
-
-* SQL queries
-* Inserts
-* Updates
-* Complex joins
-* DTO construction
-
-Repositories contain no presentation logic.
-
----
-
-# Service Layer
-
-LeagueDataService provides business logic for the REST API.
-
-Responsibilities include:
-
-* Combining repository calls
-* Returning DTOs
-* Simplifying controller code
-* Isolating business logic from HTTP requests
-
----
-
-# REST Controllers
-
-Controllers expose backend functionality as REST endpoints.
-
-Typical flow:
-
-```text
-HTTP Request
-      │
-      ▼
-Controller
-      │
-      ▼
-LeagueDataService
-      │
-      ▼
-Repository
-      │
-      ▼
-PostgreSQL
-```
-
-Controllers remain intentionally lightweight.
-
----
-
-# Current REST Endpoints
-
-## League
-
-* GET /leagueOverview
-* GET /leagueTable
-
----
-
-## Teams
-
-* GET /teams
-* GET /teamDetails
-* GET /teamPlayers
-* GET /teamFixtures
-
----
-
-## Players
-
-* GET /playerDetails
-
----
-
-## Fixtures
-
-* GET /fixtures
-* GET /fixtureDetails
-
----
-
-# Data Transfer Objects (DTOs)
-
-REST endpoints return lightweight DTOs rather than database entities.
-
-Examples include:
-
-* LeagueOverview
-* TeamSummary
-* TeamDetails
-* PlayerSummary
-* PlayerDetails
-* FixtureSummary
-* FixtureDetails
-
-DTOs contain only the information required by the Android application.
-
----
-
-# Design Principles
-
-The backend follows several architectural principles:
-
-* Separation of concerns
-* Repository pattern
-* Service layer
-* DTO-based REST API
-* Stateless controllers
-* Normalised database design
-* No direct Android access to PostgreSQL
-* External APIs isolated behind service classes
-
----
-
-# Error Handling
-
-The backend validates:
-
-* Missing database records
-* Invalid parameters
-* Empty API responses
-* SQL exceptions
-* JSON deserialization errors
-
-Meaningful HTTP status codes are returned where appropriate.
-
----
-
-# Performance Considerations
-
-The backend has been designed to minimise external API usage.
-
-Historical football information is stored locally within PostgreSQL.
-
-Repository queries retrieve related information through SQL joins rather than storing duplicate data.
-
-Future enhancements may include:
-
-* Response caching
-* Image caching
-* Scheduled imports
-* Background synchronisation
-* CDN-hosted static images
-
----
-
-# Planned Enhancements
-
-Future backend development includes:
-
-* Squad import service
-* Live match support
-* Transfers
-* Injuries
-* Match events
-* Line-ups
-* Head-to-head statistics
-* Search API
-* Authentication
-* Administrative import tools
-
----
-
-# Long-Term Architecture
-
-```text
-              API-Football
-                     │
-        Scheduled Imports / Live Calls
-                     │
-                     ▼
-             Spring Boot Backend
-                     │
-              PostgreSQL Database
-                     │
-             REST API Endpoints
-                     │
-        ┌────────────┴────────────┐
-        ▼                         ▼
- Android Application      Future Web Client
-```
-
-The backend is intended to become the central platform for all FootballApp clients. Historical data will be served from PostgreSQL, while selected live information will continue to be retrieved from API-Football during active football seasons.
+fixture_1220110.json
+fixture_events_1220110.json
+fixture_lineups_1220110.json
+fixture_statistics_1220110.json
+Architectural Principles
+Controllers depend only on FootballDataProvider.
+Package builders orchestrate smaller snapshot methods.
+Snapshot methods contain no orchestration logic.
+Android UI determines presentation (for example recent fixtures), while snapshots provide complete season data.
+Snapshot structure mirrors application navigation rather than API-Football endpoints.
+Every snapshot method is independently testable before being composed into larger package builders.

@@ -57,6 +57,7 @@ footballapp/src/main/java/org/footballapp/api/response/lineups/FixtureLineupResp
 footballapp/src/main/java/org/footballapp/api/response/lineups/FixtureTeamLineupResponse.java
 footballapp/src/main/java/org/footballapp/api/response/lineups/PlayerLineupResponse.java
 footballapp/src/main/java/org/footballapp/config/ApiConfig.java
+footballapp/src/main/java/org/footballapp/config/AppConfig.java
 footballapp/src/main/java/org/footballapp/config/competitions/CompetitionType.java
 footballapp/src/main/java/org/footballapp/config/competitions/SupportedCompetition.java
 footballapp/src/main/java/org/footballapp/config/competitions/SupportedCompetitionGroup.java
@@ -166,6 +167,7 @@ footballapp/src/main/java/org/footballapp/service/LeagueDataService.java
 footballapp/src/main/java/org/footballapp/service/LeagueImportService.java
 footballapp/src/main/java/org/footballapp/service/PlayerImportService.java
 footballapp/src/main/java/org/footballapp/service/snapshot/JsonSnapshotService.java
+footballapp/src/main/java/org/footballapp/service/snapshot/SnapshotLoader.java
 footballapp/src/main/java/org/footballapp/service/StandingService.java
 footballapp/src/main/java/org/footballapp/service/StandingsImportService.java
 footballapp/src/main/java/org/footballapp/service/SupportedCompetitionsService.java
@@ -581,6 +583,33 @@ public class ApiFootballService implements FootballDataProvider {
 
     @Override
     public FixturesApiResponse getTeamFixtures(
+            int teamId,
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        String url =
+                "https://v3.football.api-sports.io/fixtures?team="
+                        + teamId
+                        + "&league="
+                        + leagueId
+                        + "&season="
+                        + season;
+
+        String json =
+                apiClient.get(url);
+
+        return mapper.readValue(
+                json,
+                FixturesApiResponse.class
+        );
+    }
+    /**
+     * Get team's last N fixtures
+     */
+
+    @Override
+    public FixturesApiResponse getRecentTeamFixtures(
             int teamId,
             int last
     ) throws Exception {
@@ -1761,6 +1790,17 @@ public class ApiConfig {
 }
 ```
 
+## File: footballapp/src/main/java/org/footballapp/config/AppConfig.java
+```java
+package org.footballapp.config;
+
+public class AppConfig {
+
+    public static final int DEVELOPMENT_LEAGUE = 179;
+    public static final int DEVELOPMENT_SEASON = 2024;
+}
+```
+
 ## File: footballapp/src/main/java/org/footballapp/config/competitions/CompetitionType.java
 ```java
 package org.footballapp.config.competitions;
@@ -2318,6 +2358,14 @@ public class SnapshotController {
                 + season + ".";
     }
 
+
+    /*********************************************************************
+     *
+     * TEAMS SECTION
+     *
+     * *******************************************************************
+     */
+
     @GetMapping("/snapshot/teams/{leagueId}/{season}")
     public String saveTeams(
             @PathVariable int leagueId,
@@ -2341,6 +2389,14 @@ public class SnapshotController {
 
         return "Team " + teamId + " snapshot created.";
     }
+
+
+    /*********************************************************************
+     *
+     * FIXTURES SECTION
+     *
+     * *******************************************************************
+     */
 
     @GetMapping("/snapshot/fixtures/{leagueId}/{season}")
     public String saveFixtures(
@@ -2366,19 +2422,70 @@ public class SnapshotController {
         return "Fixture " + fixtureId + " snapshot created.";
     }
 
-    @GetMapping("/snapshot/teamFixtures/{teamId}/{last}")
+    @GetMapping("/snapshot/teamFixtures/{teamId}/{leagueId}/{season}")
     public String saveTeamFixtures(
             @PathVariable int teamId,
-            @PathVariable int last
+            @PathVariable int leagueId,
+            @PathVariable int season
     ) throws Exception {
 
-        snapshotService.saveTeamFixtures(teamId, last);
+        snapshotService.saveTeamFixtures(
+                teamId,
+                leagueId,
+                season
+        );
 
-        return "Last "
-                + last
-                + " fixtures snapshot created for team "
-                + teamId + ".";
+        return "Team fixtures snapshot created for team "
+                + teamId
+                + ", league "
+                + leagueId
+                + ", season "
+                + season
+                + ".";
     }
+
+    @GetMapping("/snapshot/fixtureEvents/{fixtureId}")
+    public String saveFixtureEvents(
+            @PathVariable long fixtureId
+    ) throws Exception {
+
+        snapshotService.saveFixtureEvents(fixtureId);
+
+        return "Fixture events snapshot created for fixture "
+                + fixtureId
+                + ".";
+    }
+
+    @GetMapping("/snapshot/fixtureLineups/{fixtureId}")
+    public String saveFixtureLineups(
+            @PathVariable long fixtureId
+    ) throws Exception {
+
+        snapshotService.saveFixtureLineups(fixtureId);
+
+        return "Fixture lineups snapshot created for fixture "
+                + fixtureId
+                + ".";
+    }
+
+    @GetMapping("/snapshot/fixtureStatistics/{fixtureId}")
+    public String saveFixtureStatistics(
+            @PathVariable long fixtureId
+    ) throws Exception {
+
+        snapshotService.saveFixtureStatistics(fixtureId);
+
+        return "Fixture statistics snapshot created for fixture "
+                + fixtureId
+                + ".";
+    }
+
+    /*********************************************************************
+     *
+     * PLAYERS SECTION
+     *
+     * *******************************************************************
+     */
 
     @GetMapping("/snapshot/players/{teamId}/{season}")
     public String savePlayers(
@@ -2428,6 +2535,78 @@ public class SnapshotController {
                 + ", season "
                 + season + ".";
     }
+
+
+    /*********************************************************************
+     *
+     * PACKAGES
+     *
+     * *******************************************************************
+     */
+
+    /**
+     * Save league package
+     */
+
+    @GetMapping("/snapshot/leaguePackage/{leagueId}/{season}")
+    public String saveLeaguePackage(
+            @PathVariable int leagueId,
+            @PathVariable int season
+    ) throws Exception {
+
+        snapshotService.saveLeaguePackage(
+                leagueId,
+                season
+        );
+
+        return "League package created for league "
+                + leagueId
+                + ", season "
+                + season + ".";
+
+    }
+
+    /**
+     * Save Team package
+     */
+
+    @GetMapping("/snapshot/teamPackage/{teamId}/{leagueId}/{season}")
+    public String saveTeamPackage(
+            @PathVariable int teamId,
+            @PathVariable int leagueId,
+            @PathVariable int season
+    ) throws Exception {
+
+        snapshotService.saveTeamPackage(
+                teamId,
+                leagueId,
+                season
+        );
+
+        return "Team package created for team "
+                + teamId
+                + ", league "
+                + leagueId
+                + ", season "
+                + season + ".";
+    }
+
+    /**
+     * Save Fixture package
+     */
+
+    @GetMapping("/snapshot/fixturePackage/{fixtureId}")
+    public String saveFixturePackage(
+            @PathVariable long fixtureId
+    ) throws Exception {
+
+        snapshotService.saveFixturePackage(fixtureId);
+
+        return "Fixture package created for fixture "
+                + fixtureId
+                + ".";
+    }
+
 }
 ```
 
@@ -10493,12 +10672,14 @@ public class FixtureService {
 
     public FixturesApiResponse getTeamFixtures(
             int teamId,
-            int last
+            int leagueId,
+            int season
     ) throws Exception {
 
         return footballDataProvider.getTeamFixtures(
                 teamId,
-                last
+                leagueId,
+                season
         );
     }
 }
@@ -10545,6 +10726,12 @@ public interface FootballDataProvider {
     ) throws Exception;
 
     FixturesApiResponse getTeamFixtures(
+            int teamId,
+            int leagueId,
+            int season
+    ) throws Exception;
+
+    FixturesApiResponse getRecentTeamFixtures(
             int teamId,
             int last
     ) throws Exception;
@@ -11244,6 +11431,7 @@ public class FixtureStatisticImportService {
 ```java
 package org.footballapp.service.json;
 
+import org.footballapp.config.AppConfig;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.model.league.LeaguesApiResponse;
 import org.footballapp.model.player.PlayersApiResponse;
@@ -11378,13 +11566,31 @@ public class JsonFootballDataProvider implements FootballDataProvider {
     @Override
     public FixturesApiResponse getTeamFixtures(
             int teamId,
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        return jsonLoader.load(
+                MockApiPaths.teamFixtures(
+                        teamId,
+                        leagueId,
+                        season
+                ),
+                FixturesApiResponse.class
+        );
+    }
+
+    @Override
+    public FixturesApiResponse getRecentTeamFixtures(
+            int teamId,
             int last
     ) throws Exception {
 
         return jsonLoader.load(
                 MockApiPaths.teamFixtures(
                         teamId,
-                        last
+                        AppConfig.DEVELOPMENT_LEAGUE,
+                        AppConfig.DEVELOPMENT_SEASON
                 ),
                 FixturesApiResponse.class
         );
@@ -11529,7 +11735,7 @@ public class LeagueDataService {
     private final PlayerRepository playerRepository;
     private final FixtureLineupRepository fixtureLineupRepository;
     private final FixtureLineupMapper fixtureLineupMapper;
-    private final FixtureService fixtureService;
+    private final FootballDataProvider  fixtureService;
     private final SupportedCompetitionsService supportedCompetitionsService;
     private final StandingService standingService;
     private final TeamService teamService;
@@ -11547,7 +11753,7 @@ public class LeagueDataService {
             FixtureRepository fixtureRepository,
             FixtureLineupRepository fixtureLineupRepository,
             FixtureLineupMapper fixtureLineupMapper,
-            FixtureService fixtureService,
+            FootballDataProvider  fixtureService,
             PlayerStatisticsRepository playerStatisticsRepository,
             PlayerRepository playerRepository,
             SupportedCompetitionsService supportedCompetitionsService
@@ -11559,7 +11765,7 @@ public class LeagueDataService {
         this.standingRepository = standingRepository;
         this.standingService = standingService;
         this.fixtureRepository = fixtureRepository;
-        this.fixtureService = fixtureService;
+        this.fixtureService  = fixtureService;
         this.fixtureLineupRepository = fixtureLineupRepository;
         this.playerStatisticsRepository = playerStatisticsRepository;
         this.playerRepository = playerRepository;
@@ -11940,7 +12146,7 @@ public class LeagueDataService {
     ) throws Exception {
 
         FixturesApiResponse fixtures =
-                fixtureService.getTeamFixtures(
+                fixtureService.getRecentTeamFixtures(
                         teamId,
                         5
                 );
@@ -12384,9 +12590,14 @@ package org.footballapp.service.snapshot;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.footballapp.api.ApiFootballClient;
+import org.footballapp.model.teams.TeamsApiResponse;
 import org.footballapp.util.MockApiPaths;
 import org.springframework.stereotype.Service;
 import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import org.footballapp.service.json.JsonLoader;
+import org.footballapp.service.snapshot.SnapshotLoader;
 
 @Service
 public class JsonSnapshotService {
@@ -12399,10 +12610,16 @@ public class JsonSnapshotService {
 
     private final ApiFootballClient apiFootballClient;
     private final ObjectMapper objectMapper;
+    private final JsonLoader jsonLoader;
+    private final SnapshotLoader snapshotLoader;
+
+
 
     public JsonSnapshotService(
             ApiFootballClient apiFootballClient,
-            ObjectMapper objectMapper
+            ObjectMapper objectMapper,
+            JsonLoader jsonLoader,
+            SnapshotLoader snapshotLoader
     ) {
 
         this.apiFootballClient =
@@ -12410,6 +12627,12 @@ public class JsonSnapshotService {
 
         this.objectMapper =
                 objectMapper;
+
+        this.jsonLoader =
+                jsonLoader;
+
+        this.snapshotLoader =
+                snapshotLoader;
     }
 
 
@@ -12510,7 +12733,7 @@ public class JsonSnapshotService {
         save(
                 "teams?league=" + leagueId
                         + "&season=" + season,
-                MockApiPaths.standings(
+                MockApiPaths.teams(
                         leagueId,
                         season
                 )
@@ -12543,7 +12766,7 @@ public class JsonSnapshotService {
         save(
                 "fixtures?league=" + leagueId
                         + "&season=" + season,
-                MockApiPaths.standings(
+                MockApiPaths.fixtures(
                         leagueId,
                         season
                 )
@@ -12570,13 +12793,58 @@ public class JsonSnapshotService {
 
     public void saveTeamFixtures(
             int teamId,
-            int last
+            int leagueId,
+            int season
     ) throws Exception {
 
         save(
                 "fixtures?team=" + teamId
-                        + "&last=" + last,
-                MockApiPaths.teamFixtures(teamId, last)
+                        + "&league=" + leagueId
+                        + "&season=" + season,
+                MockApiPaths.teamFixtures(
+                        teamId,
+                        leagueId,
+                        season
+                )
+        );
+    }
+
+    /**
+     * Save Fixture Events
+     */
+    public void saveFixtureEvents(
+            long fixtureId
+    ) throws Exception {
+
+        save(
+                "fixtures/events?fixture=" + fixtureId,
+                MockApiPaths.fixtureEvents(fixtureId)
+        );
+    }
+
+    /**
+     * Save Fixture Lineups
+     */
+    public void saveFixtureLineups(
+            long fixtureId
+    ) throws Exception {
+
+        save(
+                "fixtures/lineups?fixture=" + fixtureId,
+                MockApiPaths.fixtureLineups(fixtureId)
+        );
+    }
+
+    /**
+     * Save Fixture Statistics
+     */
+    public void saveFixtureStatistics(
+            long fixtureId
+    ) throws Exception {
+
+        save(
+                "fixtures/statistics?fixture=" + fixtureId,
+                MockApiPaths.fixtureStatistics(fixtureId)
         );
     }
 
@@ -12630,6 +12898,168 @@ public class JsonSnapshotService {
         );
     }
 
+    /**
+     * Generates a complete league snapshot package.
+     *
+     * This downloads all league-level resources required
+     * for offline development.
+     */
+    public void saveLeaguePackage(
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        saveLeague(
+                leagueId
+        );
+
+        saveStandings(
+                leagueId,
+                season
+        );
+
+        saveTeams(
+                leagueId,
+                season
+        );
+
+        saveFixtures(
+                leagueId,
+                season
+        );
+
+        List<Integer> teamIds =
+                getTeamIds(
+                        leagueId,
+                        season
+                );
+
+        for (int teamId : teamIds) {
+
+            saveTeam(teamId);
+
+        }
+
+    }
+
+    /**
+     * Save Team Package
+     */
+
+    public void saveTeamPackage(
+            int teamId,
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        saveTeam(teamId);
+
+        savePlayers(
+                teamId,
+                season
+        );
+
+        saveTeamFixtures(
+                teamId,
+                leagueId,
+                season
+        );
+
+        saveStatistics(
+                teamId,
+                leagueId,
+                season
+        );
+    }
+
+    /**
+     * Save Fixture Package
+     */
+    public void saveFixturePackage(
+            long fixtureId
+    ) throws Exception {
+
+        saveFixture(fixtureId);
+
+        saveFixtureEvents(fixtureId);
+
+        saveFixtureLineups(fixtureId);
+
+        saveFixtureStatistics(fixtureId);
+    }
+
+
+    /**
+     * Get Team IDs
+     */
+
+    private List<Integer> getTeamIds(
+            int leagueId,
+            int season
+    ) throws IOException {
+
+        TeamsApiResponse teams =
+                snapshotLoader.load(
+                        MockApiPaths.teams(
+                                leagueId,
+                                season
+                        ),
+                        TeamsApiResponse.class
+                );
+
+        return teams.getResponse()
+                .stream()
+                .map(team ->
+                        team.getTeam().getId()
+                )
+                .toList();
+    }
+
+}
+```
+
+## File: footballapp/src/main/java/org/footballapp/service/snapshot/SnapshotLoader.java
+```java
+package org.footballapp.service.snapshot;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+@Component
+public class SnapshotLoader {
+
+    private static final String SNAPSHOT_DIRECTORY =
+            "mockapi/";
+
+    private final ObjectMapper objectMapper;
+
+    public SnapshotLoader(
+            ObjectMapper objectMapper
+    ) {
+        this.objectMapper =
+                objectMapper;
+    }
+
+    public <T> T load(
+            String filename,
+            Class<T> clazz
+    ) throws IOException {
+
+        Path path =
+                Path.of(
+                        SNAPSHOT_DIRECTORY,
+                        filename
+                );
+
+        return objectMapper.readValue(
+                Files.newInputStream(path),
+                clazz
+        );
+    }
 }
 ```
 
@@ -15180,12 +15610,39 @@ public final class MockApiPaths {
 
     public static String teamFixtures(
             int teamId,
-            int last
+            int leagueId,
+            int season
     ) {
-        return "fixtures/teamfixtures_"
+        return "fixtures/team_fixtures_"
                 + teamId
                 + "_"
-                + last
+                + leagueId
+                + "_"
+                + season
+                + ".json";
+    }
+
+    public static String fixtureEvents(
+            long fixtureId
+    ) {
+        return "fixtures/fixture_events_"
+                + fixtureId
+                + ".json";
+    }
+
+    public static String fixtureLineups(
+            long fixtureId
+    ) {
+        return "fixtures/fixture_lineups_"
+                + fixtureId
+                + ".json";
+    }
+
+    public static String fixtureStatistics(
+            long fixtureId
+    ) {
+        return "fixtures/fixture_statistics_"
+                + fixtureId
                 + ".json";
     }
 

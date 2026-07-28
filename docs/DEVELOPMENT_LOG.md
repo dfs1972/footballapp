@@ -120,3 +120,188 @@ Milestone Reached
 This marks completion of the backend development phase.
 
 The project now transitions from backend implementation to frontend integration and live data consumption.
+
+
+# DEVELOPMENT_LOG.md
+
+## July 28th 2026 – Snapshot System Refactor & Package Architecture
+
+### Overview
+
+The backend snapshot system has been extensively redesigned to support complete offline development of the Android application. Rather than generating isolated API responses, the backend now generates hierarchical snapshot packages that mirror the application's navigation structure.
+
+FootballDataProvider
+
+Introduced the FootballDataProvider abstraction to decouple controllers and services from specific data sources.
+
+Current implementations:
+
+ApiFootballService (live API)
+JsonFootballDataProvider (offline snapshots)
+
+Controllers and services now depend only on FootballDataProvider, allowing seamless switching between live and offline data.
+
+Snapshot Architecture
+
+Snapshot generation has been reorganised into reusable package builders.
+
+Current hierarchy:
+
+League Package
+│
+├── League
+├── Standings
+├── Fixtures
+└── Team Packages
+│
+├── Team
+├── Players
+├── Team Fixtures
+├── Statistics
+└── Fixture Packages
+│
+├── Fixture
+├── Events
+├── Lineups
+└── Statistics
+
+Implemented package builders:
+
+saveLeaguePackage()
+saveTeamPackage()
+saveFixturePackage()
+
+All package builders are composed from individually tested snapshot methods.
+
+Fixture Snapshots
+
+Added support for fixture-specific snapshot generation.
+
+Implemented:
+
+saveFixture()
+saveFixtureEvents()
+saveFixtureLineups()
+saveFixtureStatistics()
+saveFixturePackage()
+
+Snapshot filenames were standardised:
+
+fixture_1220110.json
+fixture_events_1220110.json
+fixture_lineups_1220110.json
+fixture_statistics_1220110.json
+Team Fixtures
+
+Refactored team fixtures to use league and season instead of the previous last parameter.
+
+Old:
+
+fixtures?team={team}&last=5
+
+New:
+
+fixtures?team={team}&league={league}&season={season}
+
+Recent fixtures are now derived by the application from the full season snapshot.
+
+Testing
+
+All snapshot endpoints have been verified.
+
+Verified endpoints include:
+
+League packages
+Team packages
+Fixture packages
+Events
+Lineups
+Statistics
+
+Backend starts cleanly with no compilation errors.
+
+Current Status
+
+Snapshot infrastructure is considered complete for league competitions.
+
+Development focus is now moving towards:
+
+generating snapshots for every supported competition
+validating all Android screens
+implementing richer UI using imported fixture data
+supporting domestic and UEFA cup competitions
+
+
+## July 28th 2026 20:23– Snapshot Package Validation & Multi-League Planning
+
+### Overview
+
+The snapshot package architecture was further validated and refined.
+
+Development concentrated on ensuring the package builders remain modular while preparing the Android application for testing against multiple football competitions.
+
+Team Package Improvements
+
+Introduced the helper method:
+
+saveFixturePackages()
+
+This helper:
+
+Reads the generated Team Fixtures snapshot.
+Parses the API-Football response.
+Enumerates fixture IDs.
+Generates Fixture Packages using the existing saveFixturePackage() method.
+
+This maintains the package builder philosophy of composing larger packages from smaller, independently tested snapshot methods.
+
+Architectural Decision
+
+An important design decision was reached during implementation.
+
+The original direction began moving towards generating complete offline mirrors of the API.
+
+After review, it was agreed that this exceeds the current requirements.
+
+The objective of the snapshot system is to provide representative data for Android development and UI validation rather than a complete offline replica of every API endpoint.
+
+As a result, further expansion of automatic snapshot generation has been deferred until there is a demonstrated need.
+
+Current Snapshot Architecture
+
+League Package
+
+League
+Standings
+Fixtures
+Team Packages
+
+Team Package
+
+Team
+Players
+Team Fixtures
+Statistics
+Fixture Packages
+
+Fixture Package
+
+Fixture
+Events
+Lineups
+Statistics
+
+This hierarchy now provides complete navigation paths for Android development while remaining modular and reusable.
+
+Next Development Phase
+
+Development focus now moves from snapshot generation towards application validation.
+
+Next objectives:
+
+Generate snapshots for the English Premier League.
+Verify handling of a 20-team competition.
+Validate every Android screen against multiple league structures.
+Confirm UI behaviour is independent of competition size.
+
+This represents the transition from backend snapshot infrastructure to comprehensive Android testing.

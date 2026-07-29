@@ -38,6 +38,10 @@ public class JsonFootballDataProvider implements FootballDataProvider {
         );
     }
 
+    /**
+     * League Section
+     */
+
     @Override
     public LeaguesApiResponse getLeague(
             int leagueId

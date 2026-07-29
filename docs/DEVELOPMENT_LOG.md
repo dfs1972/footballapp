@@ -305,3 +305,109 @@ Validate every Android screen against multiple league structures.
 Confirm UI behaviour is independent of competition size.
 
 This represents the transition from backend snapshot infrastructure to comprehensive Android testing.
+
+## July 29th 2026 – Backend Architecture Cleanup & Legacy Import Removal
+
+### Overview
+
+This session concentrated on simplifying the backend architecture following the migration from a PostgreSQL-backed development workflow to the JSON snapshot system.
+
+The objective was to remove obsolete infrastructure while ensuring that both development profiles continued to operate correctly.
+
+Legacy Import Cleanup
+
+The majority of the legacy database import layer was removed.
+
+Deleted components included numerous ImportServices together with their supporting startup infrastructure.
+
+Rather than attempting a single large deletion, the cleanup was performed incrementally.
+
+Each failed Spring startup identified another obsolete dependency, allowing the remaining legacy components to be removed safely.
+
+This approach resulted in a clean backend startup without introducing regressions.
+
+Spring Profile Validation
+
+The separation between the two operating modes was fully validated.
+
+live profile
+
+API-Football access enabled.
+Snapshot generation enabled.
+Development tooling available.
+
+json profile
+
+Snapshot-backed data provider enabled.
+Android REST endpoints available.
+No dependency on API-Football.
+
+A temporary 404 response from a snapshot endpoint confirmed that the application was still running under the json profile. After switching back to the live profile, snapshot endpoints were immediately restored, confirming that profile-based bean registration was functioning as intended.
+
+Snapshot Verification
+
+Following the cleanup, snapshot generation was tested using:
+
+/snapshot/teamPackage/257/179/2024
+
+The complete snapshot generation pipeline executed successfully, confirming that the architectural cleanup had not affected the live development workflow.
+
+LeagueDataService Review
+
+LeagueDataService was reviewed after the cleanup.
+
+The service has evolved into a high-level orchestration layer that coordinates specialised services and repositories.
+
+Potential future improvements were identified:
+
+Extract team form calculation into a dedicated FormService.
+Move response-building logic into mapper classes.
+Rename the FootballDataProvider field currently named fixtureService.
+
+These improvements are considered architectural refinements rather than immediate priorities.
+
+Current Architecture
+
+The backend now operates with two clearly defined responsibilities.
+
+Live mode:
+
+API-Football
+
+↓
+
+JsonSnapshotService
+
+↓
+
+Snapshot files
+
+JSON mode:
+
+Snapshot files
+
+↓
+
+JsonFootballDataProvider
+
+↓
+
+LeagueDataService
+
+↓
+
+REST Controllers
+
+↓
+
+Android application
+
+This represents a substantial simplification compared with the previous architecture that attempted to support API access, PostgreSQL imports, database-backed endpoints and snapshot generation simultaneously.
+
+Current Status
+
+The backend is now considered architecturally stable.
+
+The remaining codebase has been cleaned as far as practical, and future cleanup will be performed incrementally as development continues.
+
+Development focus can now return to implementing new features rather than restructuring the underlying architecture.

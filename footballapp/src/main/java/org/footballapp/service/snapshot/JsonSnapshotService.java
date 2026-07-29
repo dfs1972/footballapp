@@ -378,7 +378,7 @@ public class JsonSnapshotService {
 
 
     /**
-     * saveFixturePackages is not currently in use.
+     * save Fixture Packages
      */
 
     private void saveFixturePackages(

@@ -5,8 +5,10 @@ import org.footballapp.api.ApiFootballClient;
 import org.footballapp.api.ApiFootballService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
+@Profile("live")
 public class ApiConfig {
 
     @Bean

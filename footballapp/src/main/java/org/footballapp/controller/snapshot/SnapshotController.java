@@ -1,11 +1,13 @@
 package org.footballapp.controller.snapshot;
 
 import org.footballapp.service.snapshot.JsonSnapshotService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Profile("live")
 public class SnapshotController {
 
     private final JsonSnapshotService snapshotService;

@@ -2,6 +2,7 @@ package org.footballapp.tools.development;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.footballapp.api.ApiFootballClient;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import static org.footballapp.tools.AppConstants.*;
 
@@ -10,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 @Service
+@Profile("live")
 public class ApiExplorerService {
 
     private static final String API_BASE =

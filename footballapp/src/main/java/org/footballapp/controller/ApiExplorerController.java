@@ -1,11 +1,13 @@
 package org.footballapp.controller;
 
 import org.footballapp.tools.development.ApiExplorerService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Profile("live")
 public class ApiExplorerController {
 
     private final ApiExplorerService explorer;

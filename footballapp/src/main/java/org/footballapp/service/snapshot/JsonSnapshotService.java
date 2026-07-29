@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.footballapp.api.ApiFootballClient;
 import org.footballapp.model.teams.TeamsApiResponse;
 import org.footballapp.util.MockApiPaths;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import org.footballapp.service.json.JsonLoader;
 import org.footballapp.service.snapshot.SnapshotLoader;
 
 @Service
+@Profile("live")
 public class JsonSnapshotService {
 
     private static final String API_BASE =
@@ -341,18 +343,6 @@ public class JsonSnapshotService {
                 season
         );
 
-        List<Integer> teamIds =
-                getTeamIds(
-                        leagueId,
-                        season
-                );
-
-        for (int teamId : teamIds) {
-
-            saveTeam(teamId);
-
-        }
-
     }
 
     /**
@@ -384,12 +374,12 @@ public class JsonSnapshotService {
                 season
         );
 
-        saveFixturePackages(
-                teamId,
-                leagueId,
-                season
-        );
     }
+
+
+    /**
+     * saveFixturePackages is not currently in use.
+     */
 
     private void saveFixturePackages(
             int teamId,

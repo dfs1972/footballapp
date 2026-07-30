@@ -3,6 +3,9 @@ package org.footballapp.service.snapshot;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.footballapp.api.ApiFootballClient;
+import org.footballapp.model.fixtures.FixtureResponse;
+import org.footballapp.model.fixtures.FixturesApiResponse;
+import org.footballapp.model.teams.TeamResponse;
 import org.footballapp.model.teams.TeamsApiResponse;
 import org.footballapp.util.MockApiPaths;
 import org.springframework.context.annotation.Profile;
@@ -319,6 +322,92 @@ public class JsonSnapshotService {
      * This downloads all league-level resources required
      * for offline development.
      */
+
+    public void saveCompleteLeaguePackage(
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        System.out.println();
+        System.out.println("==================================================");
+        System.out.println("Creating Complete League Package");
+        System.out.println("League : " + leagueId);
+        System.out.println("Season : " + season);
+        System.out.println("==================================================");
+
+        /*
+         * Create the league package.
+         *
+         * This generates the league, standings, teams and fixtures snapshots.
+         */
+        saveLeaguePackage(
+                leagueId,
+                season
+        );
+
+        /*
+         * Load the generated teams snapshot.
+         */
+        TeamsApiResponse teams =
+                snapshotLoader.load(
+                        "teams/teams_" + leagueId + "_" + season + ".json",
+                        TeamsApiResponse.class
+                );
+
+        /*
+         * Create a package for every club.
+         */
+        for (TeamResponse team : teams.getResponse()) {
+
+            System.out.println();
+            System.out.println("----------------------------------------");
+            System.out.println(
+                    "Creating team package: "
+                            + team.getTeam().getName()
+            );
+            System.out.println("----------------------------------------");
+
+            saveTeamPackage(
+                    team.getTeam().getId(),
+                    leagueId,
+                    season
+            );
+        }
+
+        /*
+         * Load the generated fixtures snapshot.
+         */
+        FixturesApiResponse fixtures =
+                snapshotLoader.load(
+                        "fixtures/fixtures_" + leagueId + "_" + season + ".json",
+                        FixturesApiResponse.class
+                );
+
+        /*
+         * Create a package for every fixture.
+         */
+        for (FixtureResponse fixture : fixtures.getResponse()) {
+
+            System.out.println(
+                    "Creating fixture package: "
+                            + fixture.getFixture().getId()
+            );
+
+            saveFixturePackage(
+                    fixture.getFixture().getId()
+            );
+        }
+
+        System.out.println();
+        System.out.println("==================================================");
+        System.out.println("Complete League Package Finished");
+        System.out.println("==================================================");
+    }
+
+    /**
+     * Save League Package
+     */
+
     public void saveLeaguePackage(
             int leagueId,
             int season

@@ -3,6 +3,7 @@ package org.footballapp.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.footballapp.api.ApiFootballClient;
 import org.footballapp.api.ApiFootballService;
+import org.footballapp.api.ApiRateLimiter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -12,7 +13,9 @@ import org.springframework.context.annotation.Profile;
 public class ApiConfig {
 
     @Bean
-    public ApiFootballClient apiFootballClient() {
+    public ApiFootballClient apiFootballClient(
+            ApiRateLimiter apiRateLimiter
+    ) {
 
         String apiKey =
                 System.getenv("API_FOOTBALL_KEY");
@@ -25,7 +28,10 @@ public class ApiConfig {
 
         }
 
-        return new ApiFootballClient(apiKey);
+        return new ApiFootballClient(
+                apiKey,
+                apiRateLimiter
+        );
 
     }
 
@@ -40,6 +46,11 @@ public class ApiConfig {
                 objectMapper
         );
 
+    }
+
+    @Bean
+    public ApiRateLimiter apiRateLimiter() {
+        return new ApiRateLimiter();
     }
 
 }

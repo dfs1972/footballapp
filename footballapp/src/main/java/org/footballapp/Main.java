@@ -1,7 +1,7 @@
 package org.footballapp;
 
 import org.footballapp.model.teamstatistics.TeamStatisticsApiResponse;
-import org.footballapp.tools.ApiTester;
+//import org.footballapp.tools.ApiTester;
 
 public class Main {
 

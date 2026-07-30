@@ -228,6 +228,29 @@ public class SnapshotController {
      * *******************************************************************
      */
 
+
+    /**
+     * Save complete league package
+     */
+
+    @GetMapping("/snapshot/completeLeaguePackage/{leagueId}/{season}")
+    public String saveCompleteLeaguePackage(
+            @PathVariable int leagueId,
+            @PathVariable int season
+    ) throws Exception {
+
+        snapshotService.saveCompleteLeaguePackage(
+                leagueId,
+                season
+        );
+
+        return "Complete league package created for league "
+                + leagueId
+                + ", season "
+                + season
+                + ".";
+    }
+
     /**
      * Save league package
      */

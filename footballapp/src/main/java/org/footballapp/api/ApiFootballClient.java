@@ -1,5 +1,7 @@
 package org.footballapp.api;
 
+import org.springframework.context.annotation.Bean;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
@@ -16,12 +18,17 @@ public class ApiFootballClient {
 
     private final String apiKey;
     private final HttpClient client;
+    private final ApiRateLimiter rateLimiter;
 
     private static final AtomicInteger requestCount =
             new AtomicInteger();
 
-    public ApiFootballClient(String apiKey) {
+    public ApiFootballClient(
+            String apiKey,
+            ApiRateLimiter rateLimiter
+    ) {
         this.apiKey = apiKey;
+        this.rateLimiter = rateLimiter;
         this.client = HttpClient.newHttpClient();
     }
 
@@ -45,11 +52,37 @@ public class ApiFootballClient {
                 .GET()
                 .build();
 
-        HttpResponse<String> response = client.send(
-                request,
-                HttpResponse.BodyHandlers.ofString()
+        HttpResponse<String> response =
+                client.send(
+                        request,
+                        HttpResponse.BodyHandlers.ofString()
+                );
+
+        rateLimiter.processHeaders(
+                response.headers()
         );
 
         return response.body();
+    }
+
+    @Bean
+    public ApiFootballClient apiFootballClient(
+            ApiRateLimiter apiRateLimiter
+    ) {
+
+        String apiKey =
+                System.getenv("API_FOOTBALL_KEY");
+
+        if (apiKey == null || apiKey.isBlank()) {
+
+            throw new IllegalStateException(
+                    "API_FOOTBALL_KEY environment variable is not configured."
+            );
+        }
+
+        return new ApiFootballClient(
+                apiKey,
+                apiRateLimiter
+        );
     }
 }

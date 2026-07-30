@@ -54,12 +54,8 @@ public final class MockApiPaths {
                 + ".json";
     }
 
-    public static String fixture(
-            long fixtureId
-    ) {
-        return "fixtures/fixture_"
-                + fixtureId
-                + ".json";
+    public static String fixture(long fixtureId) {
+        return "fixtures/" + fixtureId + "/fixture.json";
     }
 
     public static String teamFixtures(
@@ -76,28 +72,16 @@ public final class MockApiPaths {
                 + ".json";
     }
 
-    public static String fixtureEvents(
-            long fixtureId
-    ) {
-        return "fixtures/fixture_events_"
-                + fixtureId
-                + ".json";
+    public static String fixtureEvents(long fixtureId) {
+        return "fixtures/" + fixtureId + "/events.json";
     }
 
-    public static String fixtureLineups(
-            long fixtureId
-    ) {
-        return "fixtures/fixture_lineups_"
-                + fixtureId
-                + ".json";
+    public static String fixtureLineups(long fixtureId) {
+        return "fixtures/" + fixtureId + "/lineups.json";
     }
 
-    public static String fixtureStatistics(
-            long fixtureId
-    ) {
-        return "fixtures/fixture_statistics_"
-                + fixtureId
-                + ".json";
+    public static String fixtureStatistics(long fixtureId) {
+        return "fixtures/" + fixtureId + "/statistics.json";
     }
 
     public static String players(

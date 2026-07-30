@@ -294,7 +294,7 @@ public class JsonSnapshotService {
         save(
                 "players?id=" + playerId
                         + "&season=" + season,
-                MockApiPaths.players(playerId, season)
+                MockApiPaths.player(playerId, season)
         );
     }
 
@@ -350,9 +350,12 @@ public class JsonSnapshotService {
          */
         TeamsApiResponse teams =
                 snapshotLoader.load(
-                        "teams/teams_" + leagueId + "_" + season + ".json",
+                        MockApiPaths.teams(
+                                leagueId,
+                                season
+                        ),
                         TeamsApiResponse.class
-                );
+                );;
 
         /*
          * Create a package for every club.
@@ -379,7 +382,10 @@ public class JsonSnapshotService {
          */
         FixturesApiResponse fixtures =
                 snapshotLoader.load(
-                        "fixtures/fixtures_" + leagueId + "_" + season + ".json",
+                        MockApiPaths.fixtures(
+                                leagueId,
+                                season
+                        ),
                         FixturesApiResponse.class
                 );
 

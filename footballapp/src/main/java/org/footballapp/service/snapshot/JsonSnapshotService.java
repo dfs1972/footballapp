@@ -23,9 +23,6 @@ public class JsonSnapshotService {
     private static final String API_BASE =
             "https://v3.football.api-sports.io/";
 
-    private static final String OUTPUT_DIRECTORY =
-            "mockapi/";
-
     private final ApiFootballClient apiFootballClient;
     private final ObjectMapper objectMapper;
     private final JsonLoader jsonLoader;
@@ -78,7 +75,7 @@ public class JsonSnapshotService {
 
         File file =
                 new File(
-                        OUTPUT_DIRECTORY,
+                        MockApiPaths.ROOT,
                         outputFile
                 );
 
@@ -169,6 +166,79 @@ public class JsonSnapshotService {
         save(
                 "teams?id=" + teamId,
                 MockApiPaths.team(teamId)
+        );
+    }
+
+
+    /****************************************************
+
+     PLAYER SECTION
+
+     ***************************************************
+     */
+
+    /**
+     * Save Players
+     */
+
+    public void saveTeamPlayers(
+            int teamId,
+            int season
+    ) throws Exception {
+
+        save(
+                "players?team=" + teamId
+                        + "&season=" + season,
+                MockApiPaths.teamplayers(teamId, season)
+        );
+    }
+
+    /**
+     * Save Player
+     */
+
+    public void savePlayer(
+            int playerId,
+            int season
+    ) throws Exception {
+
+        save(
+                "players?id=" + playerId
+                        + "&season=" + season,
+                MockApiPaths.player(playerId, season)
+        );
+    }
+
+    /**
+     * Save Player Statistics
+     */
+    public void savePlayerStatistics(
+            int playerId,
+            int season
+    ) throws Exception {
+
+        save(
+                "players?id=" + playerId
+                        + "&season=" + season,
+                MockApiPaths.playerStatistics(
+                        playerId,
+                        season
+                )
+        );
+    }
+
+    /**
+     * Save Player Transfers
+     */
+    public void savePlayerTransfers(
+            int playerId
+    ) throws Exception {
+
+        save(
+                "transfers?player=" + playerId,
+                MockApiPaths.playerTransfers(
+                        playerId
+                )
         );
     }
 
@@ -274,79 +344,6 @@ public class JsonSnapshotService {
         );
     }
 
-
-    /****************************************************
-
-      PLAYER SECTION
-
-      ***************************************************
-     */
-
-    /**
-     * Save Players
-     */
-
-    public void savePlayers(
-            int teamId,
-            int season
-    ) throws Exception {
-
-        save(
-                "players?team=" + teamId
-                        + "&season=" + season,
-                MockApiPaths.players(teamId, season)
-        );
-    }
-
-    /**
-     * Save Player
-     */
-
-    public void savePlayer(
-            int playerId,
-            int season
-    ) throws Exception {
-
-        save(
-                "players?id=" + playerId
-                        + "&season=" + season,
-                MockApiPaths.player(playerId, season)
-        );
-    }
-
-    /**
-     * Save Player Statistics
-     */
-    public void savePlayerStatistics(
-            int playerId,
-            int season
-    ) throws Exception {
-
-        save(
-                "players?id=" + playerId
-                        + "&season=" + season,
-                MockApiPaths.playerStatistics(
-                        playerId,
-                        season
-                )
-        );
-    }
-
-    /**
-     * Save Player Transfers
-     */
-    public void savePlayerTransfers(
-            int playerId
-    ) throws Exception {
-
-        save(
-                "transfers?player=" + playerId,
-                MockApiPaths.playerTransfers(
-                        playerId
-                )
-        );
-    }
-
     /**
      * Save Statistics
      */
@@ -363,6 +360,115 @@ public class JsonSnapshotService {
                         + "&season=" + season,
                 MockApiPaths.teamStatistics(teamId, leagueId, season)
         );
+    }
+
+
+    /*********************************************************
+
+      PACKAGES SECTION
+
+      ********************************************************
+     */
+
+
+    /**
+     * Save League Package
+     */
+
+    public void saveLeaguePackage(
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        saveLeague(
+                leagueId
+        );
+
+        saveStandings(
+                leagueId,
+                season
+        );
+
+        saveTeams(
+                leagueId,
+                season
+        );
+
+        saveFixtures(
+                leagueId,
+                season
+        );
+
+    }
+
+    /**
+     * Save Team Package
+     */
+
+    public void saveTeamPackage(
+            int teamId,
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        saveTeam(teamId);
+
+        saveTeamPlayers(
+                teamId,
+                season
+        );
+
+        saveTeamFixtures(
+                teamId,
+                leagueId,
+                season
+        );
+
+        saveTeamStatistics(
+                teamId,
+                leagueId,
+                season
+        );
+
+    }
+
+    /**
+     * Save Player Package
+     */
+    public void savePlayerPackage(
+            int playerId,
+            int season
+    ) throws Exception {
+
+        savePlayer(
+                playerId,
+                season
+        );
+
+        savePlayerStatistics(
+                playerId,
+                season
+        );
+
+        savePlayerTransfers(
+                playerId
+        );
+    }
+
+    /**
+     * Save Fixture Package
+     */
+    public void saveFixturePackage(
+            long fixtureId
+    ) throws Exception {
+
+        saveFixture(fixtureId);
+
+        saveFixtureEvents(fixtureId);
+
+        saveFixtureLineups(fixtureId);
+
+        saveFixtureStatistics(fixtureId);
     }
 
     /**
@@ -459,190 +565,13 @@ public class JsonSnapshotService {
         System.out.println("==================================================");
     }
 
-    /**
-     * Save League Package
+
+    /***********************************************************
+
+      UTILITIES SECTION
+
+      **********************************************************
      */
-
-    public void saveLeaguePackage(
-            int leagueId,
-            int season
-    ) throws Exception {
-
-        saveLeague(
-                leagueId
-        );
-
-        saveStandings(
-                leagueId,
-                season
-        );
-
-        saveTeams(
-                leagueId,
-                season
-        );
-
-        saveFixtures(
-                leagueId,
-                season
-        );
-
-    }
-
-    /**
-     * Save Team Package
-     */
-
-    public void saveTeamPackage(
-            int teamId,
-            int leagueId,
-            int season
-    ) throws Exception {
-
-        saveTeam(teamId);
-
-        savePlayers(
-                teamId,
-                season
-        );
-
-        saveTeamFixtures(
-                teamId,
-                leagueId,
-                season
-        );
-
-        saveTeamStatistics(
-                teamId,
-                leagueId,
-                season
-        );
-
-    }
-
-    /**
-     * Save Player Package
-     */
-    public void savePlayerPackage(
-            int playerId,
-            int season
-    ) throws Exception {
-
-        savePlayer(
-                playerId,
-                season
-        );
-
-        savePlayerStatistics(
-                playerId,
-                season
-        );
-
-        savePlayerTransfers(
-                playerId
-        );
-    }
-
-
-    /**
-     * save Fixture Packages
-     */
-
-    private void saveFixturePackages(
-            int teamId,
-            int leagueId,
-            int season
-    ) throws Exception {
-
-        File file = new File(
-                OUTPUT_DIRECTORY,
-                MockApiPaths.teamFixtures(
-                        teamId,
-                        leagueId,
-                        season
-                )
-        );
-
-        JsonNode root =
-                objectMapper.readTree(file);
-
-        System.out.println(
-                "Loaded " + file.getPath()
-        );
-
-        JsonNode response =
-                root.get("response");
-
-        if (response == null || !response.isArray()) {
-
-            System.out.println(
-                    "No fixtures found."
-            );
-
-            return;
-        }
-
-        int total = response.size();
-
-        System.out.printf(
-                "Found %d fixtures%n",
-                total
-        );
-
-        int current = 1;
-
-        for (JsonNode fixtureNode : response) {
-
-            JsonNode fixture =
-                    fixtureNode.get("fixture");
-
-            if (fixture == null) {
-                continue;
-            }
-
-            JsonNode fixtureIdNode = fixture.get("id");
-
-            if (fixtureIdNode == null) {
-                continue;
-            }
-
-            long fixtureId = fixtureIdNode.asLong();
-
-            System.out.printf(
-                    "[%d/%d] Fixture %d%n",
-                    current,
-                    total,
-                    fixtureId
-            );
-
-            saveFixturePackage(
-                    fixtureId
-            );
-
-            current++;
-        }
-
-        System.out.println(
-                "Fixture packages complete."
-        );
-    }
-
-
-    /**
-     * Save Fixture Package
-     */
-    public void saveFixturePackage(
-            long fixtureId
-    ) throws Exception {
-
-        saveFixture(fixtureId);
-
-        saveFixtureEvents(fixtureId);
-
-        saveFixtureLineups(fixtureId);
-
-        saveFixtureStatistics(fixtureId);
-    }
 
 
     /**

@@ -172,12 +172,12 @@ public class SnapshotController {
      */
 
     @GetMapping("/snapshot/players/{teamId}/{season}")
-    public String savePlayers(
+    public String saveTeamPlayers(
             @PathVariable int teamId,
             @PathVariable int season
     ) throws Exception {
 
-        snapshotService.savePlayers(teamId, season);
+        snapshotService.saveTeamPlayers(teamId, season);
 
         return "Players snapshot created for team "
                 + teamId
@@ -312,6 +312,31 @@ public class SnapshotController {
         return "Fixture package created for fixture "
                 + fixtureId
                 + ".";
+    }
+
+    /******************************************
+     *
+     * TEMP PLAYER PACKAGE
+     *
+     * ****************************************
+     * */
+
+    @GetMapping("/snapshot/playerPackage/{playerId}/{season}")
+    public String savePlayerPackage(
+            @PathVariable int playerId,
+            @PathVariable int season
+    ) throws Exception {
+
+        snapshotService.savePlayerPackage(
+                playerId,
+                season
+        );
+
+        return "Player package created "
+                + playerId
+                + ", season "
+                + season + ".";
+
     }
 
 }

@@ -2,6 +2,8 @@ package org.footballapp.util;
 
 public final class MockApiPaths {
 
+    public static final String ROOT = "mockapi/";
+
     private MockApiPaths() {
     }
 
@@ -114,11 +116,11 @@ public final class MockApiPaths {
      * Player(s) ApiPaths
      */
 
-    public static String players(
+    public static String teamplayers(
             int teamId,
             int season
     ) {
-        return "players/players_"
+        return "players/teamplayers_"
                 + teamId
                 + "_"
                 + season

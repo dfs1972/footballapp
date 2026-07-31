@@ -1,3 +1,0 @@
-GET
-
-https://v3.football.api-sports.io/players?team=257&season=2024

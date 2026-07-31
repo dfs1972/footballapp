@@ -48,7 +48,9 @@ public class JsonFootballDataProvider implements FootballDataProvider {
     ) throws Exception {
 
         return jsonLoader.load(
-                "league/league_" + leagueId + ".json",
+                MockApiPaths.league(
+                        leagueId
+                ),
                 LeaguesApiResponse.class
         );
 
@@ -181,7 +183,7 @@ public class JsonFootballDataProvider implements FootballDataProvider {
     ) throws Exception {
 
         return jsonLoader.load(
-                MockApiPaths.teamplayers(
+                MockApiPaths.teamPlayers(
                         teamId,
                         season
                 ),

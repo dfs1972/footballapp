@@ -116,7 +116,7 @@ public final class MockApiPaths {
      * Player(s) ApiPaths
      */
 
-    public static String teamplayers(
+    public static String teamPlayers(
             int teamId,
             int season
     ) {

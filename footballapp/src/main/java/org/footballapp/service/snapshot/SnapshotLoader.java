@@ -1,6 +1,7 @@
 package org.footballapp.service.snapshot;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.footballapp.util.MockApiPaths;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -9,9 +10,6 @@ import java.nio.file.Path;
 
 @Component
 public class SnapshotLoader {
-
-    private static final String SNAPSHOT_DIRECTORY =
-            "mockapi/";
 
     private final ObjectMapper objectMapper;
 
@@ -27,14 +25,13 @@ public class SnapshotLoader {
             Class<T> clazz
     ) throws IOException {
 
-        Path path =
-                Path.of(
-                        SNAPSHOT_DIRECTORY,
-                        filename
-                );
+        Path path = Path.of(
+                MockApiPaths.ROOT,
+                filename
+        );
 
         return objectMapper.readValue(
-                Files.newInputStream(path),
+                path.toFile(),
                 clazz
         );
     }

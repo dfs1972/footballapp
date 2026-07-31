@@ -189,7 +189,7 @@ public class JsonSnapshotService {
         save(
                 "players?team=" + teamId
                         + "&season=" + season,
-                MockApiPaths.teamplayers(teamId, season)
+                MockApiPaths.teamPlayers(teamId, season)
         );
     }
 

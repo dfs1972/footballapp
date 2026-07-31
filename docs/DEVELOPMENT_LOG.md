@@ -411,3 +411,34 @@ The backend is now considered architecturally stable.
 The remaining codebase has been cleaned as far as practical, and future cleanup will be performed incrementally as development continues.
 
 Development focus can now return to implementing new features rather than restructuring the underlying architecture.
+
+
+## July 31st 2026
+
+### Snapshot Architecture Refactor Complete
+
+Unified package-based snapshot generation.
+Centralised snapshot paths in MockApiPaths.
+Standardised naming conventions.
+Added complete Player Package support.
+Removed legacy ApiExplorer subsystem.
+Unified snapshot reading and writing around a single path provider.
+
+
+## Player snapshot - July 31st 2026
+
+### We are using this player as reference for the screen
+
+Reference Player Snapshot
+
+Player ID: 351923
+Season: 2024
+
+Contains:
+- details.json
+- statistics.json
+- transfers.json
+
+Used for JSON profile testing.
+
+

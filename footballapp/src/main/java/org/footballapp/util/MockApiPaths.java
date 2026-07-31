@@ -43,6 +43,20 @@ public final class MockApiPaths {
                 + ".json";
     }
 
+    public static String teamStatistics(
+            int teamId,
+            int leagueId,
+            int season
+    ) {
+        return "statistics/teamStatistics_"
+                + teamId
+                + "_"
+                + leagueId
+                + "_"
+                + season
+                + ".json";
+    }
+
     public static String fixtures(
             int leagueId,
             int season
@@ -137,17 +151,4 @@ public final class MockApiPaths {
                 + "/transfers.json";
     }
 
-    public static String teamStatistics(
-            int teamId,
-            int leagueId,
-            int season
-    ) {
-        return "statistics/teamStatistics_"
-                + teamId
-                + "_"
-                + leagueId
-                + "_"
-                + season
-                + ".json";
-    }
 }

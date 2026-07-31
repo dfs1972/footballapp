@@ -172,6 +172,14 @@ public class JsonSnapshotService {
         );
     }
 
+
+    /*****************************************************
+
+      FIXTURES SECTION
+
+      ****************************************************
+     */
+
     /**
      * Save Fixtures
      */
@@ -266,6 +274,14 @@ public class JsonSnapshotService {
         );
     }
 
+
+    /****************************************************
+
+      PLAYER SECTION
+
+      ***************************************************
+     */
+
     /**
      * Save Players
      */
@@ -299,10 +315,43 @@ public class JsonSnapshotService {
     }
 
     /**
+     * Save Player Statistics
+     */
+    public void savePlayerStatistics(
+            int playerId,
+            int season
+    ) throws Exception {
+
+        save(
+                "players?id=" + playerId
+                        + "&season=" + season,
+                MockApiPaths.playerStatistics(
+                        playerId,
+                        season
+                )
+        );
+    }
+
+    /**
+     * Save Player Transfers
+     */
+    public void savePlayerTransfers(
+            int playerId
+    ) throws Exception {
+
+        save(
+                "transfers?player=" + playerId,
+                MockApiPaths.playerTransfers(
+                        playerId
+                )
+        );
+    }
+
+    /**
      * Save Statistics
      */
 
-    public void saveStatistics(
+    public void saveTeamStatistics(
             int teamId,
             int leagueId,
             int season
@@ -463,12 +512,35 @@ public class JsonSnapshotService {
                 season
         );
 
-        saveStatistics(
+        saveTeamStatistics(
                 teamId,
                 leagueId,
                 season
         );
 
+    }
+
+    /**
+     * Save Player Package
+     */
+    public void savePlayerPackage(
+            int playerId,
+            int season
+    ) throws Exception {
+
+        savePlayer(
+                playerId,
+                season
+        );
+
+        savePlayerStatistics(
+                playerId,
+                season
+        );
+
+        savePlayerTransfers(
+                playerId
+        );
     }
 
 

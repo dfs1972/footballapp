@@ -206,7 +206,7 @@ public class SnapshotController {
             @PathVariable int season
     ) throws Exception {
 
-        snapshotService.saveStatistics(
+        snapshotService.saveTeamStatistics(
                 teamId,
                 leagueId,
                 season

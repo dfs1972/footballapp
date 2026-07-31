@@ -312,7 +312,7 @@ public class JsonSnapshotService {
                 "teams/statistics?team=" + teamId
                         + "&league=" + leagueId
                         + "&season=" + season,
-                MockApiPaths.statistics(teamId, leagueId, season)
+                MockApiPaths.teamStatistics(teamId, leagueId, season)
         );
     }
 

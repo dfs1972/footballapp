@@ -55,7 +55,10 @@ public final class MockApiPaths {
     }
 
     public static String fixture(long fixtureId) {
-        return "fixtures/" + fixtureId + "/fixture.json";
+
+        return "fixtures/"
+                + fixtureId
+                + "/fixture.json";
     }
 
     public static String teamFixtures(
@@ -73,16 +76,29 @@ public final class MockApiPaths {
     }
 
     public static String fixtureEvents(long fixtureId) {
-        return "fixtures/" + fixtureId + "/events.json";
+
+        return "fixtures/"
+                + fixtureId
+                + "/events.json";
     }
 
     public static String fixtureLineups(long fixtureId) {
-        return "fixtures/" + fixtureId + "/lineups.json";
+
+        return "fixtures/"
+                + fixtureId
+                + "/lineups.json";
     }
 
     public static String fixtureStatistics(long fixtureId) {
-        return "fixtures/" + fixtureId + "/statistics.json";
+
+        return "fixtures/"
+                + fixtureId
+                + "/statistics.json";
     }
+
+    /**
+     * Player(s) ApiPaths
+     */
 
     public static String players(
             int teamId,
@@ -99,19 +115,34 @@ public final class MockApiPaths {
             int playerId,
             int season
     ) {
-        return "players/player_"
+        return "players/"
                 + playerId
-                + "_"
-                + season
-                + ".json";
+                + "/details.json";
     }
 
-    public static String statistics(
+    public static String playerStatistics(
+            int playerId,
+            int season
+    ) {
+        return "players/"
+                + playerId
+                + "/statistics.json";
+    }
+
+    public static String playerTransfers(
+            int playerId
+    ) {
+        return "players/"
+                + playerId
+                + "/transfers.json";
+    }
+
+    public static String teamStatistics(
             int teamId,
             int leagueId,
             int season
     ) {
-        return "statistics/statistics_"
+        return "statistics/teamStatistics_"
                 + teamId
                 + "_"
                 + leagueId

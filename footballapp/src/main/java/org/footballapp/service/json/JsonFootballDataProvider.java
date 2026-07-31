@@ -95,7 +95,7 @@ public class JsonFootballDataProvider implements FootballDataProvider {
     ) throws Exception {
 
         return jsonLoader.load(
-                MockApiPaths.statistics(
+                MockApiPaths.teamStatistics(
                         teamId,
                         leagueId,
                         season

@@ -3,10 +3,15 @@ package org.footballapp.service.snapshot;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.footballapp.api.ApiFootballClient;
+import org.footballapp.config.AppConfig;
+import org.footballapp.config.competitions.CompetitionType;
+import org.footballapp.config.competitions.SupportedCompetition;
+import org.footballapp.config.competitions.SupportedCompetitionGroup;
 import org.footballapp.model.fixtures.FixtureResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.model.teams.TeamResponse;
 import org.footballapp.model.teams.TeamsApiResponse;
+import org.footballapp.service.SupportedCompetitionsService;
 import org.footballapp.util.MockApiPaths;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -27,6 +32,7 @@ public class JsonSnapshotService {
     private final ObjectMapper objectMapper;
     private final JsonLoader jsonLoader;
     private final SnapshotLoader snapshotLoader;
+    private final SupportedCompetitionsService supportedCompetitionsService;
 
 
 
@@ -34,7 +40,8 @@ public class JsonSnapshotService {
             ApiFootballClient apiFootballClient,
             ObjectMapper objectMapper,
             JsonLoader jsonLoader,
-            SnapshotLoader snapshotLoader
+            SnapshotLoader snapshotLoader,
+            SupportedCompetitionsService supportedCompetitionsService
     ) {
 
         this.apiFootballClient =
@@ -48,6 +55,9 @@ public class JsonSnapshotService {
 
         this.snapshotLoader =
                 snapshotLoader;
+
+        this.supportedCompetitionsService =
+                supportedCompetitionsService;
     }
 
 
@@ -399,6 +409,95 @@ public class JsonSnapshotService {
                 season
         );
 
+    }
+
+    /**
+     * Save Supported League Package
+     */
+
+    public void saveSupportedLeaguePackages() throws Exception {
+
+        System.out.println();
+        System.out.println("==================================================");
+        System.out.println("Generating Supported League Packages");
+        System.out.println("Season : " + AppConfig.DEVELOPMENT_SEASON);
+        System.out.println("==================================================");
+
+        List<SupportedCompetitionGroup> groups =
+                supportedCompetitionsService.getCompetitionGroups();
+
+        long start = System.currentTimeMillis();
+
+        int total = 0;
+
+        /*
+         * Count enabled league competitions.
+         */
+        for (SupportedCompetitionGroup group : groups) {
+
+            for (SupportedCompetition competition
+                    : group.getCompetitions()) {
+
+                if (competition.isEnabled()
+                        && competition.getType() == CompetitionType.LEAGUE) {
+
+                    total++;
+                }
+            }
+        }
+
+        int current = 1;
+
+        /*
+         * Generate league packages.
+         */
+        for (SupportedCompetitionGroup group : groups) {
+
+            System.out.println();
+            System.out.println(group.getCountry());
+
+            for (SupportedCompetition competition
+                    : group.getCompetitions()) {
+
+                if (!competition.isEnabled()) {
+                    continue;
+                }
+
+                if (competition.getType() != CompetitionType.LEAGUE) {
+                    continue;
+                }
+
+                System.out.printf(
+                        "[%d/%d] %s (%d)%n",
+                        current,
+                        total,
+                        competition.getName(),
+                        competition.getCompetitionId()
+                );
+
+                saveLeaguePackage(
+                        competition.getCompetitionId(),
+                        AppConfig.DEVELOPMENT_SEASON
+                );
+
+                current++;
+            }
+        }
+
+        System.out.println();
+        System.out.println("==================================================");
+        System.out.printf(
+                "Completed - %d league packages generated.%n",
+                total
+        );
+        long elapsed =
+                (System.currentTimeMillis() - start) / 1000;
+
+        System.out.printf(
+                "Elapsed time : %d seconds%n",
+                elapsed
+        );
+        System.out.println("==================================================");
     }
 
     /**

@@ -274,6 +274,18 @@ public class SnapshotController {
     }
 
     /**
+     * Save Supported League Package
+     */
+
+    @GetMapping("/snapshot/supportedLeaguePackages")
+    public String saveSupportedLeaguePackages() throws Exception {
+
+        snapshotService.saveSupportedLeaguePackages();
+
+        return "Supported league packages created.";
+    }
+
+    /**
      * Save Team package
      */
 

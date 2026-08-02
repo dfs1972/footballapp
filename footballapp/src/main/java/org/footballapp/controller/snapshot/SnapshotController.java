@@ -286,6 +286,18 @@ public class SnapshotController {
     }
 
     /**
+     * Save a selective representation of a League.
+     */
+
+    @GetMapping("/snapshot/representativeTeamPackages")
+    public String saveRepresentativeTeamPackages() throws Exception {
+
+        snapshotService.saveRepresentativeTeamPackages();
+
+        return "Representative team packages created.";
+    }
+
+    /**
      * Save Team package
      */
 

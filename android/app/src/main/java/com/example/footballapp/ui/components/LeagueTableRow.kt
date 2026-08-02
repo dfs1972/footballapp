@@ -68,19 +68,6 @@ fun LeagueTableRow(
             fontWeight = FontWeight.SemiBold
         )
 
-        ClubBadge(
-
-            logoUrl = row.teamLogo,
-
-            modifier = Modifier
-                .size(AppDimensions.ImageSmall)
-                .padding(
-                    start = AppSpacing.ExtraSmall,
-                    end = AppSpacing.Small
-                )
-
-        )
-
         Text(
             text = row.teamName,
             modifier = Modifier.weight(1f),

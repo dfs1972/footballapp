@@ -28,25 +28,3 @@ fun ClubList(
     }
 
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//private fun ClubListPreview() {
-//
-//    MaterialTheme {
-//
-//        SectionCard {
-//
-//            ClubList(
-//
-//                clubs = PreviewData.ScottishPremiershipClubList,
-//
-//                onClubClick = {}
-//
-//            )
-//
-//        }
-//
-//    }
-//
-//}

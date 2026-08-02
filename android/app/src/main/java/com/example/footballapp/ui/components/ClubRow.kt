@@ -47,24 +47,6 @@ fun ClubRow(
 
     ) {
 
-        ClubBadge(
-
-            logoUrl = club.badgeUrl,
-
-            modifier = Modifier
-                .size(AppDimensions.ImageMedium)
-                .padding(end = AppSpacing.Medium)
-
-        )
-
-        Spacer(
-
-            modifier = Modifier.width(
-                AppSpacing.Medium
-            )
-
-        )
-
         Column(
 
             modifier = Modifier.weight(1f)

@@ -10,7 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.footballapp.ui.components.InfoRow
-import com.example.footballapp.ui.components.PlayerPhoto
+//import com.example.footballapp.ui.components.PlayerPhoto
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.SectionCard
 import com.example.footballapp.ui.components.SectionHeading
@@ -34,30 +34,6 @@ fun PlayerDetailsScreen(
         subtitle = player.position
 
     ) {
-
-        item {
-
-            Column(
-
-                modifier = Modifier.fillMaxWidth(),
-
-                horizontalAlignment = Alignment.CenterHorizontally
-
-            ) {
-
-                PlayerPhoto(
-
-                    photoUrl = player.photoUrl,
-
-                    modifier = Modifier.size(
-                        AppDimensions.ImageLarge
-                    )
-
-                )
-
-            }
-
-        }
 
         item {
 

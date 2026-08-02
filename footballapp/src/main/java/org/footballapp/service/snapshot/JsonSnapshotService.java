@@ -9,6 +9,8 @@ import org.footballapp.config.competitions.SupportedCompetition;
 import org.footballapp.config.competitions.SupportedCompetitionGroup;
 import org.footballapp.model.fixtures.FixtureResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
+import org.footballapp.model.standings.Standing;
+import org.footballapp.model.standings.StandingsApiResponse;
 import org.footballapp.model.teams.TeamResponse;
 import org.footballapp.model.teams.TeamsApiResponse;
 import org.footballapp.service.SupportedCompetitionsService;
@@ -17,7 +19,10 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.footballapp.service.json.JsonLoader;
 import org.footballapp.service.snapshot.SnapshotLoader;
 
@@ -382,6 +387,53 @@ public class JsonSnapshotService {
 
 
     /**
+     * Save representative Team package
+     */
+
+    public void saveRepresentativeTeamPackages() throws Exception {
+
+        System.out.println();
+        System.out.println("==================================================");
+        System.out.println("Generating Representative Team Packages");
+        System.out.println("Season : " + AppConfig.DEVELOPMENT_SEASON);
+        System.out.println("==================================================");
+
+        List<SupportedCompetitionGroup> groups =
+                supportedCompetitionsService.getCompetitionGroups();
+
+        for (SupportedCompetitionGroup group : groups) {
+
+            System.out.println();
+            System.out.println(group.getCountry());
+
+            for (SupportedCompetition competition
+                    : group.getCompetitions()) {
+
+                if (!competition.isEnabled()) {
+                    continue;
+                }
+
+                if (competition.getType() != CompetitionType.LEAGUE) {
+                    continue;
+                }
+
+                System.out.println();
+                System.out.println(competition.getName());
+
+                saveRepresentativeTeams(
+                        competition.getCompetitionId(),
+                        AppConfig.DEVELOPMENT_SEASON
+                );
+            }
+        }
+
+        System.out.println();
+        System.out.println("==================================================");
+        System.out.println("Representative Team Packages Complete");
+        System.out.println("==================================================");
+    }
+
+    /**
      * Save League Package
      */
 
@@ -671,6 +723,105 @@ public class JsonSnapshotService {
 
       **********************************************************
      */
+
+    /**
+     * Save Representative Teams Helper
+     */
+
+    private void saveRepresentativeTeams(
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        StandingsApiResponse standings =
+                snapshotLoader.load(
+                        MockApiPaths.standings(
+                                leagueId,
+                                season
+                        ),
+                        StandingsApiResponse.class
+                );
+
+        List<Standing> table =
+                getPrimaryStandings(standings);
+
+        Set<Integer> processedTeams =
+                new HashSet<>();
+
+        int topCount =
+                Math.min(5, table.size());
+
+        for (int i = 0; i < topCount; i++) {
+
+            saveRepresentativeTeam(
+                    table.get(i),
+                    leagueId,
+                    season,
+                    "Top " + (i + 1),
+                    processedTeams
+            );
+        }
+
+        saveRepresentativeTeam(
+                table.get(table.size() / 2),
+                leagueId,
+                season,
+                "Mid-table",
+                processedTeams
+        );
+
+        saveRepresentativeTeam(
+                table.get(table.size() - 1),
+                leagueId,
+                season,
+                "Bottom",
+                processedTeams
+        );
+    }
+
+    /**
+     * Save Representative Team helper
+     */
+
+    private void saveRepresentativeTeam(
+            Standing standing,
+            int leagueId,
+            int season,
+            String description,
+            Set<Integer> processedTeams
+    ) throws Exception {
+
+        int teamId =
+                standing.getTeam().getId();
+
+        if (!processedTeams.add(teamId)) {
+            return;
+        }
+
+        System.out.printf(
+                "  %-10s %s%n",
+                description,
+                standing.getTeam().getName()
+        );
+
+        saveTeamPackage(
+                teamId,
+                leagueId,
+                season
+        );
+    }
+
+    private List<Standing> getPrimaryStandings(
+            StandingsApiResponse standings
+    ) {
+
+        return standings.getResponse()
+                .getFirst()
+                .getLeague()
+                .getStandings()
+                .getFirst();
+    }
+
 
 
     /**

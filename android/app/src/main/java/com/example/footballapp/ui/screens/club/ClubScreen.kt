@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.footballapp.ui.components.ClubBadge
+//import com.example.footballapp.ui.components.ClubBadge
 import com.example.footballapp.ui.components.InfoRow
 import com.example.footballapp.ui.components.NavigationCard
 import com.example.footballapp.ui.components.ScreenScaffold
@@ -36,22 +36,6 @@ fun ClubScreen(
         title = club.name,
 
         subtitle = club.league,
-
-        backgroundContent = {
-
-            ClubBadge(
-
-                logoUrl = club.badgeUrl,
-
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .offset(x = (-24).dp, y = (-24).dp)
-                    .size(AppDimensions.ImageLarge *8.5f)
-                    .alpha(0.04f)
-
-            )
-
-        }
 
     ) {
 

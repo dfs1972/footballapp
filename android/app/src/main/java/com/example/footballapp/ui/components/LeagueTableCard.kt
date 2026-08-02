@@ -50,17 +50,3 @@ fun LeagueTableCard(
     }
 
 }
-//
-//@Preview(showBackground = true)
-//@Composable
-//private fun LeagueTableCardPreview() {
-//
-//    LeagueTableCard(
-//
-//        table = PreviewData.ScottishPremiershipTable,
-//
-//        onTeamClick = {}
-//
-//    )
-//
-//}

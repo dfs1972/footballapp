@@ -49,24 +49,24 @@ fun SquadScreen(
 
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun SquadScreenPreview() {
-
-    MaterialTheme {
-
-        SquadScreen(
-
-            clubName = "Rangers",
-
-            season = "2025/26",
-
-            players = PreviewData.RangersSquad,
-
-            onPlayerClick = {}
-
-        )
-
-    }
-
-}
+//@Preview(showBackground = true)
+//@Composable
+//private fun SquadScreenPreview() {
+//
+//    MaterialTheme {
+//
+//        SquadScreen(
+//
+//            clubName = "Rangers",
+//
+//            season = "2025/26",
+//
+//            players = PreviewData.RangersSquad,
+//
+//            onPlayerClick = {}
+//
+//        )
+//
+//    }
+//
+//}

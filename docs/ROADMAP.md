@@ -133,6 +133,13 @@ Feature parity between live API and snapshots
 Production-ready Android application
 Migration from development snapshots to live API
 
+## Legal Limitations
+
+FootballApp does not display copyrighted competition logos,
+club badges, or player photographs. 
+The UI is intentionally text- and data-focused, 
+with its own visual identity.
+
 ### Phase 6 — Polish
 
 Planned:

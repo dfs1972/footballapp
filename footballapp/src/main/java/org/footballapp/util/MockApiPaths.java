@@ -7,42 +7,43 @@ public final class MockApiPaths {
     private MockApiPaths() {
     }
 
+    private static String competitionRoot(
+            int leagueId
+    ) {
+        return "competitions/"
+                + leagueId
+                + "/";
+    }
+
     public static String league(
             int leagueId
     ) {
-        return "leagues/league_"
-                + leagueId
-                + ".json";
+        return competitionRoot(leagueId)
+                + "league.json";
     }
 
     public static String standings(
             int leagueId,
             int season
     ) {
-        return "standings/standings_"
-                + leagueId
-                + "_"
-                + season
-                + ".json";
+        return competitionRoot(leagueId)
+                + "standings.json";
     }
 
     public static String teams(
             int leagueId,
             int season
     ) {
-        return "teams/teams_"
-                + leagueId
-                + "_"
-                + season
-                + ".json";
+        return competitionRoot(leagueId)
+                + "teams.json";
     }
 
     public static String team(
             int teamId
     ) {
-        return "teams/team_"
+        return "teams/"
                 + teamId
-                + ".json";
+                + "/team.json";
     }
 
     public static String teamStatistics(
@@ -50,24 +51,17 @@ public final class MockApiPaths {
             int leagueId,
             int season
     ) {
-        return "statistics/teamStatistics_"
+        return "teams/"
                 + teamId
-                + "_"
-                + leagueId
-                + "_"
-                + season
-                + ".json";
+                + "/statistics.json";
     }
 
     public static String fixtures(
             int leagueId,
             int season
     ) {
-        return "fixtures/fixtures_"
-                + leagueId
-                + "_"
-                + season
-                + ".json";
+        return competitionRoot(leagueId)
+                + "fixtures.json";
     }
 
     public static String fixture(long fixtureId) {
@@ -82,13 +76,9 @@ public final class MockApiPaths {
             int leagueId,
             int season
     ) {
-        return "fixtures/team_fixtures_"
+        return "teams/"
                 + teamId
-                + "_"
-                + leagueId
-                + "_"
-                + season
-                + ".json";
+                + "/fixtures.json";
     }
 
     public static String fixtureEvents(long fixtureId) {
@@ -120,11 +110,9 @@ public final class MockApiPaths {
             int teamId,
             int season
     ) {
-        return "players/teamplayers_"
+        return "teams/"
                 + teamId
-                + "_"
-                + season
-                + ".json";
+                + "/players.json";
     }
 
     public static String player(

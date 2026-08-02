@@ -5,6 +5,7 @@ import java.net.http.HttpHeaders;
 public class ApiRateLimiter {
 
     private static final int PAUSE_THRESHOLD = 10;
+    public static final int MAX_REQUESTS_PER_MINUTE = 240;
 
     public void processHeaders(
             HttpHeaders headers

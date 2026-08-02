@@ -203,7 +203,9 @@ public class JsonSnapshotService {
     ) throws Exception {
 
         save(
-                "players?team=" + teamId
+                "players?team="
+                        + teamId
+                        + "&league=" + leagueId
                         + "&season=" + season,
                 MockApiPaths.teamPlayers(teamId, leagueId, season)
         );

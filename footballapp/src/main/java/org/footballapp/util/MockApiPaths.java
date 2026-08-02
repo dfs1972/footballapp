@@ -124,8 +124,8 @@ public final class MockApiPaths {
             int season
     ) {
         return competitionTeamRoot(
-                teamId,
-                season
+                leagueId,
+                teamId
         ) + "players.json";
     }
 

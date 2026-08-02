@@ -98,10 +98,11 @@ public class SnapshotController {
 
     @GetMapping("/snapshot/fixture/{fixtureId}")
     public String saveFixture(
-            @PathVariable long fixtureId
+            @PathVariable long fixtureId,
+            @PathVariable int leagueId
     ) throws Exception {
 
-        snapshotService.saveFixture(fixtureId);
+        snapshotService.saveFixture(fixtureId, leagueId);
 
         return "Fixture " + fixtureId + " snapshot created.";
     }
@@ -331,10 +332,11 @@ public class SnapshotController {
 
     @GetMapping("/snapshot/fixturePackage/{fixtureId}")
     public String saveFixturePackage(
-            @PathVariable long fixtureId
+            @PathVariable long fixtureId,
+            @PathVariable int leagueId
     ) throws Exception {
 
-        snapshotService.saveFixturePackage(fixtureId);
+        snapshotService.saveFixturePackage(fixtureId, leagueId);
 
         return "Fixture package created for fixture "
                 + fixtureId

@@ -67,6 +67,21 @@ public final class MockApiPaths {
         ) + "statistics.json";
     }
 
+
+    /**
+     * FIXTURES SECTION
+     */
+
+    private static String competitionFixtureRoot(
+            int leagueId,
+            long fixtureId
+    ) {
+        return competitionRoot(leagueId)
+                + "fixtures/"
+                + fixtureId
+                + "/";
+    }
+
     public static String fixtures(
             int leagueId,
             int season
@@ -75,11 +90,36 @@ public final class MockApiPaths {
                 + "fixtures.json";
     }
 
-    public static String fixture(long fixtureId) {
-
+    public static String fixture(
+            long fixtureId
+    ) {
         return "fixtures/"
                 + fixtureId
                 + "/fixture.json";
+    }
+
+    public static String fixtureEvents(
+            long fixtureId
+    ) {
+        return "fixtures/"
+                + fixtureId
+                + "/events.json";
+    }
+
+    public static String fixtureLineups(
+            long fixtureId
+    ) {
+        return "fixtures/"
+                + fixtureId
+                + "/lineups.json";
+    }
+
+    public static String fixtureStatistics(
+            long fixtureId
+    ) {
+        return "fixtures/"
+                + fixtureId
+                + "/statistics.json";
     }
 
     public static String teamFixtures(
@@ -91,27 +131,6 @@ public final class MockApiPaths {
                 leagueId,
                 teamId
         ) + "fixtures.json";
-    }
-
-    public static String fixtureEvents(long fixtureId) {
-
-        return "fixtures/"
-                + fixtureId
-                + "/events.json";
-    }
-
-    public static String fixtureLineups(long fixtureId) {
-
-        return "fixtures/"
-                + fixtureId
-                + "/lineups.json";
-    }
-
-    public static String fixtureStatistics(long fixtureId) {
-
-        return "fixtures/"
-                + fixtureId
-                + "/statistics.json";
     }
 
     /**

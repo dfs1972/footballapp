@@ -292,12 +292,15 @@ public class JsonSnapshotService {
      */
 
     public void saveFixture(
-            long fixtureId
+            long fixtureId,
+            int leagueId
     ) throws Exception {
 
         save(
                 "fixtures?id=" + fixtureId,
-                MockApiPaths.fixture(fixtureId)
+                MockApiPaths.fixture(
+                        fixtureId
+                )
         );
     }
 
@@ -616,16 +619,26 @@ public class JsonSnapshotService {
      * Save Fixture Package
      */
     public void saveFixturePackage(
-            long fixtureId
+            long fixtureId,
+            int leagueId
     ) throws Exception {
 
-        saveFixture(fixtureId);
+        saveFixture(
+                fixtureId,
+                leagueId
+        );
 
-        saveFixtureEvents(fixtureId);
+        saveFixtureEvents(
+                fixtureId
+        );
 
-        saveFixtureLineups(fixtureId);
+        saveFixtureLineups(
+                fixtureId
+        );
 
-        saveFixtureStatistics(fixtureId);
+        saveFixtureStatistics(
+                fixtureId
+        );
     }
 
     /**
@@ -712,7 +725,8 @@ public class JsonSnapshotService {
             );
 
             saveFixturePackage(
-                    fixture.getFixture().getId()
+                    fixture.getFixture().getId(),
+                    leagueId
             );
         }
 

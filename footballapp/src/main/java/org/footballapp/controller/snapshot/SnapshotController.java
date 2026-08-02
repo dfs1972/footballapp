@@ -174,13 +174,16 @@ public class SnapshotController {
     @GetMapping("/snapshot/players/{teamId}/{season}")
     public String saveTeamPlayers(
             @PathVariable int teamId,
+            @PathVariable int leagueId,
             @PathVariable int season
     ) throws Exception {
 
-        snapshotService.saveTeamPlayers(teamId, season);
+        snapshotService.saveTeamPlayers(teamId, leagueId, season);
 
         return "Players snapshot created for team "
                 + teamId
+                + ", league "
+                + leagueId
                 + " season "
                 + season + ".";
     }

@@ -120,6 +120,7 @@ public final class MockApiPaths {
 
     public static String teamPlayers(
             int teamId,
+            int leagueId,
             int season
     ) {
         return competitionTeamRoot(

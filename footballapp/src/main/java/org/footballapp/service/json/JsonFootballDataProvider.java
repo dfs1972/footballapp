@@ -179,12 +179,14 @@ public class JsonFootballDataProvider implements FootballDataProvider {
     @Override
     public PlayersApiResponse getTeamPlayers(
             int teamId,
+            int leagueId,
             int season
     ) throws Exception {
 
         return jsonLoader.load(
                 MockApiPaths.teamPlayers(
                         teamId,
+                        leagueId,
                         season
                 ),
                 PlayersApiResponse.class

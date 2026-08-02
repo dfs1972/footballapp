@@ -49,6 +49,7 @@ public interface FootballDataProvider {
 
     PlayersApiResponse getTeamPlayers(
             int teamId,
+            int leagueId,
             int season
     ) throws Exception;
 

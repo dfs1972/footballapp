@@ -198,13 +198,14 @@ public class JsonSnapshotService {
 
     public void saveTeamPlayers(
             int teamId,
+            int leagueId,
             int season
     ) throws Exception {
 
         save(
                 "players?team=" + teamId
                         + "&season=" + season,
-                MockApiPaths.teamPlayers(teamId, season)
+                MockApiPaths.teamPlayers(teamId, leagueId, season)
         );
     }
 
@@ -569,6 +570,7 @@ public class JsonSnapshotService {
 
         saveTeamPlayers(
                 teamId,
+                leagueId,
                 season
         );
 

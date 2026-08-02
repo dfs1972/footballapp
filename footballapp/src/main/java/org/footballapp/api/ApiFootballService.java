@@ -210,11 +210,13 @@ public class ApiFootballService implements FootballDataProvider {
     @Override
     public PlayersApiResponse getTeamPlayers(
             int teamId,
+            int leagueId,
             int season
     ) throws Exception {
 
         return getTeamPlayers(
                 teamId,
+                leagueId,
                 season
         );
     }

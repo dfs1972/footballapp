@@ -197,7 +197,6 @@ public class JsonSnapshotService {
      */
 
     public void saveTeamPlayers(
-            int leagueId,
             int teamId,
             int season
     ) throws Exception {
@@ -205,7 +204,7 @@ public class JsonSnapshotService {
         save(
                 "players?team=" + teamId
                         + "&season=" + season,
-                MockApiPaths.teamPlayers(leagueId, teamId, season)
+                MockApiPaths.teamPlayers(teamId, season)
         );
     }
 
@@ -371,7 +370,8 @@ public class JsonSnapshotService {
     ) throws Exception {
 
         save(
-                "teams/statistics?team=" + teamId
+                "teams/statistics?team="
+                        + teamId
                         + "&league=" + leagueId
                         + "&season=" + season,
                 MockApiPaths.teamStatistics(teamId, leagueId, season)
@@ -568,20 +568,19 @@ public class JsonSnapshotService {
         );
 
         saveTeamPlayers(
-                leagueId,
                 teamId,
                 season
         );
 
         saveTeamFixtures(
-                leagueId,
                 teamId,
+                leagueId,
                 season
         );
 
         saveTeamStatistics(
-                leagueId,
                 teamId,
+                leagueId,
                 season
         );
     }

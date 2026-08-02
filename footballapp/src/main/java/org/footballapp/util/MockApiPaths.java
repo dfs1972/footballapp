@@ -119,13 +119,12 @@ public final class MockApiPaths {
      */
 
     public static String teamPlayers(
-            int leagueId,
             int teamId,
             int season
     ) {
         return competitionTeamRoot(
-                leagueId,
-                teamId
+                teamId,
+                season
         ) + "players.json";
     }
 

@@ -209,13 +209,11 @@ public class ApiFootballService implements FootballDataProvider {
 
     @Override
     public PlayersApiResponse getTeamPlayers(
-            int leagueId,
             int teamId,
             int season
     ) throws Exception {
 
         return getTeamPlayers(
-                leagueId,
                 teamId,
                 season
         );

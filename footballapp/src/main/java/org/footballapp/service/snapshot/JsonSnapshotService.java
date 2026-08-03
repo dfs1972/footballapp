@@ -10,6 +10,7 @@ import org.footballapp.config.competitions.SupportedCompetitionGroup;
 import org.footballapp.model.fixtures.FixtureResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.model.standings.Standing;
+import org.footballapp.model.standings.StandingLeague;
 import org.footballapp.model.standings.StandingsApiResponse;
 import org.footballapp.model.teams.TeamResponse;
 import org.footballapp.model.teams.TeamsApiResponse;
@@ -82,11 +83,27 @@ public class JsonSnapshotService {
         String json =
                 apiFootballClient.get(url);
 
-        Object parsed =
-                objectMapper.readValue(
-                        json,
-                        Object.class
+        JsonNode root =
+                objectMapper.readTree(
+                        json
                 );
+
+        if (isApiError(root)) {
+
+            System.out.println();
+            System.out.println("========================================");
+            System.out.println("API ERROR");
+            System.out.println("Endpoint : " + endpoint);
+            System.out.println("Errors   : " + root.get("errors"));
+            System.out.println("Snapshot NOT saved.");
+            System.out.println("========================================");
+            System.out.println();
+
+            throw new IOException(
+                    "API returned an error for endpoint: "
+                            + endpoint
+            );
+        }
 
         File file =
                 new File(
@@ -105,7 +122,7 @@ public class JsonSnapshotService {
                 .writerWithDefaultPrettyPrinter()
                 .writeValue(
                         file,
-                        parsed
+                        root
                 );
 
         System.out.println(
@@ -765,6 +782,17 @@ public class JsonSnapshotService {
         List<Standing> table =
                 getPrimaryStandings(standings);
 
+        if (table.isEmpty()) {
+
+            System.out.println(
+                    "Skipping league "
+                            + leagueId
+                            + " - no standings available."
+            );
+
+            return;
+        }
+
         Set<Integer> processedTeams =
                 new HashSet<>();
 
@@ -835,11 +863,44 @@ public class JsonSnapshotService {
             StandingsApiResponse standings
     ) {
 
-        return standings.getResponse()
-                .getFirst()
-                .getLeague()
-                .getStandings()
-                .getFirst();
+        if (standings.getResponse().isEmpty()) {
+            return List.of();
+        }
+
+        StandingLeague league =
+                standings.getResponse().getFirst().getLeague();
+
+        if (league.getStandings().isEmpty()) {
+            return List.of();
+        }
+
+        return league.getStandings().getFirst();
+    }
+
+    /**
+     * Checks if there is an error from API before saving.
+     */
+
+    private boolean isApiError(
+            JsonNode root
+    ) {
+
+        JsonNode errors =
+                root.get("errors");
+
+        if (errors == null || errors.isNull()) {
+            return false;
+        }
+
+        if (errors.isObject()) {
+            return errors.fieldNames().hasNext();
+        }
+
+        if (errors.isArray()) {
+            return !errors.isEmpty();
+        }
+
+        return false;
     }
 
 

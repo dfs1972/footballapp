@@ -108,25 +108,6 @@ private fun ValueCell(
     )
 
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//private fun LeagueTableRowPreview() {
-//
-//    MaterialTheme {
-//
-//        LeagueTableRow(
-//
-//            row = PreviewData.ScottishPremiershipTable.first(),
-//
-//            isEvenRow = true,
-//
-//            onClubClick = {}
-//
-//        )
-//    }
-//}
-//
 @Composable
 private fun QualificationType.backgroundColor(
     isEvenRow: Boolean

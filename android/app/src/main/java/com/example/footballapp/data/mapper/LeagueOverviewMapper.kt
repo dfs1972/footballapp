@@ -2,6 +2,7 @@ package com.example.footballapp.data.mapper
 
 import com.example.footballapp.data.remote.dto.LeagueOverviewDto
 import com.example.footballapp.ui.model.LeagueOverviewUiModel
+import com.example.footballapp.util.LeagueNameFormatter
 
 /**
  * Maps a LeagueOverviewDto received from the backend
@@ -13,7 +14,12 @@ fun LeagueOverviewDto.toUiModel(): LeagueOverviewUiModel {
 
         leagueId = leagueId,
 
-        leagueName = leagueName,
+        leagueName = LeagueNameFormatter.displayName(
+
+            leagueId,
+
+            leagueName
+        ),
 
         season = season.toString(),
 
@@ -24,3 +30,24 @@ fun LeagueOverviewDto.toUiModel(): LeagueOverviewUiModel {
     )
 
 }
+
+//private fun displayLeagueName(
+//    leagueId: Int,
+//    leagueName: String
+//): String {
+//
+//    return when (leagueId) {
+//
+//        179 -> "Scottish Premiership"
+//
+//        180 -> "Scottish Championship"
+//
+//        183 -> "Scottish League One"
+//
+//        184 -> "Scottish League Two"
+//
+//        else -> leagueName
+//
+//    }
+//
+//}

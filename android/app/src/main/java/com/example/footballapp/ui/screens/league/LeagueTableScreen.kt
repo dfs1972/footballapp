@@ -1,11 +1,12 @@
 package com.example.footballapp.ui.screens.league
 
 import androidx.compose.runtime.Composable
+import com.example.footballapp.ui.components.AppHeader
 import com.example.footballapp.ui.components.LeagueTableCard
 import com.example.footballapp.ui.components.ScreenScaffold
-import com.example.footballapp.ui.design.AppConstants
 import com.example.footballapp.ui.model.LeagueOverviewUiModel
 import com.example.footballapp.ui.model.LeagueTableRowUiModel
+import com.example.footballapp.ui.theme.HeaderBlue
 
 @Composable
 fun LeagueTableScreen(
@@ -18,17 +19,23 @@ fun LeagueTableScreen(
 
 ) {
 
-    ScreenScaffold(
+    ScreenScaffold {
 
-        title = overview.leagueName,
+        item {
 
-        subtitle = AppConstants.DEVELOPMENT_SEASON_TEXT
+            AppHeader(
 
-    ) {
+                backgroundColor = HeaderBlue
+
+            )
+
+        }
 
         item {
 
             LeagueTableCard(
+
+                leagueName = overview.leagueName,
 
                 table = standings,
 
@@ -41,23 +48,3 @@ fun LeagueTableScreen(
     }
 
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//private fun LeagueTableScreenPreview() {
-//
-//    FootballAppTheme {
-//
-//        LeagueTableScreen(
-//
-//            competition = PreviewData.ScottishPremiership,
-//
-//            standings = PreviewData.ScottishPremiershipTable,
-//
-//            onClubClick = {}
-//
-//        )
-//
-//    }
-//
-//}

@@ -1,14 +1,17 @@
 package com.example.footballapp.ui.screens.fixtures
 
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.material3.MaterialTheme
 import com.example.footballapp.ui.components.FixtureCard
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.SectionHeading
 import com.example.footballapp.ui.model.FixtureDayUiModel
-import com.example.footballapp.ui.previews.PreviewData
 import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.Modifier
+import com.example.footballapp.ui.components.AppHeader
+import com.example.footballapp.ui.design.AppSpacing
+import com.example.footballapp.ui.theme.HeaderBlue
 
 @Composable
 fun FixturesScreen(
@@ -23,13 +26,25 @@ fun FixturesScreen(
 
 ) {
 
-    ScreenScaffold(
+    ScreenScaffold {
 
-        title = competitionName,
+        item {
 
-        subtitle = season
+            AppHeader(
 
-    ) {
+                backgroundColor = HeaderBlue
+
+            )
+
+        }
+
+        item {
+
+            Spacer(
+                modifier = Modifier.height(AppSpacing.ExtraLarge)
+            )
+
+        }
 
         fixtureDays.forEach { day ->
 
@@ -70,34 +85,6 @@ fun FixturesScreen(
             }
 
         }
-
-    }
-
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun FixturesScreenPreview() {
-
-    MaterialTheme {
-
-        FixturesScreen(
-
-            competitionName = "Scottish Premiership",
-
-            season = "2025/26",
-
-            fixtureDays = listOf(
-
-                PreviewData.TodayFixtures,
-
-                PreviewData.TomorrowFixtures
-
-            ),
-
-            onFixtureSelected = {}
-
-        )
 
     }
 

@@ -1,42 +1,53 @@
 package com.example.footballapp.ui.components
 
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.footballapp.ui.design.AppSpacing
-import com.example.footballapp.ui.theme.AppTypography
 
 @Composable
-fun SectionHeading(
+fun CardHeader(
 
-    text: String,
+    title: String,
 
-    centered: Boolean = false
+    subtitle: String
 
 ) {
 
     Text(
 
-        text = text,
+        text = title,
 
         modifier = Modifier.fillMaxWidth(),
 
-        textAlign =
-            if (centered)
-                TextAlign.Center
-            else
-                TextAlign.Start,
+        textAlign = TextAlign.Center,
 
-        style = MaterialTheme.typography.titleSmall,
+        style = MaterialTheme.typography.titleMedium,
 
         fontWeight = FontWeight.Bold
 
+    )
+
+    Spacer(
+        modifier = Modifier.height(AppSpacing.ExtraSmall)
+    )
+
+    SectionHeading(
+
+        text = subtitle,
+
+        centered = true
+
+    )
+
+    Spacer(
+        modifier = Modifier.height(AppSpacing.Small)
     )
 
 }

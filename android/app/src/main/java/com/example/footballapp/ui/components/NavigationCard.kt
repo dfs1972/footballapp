@@ -124,23 +124,3 @@ fun NavigationCard(
     }
 
 }
-
-@Preview(showBackground = true)
-@Composable
-private fun NavigationCardPreview() {
-
-    MaterialTheme {
-
-        NavigationCard(
-
-            title = "League Table",
-
-            subtitle = "Current standings after every match",
-
-            onClick = {}
-
-        )
-
-    }
-
-}

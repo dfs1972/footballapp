@@ -2,13 +2,16 @@ package com.example.footballapp.ui.screens.player
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.footballapp.ui.components.AppHeader
 import com.example.footballapp.ui.components.InfoRow
 //import com.example.footballapp.ui.components.PlayerPhoto
 import com.example.footballapp.ui.components.ScreenScaffold
@@ -18,6 +21,7 @@ import com.example.footballapp.ui.model.PlayerDetailsUiModel
 import com.example.footballapp.ui.previews.PreviewData
 import com.example.footballapp.ui.theme.AppDimensions
 import com.example.footballapp.ui.design.AppSpacing
+import com.example.footballapp.ui.theme.HeaderBlue
 import com.example.footballapp.util.DateFormatter
 
 @Composable
@@ -27,13 +31,25 @@ fun PlayerDetailsScreen(
 
 ) {
 
-    ScreenScaffold(
+    ScreenScaffold{
 
-        title = player.name,
+        item {
 
-        subtitle = player.position
+            AppHeader(
 
-    ) {
+                backgroundColor = HeaderBlue
+
+            )
+
+        }
+
+        item {
+
+            Spacer(
+                modifier = Modifier.height(AppSpacing.ExtraLarge)
+            )
+
+        }
 
         item {
 
@@ -182,22 +198,6 @@ fun PlayerDetailsScreen(
             }
 
         }
-
-    }
-
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun PlayerDetailsScreenPreview() {
-
-    MaterialTheme {
-
-        PlayerDetailsScreen(
-
-            player = PreviewData.JamesTavernierDetails
-
-        )
 
     }
 

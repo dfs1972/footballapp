@@ -3,6 +3,7 @@ package com.example.footballapp.data.mapper
 import com.example.footballapp.data.remote.dto.CompetitionGroupDto
 import com.example.footballapp.ui.model.CompetitionGroupUiModel
 import com.example.footballapp.ui.model.CompetitionUiModel
+import com.example.footballapp.util.LeagueNameFormatter
 
 fun CompetitionGroupDto.toUiModel() =
 
@@ -24,7 +25,13 @@ fun CompetitionGroupDto.toUiModel() =
 
                         id = it.competitionId,
 
-                        name = it.name,
+                        name = LeagueNameFormatter.displayName(
+
+                            it.competitionId,
+
+                            it.name
+
+                        ),
 
                         country = country,
 

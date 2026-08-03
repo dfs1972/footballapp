@@ -1,15 +1,18 @@
 package com.example.footballapp.ui.screens.league
 
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.Modifier
+import com.example.footballapp.ui.components.AppHeader
 import com.example.footballapp.ui.components.NavigationCard
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.TopStandingsCard
-import com.example.footballapp.ui.design.AppConstants
+import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.design.Strings
 import com.example.footballapp.ui.model.LeagueOverviewUiModel
 import com.example.footballapp.ui.model.LeagueTableRowUiModel
-import com.example.footballapp.ui.previews.PreviewData
+import com.example.footballapp.ui.theme.HeaderBlue
 
 @Composable
 fun LeagueOverviewScreen(
@@ -28,17 +31,31 @@ fun LeagueOverviewScreen(
 
 ) {
 
-    ScreenScaffold(
+    ScreenScaffold {
 
-        title = overview.leagueName,
+        item {
 
-        subtitle = "Season ${overview.season}"
+            AppHeader(
 
-    ) {
+                backgroundColor = HeaderBlue
+
+            )
+
+        }
+
+        item {
+
+            Spacer(
+                modifier = Modifier.height(AppSpacing.ExtraLarge)
+            )
+
+        }
 
         item {
 
             TopStandingsCard(
+
+                leagueName = overview.leagueName,
 
                 standings = topStandings,
 
@@ -96,32 +113,4 @@ fun LeagueOverviewScreen(
 
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun LeagueOverviewScreenPreview() {
-
-    LeagueOverviewScreen(
-
-        overview = LeagueOverviewUiModel(
-
-            leagueId = AppConstants.DEVELOPMENT_LEAGUE,
-
-            leagueName = "Scottish Premiership",
-
-            season = AppConstants.DEVELOPMENT_SEASON_TEXT,
-
-            teamCount = 12,
-
-            fixtureCount = 228
-
-        ),
-        topStandings =
-            PreviewData
-                .ScottishPremiershipTable
-                .take(5)
-
-    )
-
 }

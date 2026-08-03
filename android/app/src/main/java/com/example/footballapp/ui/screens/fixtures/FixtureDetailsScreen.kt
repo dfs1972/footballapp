@@ -2,13 +2,16 @@ package com.example.footballapp.ui.screens.fixtures
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import com.example.footballapp.ui.components.AppHeader
 import com.example.footballapp.ui.components.FixtureLineupCard
 import com.example.footballapp.ui.components.InfoRow
 import com.example.footballapp.ui.components.ScreenScaffold
@@ -17,6 +20,7 @@ import com.example.footballapp.ui.components.SectionHeading
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.model.FixtureDetailsUiModel
 import com.example.footballapp.ui.model.FixtureLineupUiModel
+import com.example.footballapp.ui.theme.HeaderBlue
 import com.example.footballapp.util.DateFormatter
 
 @Composable
@@ -30,13 +34,25 @@ fun FixtureDetailsScreen(
 
 ) {
 
-    ScreenScaffold(
+    ScreenScaffold{
 
-        title = fixture.leagueName,
+        item {
 
-        subtitle = fixture.season
+            AppHeader(
 
-    ) {
+                backgroundColor = HeaderBlue
+
+            )
+
+        }
+
+        item {
+
+            Spacer(
+                modifier = Modifier.height(AppSpacing.ExtraLarge)
+            )
+
+        }
 
         /*
          * Match

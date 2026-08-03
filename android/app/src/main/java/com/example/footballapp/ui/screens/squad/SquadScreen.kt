@@ -1,12 +1,15 @@
 package com.example.footballapp.ui.screens.squad
 
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import com.example.footballapp.ui.model.PlayerUiModel
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.Modifier
+import com.example.footballapp.ui.components.AppHeader
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.PlayerList
-import com.example.footballapp.ui.previews.PreviewData
+import com.example.footballapp.ui.design.AppSpacing
+import com.example.footballapp.ui.theme.HeaderBlue
 
 @Composable
 fun SquadScreen(
@@ -21,13 +24,25 @@ fun SquadScreen(
 
 ) {
 
-    ScreenScaffold(
+    ScreenScaffold {
 
-        title = clubName,
+        item {
 
-        subtitle = season
+            AppHeader(
 
-    ) {
+                backgroundColor = HeaderBlue
+
+            )
+
+        }
+
+        item {
+
+            Spacer(
+                modifier = Modifier.height(AppSpacing.ExtraLarge)
+            )
+
+        }
 
         PlayerList(
 
@@ -48,25 +63,3 @@ fun SquadScreen(
     }
 
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//private fun SquadScreenPreview() {
-//
-//    MaterialTheme {
-//
-//        SquadScreen(
-//
-//            clubName = "Rangers",
-//
-//            season = "2025/26",
-//
-//            players = PreviewData.RangersSquad,
-//
-//            onPlayerClick = {}
-//
-//        )
-//
-//    }
-//
-//}

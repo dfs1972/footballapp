@@ -52,18 +52,32 @@ public class ApiFootballClient {
                 .GET()
                 .build();
 
-        HttpResponse<String> response =
-                client.send(
-                        request,
-                        HttpResponse.BodyHandlers.ofString()
-                );
+        while (true) {
 
-        rateLimiter.processHeaders(
-                response.headers()
-        );
+            HttpResponse<String> response =
+                    client.send(
+                            request,
+                            HttpResponse.BodyHandlers.ofString()
+                    );
 
-        return response.body();
-    }
+            rateLimiter.processHeaders(
+                    response.headers()
+            );
+
+            String body =
+                    response.body();
+
+            if (!body.contains("\"rateLimit\"")) {
+                return body;
+            }
+
+            System.out.println();
+            System.out.println("API rate limit reached.");
+            System.out.println("Waiting 60 seconds before retry...");
+            System.out.println();
+
+            Thread.sleep(60_000);
+        }}
 
     @Bean
     public ApiFootballClient apiFootballClient(

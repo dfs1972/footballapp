@@ -30,6 +30,13 @@ public class SnapshotLoader {
                 filename
         );
 
+        if (!Files.exists(path)) {
+
+            throw new SnapshotNotFoundException(
+                    filename
+            );
+        }
+
         return objectMapper.readValue(
                 path.toFile(),
                 clazz

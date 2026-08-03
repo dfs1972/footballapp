@@ -31,7 +31,8 @@ public class ApiRateLimiter {
                 dayLimit
         );
 
-        if (minuteRemaining <= PAUSE_THRESHOLD) {
+        if (minuteRemaining > 0 &&
+                minuteRemaining <= PAUSE_THRESHOLD) {
 
             System.out.println(
                     "Approaching API rate limit. Waiting 60 seconds..."

@@ -9,6 +9,8 @@ import org.footballapp.config.competitions.SupportedCompetition;
 import org.footballapp.config.competitions.SupportedCompetitionGroup;
 import org.footballapp.model.fixtures.FixtureResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
+import org.footballapp.model.player.PlayerResponse;
+import org.footballapp.model.player.PlayersApiResponse;
 import org.footballapp.model.standings.Standing;
 import org.footballapp.model.standings.StandingLeague;
 import org.footballapp.model.standings.StandingsApiResponse;
@@ -857,6 +859,12 @@ public class JsonSnapshotService {
                 leagueId,
                 season
         );
+
+        saveRepresentativePlayerPackages(
+                teamId,
+                leagueId,
+                season
+        );
     }
 
     private List<Standing> getPrimaryStandings(
@@ -901,6 +909,66 @@ public class JsonSnapshotService {
         }
 
         return false;
+    }
+
+
+    /**
+     * Save representative players helper
+     */
+
+    private void saveRepresentativePlayerPackages(
+            int teamId,
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        PlayersApiResponse players =
+                snapshotLoader.load(
+                        MockApiPaths.teamPlayers(
+                                teamId,
+                                leagueId,
+                                season
+                        ),
+                        PlayersApiResponse.class
+                );
+
+        if (players.getResponse() == null
+                || players.getResponse().isEmpty()) {
+
+            System.out.println(
+                    "No players found for team " + teamId
+            );
+
+            return;
+        }
+
+        System.out.println(
+                "Downloading "
+                        + players.getResponse().size()
+                        + " player packages..."
+        );
+
+        for (PlayerResponse response
+                : players.getResponse()) {
+
+            int playerId =
+                    response.getPlayer().getPlayerId();
+
+            System.out.println(
+                    "Player " + playerId
+                            + " - "
+                            + response.getPlayer().getName()
+            );
+
+            savePlayerPackage(
+                    playerId,
+                    season
+            );
+        }
+
+        System.out.println(
+                "Player packages complete."
+        );
     }
 
 

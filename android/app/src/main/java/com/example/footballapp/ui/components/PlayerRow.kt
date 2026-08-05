@@ -100,17 +100,6 @@ fun PlayerRow(
 
                 )
 
-                Text(
-
-                    text = player.position,
-
-                    //style = MaterialTheme.typography.bodyMedium,
-                    style = MaterialTheme.typography.bodyMedium,
-
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-
-                )
-
             }
 
         }
@@ -128,35 +117,3 @@ fun PlayerRow(
     }
 
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//private fun PlayerRowPreview() {
-//
-//    MaterialTheme {
-//
-//        SectionCard {
-//
-//            PlayerRow(
-//
-//                player = PlayerUiModel(
-//
-//                    playerId = 1,
-//
-//                    shirtNumber = 2,
-//
-//                    name = "James Tavernier",
-//
-//                    position = "Defender"
-//
-//                ),
-//
-//                onClick = {}
-//
-//            )
-//
-//        }
-//
-//    }
-//
-//}

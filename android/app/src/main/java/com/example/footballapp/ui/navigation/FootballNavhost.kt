@@ -458,9 +458,7 @@ fun FootballNavHost() {
 
                 ClubsScreen(
 
-                    competitionName = overview.leagueName,
-
-                    season = overview.season,
+                    overview = overview,
 
                     clubs = clubsState.clubs,
 

@@ -66,11 +66,22 @@ fun LazyListScope.PlayerList(
 
                         ) {
 
+                            SectionHeading(
+
+                                text = positionHeading(position),
+
+                                centered = true
+
+                            )
+
                             squad.forEach { player ->
 
                                 PlayerRow(
+
                                     player = player,
+
                                     onClick = onPlayerClick
+
                                 )
 
                             }
@@ -88,27 +99,3 @@ fun LazyListScope.PlayerList(
     }
 
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//private fun PlayerListPreview() {
-//
-//    ScreenScaffold(
-//
-//        title = "Rangers",
-//
-//        subtitle = "Squad"
-//
-//    ) {
-//
-//        PlayerList(
-//
-//            players = PreviewData.RangersSquad,
-//
-//            onPlayerClick = {}
-//
-//        )
-//
-//    }
-//
-//}

@@ -59,8 +59,7 @@ fun ClubRow(
 
                 style = MaterialTheme.typography.titleMedium,
 
-                fontWeight = FontWeight.SemiBold
-
+                fontWeight = FontWeight.Normal
             )
 
             club.stadium?.let {

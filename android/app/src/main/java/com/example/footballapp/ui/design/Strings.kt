@@ -7,6 +7,9 @@ object Strings {
     const val LEAGUE_TABLE = "League Table"
     const val FIXTURES = "Fixtures"
     const val CLUBS = "Teams"
+
+    const val Football_Club = " Football Club"
+    const val SQUAD = "Squad"
     const val TOP_FIVE = "Top 5"
     const val VIEW_COMPLETE_STANDINGS = "View complete standings"
     const val UPCOMING_FIXTURES = "Upcoming fixtures and results"

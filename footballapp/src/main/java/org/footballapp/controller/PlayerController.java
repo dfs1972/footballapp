@@ -55,6 +55,14 @@ public class PlayerController {
 
     ) throws Exception {
 
+        System.out.println(">>> PlayerDetails endpoint hit");
+
+        System.out.println(
+                "playerId=" + playerId +
+                        ", leagueId=" + leagueId +
+                        ", season=" + season
+        );
+
         return leagueDataService.getPlayerDetails(
                 playerId,
                 leagueId,

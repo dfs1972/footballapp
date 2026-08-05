@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.footballapp.ui.model.LeagueTableRowUiModel
 //import com.example.footballapp.ui.previews.PreviewData
 import com.example.footballapp.ui.design.AppSpacing
+import com.example.footballapp.ui.design.Strings
 
 @Composable
 fun LeagueTableCard(
@@ -27,34 +28,12 @@ fun LeagueTableCard(
 
     SectionCard {
 
-        Text(
+        CardHeader(
 
-            text = leagueName,
+            title = leagueName,
 
-            modifier = Modifier.fillMaxWidth(),
+            subtitle = Strings.LEAGUE_TABLE
 
-            textAlign = TextAlign.Center,
-
-            style = MaterialTheme.typography.titleMedium,
-
-            fontWeight = FontWeight.Bold
-
-        )
-
-        Spacer(
-            modifier = Modifier.height(AppSpacing.ExtraSmall)
-        )
-
-        SectionHeading(
-
-            text = "League Table",
-
-            centered = true
-
-        )
-
-        Spacer(
-            modifier = Modifier.height(AppSpacing.Small)
         )
 
         LeagueTableHeader()

@@ -4,8 +4,11 @@ package org.footballapp.service;
  * Spring Boot Service
  */
 import org.footballapp.api.response.lineups.FixtureLineupMapper;
+import org.footballapp.mapper.PlayerDetailsMapper;
+import org.footballapp.mapper.PlayerMapper;
 import org.footballapp.model.fixtures.FixtureResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
+import org.footballapp.model.player.PlayersApiResponse;
 import org.footballapp.model.standings.Standing;
 import org.footballapp.model.standings.StandingsApiResponse;
 import org.footballapp.model.teams.TeamResponse;
@@ -21,7 +24,7 @@ import org.footballapp.repository.StandingRepository;
 import org.footballapp.repository.TeamRepository;
 import org.footballapp.repository.TeamStatisticsRepository;
 import org.footballapp.repository.VenueRepository;
-import org.footballapp.repository.PlayerStatisticsRepository;
+//import org.footballapp.repository.PlayerStatisticsRepository;
 import org.footballapp.repository.PlayerRepository;
 import org.footballapp.model.club.ClubDetails;
 
@@ -51,14 +54,17 @@ public class LeagueDataService {
     private final VenueRepository venueRepository;
     private final StandingRepository standingRepository;
     private final FixtureRepository fixtureRepository;
-    private final PlayerStatisticsRepository playerStatisticsRepository;
+    //private final PlayerStatisticsRepository playerStatisticsRepository;
     private final PlayerRepository playerRepository;
     private final FixtureLineupRepository fixtureLineupRepository;
     private final FixtureLineupMapper fixtureLineupMapper;
     private final FootballDataProvider  fixtureService;
+    private final FootballDataProvider  footballDataProvider;
     private final SupportedCompetitionsService supportedCompetitionsService;
     private final StandingService standingService;
     private final TeamService teamService;
+    private final PlayerMapper playerMapper;
+    private final PlayerDetailsMapper playerDetailsMapper;
 
     /**
      * Contructors
@@ -74,9 +80,12 @@ public class LeagueDataService {
             FixtureLineupRepository fixtureLineupRepository,
             FixtureLineupMapper fixtureLineupMapper,
             FootballDataProvider  fixtureService,
-            PlayerStatisticsRepository playerStatisticsRepository,
+            //PlayerStatisticsRepository playerStatisticsRepository,
             PlayerRepository playerRepository,
-            SupportedCompetitionsService supportedCompetitionsService
+            SupportedCompetitionsService supportedCompetitionsService,
+            FootballDataProvider footballDataProvider,
+            PlayerMapper playerMapper,
+            PlayerDetailsMapper playerDetailsMapper
     ) {
         this.teamRepository = teamRepository;
         this.teamService = teamService;
@@ -87,15 +96,19 @@ public class LeagueDataService {
         this.fixtureRepository = fixtureRepository;
         this.fixtureService  = fixtureService;
         this.fixtureLineupRepository = fixtureLineupRepository;
-        this.playerStatisticsRepository = playerStatisticsRepository;
+        //this.playerStatisticsRepository = playerStatisticsRepository;
         this.playerRepository = playerRepository;
         this.fixtureLineupMapper = fixtureLineupMapper;
         this.supportedCompetitionsService = supportedCompetitionsService;
+        this.footballDataProvider = footballDataProvider;
+        this.playerMapper = playerMapper;
+        this.playerDetailsMapper = playerDetailsMapper;
     }
 
     /**
      *  Get team by ID method
      */
+
     public Team getTeam(
             int teamId
     ) throws Exception {
@@ -108,39 +121,68 @@ public class LeagueDataService {
     /**
      * Get team lineup from a game
      */
+
     public List<PlayerSummary> getPlayersForTeam(
             int teamId,
             int leagueId,
             int season
     ) throws Exception {
 
-        return playerStatisticsRepository
-                .getPlayersForTeam(
+        return playerMapper.toPlayerSummaries(
+
+                footballDataProvider.getTeamPlayers(
+
                         teamId,
                         leagueId,
                         season
-                );
+
+                )
+
+        );
+
     }
 
     /**
      * Returns detailed information for a player.
      */
+
     public PlayerDetails getPlayerDetails(
             int playerId,
             int leagueId,
             int season
     ) throws Exception {
 
-        return playerRepository.getPlayerDetails(
-                playerId,
-                leagueId,
-                season
+        PlayersApiResponse response =
+                footballDataProvider.getPlayer(
+                        playerId,
+                        season
+                );
+
+        System.out.println(
+                response.getResponse().size()
         );
+
+        return playerDetailsMapper.toPlayerDetails(
+                response
+        );
+
+//        return playerDetailsMapper.toPlayerDetails(
+//
+//                footballDataProvider.getPlayer(
+//
+//                        playerId,
+//                        season
+//
+//                )
+//
+//        );
+
     }
 
     /**
      * Get league table by season
      */
+
     public List<LeagueTableRow> getLeagueTable(
             int leagueId,
             int season

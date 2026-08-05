@@ -16,7 +16,7 @@ fun CardHeader(
 
     title: String,
 
-    subtitle: String
+    subtitle: String? = null
 
 ) {
 
@@ -34,17 +34,21 @@ fun CardHeader(
 
     )
 
-    Spacer(
-        modifier = Modifier.height(AppSpacing.ExtraSmall)
-    )
+    if (subtitle != null) {
 
-    SectionHeading(
+        Spacer(
+            modifier = Modifier.height(AppSpacing.ExtraSmall)
+        )
 
-        text = subtitle,
+        SectionHeading(
 
-        centered = true
+            text = subtitle,
 
-    )
+            centered = true
+
+        )
+
+    }
 
     Spacer(
         modifier = Modifier.height(AppSpacing.Small)

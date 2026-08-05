@@ -7,20 +7,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
 import com.example.footballapp.ui.components.AppHeader
+import com.example.footballapp.ui.components.CardHeader
 import com.example.footballapp.ui.components.ClubList
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.SectionCard
 import com.example.footballapp.ui.design.AppSpacing
+import com.example.footballapp.ui.design.Strings
+import com.example.footballapp.ui.model.ClubDetailsUiModel
 import com.example.footballapp.ui.model.ClubUiModel
+import com.example.footballapp.ui.model.LeagueOverviewUiModel
 import com.example.footballapp.ui.previews.PreviewData
 import com.example.footballapp.ui.theme.HeaderBlue
 
 @Composable
 fun ClubsScreen(
 
-    competitionName: String,
-
-    season: String,
+    overview: LeagueOverviewUiModel,
 
     clubs: List<ClubUiModel>,
 
@@ -44,6 +46,18 @@ fun ClubsScreen(
 
             Spacer(
                 modifier = Modifier.height(AppSpacing.ExtraLarge)
+            )
+
+        }
+
+        item {
+
+            CardHeader(
+
+                title = overview.leagueName,
+
+                subtitle = Strings.CLUBS
+
             )
 
         }

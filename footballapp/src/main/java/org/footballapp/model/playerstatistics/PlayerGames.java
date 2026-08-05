@@ -17,7 +17,7 @@ public class PlayerGames {
 
     private Boolean captain;
 
-    private String rating;
+    private Double rating;
 
     public PlayerGames() {
     }
@@ -70,11 +70,11 @@ public class PlayerGames {
         this.captain = captain;
     }
 
-    public String getRating() {
+    public Double getRating() {
         return rating;
     }
 
-    public void setRating(String rating) {
+    public void setRating(Double rating) {
         this.rating = rating;
     }
 }

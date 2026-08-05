@@ -14,7 +14,9 @@ import java.sql.Date;
 public class PlayerDetailsMapper {
 
     public PlayerDetails toPlayerDetails(
-            PlayersApiResponse response
+            PlayersApiResponse response,
+            int leagueId,
+            int season
     ) {
 
         if (response == null
@@ -25,26 +27,41 @@ public class PlayerDetailsMapper {
         }
 
         return toPlayerDetails(
-                response.getResponse().getFirst()
+                response.getResponse().getFirst(),
+                leagueId,
+                season
         );
 
     }
 
     private PlayerDetails toPlayerDetails(
-            PlayerResponse response
+            PlayerResponse response,
+            int leagueId,
+            int season
     ) {
 
         Player player =
                 response.getPlayer();
 
-        PlayerStatistics statistics =
-                null;
+        PlayerStatistics statistics = null;
 
-        if (response.getStatistics() != null
-                && !response.getStatistics().isEmpty()) {
+        if (response.getStatistics() != null) {
 
-            statistics =
-                    response.getStatistics().getFirst();
+            for (PlayerStatistics playerStatistics
+                    : response.getStatistics()) {
+
+                if (playerStatistics.getLeague() == null) {
+                    continue;
+                }
+
+                if (playerStatistics.getLeague().getLeagueId() == leagueId
+                        && playerStatistics.getLeague().getSeason() == season) {
+
+                    statistics = playerStatistics;
+                    break;
+                }
+
+            }
 
         }
 

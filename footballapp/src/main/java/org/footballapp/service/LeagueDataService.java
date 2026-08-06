@@ -4,6 +4,7 @@ package org.footballapp.service;
  * Spring Boot Service
  */
 import org.footballapp.api.response.lineups.FixtureLineupMapper;
+import org.footballapp.mapper.FixtureMapper;
 import org.footballapp.mapper.PlayerDetailsMapper;
 import org.footballapp.mapper.PlayerMapper;
 import org.footballapp.model.fixtures.FixtureResponse;
@@ -57,6 +58,7 @@ public class LeagueDataService {
     //private final PlayerStatisticsRepository playerStatisticsRepository;
     private final PlayerRepository playerRepository;
     private final FixtureLineupRepository fixtureLineupRepository;
+    private final FixtureMapper fixtureMapper;
     private final FixtureLineupMapper fixtureLineupMapper;
     private final FootballDataProvider  fixtureService;
     private final FootballDataProvider  footballDataProvider;
@@ -78,6 +80,7 @@ public class LeagueDataService {
             StandingService standingService,
             FixtureRepository fixtureRepository,
             FixtureLineupRepository fixtureLineupRepository,
+            FixtureMapper fixtureMapper,
             FixtureLineupMapper fixtureLineupMapper,
             FootballDataProvider  fixtureService,
             //PlayerStatisticsRepository playerStatisticsRepository,
@@ -94,6 +97,7 @@ public class LeagueDataService {
         this.standingRepository = standingRepository;
         this.standingService = standingService;
         this.fixtureRepository = fixtureRepository;
+        this.fixtureMapper = fixtureMapper;
         this.fixtureService  = fixtureService;
         this.fixtureLineupRepository = fixtureLineupRepository;
         //this.playerStatisticsRepository = playerStatisticsRepository;
@@ -294,15 +298,23 @@ public class LeagueDataService {
     /**
      *  Get Fixtures for that season.
      */
+
     public List<FixtureRow> getFixtures(
             int leagueId,
             int season
     ) throws Exception {
 
-        return fixtureRepository.getFixtures(
-                leagueId,
-                season
+        return fixtureMapper.toFixtureRows(
+
+                footballDataProvider.getFixtures(
+
+                        leagueId,
+                        season
+
+                )
+
         );
+
     }
 
     /**

@@ -67,6 +67,9 @@ public class ApiFootballClient {
             String body =
                     response.body();
 
+            /**  TEST PRINT ****/
+            System.out.println(body);
+
             if (!body.contains("\"rateLimit\"")) {
                 return body;
             }

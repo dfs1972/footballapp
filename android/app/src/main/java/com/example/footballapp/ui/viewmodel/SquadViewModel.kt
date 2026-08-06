@@ -27,7 +27,13 @@ class SquadViewModel : ViewModel() {
         season: Int
     ) {
 
+        /*************** TEST PRINT *******************************/
+
+        println(">>> SquadViewModel.loadPlayers called")
+
         viewModelScope.launch {
+
+            println(">>> Coroutine started")
 
             _uiState.value =
                 SquadUiState(
@@ -37,37 +43,41 @@ class SquadViewModel : ViewModel() {
             try {
 
                 val players =
-                    repository
-                        .getPlayers(
-                            teamId,
-                            leagueId,
-                            season
-                        )
+                    repository.getPlayers(
+                        teamId,
+                        leagueId,
+                        season
+                    )
+
+                println("Players received = ${players.size}")
+
+                players.forEach {
+                    println("${it.name} -> ${it.position}")
+                }
 
                 _uiState.value =
                     SquadUiState(
-
                         isLoading = false,
-
                         players = players
-
                     )
 
             } catch (e: Exception) {
 
                 _uiState.value =
                     SquadUiState(
-
                         isLoading = false,
-
                         error = e.message
-
                     )
+
+                e.printStackTrace()
+
+                println("Repository failed: ${e.message}")
+
+                throw e
 
             }
 
         }
 
     }
-
 }

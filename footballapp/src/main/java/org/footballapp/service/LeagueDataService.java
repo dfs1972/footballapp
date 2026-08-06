@@ -181,31 +181,6 @@ public class LeagueDataService {
 
         );
 
-//        PlayersApiResponse response =
-//                footballDataProvider.getPlayer(
-//                        playerId,
-//                        season
-//                );
-//
-//        System.out.println(
-//                response.getResponse().size()
-//        );
-//
-//        return playerDetailsMapper.toPlayerDetails(
-//                response
-//        );
-
-//        return playerDetailsMapper.toPlayerDetails(
-//
-//                footballDataProvider.getPlayer(
-//
-//                        playerId,
-//                        season
-//
-//                )
-//
-//        );
-
     }
 
     /**

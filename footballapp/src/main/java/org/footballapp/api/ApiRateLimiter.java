@@ -4,8 +4,7 @@ import java.net.http.HttpHeaders;
 
 public class ApiRateLimiter {
 
-    private static final int PAUSE_THRESHOLD = 10;
-    public static final int MAX_REQUESTS_PER_MINUTE = 240;
+    private static final int PAUSE_THRESHOLD = 2;
 
     public void processHeaders(
             HttpHeaders headers
@@ -38,7 +37,7 @@ public class ApiRateLimiter {
                     "Approaching API rate limit. Waiting 60 seconds..."
             );
 
-            Thread.sleep(60_000);
+            Thread.sleep(5_000);
         }
     }
 

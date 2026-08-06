@@ -11,7 +11,7 @@ fun PlayerDto.toUiModel() =
 
         shirtNumber = shirtNumber,
 
-        name = displayName,
+        name = displayName?: "Unknown",
 
         position = position
 

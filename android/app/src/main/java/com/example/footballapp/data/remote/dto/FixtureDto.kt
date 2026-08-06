@@ -16,8 +16,8 @@ data class FixtureDto(
 
     val awayTeam: String,
 
-    val homeGoals: Int,
+    val homeGoals: Int?,
 
-    val awayGoals: Int
+    val awayGoals: Int?
 
 )

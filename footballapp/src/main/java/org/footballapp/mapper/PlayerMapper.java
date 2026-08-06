@@ -116,6 +116,12 @@ public class PlayerMapper {
 
         }
 
+        System.out.println(
+                summary.getDisplayName()
+                        + " -> "
+                        + summary.getPosition()
+        );
+
         return summary;
 
     }

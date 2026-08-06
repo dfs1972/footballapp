@@ -2,6 +2,8 @@ package org.footballapp.service.snapshot;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.footballapp.api.ApiFootballClient;
 import org.footballapp.config.AppConfig;
 import org.footballapp.config.competitions.CompetitionType;
@@ -135,6 +137,122 @@ public class JsonSnapshotService {
                 "Snapshot created: %s%n",
                 file.getPath()
         );
+    } // End of save()
+
+
+    /**
+     * Save Paged
+     */
+
+    private void savePaged(
+            String endpoint,
+            String outputFile
+    ) throws Exception {
+
+        int page = 1;
+
+        JsonNode mergedRoot = null;
+
+        ArrayNode mergedResponse =
+                objectMapper.createArrayNode();
+
+        while (true) {
+
+            String url =
+                    API_BASE
+                            + endpoint
+                            + "&page="
+                            + page;
+
+            String json =
+                    apiFootballClient.get(url);
+
+            JsonNode root =
+                    objectMapper.readTree(json);
+
+            if (isApiError(root)) {
+
+                System.out.println();
+                System.out.println("========================================");
+                System.out.println("API ERROR");
+                System.out.println("Endpoint : " + endpoint);
+                System.out.println("Errors   : " + root.get("errors"));
+                System.out.println("Snapshot NOT saved.");
+                System.out.println("========================================");
+                System.out.println();
+
+                throw new IOException(
+                        "API returned an error for endpoint: "
+                                + endpoint
+                );
+            }
+
+            if (mergedRoot == null) {
+
+                mergedRoot = root.deepCopy();
+
+            }
+
+            ArrayNode response =
+                    (ArrayNode) root.get("response");
+
+            mergedResponse.addAll(response);
+
+            int current =
+                    root.get("paging")
+                            .get("current")
+                            .asInt();
+
+            int total =
+                    root.get("paging")
+                            .get("total")
+                            .asInt();
+
+            if (current >= total) {
+                break;
+            }
+
+            page++;
+        }
+
+        ((ObjectNode) mergedRoot).set(
+                "response",
+                mergedResponse
+        );
+
+        ((ObjectNode) mergedRoot).put(
+                "results",
+                mergedResponse.size()
+        );
+
+        File file =
+                new File(
+                        MockApiPaths.ROOT,
+                        outputFile
+                );
+
+        File parent =
+                file.getParentFile();
+
+        if (parent != null) {
+            parent.mkdirs();
+        }
+
+        objectMapper
+                .writerWithDefaultPrettyPrinter()
+                .writeValue(
+                        file,
+                        mergedRoot
+                );
+
+        System.out.println(
+                "Saved " + file.getPath()
+        );
+
+        System.out.printf(
+                "Snapshot created: %s%n",
+                file.getPath()
+        );
     }
 
     /**
@@ -221,7 +339,7 @@ public class JsonSnapshotService {
             int season
     ) throws Exception {
 
-        save(
+        savePaged(
                 "players?team="
                         + teamId
                         + "&league=" + leagueId
@@ -970,8 +1088,6 @@ public class JsonSnapshotService {
                 "Player packages complete."
         );
     }
-
-
 
     /**
      * Get Team IDs

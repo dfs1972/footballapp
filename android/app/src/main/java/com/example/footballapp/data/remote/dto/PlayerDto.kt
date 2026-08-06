@@ -4,11 +4,11 @@ data class PlayerDto(
 
     val playerId: Int,
 
-    val age: Int,
+    val age: Int?,
 
-    val nationality: String,
+    val nationality: String?,
 
-    val displayName: String,
+    val displayName: String?,
 
     val photoUrl: String?,
 
@@ -16,7 +16,7 @@ data class PlayerDto(
 
     val shirtNumber: Int?,
 
-    val captain: Boolean,
+    val captain: Boolean?,
 
     val appearances: Int?,
 

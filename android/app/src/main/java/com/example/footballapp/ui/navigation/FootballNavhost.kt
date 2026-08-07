@@ -147,7 +147,10 @@ fun FootballNavHost() {
                         navController.navigate(
                             FootballDestination
                                 .Club
-                                .createRoute(clubId)
+                                .createRoute(
+                                    leagueId,
+                                    clubId
+                                )
                         )
 
                     }
@@ -209,7 +212,10 @@ fun FootballNavHost() {
 
                             FootballDestination
                                 .Club
-                                .createRoute(clubId)
+                                .createRoute(
+                                    leagueId,
+                                    clubId
+                                )
 
                         )
 
@@ -276,7 +282,9 @@ fun FootballNavHost() {
 
                             FootballDestination
                                 .FixtureDetails
-                                .createRoute(fixtureId)
+                                .createRoute(
+                                    leagueId,
+                                    fixtureId)
 
                         )
 
@@ -295,6 +303,12 @@ fun FootballNavHost() {
         composable(
             route = FootballDestination.TeamFixtures.route
         ) { backStackEntry ->
+
+            val leagueId =
+                backStackEntry.arguments
+                    ?.getString("leagueId")
+                    ?.toInt()
+                    ?: return@composable
 
             val teamId =
                 backStackEntry.arguments
@@ -330,7 +344,7 @@ fun FootballNavHost() {
 
                     teamId = teamId,
 
-                    leagueId = AppConstants.DEVELOPMENT_LEAGUE,
+                    leagueId = leagueId,
 
                     season = AppConstants.DEVELOPMENT_SEASON
 
@@ -354,7 +368,9 @@ fun FootballNavHost() {
 
                             FootballDestination
                                 .FixtureDetails
-                                .createRoute(fixtureId)
+                                .createRoute(
+                                    leagueId,
+                                    fixtureId)
 
                         )
 
@@ -372,6 +388,12 @@ fun FootballNavHost() {
         composable(
             route = FootballDestination.FixtureDetails.route
         ) { backStackEntry ->
+
+            val leagueId =
+                backStackEntry.arguments
+                    ?.getString("leagueId")
+                    ?.toInt()
+                    ?: return@composable
 
             val fixtureId =
                 backStackEntry.arguments
@@ -405,7 +427,9 @@ fun FootballNavHost() {
                     onPlayerClick = { playerId ->
 
                         navController.navigate(
-                            FootballDestination.PlayerDetails.createRoute(playerId)
+                            FootballDestination.PlayerDetails.createRoute(
+                                leagueId,
+                                playerId)
                         )
 
                     }
@@ -468,7 +492,10 @@ fun FootballNavHost() {
 
                             FootballDestination
                                 .Club
-                                .createRoute(clubId)
+                                .createRoute(
+                                    leagueId,
+                                    clubId
+                                )
 
                         )
 
@@ -487,6 +514,12 @@ fun FootballNavHost() {
         composable(
             route = FootballDestination.Club.route
         ) { backStackEntry ->
+
+            val leagueId =
+                backStackEntry.arguments
+                    ?.getString("leagueId")
+                    ?.toInt()
+                    ?: return@composable
 
             val clubId =
                 backStackEntry.arguments
@@ -516,7 +549,10 @@ fun FootballNavHost() {
                         navController.navigate(
 
                             FootballDestination.TeamFixtures
-                                .createRoute(selectedClubId)
+                                .createRoute(
+                                    leagueId,
+                                    selectedClubId
+                                )
 
                         )
 
@@ -526,9 +562,9 @@ fun FootballNavHost() {
 
                         navController.navigate(
 
-                            FootballDestination
-                                .Squad
+                            FootballDestination.Squad
                                 .createRoute(
+                                    leagueId,
                                     selectedClubId
                                 )
 
@@ -549,6 +585,12 @@ fun FootballNavHost() {
             route = FootballDestination.Squad.route
         ) { backStackEntry ->
 
+            val leagueId =
+                backStackEntry.arguments
+                    ?.getString("leagueId")
+                    ?.toInt()
+                    ?: return@composable
+
             val clubId =
                 backStackEntry.arguments
                     ?.getString("clubId")
@@ -566,7 +608,7 @@ fun FootballNavHost() {
 
                     teamId = clubId,
 
-                    leagueId = AppConstants.DEVELOPMENT_LEAGUE,
+                    leagueId = leagueId,
 
                     season = AppConstants.DEVELOPMENT_SEASON
 
@@ -596,7 +638,9 @@ fun FootballNavHost() {
 
                             FootballDestination
                                 .PlayerDetails
-                                .createRoute(playerId)
+                                .createRoute(
+                                    leagueId,
+                                    playerId)
 
                         )
 
@@ -615,6 +659,12 @@ fun FootballNavHost() {
             route = FootballDestination.PlayerDetails.route
         ) { backStackEntry ->
 
+            val leagueId =
+                backStackEntry.arguments
+                    ?.getString("leagueId")
+                    ?.toInt()
+                    ?: return@composable
+
             val playerId =
                 backStackEntry.arguments
                     ?.getString("playerId")
@@ -623,13 +673,15 @@ fun FootballNavHost() {
 
             val playerDetailsViewModel: PlayerDetailsViewModel = viewModel()
 
-            LaunchedEffect(playerId) {
+            LaunchedEffect(
+                leagueId,
+                playerId) {
 
                 playerDetailsViewModel.loadPlayerDetails(
 
                     playerId = playerId,
 
-                    leagueId = AppConstants.DEVELOPMENT_LEAGUE,
+                    leagueId = leagueId,
 
                     season = AppConstants.DEVELOPMENT_SEASON
 

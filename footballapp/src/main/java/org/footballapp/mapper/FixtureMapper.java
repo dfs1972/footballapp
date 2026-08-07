@@ -9,6 +9,9 @@ import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,17 +65,13 @@ public class FixtureMapper {
                 fixture.getId()
         );
 
-        OffsetDateTime dateTime =
-                OffsetDateTime.parse(
-                        fixture.getDate()
-                );
-
-        row.setFixtureDate(
-                dateTime.toLocalDate().toString()
+        populateFixtureDateTime(
+                row,
+                fixture.getDate()
         );
 
-        row.setFixtureTime(
-                dateTime.toLocalTime().toString()
+        System.out.println(
+                "Mapped fixture date = " + row.getFixtureDate()
         );
 
         row.setHomeTeamId(
@@ -101,6 +100,43 @@ public class FixtureMapper {
 
         return row;
 
+    }
+
+    /**
+     * Formats fixture date/time for UK display.
+     */
+    private void populateFixtureDateTime(
+            FixtureRow row,
+            String rawDate
+    ) {
+
+        OffsetDateTime fixtureDate =
+                OffsetDateTime.parse(
+                        rawDate
+                );
+
+        ZonedDateTime ukDateTime =
+                fixtureDate.atZoneSameInstant(
+                        ZoneId.of(
+                                "Europe/London"
+                        )
+                );
+
+        row.setFixtureDate(
+                ukDateTime.format(
+                        DateTimeFormatter.ofPattern(
+                                "EEE dd MMM yyyy"
+                        )
+                )
+        );
+
+        row.setFixtureTime(
+                ukDateTime.format(
+                        DateTimeFormatter.ofPattern(
+                                "HH:mm"
+                        )
+                )
+        );
     }
 
 }

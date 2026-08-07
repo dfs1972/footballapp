@@ -598,6 +598,51 @@ public class JsonSnapshotService {
     }
 
     /**
+     * Save representative Coach snapshots.
+     */
+    public void saveRepresentativeCoaches() throws Exception {
+
+        System.out.println();
+        System.out.println("==================================================");
+        System.out.println("Generating Representative Coach Snapshots");
+        System.out.println("==================================================");
+
+        List<SupportedCompetitionGroup> groups =
+                supportedCompetitionsService.getCompetitionGroups();
+
+        for (SupportedCompetitionGroup group : groups) {
+
+            System.out.println();
+            System.out.println(group.getCountry());
+
+            for (SupportedCompetition competition
+                    : group.getCompetitions()) {
+
+                if (!competition.isEnabled()) {
+                    continue;
+                }
+
+                if (competition.getType() != CompetitionType.LEAGUE) {
+                    continue;
+                }
+
+                System.out.println();
+                System.out.println(competition.getName());
+
+                saveRepresentativeCoaches(
+                        competition.getCompetitionId(),
+                        AppConfig.DEVELOPMENT_SEASON
+                );
+            }
+        }
+
+        System.out.println();
+        System.out.println("==================================================");
+        System.out.println("Representative Coach Snapshots Complete");
+        System.out.println("==================================================");
+    }
+
+    /**
      * Save League Package
      */
 
@@ -968,6 +1013,92 @@ public class JsonSnapshotService {
                 season,
                 "Bottom",
                 processedTeams
+        );
+    }
+
+    /**
+     * Save Representative Coaches Helper
+     */
+    private void saveRepresentativeCoaches(
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        StandingsApiResponse standings =
+                snapshotLoader.load(
+                        MockApiPaths.standings(
+                                leagueId,
+                                season
+                        ),
+                        StandingsApiResponse.class
+                );
+
+        List<Standing> table =
+                getPrimaryStandings(standings);
+
+        if (table.isEmpty()) {
+
+            System.out.println(
+                    "Skipping league "
+                            + leagueId
+                            + " - no standings available."
+            );
+
+            return;
+        }
+
+        Set<Integer> processedTeams =
+                new HashSet<>();
+
+        int topCount =
+                Math.min(5, table.size());
+
+        for (int i = 0; i < topCount; i++) {
+
+            saveRepresentativeCoach(
+                    table.get(i),
+                    "Top " + (i + 1),
+                    processedTeams
+            );
+        }
+
+        saveRepresentativeCoach(
+                table.get(table.size() / 2),
+                "Mid-table",
+                processedTeams
+        );
+
+        saveRepresentativeCoach(
+                table.get(table.size() - 1),
+                "Bottom",
+                processedTeams
+        );
+    }
+
+    /**
+     * Save Representative Coach Helper
+     */
+    private void saveRepresentativeCoach(
+            Standing standing,
+            String description,
+            Set<Integer> processedTeams
+    ) throws Exception {
+
+        int teamId =
+                standing.getTeam().getId();
+
+        if (!processedTeams.add(teamId)) {
+            return;
+        }
+
+        System.out.printf(
+                "  %-10s %s%n",
+                description,
+                standing.getTeam().getName()
+        );
+
+        saveCoach(
+                teamId
         );
     }
 

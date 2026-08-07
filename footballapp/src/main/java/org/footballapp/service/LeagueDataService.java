@@ -508,20 +508,6 @@ public class LeagueDataService {
 
     }
 
-    /**
-     *  Get a particular team's fixtures for that season.
-     */
-    public List<FixtureRow> getLeagueFixtures(
-            int leagueId,
-            int season
-    ) throws Exception {
-
-        return fixtureRepository.getLeagueFixtures(
-                leagueId,
-                season
-        );
-    }
-
     /** Get a list of all teams playing in a particular league in that season. */
 
     public List<Team> getTeamsForLeague(
@@ -607,6 +593,7 @@ public class LeagueDataService {
 
         return fixtureRepository.getFixturesByTeam(teamId);
     }
+
     /**
      * Get a list of a team's recent results.
      */
@@ -760,6 +747,27 @@ public class LeagueDataService {
     }
 
     /**
+     * Returns fixtures for a single team.
+     */
+    public List<FixtureRow> getTeamFixtures(
+            int teamId,
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        FixturesApiResponse response =
+                footballDataProvider.getTeamFixtures(
+                        teamId,
+                        leagueId,
+                        season
+                );
+
+        return fixtureMapper.toFixtureRows(
+                response
+        );
+    }
+
+    /**
      * Get League Overview
      */
     public LeagueOverview getLeagueOverview(
@@ -794,14 +802,16 @@ public class LeagueDataService {
         );
 
         overview.setFixtureCount(
-                fixtureRepository
-                        .getLeagueFixtures(
+
+                footballDataProvider
+                        .getFixtures(
                                 leagueId,
                                 season
                         )
+                        .getResponse()
                         .size()
-        );
 
+        );
         return overview;
     } // End of getLeagueOverview()
 }

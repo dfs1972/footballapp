@@ -63,12 +63,13 @@ sealed class FootballDestination(
 
     object Club :
         FootballDestination(
-            "club/{clubId}"
+            "club/{leagueId}/{clubId}"
         ) {
 
         fun createRoute(
+            leagueId: Int,
             clubId: Int
-        ) = "club/$clubId"
+        ) = "club/$leagueId/$clubId"
 
     }
 
@@ -77,12 +78,13 @@ sealed class FootballDestination(
     //
     object Squad :
         FootballDestination(
-            "squad/{clubId}"
+            "squad/{leagueId}/{clubId}"
         ) {
 
         fun createRoute(
+            leagueId: Int,
             clubId: Int
-        ) = "squad/$clubId"
+        ) = "squad/$leagueId/$clubId"
 
     }
 
@@ -91,12 +93,13 @@ sealed class FootballDestination(
     //
     object TeamFixtures :
         FootballDestination(
-            "teamFixtures/{teamId}"
+            "teamFixtures/{leagueId}/{teamId}"
         ) {
 
         fun createRoute(
+            leagueId: Int,
             teamId: Int
-        ) = "teamFixtures/$teamId"
+        ) = "teamFixtures/$leagueId/$teamId"
 
     }
 
@@ -105,12 +108,13 @@ sealed class FootballDestination(
      */
 
     object FixtureDetails : FootballDestination(
-        "fixtureDetails/{fixtureId}"
+        "fixtureDetails/{leagueId}/{fixtureId}"
     ) {
 
         fun createRoute(
+            leagueId: Int,
             fixtureId: Long
-        ) = "fixtureDetails/$fixtureId"
+        ) = "fixtureDetails/$leagueId/$fixtureId"
 
     }
 
@@ -120,12 +124,13 @@ sealed class FootballDestination(
 
     object PlayerDetails :
         FootballDestination(
-            "player/{playerId}"
+            "player/{leagueId}/{playerId}"
         ) {
 
         fun createRoute(
+            leagueId: Int,
             playerId: Int
-        ) = "player/$playerId"
+        ) = "player/$leagueId/$playerId"
 
     }
 

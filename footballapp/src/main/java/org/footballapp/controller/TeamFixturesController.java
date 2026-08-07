@@ -14,25 +14,29 @@ import java.util.List;
 @RestController
 public class TeamFixturesController {
 
-    private final LeagueDataService
-            leagueDataService;
+    private final LeagueDataService leagueDataService;
 
     public TeamFixturesController(
             LeagueDataService leagueDataService
     ) {
-        this.leagueDataService =
-                leagueDataService;
+        this.leagueDataService = leagueDataService;
     }
 
     @GetMapping("/teamFixtures")
-    public List<FixtureRow> getFixturesByTeam(
+    public List<FixtureRow> getTeamFixtures(
 
-            @RequestParam int teamId
+            @RequestParam int teamId,
+
+            @RequestParam int leagueId,
+
+            @RequestParam int season
 
     ) throws Exception {
 
-        return leagueDataService.getFixturesByTeam(
-                teamId
+        return leagueDataService.getTeamFixtures(
+                teamId,
+                leagueId,
+                season
         );
 
     }

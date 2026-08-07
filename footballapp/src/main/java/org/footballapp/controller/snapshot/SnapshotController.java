@@ -65,6 +65,16 @@ public class SnapshotController {
 
     }
 
+
+    @GetMapping("/snapshot/representativeCoaches")
+    public String saveRepresentativeCoaches() throws Exception {
+
+        snapshotService.saveRepresentativeCoaches();
+
+        return "Representative coach snapshots created.";
+    }
+
+
     @GetMapping("/snapshot/teams/{leagueId}/{season}")
     public String saveTeams(
             @PathVariable int leagueId,

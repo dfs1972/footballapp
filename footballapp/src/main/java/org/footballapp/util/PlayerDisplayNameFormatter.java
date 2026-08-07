@@ -6,13 +6,13 @@ public final class PlayerDisplayNameFormatter {
     }
 
     public static String format(
-            String apiName,
             String firstName,
-            String lastName
+            String lastName,
+            String fallback
     ) {
 
         if (isBlank(firstName) || isBlank(lastName)) {
-            return apiName;
+            return fallback;
         }
 
         return firstWord(firstName)

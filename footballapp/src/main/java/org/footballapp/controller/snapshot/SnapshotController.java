@@ -45,10 +45,25 @@ public class SnapshotController {
 
     /*********************************************************************
      *
-     * TEAMS SECTION
+     * TEAMS & COACH SECTION
      *
      * *******************************************************************
      */
+
+    @GetMapping("/snapshot/coaches/{teamId}")
+    public String saveCoach(
+            @PathVariable int teamId
+    ) throws Exception {
+
+        snapshotService.saveCoach(
+                teamId
+        );
+
+        return "Coach snapshot created for team "
+                + teamId
+                + ".";
+
+    }
 
     @GetMapping("/snapshot/teams/{leagueId}/{season}")
     public String saveTeams(

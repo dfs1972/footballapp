@@ -174,4 +174,18 @@ public final class MockApiPaths {
                 + "/transfers.json";
     }
 
+    /**
+     * Coach Helper
+     */
+
+    public static String coach(
+            int teamId
+    ) {
+
+        return "teams/"
+                + teamId
+                + "/coach.json";
+
+    }
+
 }

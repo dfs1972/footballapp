@@ -14,6 +14,8 @@ data class ClubDto(
 
     val city: String,
 
-    val capacity: Int
+    val capacity: Int,
+
+    val coach: String?
 
 )

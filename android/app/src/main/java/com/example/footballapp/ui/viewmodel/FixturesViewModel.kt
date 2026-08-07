@@ -45,14 +45,6 @@ class FixturesViewModel : ViewModel() {
                         )
                         .groupByDay()
 
-                /*************** TEMP PRINT ******************/
-
-                println("Fixture days = ${fixtureDays.size}")
-
-                if (fixtureDays.isNotEmpty()) {
-                    println(fixtureDays.first())
-                }
-
                 _uiState.value =
                     FixturesUiState(
 

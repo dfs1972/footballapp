@@ -7,6 +7,8 @@ public class ClubDetails {
     private String country;
     private int founded;
 
+    private String coach;
+
     private String stadium;
     private String city;
     private int capacity;
@@ -42,6 +44,10 @@ public class ClubDetails {
     public void setFounded(int founded) {
         this.founded = founded;
     }
+
+    public String getCoach() {return coach;}
+
+    public void setCoach(String coach) {this.coach = coach;}
 
     public String getStadium() {
         return stadium;

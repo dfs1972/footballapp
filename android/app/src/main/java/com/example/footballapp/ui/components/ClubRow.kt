@@ -95,28 +95,3 @@ fun ClubRow(
     }
 
 }
-
-/**
- * Preview
- */
-//@Preview(showBackground = true)
-//@Composable
-//private fun ClubRowPreview() {
-//
-//    MaterialTheme {
-//
-//        SectionCard {
-//
-//            ClubRow(
-//
-//                club = PreviewData.Celtic,
-//
-//                onClick = {}
-//
-//            )
-//
-//        }
-//
-//    }
-//
-//}

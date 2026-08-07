@@ -662,7 +662,7 @@ object PreviewData {
 
         capacity = 60411,
 
-        manager = "Brendan Rodgers"
+        coach = "Brendan Rodgers"
 
     )
 
@@ -682,7 +682,7 @@ object PreviewData {
 
         capacity = 50817,
 
-        manager = "Russell Martin"
+        coach = "Russell Martin"
 
     )
 

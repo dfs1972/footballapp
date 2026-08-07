@@ -16,6 +16,6 @@ data class ClubDetailsUiModel(
 
     val capacity: Int? = null,
 
-    val manager: String? = null
+    val coach: String? = null
 
 )

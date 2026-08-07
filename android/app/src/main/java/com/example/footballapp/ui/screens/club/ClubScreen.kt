@@ -89,9 +89,9 @@ fun ClubScreen(
 
                 InfoRow(
 
-                    label = "Manager",
+                    label = "Coach",
 
-                    value = club.manager
+                    value = club.coach
 
                 )
 

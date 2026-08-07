@@ -1,6 +1,7 @@
 package org.footballapp.service.json;
 
 import org.footballapp.config.AppConfig;
+import org.footballapp.model.coaches.CoachApiResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.model.league.LeaguesApiResponse;
 import org.footballapp.model.player.PlayersApiResponse;
@@ -58,8 +59,22 @@ public class JsonFootballDataProvider implements FootballDataProvider {
 
 
     /**
-     ********* TEAMS SECTION *********
+     ********* TEAMS & COACH SECTION *********
      */
+
+    @Override
+    public CoachApiResponse getCoach(
+            int teamId
+    ) throws Exception {
+
+        return jsonLoader.load(
+                MockApiPaths.coach(
+                        teamId
+                ),
+                CoachApiResponse.class
+        );
+
+    }
 
     @Override
     public TeamsApiResponse getTeams(

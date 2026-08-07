@@ -4,18 +4,19 @@ package org.footballapp.service;
  * Spring Boot Service
  */
 import org.footballapp.api.response.lineups.FixtureLineupMapper;
-import org.footballapp.mapper.FixtureMapper;
-import org.footballapp.mapper.PlayerDetailsMapper;
-import org.footballapp.mapper.PlayerMapper;
+import org.footballapp.mapper.*;
+import org.footballapp.model.coaches.Coach;
 import org.footballapp.model.fixtures.FixtureResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.model.player.PlayersApiResponse;
 import org.footballapp.model.standings.Standing;
+import org.footballapp.model.standings.StandingLeague;
 import org.footballapp.model.standings.StandingsApiResponse;
 import org.footballapp.model.teams.TeamResponse;
+import org.footballapp.model.teams.TeamsApiResponse;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.*;
 
 
 /**Import repositories*/
@@ -65,6 +66,8 @@ public class LeagueDataService {
     private final SupportedCompetitionsService supportedCompetitionsService;
     private final StandingService standingService;
     private final TeamService teamService;
+    private final TeamMapper teamMapper;
+    private final CoachMapper coachMapper;
     private final PlayerMapper playerMapper;
     private final PlayerDetailsMapper playerDetailsMapper;
 
@@ -73,6 +76,8 @@ public class LeagueDataService {
      */
     public LeagueDataService(
             TeamRepository teamRepository,
+            TeamMapper teamMapper,
+            CoachMapper coachMapper,
             TeamService teamService,
             TeamStatisticsRepository teamStatisticsRepository,
             VenueRepository venueRepository,
@@ -91,7 +96,9 @@ public class LeagueDataService {
             PlayerDetailsMapper playerDetailsMapper
     ) {
         this.teamRepository = teamRepository;
+        this.teamMapper = teamMapper;
         this.teamService = teamService;
+        this.coachMapper = coachMapper;
         this.teamStatisticsRepository = teamStatisticsRepository;
         this.venueRepository = venueRepository;
         this.standingRepository = standingRepository;
@@ -258,42 +265,76 @@ public class LeagueDataService {
             int clubId
     ) throws Exception {
 
-        TeamResponse response =
-                teamService.getTeam(clubId);
+        TeamsApiResponse response =
+                footballDataProvider.getTeam(
+                        clubId
+                );
+
+        if (response.getResponse().isEmpty()) {
+            return null;
+        }
+
+        TeamResponse teamResponse =
+                response.getResponse().getFirst();
 
         ClubDetails club =
                 new ClubDetails();
 
         club.setClubId(
-                response.getTeam().getId()
+                teamResponse.getTeam().getId()
         );
 
         club.setName(
-                response.getTeam().getName()
+                teamResponse.getTeam().getName()
         );
 
         club.setCountry(
-                response.getTeam().getCountry()
+                teamResponse.getTeam().getCountry()
         );
 
         club.setFounded(
-                response.getTeam().getFounded()
+                teamResponse.getTeam().getFounded()
         );
 
         club.setStadium(
-                response.getVenue().getName()
+                teamResponse.getVenue().getName()
         );
 
         club.setCity(
-                response.getVenue().getCity()
+                teamResponse.getVenue().getCity()
         );
 
         club.setCapacity(
-                response.getVenue().getCapacity()
+                teamResponse.getVenue().getCapacity()
         );
+
+        Coach coach =
+                coachMapper.getCurrentCoach(
+
+                        footballDataProvider.getCoach(
+                                clubId
+                        ),
+
+                        clubId
+
+                );
+
+        if (coach != null) {
+
+            club.setCoach(
+
+                    coach.getFirstname()
+                            + " "
+                            + coach.getLastname()
+
+            );
+
+        }
 
         return club;
     }
+
+
 
     /**
      *  Get Fixtures for that season.
@@ -482,16 +523,81 @@ public class LeagueDataService {
     }
 
     /** Get a list of all teams playing in a particular league in that season. */
+
     public List<Team> getTeamsForLeague(
             int leagueId,
             int season
     ) throws Exception {
 
-        return teamRepository.getTeamsForLeague(
-                leagueId,
-                season
+        StandingsApiResponse standings =
+                footballDataProvider.getStandings(
+                        leagueId,
+                        season
+                );
+
+        List<Standing> primaryStandings =
+                getPrimaryStandings(
+                        standings
+                );
+
+        Set<Integer> teamIds =
+                new HashSet<>();
+
+        for (Standing standing
+                : primaryStandings) {
+
+            teamIds.add(
+                    standing.getTeam().getId()
+            );
+
+        }
+
+        List<Team> teams =
+                teamMapper.toTeams(
+                        footballDataProvider.getTeams(
+                                leagueId,
+                                season
+                        )
+                );
+
+        teams.removeIf(team ->
+                !teamIds.contains(
+                        team.getId()
+                )
         );
+
+        teams.sort(
+                Comparator.comparing(
+                        Team::getName,
+                        String.CASE_INSENSITIVE_ORDER
+                )
+        );
+
+        return teams;
+
     }
+
+    /********** HELPER FOR ABOVE METHOD, ALSO USED IN SnapshotService - TO BE MOVED INTO A SHARED UTILITY FILE ***************************************/
+    private List<Standing> getPrimaryStandings(
+            StandingsApiResponse standings
+    ) {
+
+        if (standings.getResponse().isEmpty()) {
+            return List.of();
+        }
+
+        StandingLeague league =
+                standings.getResponse().getFirst().getLeague();
+
+        if (league.getStandings().isEmpty()) {
+            return List.of();
+        }
+
+        return league.getStandings().getFirst();
+
+    }
+
+
     /**
      * Get a list of a team's fixtures for a season.
      */

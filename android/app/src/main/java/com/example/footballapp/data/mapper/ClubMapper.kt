@@ -21,6 +21,6 @@ fun ClubDto.toDetailsUiModel() =
 
         capacity = capacity,
 
-        manager = null
+        coach = coach
 
     )

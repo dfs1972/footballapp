@@ -1,5 +1,6 @@
 package org.footballapp.service;
 
+import org.footballapp.model.coaches.CoachApiResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.model.league.LeaguesApiResponse;
 import org.footballapp.model.player.PlayersApiResponse;
@@ -19,6 +20,10 @@ public interface FootballDataProvider {
     ) throws Exception;
 
     TeamsApiResponse getTeam(
+            int teamId
+    ) throws Exception;
+
+    CoachApiResponse getCoach(
             int teamId
     ) throws Exception;
 

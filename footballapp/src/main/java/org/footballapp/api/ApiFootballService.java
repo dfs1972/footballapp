@@ -2,6 +2,7 @@ package org.footballapp.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.footballapp.api.ApiFootballClient;
+import org.footballapp.model.coaches.CoachApiResponse;
 import org.footballapp.model.player.PlayersApiResponse;
 import org.footballapp.model.league.LeaguesApiResponse;
 import org.footballapp.model.teams.TeamsApiResponse;
@@ -99,8 +100,27 @@ public class ApiFootballService implements FootballDataProvider {
 
 
     /**
-     * Get Teams from a league & season
+     * Get Teams & Coaches from a league & season
      */
+
+    @Override
+    public CoachApiResponse getCoach(
+            int teamId
+    ) throws Exception {
+
+        String url =
+                "https://v3.football.api-sports.io/coachs?team="
+                        + teamId;
+
+        String json =
+                apiClient.get(url);
+
+        return mapper.readValue(
+                json,
+                CoachApiResponse.class
+        );
+
+    }
 
     @Override
     public TeamsApiResponse getTeams(

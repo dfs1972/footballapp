@@ -1,5 +1,6 @@
 package org.footballapp.service.json;
 
+import org.footballapp.api.dto.lineups.FixtureLineupsResponse;
 import org.footballapp.config.AppConfig;
 import org.footballapp.model.coaches.CoachApiResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
@@ -150,6 +151,19 @@ public class JsonFootballDataProvider implements FootballDataProvider {
                         fixtureId
                 ),
                 FixturesApiResponse.class
+        );
+    }
+
+    @Override
+    public FixtureLineupsResponse getFixtureLineups(
+            long fixtureId
+    ) throws Exception {
+
+        return jsonLoader.load(
+                MockApiPaths.fixtureLineups(
+                        fixtureId
+                ),
+                FixtureLineupsResponse.class
         );
     }
 

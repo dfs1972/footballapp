@@ -1,5 +1,6 @@
 package org.footballapp.service;
 
+import org.footballapp.api.dto.lineups.FixtureLineupsResponse;
 import org.footballapp.model.coaches.CoachApiResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.model.league.LeaguesApiResponse;
@@ -40,6 +41,12 @@ public interface FootballDataProvider {
     FixturesApiResponse getFixture(
             long fixtureId
     ) throws Exception;
+
+    FixtureLineupsResponse getFixtureLineups(
+            long fixtureId
+    ) throws Exception;
+
+
 
     FixturesApiResponse getTeamFixtures(
             int teamId,

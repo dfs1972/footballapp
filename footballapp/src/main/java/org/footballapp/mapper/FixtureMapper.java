@@ -1,6 +1,7 @@
 package org.footballapp.mapper;
 
 import org.footballapp.model.fixtures.Fixture;
+import org.footballapp.model.fixtures.FixtureDetails;
 import org.footballapp.model.fixtures.FixtureGoals;
 import org.footballapp.model.fixtures.FixtureResponse;
 import org.footballapp.model.fixtures.FixtureRow;
@@ -45,6 +46,122 @@ public class FixtureMapper {
 
     }
 
+    /**
+     * Maps a single API-Football fixture response
+     * to FixtureDetails.
+     */
+    public FixtureDetails toFixtureDetails(
+            FixturesApiResponse response
+    ) {
+
+        if (response == null
+                || response.getResponse() == null
+                || response.getResponse().isEmpty()) {
+
+            return null;
+
+        }
+
+        return toFixtureDetails(
+                response.getResponse().getFirst()
+        );
+
+    }
+
+    private FixtureDetails toFixtureDetails(
+            FixtureResponse response
+    ) {
+
+        Fixture fixture =
+                response.getFixture();
+
+        FixtureTeams teams =
+                response.getTeams();
+
+        FixtureGoals goals =
+                response.getGoals();
+
+        FixtureDetails details =
+                new FixtureDetails();
+
+        details.setFixtureId(
+                fixture.getId()
+        );
+
+        /*
+         * Use the same centralised UK date formatting
+         * already used by FixtureMapper.
+         */
+        OffsetDateTime dateTime =
+                OffsetDateTime.parse(
+                        fixture.getDate()
+                );
+
+        ZonedDateTime ukDateTime =
+                dateTime.atZoneSameInstant(
+                        ZoneId.of("Europe/London")
+                );
+
+        details.setFixtureDate(
+                        fixture.getDate()
+        );
+
+        details.setHomeTeamId(
+                teams.getHome().getId()
+        );
+
+        details.setHomeTeam(
+                teams.getHome().getName()
+        );
+
+        details.setAwayTeamId(
+                teams.getAway().getId()
+        );
+
+        details.setAwayTeam(
+                teams.getAway().getName()
+        );
+
+        details.setHomeGoals(
+                goals.getHome()
+        );
+
+        details.setAwayGoals(
+                goals.getAway()
+        );
+
+        if (fixture.getVenue() != null) {
+
+            details.setVenueName(
+                    fixture.getVenue().getName()
+            );
+
+        }
+
+        if (response.getLeague() != null) {
+
+            details.setLeagueId(
+                    response.getLeague().getId()
+            );
+
+            details.setLeagueName(
+                    response.getLeague().getName()
+            );
+
+            details.setSeason(
+                    response.getLeague().getSeason()
+            );
+
+            details.setRound(
+                    response.getLeague().getRound()
+            );
+
+        }
+
+        return details;
+
+    }
+
     private FixtureRow toFixtureRow(
             FixtureResponse response
     ) {
@@ -68,10 +185,6 @@ public class FixtureMapper {
         populateFixtureDateTime(
                 row,
                 fixture.getDate()
-        );
-
-        System.out.println(
-                "Mapped fixture date = " + row.getFixtureDate()
         );
 
         row.setHomeTeamId(

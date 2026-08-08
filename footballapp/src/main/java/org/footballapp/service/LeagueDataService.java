@@ -6,7 +6,6 @@ package org.footballapp.service;
 import org.footballapp.api.response.lineups.FixtureLineupMapper;
 import org.footballapp.mapper.*;
 import org.footballapp.model.coaches.Coach;
-import org.footballapp.model.fixtures.FixtureResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.model.player.PlayersApiResponse;
 import org.footballapp.model.standings.Standing;
@@ -20,7 +19,6 @@ import java.util.*;
 
 
 /**Import repositories*/
-import org.footballapp.repository.FixtureRepository;
 import org.footballapp.repository.FixtureLineupRepository;
 import org.footballapp.repository.StandingRepository;
 import org.footballapp.repository.TeamRepository;
@@ -36,12 +34,10 @@ import org.footballapp.model.lineups.FixtureLineup;
 import org.footballapp.model.lineups.FixtureLineupPlayer;
 import org.footballapp.api.response.lineups.FixtureLineupResponse;
 import org.footballapp.api.response.lineups.FixtureTeamLineupResponse;
-import org.footballapp.service.FixtureService;
 import org.footballapp.api.response.lineups.PlayerLineupResponse;
 import org.footballapp.model.player.Player;
 import org.footballapp.model.fixtures.FixtureRow;
 import org.footballapp.model.playerdetails.PlayerSummary;
-import org.footballapp.model.teamdetails.TeamDetails;
 import org.footballapp.model.teams.Team;
 import org.footballapp.model.standings.LeagueTableRow;
 import org.footballapp.model.league.LeagueOverview;
@@ -55,7 +51,6 @@ public class LeagueDataService {
     private final TeamStatisticsRepository teamStatisticsRepository;
     private final VenueRepository venueRepository;
     private final StandingRepository standingRepository;
-    private final FixtureRepository fixtureRepository;
     //private final PlayerStatisticsRepository playerStatisticsRepository;
     private final PlayerRepository playerRepository;
     private final FixtureLineupRepository fixtureLineupRepository;
@@ -83,7 +78,6 @@ public class LeagueDataService {
             VenueRepository venueRepository,
             StandingRepository standingRepository,
             StandingService standingService,
-            FixtureRepository fixtureRepository,
             FixtureLineupRepository fixtureLineupRepository,
             FixtureMapper fixtureMapper,
             FixtureLineupMapper fixtureLineupMapper,
@@ -103,7 +97,6 @@ public class LeagueDataService {
         this.venueRepository = venueRepository;
         this.standingRepository = standingRepository;
         this.standingService = standingService;
-        this.fixtureRepository = fixtureRepository;
         this.fixtureMapper = fixtureMapper;
         this.fixtureService  = fixtureService;
         this.fixtureLineupRepository = fixtureLineupRepository;
@@ -335,6 +328,8 @@ public class LeagueDataService {
     }
 
 
+    /**************** FIXTURES SECTION ***************************/
+
 
     /**
      *  Get Fixtures for that season.
@@ -366,8 +361,13 @@ public class LeagueDataService {
             long fixtureId
     ) throws Exception {
 
-        return fixtureRepository.getFixtureDetails(
-                fixtureId
+        FixturesApiResponse response =
+                footballDataProvider.getFixture(
+                        fixtureId
+                );
+
+        return fixtureMapper.toFixtureDetails(
+                response
         );
 
     }
@@ -564,6 +564,7 @@ public class LeagueDataService {
     }
 
     /********** HELPER FOR ABOVE METHOD, ALSO USED IN SnapshotService - TO BE MOVED INTO A SHARED UTILITY FILE ***************************************/
+
     private List<Standing> getPrimaryStandings(
             StandingsApiResponse standings
     ) {
@@ -583,92 +584,6 @@ public class LeagueDataService {
 
     }
 
-
-    /**
-     * Get a list of a team's fixtures for a season.
-     */
-    public List<FixtureRow> getFixturesByTeam(
-            int teamId
-    ) throws Exception {
-
-        return fixtureRepository.getFixturesByTeam(teamId);
-    }
-
-    /**
-     * Get a list of a team's recent results.
-     */
-    public List<FixtureRow> getRecentResults(
-            int leagueId,
-            int season,
-            int limit
-    ) throws Exception {
-
-        return fixtureRepository.getRecentResults(
-                leagueId,
-                season,
-                limit
-        );
-    }
-    /**
-     * Get team's form from last 5 matches.
-     */
-    public String getTeamForm(
-            int teamId
-    ) throws Exception {
-
-        FixturesApiResponse fixtures =
-                fixtureService.getRecentTeamFixtures(
-                        teamId,
-                        5
-                );
-
-        StringBuilder form =
-                new StringBuilder();
-
-        for (FixtureResponse fixture : fixtures.getResponse()) {
-
-            boolean homeTeam =
-                    fixture.getTeams()
-                            .getHome()
-                            .getId() == teamId;
-
-            Integer homeGoals =
-                    fixture.getGoals().getHome();
-
-            Integer awayGoals =
-                    fixture.getGoals().getAway();
-
-            if (homeGoals == null || awayGoals == null) {
-                continue;
-            }
-
-            int goalsFor =
-                    homeTeam
-                            ? homeGoals
-                            : awayGoals;
-
-            int goalsAgainst =
-                    homeTeam
-                            ? awayGoals
-                            : homeGoals;
-
-            if (goalsFor > goalsAgainst) {
-
-                form.append("W");
-
-            } else if (goalsFor < goalsAgainst) {
-
-                form.append("L");
-
-            } else {
-
-                form.append("D");
-            }
-        }
-
-        return form.toString();
-    }
-
     /**
      * Get a team's stats
      */
@@ -684,66 +599,6 @@ public class LeagueDataService {
                         leagueId,
                         season
                 );
-    }
-
-    /**
-     * Returns a team's league standing
-     */
-    public TeamDetails getTeamDetails(
-            int leagueId,
-            int season,
-            int teamId
-    )
-            throws Exception {
-
-        TeamDetails details =
-                new TeamDetails();
-
-        TeamResponse teamResponse =
-                teamService.getTeam(
-                        teamId
-                );
-
-        details.setTeam(
-                teamResponse.getTeam()
-        );
-
-        details.setVenue(
-                teamResponse.getVenue()
-        );
-
-        Standing standing =
-                standingService.getTeamStanding(
-                        leagueId,
-                        season,
-                        teamId
-                );
-
-        if (standing != null) {
-
-            details.setLeaguePosition(
-                    standing.getRank()
-            );
-
-            details.setPoints(
-                    standing.getPoints()
-            );
-
-        }
-
-        details.setForm(
-                getTeamForm(teamId)
-        );
-
-        details.setRecentFixtures(
-                fixtureRepository
-                        .getRecentFixturesByTeam(
-                                teamId,
-                                5
-                        )
-        );
-
-        return details;
     }
 
     /**
@@ -812,8 +667,11 @@ public class LeagueDataService {
                         .size()
 
         );
+
         return overview;
+
     } // End of getLeagueOverview()
+
 }
 
 

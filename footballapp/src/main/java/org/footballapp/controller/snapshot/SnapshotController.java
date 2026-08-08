@@ -44,9 +44,9 @@ public class SnapshotController {
 
 
     /*********************************************************************
-     *
+     * <p>
      * TEAMS & COACH SECTION
-     *
+     * <p>
      * *******************************************************************
      */
 
@@ -99,13 +99,8 @@ public class SnapshotController {
         return "Team " + teamId + " snapshot created.";
     }
 
+/*********************** FIXTURES SECTION ****************************************/
 
-    /*********************************************************************
-     *
-     * FIXTURES SECTION
-     *
-     * *******************************************************************
-     */
 
     @GetMapping("/snapshot/fixtures/{leagueId}/{season}")
     public String saveFixtures(
@@ -190,12 +185,7 @@ public class SnapshotController {
                 + ".";
     }
 
-    /*********************************************************************
-     *
-     * PLAYERS SECTION
-     *
-     * *******************************************************************
-     */
+    /************************ PLAYERS SECTION *******************************/
 
     @GetMapping("/snapshot/players/{teamId}/{season}")
     public String saveTeamPlayers(
@@ -249,14 +239,7 @@ public class SnapshotController {
                 + season + ".";
     }
 
-
-    /*********************************************************************
-     *
-     * PACKAGES
-     *
-     * *******************************************************************
-     */
-
+    /************************ LEAGUE SECTION *******************************
 
     /**
      * Save complete league package
@@ -355,25 +338,23 @@ public class SnapshotController {
      * Save Fixture package
      */
 
-    @GetMapping("/snapshot/fixturePackage/{fixtureId}")
+    @GetMapping("/snapshot/fixturePackage/{fixtureId}/{leagueId}")
     public String saveFixturePackage(
             @PathVariable long fixtureId,
             @PathVariable int leagueId
     ) throws Exception {
 
-        snapshotService.saveFixturePackage(fixtureId, leagueId);
+        snapshotService.saveFixturePackage(
+                fixtureId,
+                leagueId
+        );
 
         return "Fixture package created for fixture "
                 + fixtureId
                 + ".";
     }
 
-    /******************************************
-     *
-     * TEMP PLAYER PACKAGE
-     *
-     * ****************************************
-     * */
+    /*************************** TEMP PLAYER PACKAGE *****************************/
 
     @GetMapping("/snapshot/playerPackage/{playerId}/{season}")
     public String savePlayerPackage(

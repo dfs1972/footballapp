@@ -31,36 +31,6 @@ public class StandingService {
     }
 
     /**
-     * Returns the standing for a single team.
-     */
-    /**
-     * Returns the standing for a single team.
-     */
-    public Standing getTeamStanding(
-            int leagueId,
-            int season,
-            int teamId
-    ) throws Exception {
-
-        for (Standing standing :
-                getLeagueStandings(
-                        leagueId,
-                        season
-                )) {
-
-            if (standing.getTeam() != null
-                    && standing.getTeam().getId() == teamId) {
-
-                return standing;
-
-            }
-
-        }
-
-        return null;
-    }
-
-    /**
      * Returns the standings as a single league table.
      *
      * Normal leagues:

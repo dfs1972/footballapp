@@ -1,5 +1,6 @@
 package org.footballapp.api.response.lineups;
 
+import org.footballapp.api.dto.lineups.FixturePlayerWrapper;
 import org.footballapp.model.lineups.FixtureLineup;
 import org.footballapp.model.lineups.FixtureLineupPlayer;
 import org.footballapp.model.teams.Team;
@@ -77,6 +78,56 @@ public class FixtureLineupMapper {
     }
 
     /**
+     * Maps an API-Football team lineup to the
+     * backend team lineup response.
+     */
+    public FixtureTeamLineupResponse mapApiTeamLineup(
+
+            org.footballapp.api.dto.lineups.FixtureLineupResponse lineup,
+
+            List<PlayerLineupResponse> players
+
+    ) {
+
+        FixtureTeamLineupResponse response =
+                new FixtureTeamLineupResponse();
+
+        if (lineup.getTeam() != null) {
+
+            response.setTeamId(
+                    lineup.getTeam().getId()
+            );
+
+            response.setTeamName(
+                    lineup.getTeam().getName()
+            );
+
+        }
+
+        if (lineup.getCoach() != null) {
+
+            response.setCoachId(
+                    lineup.getCoach().getId()
+            );
+
+            response.setCoachName(
+                    lineup.getCoach().getName()
+            );
+
+        }
+
+        response.setFormation(
+                lineup.getFormation()
+        );
+
+        response.setPlayers(
+                players
+        );
+
+        return response;
+    }
+
+    /**
      * Maps a lineup player.
      */
     public PlayerLineupResponse mapPlayer(
@@ -120,6 +171,61 @@ public class FixtureLineupMapper {
 
         return response;
 
+    }
+
+    /**
+     * Maps an API-Football lineup player to the
+     * backend player lineup response.
+     */
+    public PlayerLineupResponse mapApiPlayer(
+
+            FixturePlayerWrapper wrapper,
+
+            boolean starting,
+
+            int displayOrder
+
+    ) {
+
+        PlayerLineupResponse response =
+                new PlayerLineupResponse();
+
+        if (wrapper == null
+                || wrapper.getPlayer() == null) {
+
+            return response;
+
+        }
+
+        response.setPlayerId(
+                wrapper.getPlayer().getId()
+        );
+
+        response.setPlayerName(
+                wrapper.getPlayer().getName()
+        );
+
+        response.setShirtNumber(
+                wrapper.getPlayer().getNumber()
+        );
+
+        response.setPosition(
+                wrapper.getPlayer().getPos()
+        );
+
+        response.setGrid(
+                wrapper.getPlayer().getGrid()
+        );
+
+        response.setStarting(
+                starting
+        );
+
+        response.setDisplayOrder(
+                displayOrder
+        );
+
+        return response;
     }
 
 

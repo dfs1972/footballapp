@@ -21,7 +21,6 @@ import java.util.*;
 /**Import repositories*/
 import org.footballapp.repository.FixtureLineupRepository;
 import org.footballapp.repository.StandingRepository;
-import org.footballapp.repository.TeamRepository;
 import org.footballapp.repository.TeamStatisticsRepository;
 import org.footballapp.repository.VenueRepository;
 //import org.footballapp.repository.PlayerStatisticsRepository;
@@ -30,12 +29,9 @@ import org.footballapp.model.club.ClubDetails;
 
 /**Import models*/
 import org.footballapp.model.fixtures.FixtureDetails;
-import org.footballapp.model.lineups.FixtureLineup;
-import org.footballapp.model.lineups.FixtureLineupPlayer;
 import org.footballapp.api.response.lineups.FixtureLineupResponse;
 import org.footballapp.api.response.lineups.FixtureTeamLineupResponse;
 import org.footballapp.api.response.lineups.PlayerLineupResponse;
-import org.footballapp.model.player.Player;
 import org.footballapp.model.fixtures.FixtureRow;
 import org.footballapp.model.playerdetails.PlayerSummary;
 import org.footballapp.model.teams.Team;
@@ -47,7 +43,6 @@ import org.footballapp.model.teamstatistics.TeamStatistics;
 @Service
 public class LeagueDataService {
 
-    private final TeamRepository teamRepository;
     private final TeamStatisticsRepository teamStatisticsRepository;
     private final VenueRepository venueRepository;
     private final StandingRepository standingRepository;
@@ -70,7 +65,6 @@ public class LeagueDataService {
      * Contructors
      */
     public LeagueDataService(
-            TeamRepository teamRepository,
             TeamMapper teamMapper,
             CoachMapper coachMapper,
             TeamService teamService,
@@ -89,7 +83,6 @@ public class LeagueDataService {
             PlayerMapper playerMapper,
             PlayerDetailsMapper playerDetailsMapper
     ) {
-        this.teamRepository = teamRepository;
         this.teamMapper = teamMapper;
         this.teamService = teamService;
         this.coachMapper = coachMapper;
@@ -373,43 +366,10 @@ public class LeagueDataService {
     }
 
     /**
-     * Retrieves the lineups for a fixture.
-     */
-    public List<FixtureLineup> getFixtureLineups(
-
-            long fixtureId
-
-    ) throws Exception {
-
-        return fixtureLineupRepository.getFixtureLineups(
-                fixtureId
-        );
-
-    }
-
-    /**
-     * Retrieves the players for a team's lineup.
-     */
-    public List<FixtureLineupPlayer> getFixtureLineupPlayers(
-
-            long fixtureId,
-
-            int teamId
-
-    ) throws Exception {
-
-        return fixtureLineupRepository.getFixtureLineupPlayers(
-
-                fixtureId,
-
-                teamId
-
-        );
-
-    }
-
-    /**
      * Retrieves the complete lineup for a fixture.
+     *
+     * Uses the API-Football snapshot/provider rather than
+     * the development database.
      */
     public FixtureLineupResponse getFixtureLineupResponse(
 
@@ -422,80 +382,76 @@ public class LeagueDataService {
                         fixtureId
                 );
 
-        List<FixtureLineup> lineups =
-                fixtureLineupRepository.getFixtureLineups(
+        org.footballapp.api.dto.lineups.FixtureLineupsResponse apiResponse =
+                footballDataProvider.getFixtureLineups(
                         fixtureId
                 );
 
-        for (FixtureLineup lineup : lineups) {
+        if (apiResponse == null
+                || apiResponse.getResponse() == null) {
 
-            Team team =
-                    teamRepository.getTeamById(
-                            lineup.getTeamId()
-                    );
+            return response;
 
-            List<FixtureLineupPlayer> lineupPlayers =
-                    fixtureLineupRepository.getFixtureLineupPlayers(
+        }
 
-                            fixtureId,
+        for (
+                org.footballapp.api.dto.lineups.FixtureLineupResponse lineup
+                : apiResponse.getResponse()
+        ) {
 
-                            lineup.getTeamId()
-
-                    );
-
-            List<PlayerLineupResponse> playerResponses =
+            List<PlayerLineupResponse> players =
                     new ArrayList<>();
 
-            for (FixtureLineupPlayer lineupPlayer : lineupPlayers) {
+            int displayOrder = 0;
 
-                Player player =
-                        playerRepository.getPlayerById(
+            /*
+             * Starting XI
+             */
+            if (lineup.getStartXI() != null) {
 
-                                lineupPlayer.getPlayerId()
+                for (
+                        org.footballapp.api.dto.lineups.FixturePlayerWrapper player
+                        : lineup.getStartXI()
+                ) {
 
-                        );
-
-                String playerName = "";
-                String photo = "";
-
-                if (player != null) {
-
-                    playerName =
-                            player.getName();
-
-                    photo =
-                            player.getPhotoUrl();
+                    players.add(
+                            fixtureLineupMapper.mapApiPlayer(
+                                    player,
+                                    true,
+                                    displayOrder++
+                            )
+                    );
 
                 }
 
-                PlayerLineupResponse playerResponse =
-                        fixtureLineupMapper.mapPlayer(
+            }
 
-                                lineupPlayer,
+            /*
+             * Substitutes
+             */
+            if (lineup.getSubstitutes() != null) {
 
-                                playerName
+                for (
+                        org.footballapp.api.dto.lineups.FixturePlayerWrapper player
+                        : lineup.getSubstitutes()
+                ) {
 
-                        );
+                    players.add(
+                            fixtureLineupMapper.mapApiPlayer(
+                                    player,
+                                    false,
+                                    displayOrder++
+                            )
+                    );
 
-                playerResponse.setPhoto(
-                        photo
-                );
-
-                playerResponses.add(
-                        playerResponse
-                );
+                }
 
             }
 
             FixtureTeamLineupResponse teamResponse =
-                    fixtureLineupMapper.mapTeamLineup(
-
+                    fixtureLineupMapper.mapApiTeamLineup(
                             lineup,
-
-                            team,
-
-                            playerResponses
-
+                            players
                     );
 
             response.getTeams().add(
@@ -648,11 +604,12 @@ public class LeagueDataService {
         );
 
         overview.setTeamCount(
-                teamRepository
-                        .getTeamsForLeague(
+                footballDataProvider
+                        .getTeams(
                                 leagueId,
                                 season
                         )
+                        .getResponse()
                         .size()
         );
 

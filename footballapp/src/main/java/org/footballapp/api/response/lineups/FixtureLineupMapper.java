@@ -122,47 +122,6 @@ public class FixtureLineupMapper {
 
     }
 
-    public FixtureTeamLineupResponse mapApiTeamLineup(
-            FixtureLineupResponse lineup,
-            List<PlayerLineupResponse> players
-    ) {
 
-        FixtureTeamLineupResponse response =
-                new FixtureTeamLineupResponse();
-
-        if (lineup.getTeam() != null) {
-
-            response.setTeamId(
-                    lineup.getTeam().getId()
-            );
-
-            response.setTeamName(
-                    lineup.getTeam().getName()
-            );
-
-        }
-
-        if (lineup.getCoach() != null) {
-
-            response.setCoachId(
-                    lineup.getCoach().getId()
-            );
-
-            response.setCoachName(
-                    lineup.getCoach().getName()
-            );
-
-        }
-
-        response.setFormation(
-                lineup.getFormation()
-        );
-
-        response.setPlayers(
-                players
-        );
-
-        return response;
-    }
 
 }

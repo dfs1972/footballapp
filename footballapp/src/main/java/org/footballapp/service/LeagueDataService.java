@@ -19,12 +19,7 @@ import java.util.*;
 
 
 /**Import repositories*/
-import org.footballapp.repository.FixtureLineupRepository;
-import org.footballapp.repository.StandingRepository;
-import org.footballapp.repository.TeamStatisticsRepository;
-import org.footballapp.repository.VenueRepository;
 //import org.footballapp.repository.PlayerStatisticsRepository;
-import org.footballapp.repository.PlayerRepository;
 import org.footballapp.model.club.ClubDetails;
 
 /**Import models*/
@@ -38,17 +33,10 @@ import org.footballapp.model.teams.Team;
 import org.footballapp.model.standings.LeagueTableRow;
 import org.footballapp.model.league.LeagueOverview;
 import org.footballapp.model.playerdetails.PlayerDetails;
-import org.footballapp.model.teamstatistics.TeamStatistics;
 
 @Service
 public class LeagueDataService {
 
-    private final TeamStatisticsRepository teamStatisticsRepository;
-    private final VenueRepository venueRepository;
-    private final StandingRepository standingRepository;
-    //private final PlayerStatisticsRepository playerStatisticsRepository;
-    private final PlayerRepository playerRepository;
-    private final FixtureLineupRepository fixtureLineupRepository;
     private final FixtureMapper fixtureMapper;
     private final FixtureLineupMapper fixtureLineupMapper;
     private final FootballDataProvider  fixtureService;
@@ -68,16 +56,10 @@ public class LeagueDataService {
             TeamMapper teamMapper,
             CoachMapper coachMapper,
             TeamService teamService,
-            TeamStatisticsRepository teamStatisticsRepository,
-            VenueRepository venueRepository,
-            StandingRepository standingRepository,
             StandingService standingService,
-            FixtureLineupRepository fixtureLineupRepository,
             FixtureMapper fixtureMapper,
             FixtureLineupMapper fixtureLineupMapper,
             FootballDataProvider  fixtureService,
-            //PlayerStatisticsRepository playerStatisticsRepository,
-            PlayerRepository playerRepository,
             SupportedCompetitionsService supportedCompetitionsService,
             FootballDataProvider footballDataProvider,
             PlayerMapper playerMapper,
@@ -86,15 +68,9 @@ public class LeagueDataService {
         this.teamMapper = teamMapper;
         this.teamService = teamService;
         this.coachMapper = coachMapper;
-        this.teamStatisticsRepository = teamStatisticsRepository;
-        this.venueRepository = venueRepository;
-        this.standingRepository = standingRepository;
         this.standingService = standingService;
         this.fixtureMapper = fixtureMapper;
         this.fixtureService  = fixtureService;
-        this.fixtureLineupRepository = fixtureLineupRepository;
-        //this.playerStatisticsRepository = playerStatisticsRepository;
-        this.playerRepository = playerRepository;
         this.fixtureLineupMapper = fixtureLineupMapper;
         this.supportedCompetitionsService = supportedCompetitionsService;
         this.footballDataProvider = footballDataProvider;
@@ -307,14 +283,26 @@ public class LeagueDataService {
 
         if (coach != null) {
 
-            club.setCoach(
+            String coachName;
 
-                    coach.getFirstname()
-                            + " "
-                            + coach.getLastname()
+            if (coach.getFirstname() != null
+                    && !coach.getFirstname().isBlank()
+                    && coach.getLastname() != null
+                    && !coach.getLastname().isBlank()) {
 
-            );
+                coachName =
+                        coach.getFirstname()
+                                + " "
+                                + coach.getLastname();
 
+            } else {
+
+                coachName =
+                        coach.getName();
+
+            }
+
+            club.setCoach(coachName);
         }
 
         return club;
@@ -538,23 +526,6 @@ public class LeagueDataService {
 
         return league.getStandings().getFirst();
 
-    }
-
-    /**
-     * Get a team's stats
-     */
-    public TeamStatistics getTeamStatistics(
-            int teamId,
-            int leagueId,
-            int season
-    ) throws Exception {
-
-        return teamStatisticsRepository
-                .getTeamStatistics(
-                        teamId,
-                        leagueId,
-                        season
-                );
     }
 
     /**

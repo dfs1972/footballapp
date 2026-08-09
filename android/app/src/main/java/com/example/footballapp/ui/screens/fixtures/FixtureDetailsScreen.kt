@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import com.example.footballapp.ui.components.AppHeader
 import com.example.footballapp.ui.components.FixtureLineupCard
 import com.example.footballapp.ui.components.InfoRow
 import com.example.footballapp.ui.components.ScreenScaffold
@@ -20,7 +19,6 @@ import com.example.footballapp.ui.components.SectionHeading
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.model.FixtureDetailsUiModel
 import com.example.footballapp.ui.model.FixtureLineupUiModel
-import com.example.footballapp.ui.theme.HeaderBlue
 import com.example.footballapp.util.DateFormatter
 
 @Composable
@@ -34,22 +32,14 @@ fun FixtureDetailsScreen(
 
 ) {
 
-    ScreenScaffold{
-
-        item {
-
-            AppHeader(
-
-                backgroundColor = HeaderBlue
-
-            )
-
-        }
+    ScreenScaffold {
 
         item {
 
             Spacer(
-                modifier = Modifier.height(AppSpacing.ExtraLarge)
+                modifier = Modifier.height(
+                    AppSpacing.ExtraLarge
+                )
             )
 
         }
@@ -66,11 +56,13 @@ fun FixtureDetailsScreen(
 
                     modifier = Modifier.fillMaxWidth(),
 
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                    horizontalAlignment =
+                        Alignment.CenterHorizontally,
 
-                    verticalArrangement = Arrangement.spacedBy(
-                        AppSpacing.Medium
-                    )
+                    verticalArrangement =
+                        Arrangement.spacedBy(
+                            AppSpacing.Medium
+                        )
 
                 ) {
 
@@ -78,17 +70,26 @@ fun FixtureDetailsScreen(
 
                         text = fixture.homeTeam,
 
-                        style = MaterialTheme.typography.titleLarge
+                        style =
+                            MaterialTheme
+                                .typography
+                                .titleLarge
 
                     )
 
                     Text(
 
-                        text = "${fixture.homeGoals ?: "-"} – ${fixture.awayGoals ?: "-"}",
+                        text =
+                            "${fixture.homeGoals ?: "-"} – " +
+                                    "${fixture.awayGoals ?: "-"}",
 
-                        style = MaterialTheme.typography.headlineLarge,
+                        style =
+                            MaterialTheme
+                                .typography
+                                .headlineLarge,
 
-                        fontWeight = FontWeight.Bold
+                        fontWeight =
+                            FontWeight.Bold
 
                     )
 
@@ -96,7 +97,10 @@ fun FixtureDetailsScreen(
 
                         text = fixture.awayTeam,
 
-                        style = MaterialTheme.typography.titleLarge
+                        style =
+                            MaterialTheme
+                                .typography
+                                .titleLarge
 
                     )
 
@@ -144,11 +148,11 @@ fun FixtureDetailsScreen(
 
                     label = "Date",
 
-                    value = DateFormatter.formatFixtureDateOnly(
-
-                        fixture.fixtureDate
-
-                    )
+                    value =
+                        DateFormatter
+                            .formatFixtureDateOnly(
+                                fixture.fixtureDate
+                            )
 
                 )
 
@@ -156,11 +160,11 @@ fun FixtureDetailsScreen(
 
                     label = "Kick-off",
 
-                    value = DateFormatter.formatFixtureTime(
-
-                        fixture.fixtureDate
-
-                    )
+                    value =
+                        DateFormatter
+                            .formatFixtureTime(
+                                fixture.fixtureDate
+                            )
 
                 )
 
@@ -168,7 +172,8 @@ fun FixtureDetailsScreen(
 
                     label = "Venue",
 
-                    value = fixture.venueName ?: "N/A"
+                    value =
+                        fixture.venueName ?: "N/A"
 
                 )
 

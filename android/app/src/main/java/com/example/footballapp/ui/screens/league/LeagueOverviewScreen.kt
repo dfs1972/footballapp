@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.footballapp.ui.components.AppHeader
 import com.example.footballapp.ui.components.NavigationCard
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.TopStandingsCard
@@ -12,7 +11,6 @@ import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.design.Strings
 import com.example.footballapp.ui.model.LeagueOverviewUiModel
 import com.example.footballapp.ui.model.LeagueTableRowUiModel
-import com.example.footballapp.ui.theme.HeaderBlue
 
 @Composable
 fun LeagueOverviewScreen(
@@ -35,18 +33,10 @@ fun LeagueOverviewScreen(
 
         item {
 
-            AppHeader(
-
-                backgroundColor = HeaderBlue
-
-            )
-
-        }
-
-        item {
-
             Spacer(
-                modifier = Modifier.height(AppSpacing.ExtraLarge)
+                modifier = Modifier.height(
+                    AppSpacing.ExtraLarge
+                )
             )
 
         }
@@ -61,11 +51,14 @@ fun LeagueOverviewScreen(
 
                 onTeamClick = {
 
-                    onClubClick(it.teamId)
+                    onClubClick(
+                        it.teamId
+                    )
 
                 },
 
-                onViewFullTable = onLeagueTableClick
+                onViewFullTable =
+                    onLeagueTableClick
 
             )
 
@@ -75,25 +68,14 @@ fun LeagueOverviewScreen(
 
             NavigationCard(
 
-                title = Strings.LEAGUE_TABLE,
+                title =
+                    Strings.LEAGUE_TABLE,
 
-                subtitle = Strings.VIEW_COMPLETE_STANDINGS,
+                subtitle =
+                    Strings.VIEW_COMPLETE_STANDINGS,
 
-                onClick = onLeagueTableClick
-
-            )
-
-        }
-
-        item {
-
-            NavigationCard(
-
-                title = Strings.FIXTURES,
-
-                subtitle = Strings.UPCOMING_FIXTURES,
-
-                onClick = onFixturesClick
+                onClick =
+                    onLeagueTableClick
 
             )
 
@@ -103,14 +85,36 @@ fun LeagueOverviewScreen(
 
             NavigationCard(
 
-                title = Strings.CLUBS,
+                title =
+                    Strings.FIXTURES,
 
-                subtitle = Strings.BROWSE_ALL_CLUBS,
+                subtitle =
+                    Strings.UPCOMING_FIXTURES,
 
-                onClick = onClubsClick
+                onClick =
+                    onFixturesClick
 
             )
 
         }
+
+        item {
+
+            NavigationCard(
+
+                title =
+                    Strings.CLUBS,
+
+                subtitle =
+                    Strings.BROWSE_ALL_CLUBS,
+
+                onClick =
+                    onClubsClick
+
+            )
+
+        }
+
     }
+
 }

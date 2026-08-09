@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.footballapp.ui.components.AppHeader
 import com.example.footballapp.ui.components.InfoRow
 //import com.example.footballapp.ui.components.PlayerPhoto
 import com.example.footballapp.ui.components.ScreenScaffold
@@ -21,7 +20,6 @@ import com.example.footballapp.ui.model.PlayerDetailsUiModel
 import com.example.footballapp.ui.previews.PreviewData
 import com.example.footballapp.ui.theme.AppDimensions
 import com.example.footballapp.ui.design.AppSpacing
-import com.example.footballapp.ui.theme.HeaderBlue
 import com.example.footballapp.util.DateFormatter
 
 @Composable
@@ -31,22 +29,14 @@ fun PlayerDetailsScreen(
 
 ) {
 
-    ScreenScaffold{
-
-        item {
-
-            AppHeader(
-
-                backgroundColor = HeaderBlue
-
-            )
-
-        }
+    ScreenScaffold {
 
         item {
 
             Spacer(
-                modifier = Modifier.height(AppSpacing.ExtraLarge)
+                modifier = Modifier.height(
+                    AppSpacing.ExtraLarge
+                )
             )
 
         }
@@ -84,7 +74,11 @@ fun PlayerDetailsScreen(
 
                     InfoRow(
                         label = "Captain",
-                        value = if (player.captain) "Yes" else "No"
+                        value =
+                            if (player.captain)
+                                "Yes"
+                            else
+                                "No"
                     )
 
                 }

@@ -91,15 +91,3 @@ private fun HeaderCell(
     )
 
 }
-
-@Preview(showBackground = true)
-@Composable
-private fun LeagueTableHeaderPreview() {
-
-    MaterialTheme {
-
-        LeagueTableHeader()
-
-    }
-
-}

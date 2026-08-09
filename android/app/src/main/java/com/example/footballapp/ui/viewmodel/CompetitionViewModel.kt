@@ -34,7 +34,11 @@ class CompetitionViewModel : ViewModel() {
                         .getCompetitions()
                         .map { it.toUiModel() }
 
-                Log.d("CompetitionVM", "Loaded ${competitionGroups.size} groups")
+                Log.d(
+                    "CompetitionVM",
+                    "Loaded groups: " +
+                            competitionGroups.map { it.title }
+                )
 
                 _uiState.value = CompetitionUiState(
                     isLoading = false,

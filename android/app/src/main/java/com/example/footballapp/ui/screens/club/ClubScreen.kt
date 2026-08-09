@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.footballapp.ui.components.AppHeader
 import com.example.footballapp.ui.components.InfoRow
 import com.example.footballapp.ui.components.NavigationCard
 import com.example.footballapp.ui.components.ScreenScaffold
@@ -12,7 +11,6 @@ import com.example.footballapp.ui.components.SectionCard
 import com.example.footballapp.ui.components.SectionHeading
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.model.ClubDetailsUiModel
-import com.example.footballapp.ui.theme.HeaderBlue
 
 @Composable
 fun ClubScreen(
@@ -29,18 +27,10 @@ fun ClubScreen(
 
         item {
 
-            AppHeader(
-
-                backgroundColor = HeaderBlue
-
-            )
-
-        }
-
-        item {
-
             Spacer(
-                modifier = Modifier.height(AppSpacing.ExtraLarge)
+                modifier = Modifier.height(
+                    AppSpacing.ExtraLarge
+                )
             )
 
         }

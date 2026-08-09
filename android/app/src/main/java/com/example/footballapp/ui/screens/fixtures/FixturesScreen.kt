@@ -2,16 +2,14 @@ package com.example.footballapp.ui.screens.fixtures
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.example.footballapp.ui.components.FixtureCard
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.SectionHeading
-import com.example.footballapp.ui.model.FixtureDayUiModel
-import androidx.compose.foundation.lazy.items
-import androidx.compose.ui.Modifier
-import com.example.footballapp.ui.components.AppHeader
 import com.example.footballapp.ui.design.AppSpacing
-import com.example.footballapp.ui.theme.HeaderBlue
+import com.example.footballapp.ui.model.FixtureDayUiModel
 
 @Composable
 fun FixturesScreen(
@@ -30,18 +28,10 @@ fun FixturesScreen(
 
         item {
 
-            AppHeader(
-
-                backgroundColor = HeaderBlue
-
-            )
-
-        }
-
-        item {
-
             Spacer(
-                modifier = Modifier.height(AppSpacing.ExtraLarge)
+                modifier = Modifier.height(
+                    AppSpacing.ExtraLarge
+                )
             )
 
         }

@@ -47,6 +47,8 @@ fun LeagueOverviewScreen(
 
                 leagueName = overview.leagueName,
 
+                season = overview.season,
+
                 standings = topStandings,
 
                 onTeamClick = {

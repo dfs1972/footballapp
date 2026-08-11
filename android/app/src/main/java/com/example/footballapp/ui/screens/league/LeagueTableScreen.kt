@@ -25,6 +25,8 @@ fun LeagueTableScreen(
 
                 leagueName = overview.leagueName,
 
+                season = overview.season,
+
                 table = standings,
 
                 onTeamClick = onClubClick

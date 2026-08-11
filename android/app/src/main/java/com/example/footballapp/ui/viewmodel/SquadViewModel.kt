@@ -73,8 +73,6 @@ class SquadViewModel : ViewModel() {
 
                 println("Repository failed: ${e.message}")
 
-                throw e
-
             }
 
         }

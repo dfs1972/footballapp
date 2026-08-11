@@ -29,6 +29,8 @@ fun TopStandingsCard(
 
     leagueName: String,
 
+    season: String,
+
     title: String = Strings.TOP_FIVE,
 
     standings: List<LeagueTableRowUiModel>,
@@ -47,7 +49,7 @@ fun TopStandingsCard(
 
             title = leagueName,
 
-            subtitle = title
+            subtitle = "$title · $season"
 
         )
 
@@ -62,19 +64,26 @@ fun TopStandingsCard(
                         onTeamClick(standing)
 
                     }
-                    .padding(vertical = AppSpacing.Small),
+                    .padding(
+                        vertical = AppSpacing.Small
+                    ),
 
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment =
+                    Alignment.CenterVertically
 
             ) {
 
                 Text(
 
-                    text = standing.position.toString(),
+                    text =
+                        standing.position.toString(),
 
-                    modifier = Modifier.width(AppSpacing.ExtraLarge),
+                    modifier = Modifier.width(
+                        AppSpacing.ExtraLarge
+                    ),
 
-                    fontWeight = FontWeight.Bold
+                    fontWeight =
+                        FontWeight.Bold
 
                 )
 
@@ -105,11 +114,15 @@ fun TopStandingsCard(
                     onViewFullTable()
 
                 }
-                .padding(top = AppSpacing.Medium),
+                .padding(
+                    top = AppSpacing.Medium
+                ),
 
-            horizontalArrangement = Arrangement.End,
+            horizontalArrangement =
+                Arrangement.End,
 
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment =
+                Alignment.CenterVertically
 
         ) {
 
@@ -117,19 +130,23 @@ fun TopStandingsCard(
 
                 text = viewMoreText,
 
-                color = MaterialTheme.colorScheme.primary,
+                color =
+                    MaterialTheme.colorScheme.primary,
 
-                style = MaterialTheme.typography.labelLarge
+                style =
+                    MaterialTheme.typography.labelLarge
 
             )
 
             Icon(
 
-                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                imageVector =
+                    Icons.AutoMirrored.Filled.KeyboardArrowRight,
 
                 contentDescription = null,
 
-                tint = MaterialTheme.colorScheme.primary
+                tint =
+                    MaterialTheme.colorScheme.primary
 
             )
 

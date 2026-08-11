@@ -45,7 +45,7 @@ fun SquadScreen(
                             Strings.Football_Club,
 
                 subtitle =
-                    Strings.SQUAD
+                    "${Strings.SQUAD} · $season"
 
             )
 

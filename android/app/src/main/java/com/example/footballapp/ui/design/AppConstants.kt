@@ -5,7 +5,7 @@ object AppConstants {
     /**
      * Used for UI display.
      */
-    const val DEVELOPMENT_SEASON_TEXT = "2024/25"
+    const val DEVELOPMENT_SEASON_TEXT = "2025/26"
 
     /**
      * Temporary development season used by backend requests.

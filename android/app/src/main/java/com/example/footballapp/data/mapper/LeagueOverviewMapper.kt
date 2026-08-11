@@ -8,6 +8,7 @@ import com.example.footballapp.util.LeagueNameFormatter
  * Maps a LeagueOverviewDto received from the backend
  * into a LeagueOverviewUiModel used by the Compose UI.
  */
+
 fun LeagueOverviewDto.toUiModel(): LeagueOverviewUiModel {
 
     return LeagueOverviewUiModel(
@@ -21,7 +22,7 @@ fun LeagueOverviewDto.toUiModel(): LeagueOverviewUiModel {
             leagueName
         ),
 
-        season = season.toString(),
+        season = "$season/${(season + 1).toString().takeLast(2)}",
 
         teamCount = teamCount,
 
@@ -30,24 +31,3 @@ fun LeagueOverviewDto.toUiModel(): LeagueOverviewUiModel {
     )
 
 }
-
-//private fun displayLeagueName(
-//    leagueId: Int,
-//    leagueName: String
-//): String {
-//
-//    return when (leagueId) {
-//
-//        179 -> "Scottish Premiership"
-//
-//        180 -> "Scottish Championship"
-//
-//        183 -> "Scottish League One"
-//
-//        184 -> "Scottish League Two"
-//
-//        else -> leagueName
-//
-//    }
-//
-//}

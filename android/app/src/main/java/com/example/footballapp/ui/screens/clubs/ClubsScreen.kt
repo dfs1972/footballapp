@@ -42,12 +42,9 @@ fun ClubsScreen(
 
                 CardHeader(
 
-                    title =
-                        overview.leagueName,
+                    title = overview.leagueName,
 
-                    subtitle =
-                        Strings.CLUBS
-
+                    subtitle = "${Strings.CLUBS} · ${overview.season}"
                 )
 
                 ClubList(

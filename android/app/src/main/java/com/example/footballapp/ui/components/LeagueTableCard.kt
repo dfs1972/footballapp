@@ -20,6 +20,8 @@ fun LeagueTableCard(
 
     leagueName: String,
 
+    season: String,
+
     table: List<LeagueTableRowUiModel>,
 
     onTeamClick: (Int) -> Unit
@@ -32,14 +34,17 @@ fun LeagueTableCard(
 
             title = leagueName,
 
-            subtitle = Strings.LEAGUE_TABLE
+            subtitle =
+                "${Strings.LEAGUE_TABLE} · $season"
 
         )
 
         LeagueTableHeader()
 
         Spacer(
-            modifier = Modifier.height(AppSpacing.Small)
+            modifier = Modifier.height(
+                AppSpacing.Small
+            )
         )
 
         table.forEachIndexed { index, row ->

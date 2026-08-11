@@ -841,115 +841,92 @@ object PreviewData {
 
     )
 
-    /**
-     * Player Details
-     */
-    val JamesTavernierDetails = PlayerDetailsUiModel(
-
-        playerId = 1,
-
-        name = "James Tavernier",
-
-        photoUrl = null,
-
-        shirtNumber = 2,
-
-        position = "Defender",
-
-        nationality = "England",
-
-        dateOfBirth = "31 October 1991",
-
-        age = 34,
-
-        height = "182 cm",
-
-        weight = "76 kg",
-
-        preferredFoot = "Right",
-
-        captain = true,
-
-        appearances = 36,
-
-        starts = 36,
-
-        goals = 5,
-
-        assists = 8,
-
-        yellowCards = 4,
-
-        redCards = 0,
-
-        minutesPlayed = 3142
-
-    )
-
-    val JackButlandDetails = PlayerDetailsUiModel(
-
-        playerId = 2,
-
-        name = "Jack Butland",
-
-        photoUrl = null,
-
-        shirtNumber = 1,
-
-        position = "Goalkeeper",
-
-        nationality = "England",
-
-        dateOfBirth = "10 March 1993",
-
-        age = 33,
-
-        height = "196 cm",
-
-        weight = "95 kg",
-
-        preferredFoot = "Right",
-
-        captain = false,
-
-        appearances = 34,
-
-        starts = 34,
-
-        goals = 0,
-
-        assists = 0,
-
-        yellowCards = 1,
-
-        redCards = 0,
-
-        minutesPlayed = 3060
-
-    )
+//    /**
+//     * Player Details
+//     */
+//    val JamesTavernierDetails = PlayerDetailsUiModel(
+//
+//        playerId = 1,
+//
+//        name = "James Tavernier",
+//
+//        photoUrl = null,
+//
+//        shirtNumber = 2,
+//
+//        position = "Defender",
+//
+//        nationality = "England",
+//
+//        dateOfBirth = "31 October 1991",
+//
+//        age = 34,
+//
+//        height = "182 cm",
+//
+//        weight = "76 kg",
+//
+//        preferredFoot = "Right",
+//
+//        captain = true,
+//
+//        appearances = 36,
+//
+//        starts = 36,
+//
+//        goals = 5,
+//
+//        assists = 8,
+//
+//        yellowCards = 4,
+//
+//        redCards = 0,
+//
+//        minutesPlayed = 3142
+//
+//    )
+//
+//    val JackButlandDetails = PlayerDetailsUiModel(
+//
+//        playerId = 2,
+//
+//        name = "Jack Butland",
+//
+//        photoUrl = null,
+//
+//        shirtNumber = 1,
+//
+//        position = "Goalkeeper",
+//
+//        nationality = "England",
+//
+//        dateOfBirth = "10 March 1993",
+//
+//        age = 33,
+//
+//        height = "196 cm",
+//
+//        weight = "95 kg",
+//
+//        preferredFoot = "Right",
+//
+//        captain = false,
+//
+//        appearances = 34,
+//
+//        starts = 34,
+//
+//        goals = 0,
+//
+//        assists = 0,
+//
+//        yellowCards = 1,
+//
+//        redCards = 0,
+//
+//        minutesPlayed = 3060
+//
+//    )
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

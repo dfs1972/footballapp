@@ -3,11 +3,7 @@ package com.example.footballapp.ui.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyListScope
-//import androidx.compose.foundation.lazy.item
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.footballapp.ui.model.PlayerUiModel
-//import com.example.footballapp.ui.previews.PreviewData
 import com.example.footballapp.ui.design.AppSpacing
 
 private val PositionOrder = listOf(
@@ -34,57 +30,50 @@ fun LazyListScope.PlayerList(
 
 ) {
 
-    val groupedPlayers = players.groupBy { it.position }
+    val groupedPlayers =
+        players.groupBy { it.position }
 
     PositionOrder.forEach { position ->
 
-        val squad = groupedPlayers[position]
+        val squad =
+            groupedPlayers[position]
 
         if (!squad.isNullOrEmpty()) {
 
             item {
 
-                Column(
+                SectionCard {
 
-                    verticalArrangement = Arrangement.spacedBy(
-                        AppSpacing.Small
-                    )
+                    Column(
 
-                ) {
-
-                    SectionHeading(
-                        text = positionHeading(position)
-                    )
-
-                    SectionCard {
-
-                        Column(
-
-                            verticalArrangement = Arrangement.spacedBy(
+                        verticalArrangement =
+                            Arrangement.spacedBy(
                                 AppSpacing.Small
                             )
 
-                        ) {
+                    ) {
 
-                            SectionHeading(
+                        SectionHeading(
 
-                                text = positionHeading(position),
+                            text =
+                                positionHeading(
+                                    position
+                                ),
 
-                                centered = true
+                            centered = true
+
+                        )
+
+                        squad.forEach { player ->
+
+                            PlayerRow(
+
+                                player = player,
+
+                                onClick =
+                                    onPlayerClick
 
                             )
-
-                            squad.forEach { player ->
-
-                                PlayerRow(
-
-                                    player = player,
-
-                                    onClick = onPlayerClick
-
-                                )
-
-                            }
 
                         }
 

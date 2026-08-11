@@ -38,21 +38,17 @@ fun ClubsScreen(
 
         item {
 
-            CardHeader(
-
-                title =
-                    overview.leagueName,
-
-                subtitle =
-                    Strings.CLUBS
-
-            )
-
-        }
-
-        item {
-
             SectionCard {
+
+                CardHeader(
+
+                    title =
+                        overview.leagueName,
+
+                    subtitle =
+                        Strings.CLUBS
+
+                )
 
                 ClubList(
 

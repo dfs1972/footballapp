@@ -527,22 +527,43 @@ fun FootballNavHost() {
                     ?.toInt()
                     ?: return@composable
 
-            val clubViewModel: ClubViewModel = viewModel()
+            val overviewViewModel: LeagueOverviewViewModel =
+                viewModel()
 
-            LaunchedEffect(clubId) {
+            val clubViewModel: ClubViewModel =
+                viewModel()
 
-                clubViewModel.loadClub(clubId)
+            LaunchedEffect(leagueId, clubId) {
+
+                overviewViewModel.loadLeagueOverview(
+                    leagueId,
+                    AppConstants.DEVELOPMENT_SEASON
+                )
+
+                clubViewModel.loadClub(
+                    clubId
+                )
 
             }
 
-            val uiState by
+            val overviewState by
+            overviewViewModel.uiState.collectAsState()
+
+            val clubState by
             clubViewModel.uiState.collectAsState()
 
-            uiState.club?.let { club ->
+            if (
+                overviewState.overview != null &&
+                clubState.club != null
+            ) {
 
                 ClubScreen(
 
-                    club = club,
+                    overview =
+                        overviewState.overview!!,
+
+                    club =
+                        clubState.club!!,
 
                     onFixturesClick = { selectedClubId ->
 
@@ -671,11 +692,15 @@ fun FootballNavHost() {
                     ?.toInt()
                     ?: return@composable
 
-            val playerDetailsViewModel: PlayerDetailsViewModel = viewModel()
+
+            val playerDetailsViewModel:
+                    PlayerDetailsViewModel =
+                viewModel()
 
             LaunchedEffect(
                 leagueId,
-                playerId) {
+                playerId
+            ) {
 
                 playerDetailsViewModel.loadPlayerDetails(
 

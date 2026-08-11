@@ -56,6 +56,14 @@ public final class MockApiPaths {
                 + "/team.json";
     }
 
+    public static String teamSquad(
+            int teamId
+    ) {
+        return "teams/"
+                + teamId
+                + "/squad.json";
+    }
+
     public static String teamStatistics(
             int teamId,
             int leagueId,

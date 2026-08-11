@@ -1,25 +1,16 @@
 package com.example.footballapp.ui.screens.player
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import com.example.footballapp.ui.components.CardHeader
 import com.example.footballapp.ui.components.InfoRow
-//import com.example.footballapp.ui.components.PlayerPhoto
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.SectionCard
-import com.example.footballapp.ui.components.SectionHeading
-import com.example.footballapp.ui.model.PlayerDetailsUiModel
-import com.example.footballapp.ui.previews.PreviewData
-import com.example.footballapp.ui.theme.AppDimensions
 import com.example.footballapp.ui.design.AppSpacing
+import com.example.footballapp.ui.model.LeagueOverviewUiModel
+import com.example.footballapp.ui.model.PlayerDetailsUiModel
 import com.example.footballapp.util.DateFormatter
 
 @Composable
@@ -41,153 +32,194 @@ fun PlayerDetailsScreen(
 
         }
 
+        /*
+         * Player
+         */
+
         item {
 
-            Column(
+            SectionCard {
 
-                verticalArrangement = Arrangement.spacedBy(
-                    AppSpacing.Small
+                CardHeader(
+
+                    title = player.teamName?.let { "$it Football Club" } ?: "Club",
+
+                    subtitle =
+                        "${player.name} Details"
+
                 )
 
-            ) {
+                InfoRow(
 
-                SectionHeading(
-                    text = "Player"
+                    label = "Shirt Number",
+
+                    value =
+                        player.shirtNumber?.toString()
+
                 )
 
-                SectionCard {
+                InfoRow(
 
-                    InfoRow(
-                        label = "Shirt Number",
-                        value = player.shirtNumber?.toString()
-                    )
+                    label = "Position",
 
-                    InfoRow(
-                        label = "Position",
-                        value = player.position
-                    )
+                    value = player.position
 
-                    InfoRow(
-                        label = "Preferred Foot",
-                        value = player.preferredFoot
-                    )
+                )
 
-                    InfoRow(
-                        label = "Captain",
-                        value =
-                            if (player.captain)
-                                "Yes"
-                            else
-                                "No"
-                    )
+                InfoRow(
 
-                }
+                    label = "Captain",
+
+                    value =
+                        if (player.captain)
+                            "Yes"
+                        else
+                            "No"
+
+                )
 
             }
 
         }
 
+        /*
+         * Personal
+         */
+
         item {
 
-            Column(
+            SectionCard {
 
-                verticalArrangement = Arrangement.spacedBy(
-                    AppSpacing.Small
+                CardHeader(
+
+                    title = "Personal"
+
                 )
 
-            ) {
+                InfoRow(
 
-                SectionHeading(
-                    text = "Personal"
+                    label = "Nationality",
+
+                    value = player.nationality
+
                 )
 
-                SectionCard {
+                InfoRow(
 
-                    InfoRow(
-                        label = "Nationality",
-                        value = player.nationality
-                    )
+                    label = "Date of Birth",
 
-                    InfoRow(
-                        label = "Date of Birth",
-                        value = DateFormatter.formatDate(
+                    value =
+                        DateFormatter.formatDate(
                             player.dateOfBirth
                         )
-                    )
 
-                    InfoRow(
-                        label = "Age",
-                        value = player.age?.toString()
-                    )
+                )
 
-                    InfoRow(
-                        label = "Height",
-                        value = player.height
-                    )
+                InfoRow(
 
-                    InfoRow(
-                        label = "Weight",
-                        value = player.weight
-                    )
+                    label = "Age",
 
-                }
+                    value =
+                        player.age?.toString()
+
+                )
+
+                InfoRow(
+
+                    label = "Height",
+
+                    value = player.height
+
+                )
+
+                InfoRow(
+
+                    label = "Weight",
+
+                    value = player.weight
+
+                )
 
             }
 
         }
 
+        /*
+         * Season Statistics
+         */
+
         item {
 
-            Column(
+            SectionCard {
 
-                verticalArrangement = Arrangement.spacedBy(
-                    AppSpacing.Small
+                CardHeader(
+
+                    title = "Season Statistics"
+
                 )
 
-            ) {
+                InfoRow(
 
-                SectionHeading(
-                    text = "Season Statistics"
+                    label = "Appearances",
+
+                    value =
+                        player.appearances?.toString()
+
                 )
 
-                SectionCard {
+                InfoRow(
 
-                    InfoRow(
-                        label = "Appearances",
-                        value = player.appearances?.toString()
-                    )
+                    label = "Starts",
 
-                    InfoRow(
-                        label = "Starts",
-                        value = player.starts?.toString()
-                    )
+                    value =
+                        player.starts?.toString()
 
-                    InfoRow(
-                        label = "Goals",
-                        value = player.goals?.toString()
-                    )
+                )
 
-                    InfoRow(
-                        label = "Assists",
-                        value = player.assists?.toString()
-                    )
+                InfoRow(
 
-                    InfoRow(
-                        label = "Yellow Cards",
-                        value = player.yellowCards?.toString()
-                    )
+                    label = "Goals",
 
-                    InfoRow(
-                        label = "Red Cards",
-                        value = player.redCards?.toString()
-                    )
+                    value =
+                        player.goals?.toString()
 
-                    InfoRow(
-                        label = "Minutes Played",
-                        value = player.minutesPlayed?.toString()
-                    )
+                )
 
-                }
+                InfoRow(
+
+                    label = "Assists",
+
+                    value =
+                        player.assists?.toString()
+
+                )
+
+                InfoRow(
+
+                    label = "Yellow Cards",
+
+                    value =
+                        player.yellowCards?.toString()
+
+                )
+
+                InfoRow(
+
+                    label = "Red Cards",
+
+                    value =
+                        player.redCards?.toString()
+
+                )
+
+                InfoRow(
+
+                    label = "Minutes Played",
+
+                    value =
+                        player.minutesPlayed?.toString()
+
+                )
 
             }
 

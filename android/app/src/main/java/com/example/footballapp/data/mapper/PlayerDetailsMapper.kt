@@ -10,6 +10,8 @@ fun PlayerDetailsDto.toUiModel() =
 
         name = displayName,
 
+        teamName = teamName,
+
         photoUrl = photoUrl,
 
         shirtNumber = shirtNumber,

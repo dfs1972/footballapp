@@ -8,6 +8,7 @@ import org.footballapp.mapper.*;
 import org.footballapp.model.coaches.Coach;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.model.player.PlayersApiResponse;
+import org.footballapp.model.squad.SquadApiResponse;
 import org.footballapp.model.standings.Standing;
 import org.footballapp.model.standings.StandingLeague;
 import org.footballapp.model.standings.StandingsApiResponse;
@@ -101,16 +102,21 @@ public class LeagueDataService {
             int season
     ) throws Exception {
 
-        return playerMapper.toPlayerSummaries(
-
+        PlayersApiResponse players =
                 footballDataProvider.getTeamPlayers(
-
                         teamId,
                         leagueId,
                         season
+                );
 
-                )
+        SquadApiResponse squad =
+                footballDataProvider.getTeamSquad(
+                        teamId
+                );
 
+        return playerMapper.toPlayerSummaries(
+                players,
+                squad
         );
 
     }

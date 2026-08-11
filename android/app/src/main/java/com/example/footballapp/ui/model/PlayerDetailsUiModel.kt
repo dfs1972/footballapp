@@ -12,6 +12,8 @@ data class PlayerDetailsUiModel(
 
     val name: String,
 
+    val teamName: String?,
+
     val photoUrl: String?,
 
     val shirtNumber: Int?,

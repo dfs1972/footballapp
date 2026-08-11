@@ -5,6 +5,7 @@ import org.footballapp.model.coaches.CoachApiResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.model.league.LeaguesApiResponse;
 import org.footballapp.model.player.PlayersApiResponse;
+import org.footballapp.model.squad.SquadApiResponse;
 import org.footballapp.model.standings.StandingsApiResponse;
 import org.footballapp.model.teamstatistics.TeamStatisticsApiResponse;
 import org.footballapp.model.teams.TeamsApiResponse;
@@ -63,6 +64,10 @@ public interface FootballDataProvider {
             int teamId,
             int leagueId,
             int season
+    ) throws Exception;
+
+    SquadApiResponse getTeamSquad(
+            int teamId
     ) throws Exception;
 
     PlayersApiResponse getPlayer(

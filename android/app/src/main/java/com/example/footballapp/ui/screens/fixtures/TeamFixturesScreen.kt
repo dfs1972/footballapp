@@ -12,7 +12,7 @@ import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.SectionHeading
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.model.FixtureDayUiModel
-import com.example.footballapp.ui.previews.PreviewData
+
 
 @Composable
 fun TeamFixturesScreen(

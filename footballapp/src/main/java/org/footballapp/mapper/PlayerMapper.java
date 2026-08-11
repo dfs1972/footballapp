@@ -5,17 +5,26 @@ import org.footballapp.model.player.PlayerResponse;
 import org.footballapp.model.player.PlayersApiResponse;
 import org.footballapp.model.playerdetails.PlayerSummary;
 import org.footballapp.model.playerstatistics.PlayerStatistics;
+import org.footballapp.model.squad.SquadApiResponse;
+import org.footballapp.model.squad.SquadPlayer;
+import org.footballapp.model.squad.SquadResponse;
 import org.footballapp.util.PlayerDisplayNameFormatter;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class PlayerMapper {
 
     public List<PlayerSummary> toPlayerSummaries(
-            PlayersApiResponse response
+
+            PlayersApiResponse response,
+
+            SquadApiResponse squadResponse
+
     ) {
 
         List<PlayerSummary> players =
@@ -27,20 +36,56 @@ public class PlayerMapper {
             return players;
         }
 
+        Map<Integer, SquadPlayer> squadPlayers =
+                buildSquadPlayerMap(
+                        squadResponse
+                );
+
         for (PlayerResponse playerResponse
                 : response.getResponse()) {
 
+            Player player =
+                    playerResponse.getPlayer();
+
+            /*
+             * Only include players who are
+             * currently in the squad.
+             */
+
+            if (!squadPlayers.containsKey(
+                    player.getPlayerId()
+            )) {
+
+                continue;
+
+            }
+
             players.add(
-                    toPlayerSummary(playerResponse)
+
+                    toPlayerSummary(
+
+                            playerResponse,
+
+                            squadPlayers.get(
+                                    player.getPlayerId()
+                            )
+
+                    )
+
             );
 
         }
 
         return players;
+
     }
 
     private PlayerSummary toPlayerSummary(
-            PlayerResponse response
+
+            PlayerResponse response,
+
+            SquadPlayer squadPlayer
+
     ) {
 
         Player player =
@@ -88,14 +133,19 @@ public class PlayerMapper {
                 player.getAge()
         );
 
+        /*
+         * Squad data is authoritative for
+         * current squad information.
+         */
+
+        summary.setShirtNumber(
+                squadPlayer.getNumber()
+        );
+
         if (statistics != null) {
 
             summary.setPosition(
                     statistics.getGames().getPosition()
-            );
-
-            summary.setShirtNumber(
-                    statistics.getGames().getNumber()
             );
 
             summary.setCaptain(
@@ -114,15 +164,71 @@ public class PlayerMapper {
                     statistics.getGoals().getAssists()
             );
 
+        } else {
+
+            /*
+             * If there are no season statistics,
+             * use the squad position.
+             */
+
+            summary.setPosition(
+                    squadPlayer.getPosition()
+            );
+
         }
 
         System.out.println(
+
                 summary.getDisplayName()
                         + " -> "
                         + summary.getPosition()
+                        + " -> shirt "
+                        + summary.getShirtNumber()
+
         );
 
         return summary;
+
+    }
+
+    private Map<Integer, SquadPlayer> buildSquadPlayerMap(
+
+            SquadApiResponse response
+
+    ) {
+
+        Map<Integer, SquadPlayer> squadPlayers =
+                new HashMap<>();
+
+        if (response == null
+                || response.getResponse() == null) {
+
+            return squadPlayers;
+        }
+
+        for (SquadResponse squadResponse
+                : response.getResponse()) {
+
+            if (squadResponse.getPlayers() == null) {
+                continue;
+            }
+
+            for (SquadPlayer player
+                    : squadResponse.getPlayers()) {
+
+                squadPlayers.put(
+
+                        player.getId(),
+
+                        player
+
+                );
+
+            }
+
+        }
+
+        return squadPlayers;
 
     }
 

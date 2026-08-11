@@ -121,15 +121,39 @@ object DateFormatter {
             return ""
         }
 
-        return OffsetDateTime
-            .parse(utcDateTime)
-            .atZoneSameInstant(ukZone)
-            .format(fixtureDateOnlyFormatter)
+        return try {
+
+            OffsetDateTime
+                .parse(utcDateTime)
+                .atZoneSameInstant(ukZone)
+                .format(fixtureDateOnlyFormatter)
+
+        } catch (e: java.time.format.DateTimeParseException) {
+
+            try {
+
+                java.time.LocalDate
+                    .parse(
+                        utcDateTime,
+                        DateTimeFormatter.ofPattern(
+                            "EEE dd MMM yyyy",
+                            Locale.UK
+                        )
+                    )
+                    .format(fixtureDateOnlyFormatter)
+
+            } catch (e: java.time.format.DateTimeParseException) {
+
+                ""
+
+            }
+
+        }
 
     }
 
     /**
-     * Returns- 12:30 for example..
+     * Returns- 12:30 for example.
      */
 
     fun formatFixtureTime(
@@ -140,10 +164,18 @@ object DateFormatter {
             return ""
         }
 
-        return OffsetDateTime
-            .parse(utcDateTime)
-            .atZoneSameInstant(ukZone)
-            .format(fixtureTimeFormatter)
+        return try {
+
+            OffsetDateTime
+                .parse(utcDateTime)
+                .atZoneSameInstant(ukZone)
+                .format(fixtureTimeFormatter)
+
+        } catch (e: java.time.format.DateTimeParseException) {
+
+            ""
+
+        }
 
     }
 

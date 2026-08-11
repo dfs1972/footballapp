@@ -16,10 +16,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-//import androidx.compose.ui.tooling.preview.Preview
+import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.model.PlayerUiModel
 import com.example.footballapp.ui.theme.AppDimensions
-import com.example.footballapp.ui.design.AppSpacing
 
 @Composable
 fun PlayerRow(
@@ -42,35 +41,49 @@ fun PlayerRow(
 
             },
 
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment =
+            Alignment.CenterVertically
 
     ) {
 
         Row(
 
-            modifier = Modifier.weight(1f),
+            modifier =
+                Modifier.weight(1f),
 
-            verticalAlignment = Alignment.Top
+            verticalAlignment =
+                Alignment.CenterVertically
 
         ) {
 
             Box(
 
-                modifier = Modifier.width(
-                    AppDimensions.ShirtNumberWidth
-                ),
+                modifier =
+                    Modifier.width(
+                        AppDimensions.ShirtNumberWidth
+                    ),
 
-                contentAlignment = Alignment.TopEnd
+                contentAlignment =
+                    Alignment.Center
 
             ) {
 
                 Text(
 
-                    text = player.shirtNumber?.toString() ?: "-",
+                    text =
+                        player.shirtNumber
+                            ?.toString()
+                            ?: "",
 
-                    style = MaterialTheme.typography.bodyLarge,
+                    style =
+                        MaterialTheme
+                            .typography
+                            .bodyLarge,
 
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color =
+                        MaterialTheme
+                            .colorScheme
+                            .onSurfaceVariant
 
                 )
 
@@ -78,17 +91,19 @@ fun PlayerRow(
 
             Spacer(
 
-                modifier = Modifier.width(
-                    AppSpacing.Small
-                )
+                modifier =
+                    Modifier.width(
+                        AppSpacing.Small
+                    )
 
             )
 
             Column(
 
-                verticalArrangement = Arrangement.spacedBy(
-                    AppSpacing.ExtraSmall
-                )
+                verticalArrangement =
+                    Arrangement.spacedBy(
+                        AppSpacing.ExtraSmall
+                    )
 
             ) {
 
@@ -96,7 +111,10 @@ fun PlayerRow(
 
                     text = player.name,
 
-                    style = MaterialTheme.typography.titleMedium
+                    style =
+                        MaterialTheme
+                            .typography
+                            .titleMedium
 
                 )
 
@@ -106,11 +124,15 @@ fun PlayerRow(
 
         Icon(
 
-            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+            imageVector =
+                Icons.AutoMirrored.Filled.KeyboardArrowRight,
 
             contentDescription = null,
 
-            tint = MaterialTheme.colorScheme.onSurfaceVariant
+            tint =
+                MaterialTheme
+                    .colorScheme
+                    .onSurfaceVariant
 
         )
 

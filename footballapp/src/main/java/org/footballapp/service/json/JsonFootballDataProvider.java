@@ -6,6 +6,7 @@ import org.footballapp.model.coaches.CoachApiResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.model.league.LeaguesApiResponse;
 import org.footballapp.model.player.PlayersApiResponse;
+import org.footballapp.model.squad.SquadApiResponse;
 import org.footballapp.model.standings.StandingsApiResponse;
 import org.footballapp.model.teams.TeamsApiResponse;
 import org.footballapp.model.teamstatistics.TeamStatisticsApiResponse;
@@ -220,6 +221,20 @@ public class JsonFootballDataProvider implements FootballDataProvider {
                 ),
                 PlayersApiResponse.class
         );
+    }
+
+    @Override
+    public SquadApiResponse getTeamSquad(
+            int teamId
+    ) throws Exception {
+
+        return jsonLoader.load(
+                MockApiPaths.teamSquad(
+                        teamId
+                ),
+                SquadApiResponse.class
+        );
+
     }
 
     @Override

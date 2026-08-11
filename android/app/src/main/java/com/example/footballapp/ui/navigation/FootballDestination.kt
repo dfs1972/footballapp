@@ -73,9 +73,10 @@ sealed class FootballDestination(
 
     }
 
-    //
-    // Squad
-    //
+    /**
+     * Squad
+     */
+
     object Squad :
         FootballDestination(
             "squad/{leagueId}/{clubId}"
@@ -88,9 +89,10 @@ sealed class FootballDestination(
 
     }
 
-    //
-    // Team Fixtures
-    //
+    /**
+     * Team Fixtures
+     */
+
     object TeamFixtures :
         FootballDestination(
             "teamFixtures/{leagueId}/{teamId}"
@@ -118,10 +120,9 @@ sealed class FootballDestination(
 
     }
 
-    // -------------------------------------------------------------------------
-    // Player Details
-    // -------------------------------------------------------------------------
-
+    /**
+     * Player Details
+     */
     object PlayerDetails :
         FootballDestination(
             "player/{leagueId}/{playerId}"

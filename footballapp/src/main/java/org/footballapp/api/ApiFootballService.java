@@ -6,6 +6,7 @@ import org.footballapp.model.coaches.CoachApiResponse;
 import org.footballapp.model.player.PlayersApiResponse;
 import org.footballapp.model.league.LeaguesApiResponse;
 import org.footballapp.model.teams.TeamsApiResponse;
+import org.footballapp.model.squad.SquadApiResponse;
 import org.footballapp.model.standings.StandingsApiResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.model.teamstatistics.TeamStatisticsApiResponse;
@@ -224,6 +225,24 @@ public class ApiFootballService implements FootballDataProvider {
         return mapper.readValue(
                 json,
                 PlayersApiResponse.class
+        );
+    }
+
+    @Override
+    public SquadApiResponse getTeamSquad(
+            int teamId
+    ) throws Exception {
+
+        String url =
+                "https://v3.football.api-sports.io/players/squads?team="
+                        + teamId;
+
+        String json =
+                apiClient.get(url);
+
+        return mapper.readValue(
+                json,
+                SquadApiResponse.class
         );
     }
 

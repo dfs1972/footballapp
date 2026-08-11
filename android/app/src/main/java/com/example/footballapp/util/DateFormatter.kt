@@ -1,8 +1,11 @@
 package com.example.footballapp.util
 
+import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
+import java.time.format.TextStyle
 import java.util.Locale
 
 /**
@@ -12,6 +15,28 @@ object DateFormatter {
 
     private val ukZone =
         ZoneId.of("Europe/London")
+
+    private fun ordinalDay(day: Int): String {
+
+        return when {
+
+            day in 11..13 ->
+                "${day}th"
+
+            day % 10 == 1 ->
+                "${day}st"
+
+            day % 10 == 2 ->
+                "${day}nd"
+
+            day % 10 == 3 ->
+                "${day}rd"
+
+            else ->
+                "${day}th"
+        }
+
+    }
 
     private val fixtureFormatter =
         DateTimeFormatter.ofPattern(
@@ -33,7 +58,7 @@ object DateFormatter {
 
     private val fixtureDateOnlyFormatter =
         DateTimeFormatter.ofPattern(
-            "d MMMM yyyy",
+            "EEEE d MMMM yyyy",
             Locale.UK
         )
 
@@ -114,41 +139,47 @@ object DateFormatter {
      */
 
     fun formatFixtureDateOnly(
-        utcDateTime: String?
+        fixtureDate: String?
     ): String {
 
-        if (utcDateTime.isNullOrBlank()) {
+        if (fixtureDate.isNullOrBlank()) {
             return ""
         }
 
-        return try {
-
-            OffsetDateTime
-                .parse(utcDateTime)
-                .atZoneSameInstant(ukZone)
-                .format(fixtureDateOnlyFormatter)
-
-        } catch (e: java.time.format.DateTimeParseException) {
-
+        val date: LocalDate =
             try {
 
-                java.time.LocalDate
-                    .parse(
-                        utcDateTime,
-                        DateTimeFormatter.ofPattern(
-                            "EEE dd MMM yyyy",
-                            Locale.UK
-                        )
+                // Backend fixture-list format:
+                // Sat 02 Aug 2025
+
+                LocalDate.parse(
+                    fixtureDate,
+                    DateTimeFormatter.ofPattern(
+                        "EEE dd MMM yyyy",
+                        Locale.UK
                     )
-                    .format(fixtureDateOnlyFormatter)
+                )
 
-            } catch (e: java.time.format.DateTimeParseException) {
+            } catch (_: DateTimeParseException) {
 
-                ""
+                // Fixture-details/API format:
+                // 2025-08-31T11:00:00+00:00
+
+                OffsetDateTime
+                    .parse(fixtureDate)
+                    .toLocalDate()
 
             }
 
-        }
+        return "${date.dayOfWeek.getDisplayName(
+            TextStyle.FULL,
+            Locale.UK
+        )} ${ordinalDay(date.dayOfMonth)} ${
+            date.month.getDisplayName(
+                TextStyle.FULL,
+                Locale.UK
+            )
+        } ${date.year}"
 
     }
 

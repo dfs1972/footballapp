@@ -21,7 +21,15 @@ fun FixtureDto.toUiModel() =
 
         kickOff = fixtureTime,
 
-        status = FixtureStatus.SCHEDULED,
+        status =
+            if (
+                homeGoals != null &&
+                awayGoals != null
+            ) {
+                FixtureStatus.FINISHED
+            } else {
+                FixtureStatus.SCHEDULED
+            },
 
         homeScore = homeGoals,
         awayScore = awayGoals

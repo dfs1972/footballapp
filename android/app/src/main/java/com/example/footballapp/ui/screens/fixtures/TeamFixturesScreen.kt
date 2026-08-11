@@ -8,8 +8,6 @@ import androidx.compose.ui.Modifier
 import com.example.footballapp.ui.components.CardHeader
 import com.example.footballapp.ui.components.FixtureCard
 import com.example.footballapp.ui.components.ScreenScaffold
-import com.example.footballapp.ui.components.SectionCard
-import com.example.footballapp.ui.components.SectionHeading
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.design.Strings
 import com.example.footballapp.ui.model.FixtureDayUiModel
@@ -41,26 +39,18 @@ fun TeamFixturesScreen(
 
         item {
 
-                CardHeader(
+            CardHeader(
 
-                    title = clubName,
+                title = clubName,
 
-                    subtitle =
-                        "${Strings.FIXTURES} · $season"
+                subtitle =
+                    "${Strings.FIXTURES} · $season"
 
-                )
+            )
 
         }
 
         fixtureDays.forEach { day ->
-
-            item {
-
-                SectionHeading(
-                    day.heading
-                )
-
-            }
 
             items(
 

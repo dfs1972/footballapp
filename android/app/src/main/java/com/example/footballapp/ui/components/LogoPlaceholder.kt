@@ -21,7 +21,6 @@ import androidx.test.espresso.base.Default
 import com.example.footballapp.ui.design.AppSpacing
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.SportsSoccer
-import com.example.footballapp.ui.theme.HeaderBlue
 
 @Composable
 fun LogoPlaceholder(
@@ -51,7 +50,7 @@ private fun LogoPlaceholderPreview() {
 
     Box(
         modifier = Modifier
-            .background(HeaderBlue)
+            .background(Color.Blue)
             .padding(16.dp)
     ) {
         LogoPlaceholder()

@@ -40,6 +40,7 @@ fun FixtureListRow(
             modifier = Modifier.weight(1f),
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.End,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
@@ -53,6 +54,7 @@ fun FixtureListRow(
                 ),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center
         )
 
@@ -61,6 +63,7 @@ fun FixtureListRow(
             modifier = Modifier.weight(1f),
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Start,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis

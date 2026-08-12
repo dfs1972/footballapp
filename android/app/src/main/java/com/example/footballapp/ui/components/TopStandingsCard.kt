@@ -83,7 +83,9 @@ fun TopStandingsCard(
                     ),
 
                     fontWeight =
-                        FontWeight.Bold
+                        FontWeight.Bold,
+
+                    color = MaterialTheme.colorScheme.onSurface
 
                 )
 
@@ -91,13 +93,17 @@ fun TopStandingsCard(
 
                     text = standing.teamName,
 
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+
+                    color = MaterialTheme.colorScheme.onSurface
 
                 )
 
                 Text(
 
-                    text = "${standing.points} pts"
+                    text = "${standing.points} pts",
+
+                    color = MaterialTheme.colorScheme.onSurface
 
                 )
 

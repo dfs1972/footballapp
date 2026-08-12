@@ -35,7 +35,9 @@ fun SectionHeading(
 
         style = MaterialTheme.typography.titleSmall,
 
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Bold,
+
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
 
     )
 

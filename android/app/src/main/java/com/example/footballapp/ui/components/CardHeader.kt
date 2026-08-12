@@ -30,7 +30,9 @@ fun CardHeader(
 
         style = MaterialTheme.typography.titleMedium,
 
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Bold,
+
+        color = MaterialTheme.colorScheme.onSurface,
 
     )
 

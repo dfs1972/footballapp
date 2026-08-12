@@ -24,7 +24,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.footballapp.ui.design.AppSpacing
-import com.example.footballapp.ui.theme.HeaderBlue
 
 @Composable
 fun SearchBarPlaceholder(
@@ -70,7 +69,7 @@ private fun SearchBarPlaceholderPreview() {
 
     Box(
         modifier = Modifier
-            .background(HeaderBlue)
+            .background(Color.Blue)
             .padding(16.dp)
     ) {
         SearchBarPlaceholder(

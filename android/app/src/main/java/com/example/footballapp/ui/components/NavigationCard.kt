@@ -36,7 +36,6 @@ fun NavigationCard(
 ) {
 
     Card(
-
         onClick = onClick,
 
         modifier = Modifier
@@ -50,8 +49,11 @@ fun NavigationCard(
 
         elevation = CardDefaults.cardElevation(
             defaultElevation = AppElevation.Card
-        )
+        ),
 
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
     ) {
 
         Row(

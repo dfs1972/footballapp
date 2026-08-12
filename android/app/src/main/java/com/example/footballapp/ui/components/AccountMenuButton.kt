@@ -12,8 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.footballapp.ui.theme.HeaderBlue
-
 @Composable
 fun AccountMenuButton(
     modifier: Modifier = Modifier,
@@ -32,7 +30,7 @@ fun AccountMenuButton(
             Icon(
                 imageVector = Icons.Default.AccountCircle,
                 contentDescription = "Account",
-                tint = HeaderBlue,
+                tint = Color.Blue,
                 modifier = Modifier.size(28.dp)
             )
         }

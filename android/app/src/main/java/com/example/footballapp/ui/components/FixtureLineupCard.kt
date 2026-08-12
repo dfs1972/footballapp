@@ -73,28 +73,6 @@ fun FixtureLineupCard(
 
                 )
 
-
-                Text(
-
-                    text = "Players",
-
-                    style =
-                        MaterialTheme.typography.titleMedium,
-
-                    fontWeight =
-                        FontWeight.Bold
-
-                )
-
-                Spacer(
-
-                    modifier = Modifier.height(
-                        AppSpacing.ExtraSmall
-                    )
-
-                )
-
-
                 val groupedPlayers = team.players.groupBy { player ->
                     when (player.position) {
                         "G" -> "Goalkeeper"

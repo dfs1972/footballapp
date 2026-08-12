@@ -110,20 +110,6 @@ fun FixtureDetailsScreen(
 
         }
 
-        /*
-         * Match Information
-         */
-
-        item {
-
-            SectionHeading(
-
-                text = "Match Information"
-
-            )
-
-        }
-
         item {
 
             SectionCard {

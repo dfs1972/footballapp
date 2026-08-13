@@ -210,4 +210,58 @@ object DateFormatter {
 
     }
 
+    /**
+     * Parses a fixture date into a LocalDate.
+     *
+     * Supports:
+     *
+     * 2025-08-31T11:00:00+00:00
+     *
+     * and:
+     *
+     * Sat 02 Aug 2025
+     *
+     * Returns null when the date cannot be parsed.
+     */
+    fun parseFixtureDate(
+        fixtureDate: String?
+    ): LocalDate? {
+
+        if (fixtureDate.isNullOrBlank()) {
+            return null
+        }
+
+        return try {
+
+            // ISO fixture date-time
+            OffsetDateTime
+                .parse(fixtureDate)
+                .atZoneSameInstant(ukZone)
+                .toLocalDate()
+
+        } catch (e: DateTimeParseException) {
+
+            try {
+
+                // Backend fixture-list format:
+                // Sat 02 Aug 2025
+
+                LocalDate.parse(
+                    fixtureDate,
+                    DateTimeFormatter.ofPattern(
+                        "EEE dd MMM yyyy",
+                        Locale.UK
+                    )
+                )
+
+            } catch (e: DateTimeParseException) {
+
+                null
+
+            }
+
+        }
+
+    }
+
 }

@@ -82,17 +82,6 @@ interface FootballApiService {
     ): FixtureLineupDto
 
     /**
-     * Get Fixture Events
-     */
-    @GET("fixtureEvents")
-    suspend fun getFixtureEvents(
-
-        @Query("fixtureId")
-        fixtureId: Long
-
-    ): List<FixtureEventDto>
-
-    /**
      * Get League Teams
      */
     @GET("teams")

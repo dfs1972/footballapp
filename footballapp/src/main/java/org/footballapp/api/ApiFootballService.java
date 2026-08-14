@@ -11,7 +11,7 @@ import org.footballapp.model.standings.StandingsApiResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.model.teamstatistics.TeamStatisticsApiResponse;
 import org.footballapp.api.dto.lineups.FixtureLineupsResponse;
-import org.footballapp.api.dto.events.FixtureEventsResponse;
+//import org.footballapp.api.dto.events.FixtureEventsResponse;
 import org.footballapp.api.dto.fixtures.FixtureStatisticsResponse;
 import org.footballapp.service.FootballDataProvider;
 import org.springframework.context.annotation.Profile;
@@ -27,8 +27,7 @@ public class ApiFootballService implements FootballDataProvider {
     public ApiFootballService(
             ApiFootballClient apiClient,
             ObjectMapper mapper
-    )
-    {
+    ) {
         this.apiClient = apiClient;
         this.mapper = mapper;
 
@@ -38,7 +37,6 @@ public class ApiFootballService implements FootballDataProvider {
     /**************************************************+************************************************
 
      LEAGUES SECTION
-
      *************************************************************************************************
      */
 
@@ -95,7 +93,6 @@ public class ApiFootballService implements FootballDataProvider {
     /**************************************************+************************************************
 
      TEAMS SECTION
-
      *************************************************************************************************
      */
 
@@ -197,7 +194,6 @@ public class ApiFootballService implements FootballDataProvider {
     /**************************************************+************************************************
 
      PLAYERS SECTION
-
      *************************************************************************************************
      */
 
@@ -327,9 +323,8 @@ public class ApiFootballService implements FootballDataProvider {
 
     /**************************************************************************************************
 
-      FIXTURES SECTION
-
-      *************************************************************************************************
+     FIXTURES SECTION
+     *************************************************************************************************
      */
 
 
@@ -394,6 +389,7 @@ public class ApiFootballService implements FootballDataProvider {
                 FixturesApiResponse.class
         );
     }
+
     /**
      * Get team's last N fixtures
      */
@@ -440,60 +436,5 @@ public class ApiFootballService implements FootballDataProvider {
                 FixtureLineupsResponse.class
         );
     }
-
-    /**
-     * Get Fixture Events
-     */
-
-    public FixtureEventsResponse getFixtureEvents(
-
-            long fixtureId
-
-    ) throws Exception {
-
-        String url =
-
-                "https://v3.football.api-sports.io/fixtures/events?fixture="
-                        + fixtureId;
-
-        String json =
-
-                apiClient.get(url);
-
-        return mapper.readValue(
-
-                json,
-
-                FixtureEventsResponse.class
-
-        );
-
-    }
-
-    /***
-     * Get Fixture Statistics
-     */
-
-    public FixtureStatisticsResponse getFixtureStatistics(
-            long fixtureId,
-            int teamId
-    ) throws Exception {
-
-        String url =
-                "https://v3.football.api-sports.io/fixtures/statistics?fixture="
-                        + fixtureId
-                        + "&team="
-                        + teamId;
-
-        String json =
-                apiClient.get(url);
-
-        return mapper.readValue(
-                json,
-                FixtureStatisticsResponse.class
-        );
-
-    }
-
 }
 

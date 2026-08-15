@@ -108,4 +108,36 @@ public class StandingService {
         System.out.println("Returning fallback: " + merged.size());
         return merged;
     }
+
+    public List<List<Standing>> getLeagueStandingGroups(
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        StandingsApiResponse response =
+                getStandings(
+                        leagueId,
+                        season
+                );
+
+        if (response.getResponse() == null
+                || response.getResponse().isEmpty()) {
+
+            return List.of();
+        }
+
+        List<List<Standing>> groups =
+                response.getResponse()
+                        .getFirst()
+                        .getLeague()
+                        .getStandings();
+
+        if (groups == null
+                || groups.isEmpty()) {
+
+            return List.of();
+        }
+
+        return groups;
+    }
 }

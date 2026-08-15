@@ -2,6 +2,7 @@ package com.example.footballapp.data.repository
 
 import com.example.footballapp.data.remote.FootballApiClient
 import com.example.footballapp.data.mapper.toUiModel
+import com.example.footballapp.ui.model.LeagueTableGroupUiModel
 import com.example.footballapp.ui.model.LeagueTableRowUiModel
 
 /**
@@ -15,7 +16,7 @@ class LeagueTableRepository {
     suspend fun getLeagueTable(
         leagueId: Int,
         season: Int
-    ): List<LeagueTableRowUiModel> {
+    ): List<LeagueTableGroupUiModel> {
 
         return service
             .getLeagueTable(

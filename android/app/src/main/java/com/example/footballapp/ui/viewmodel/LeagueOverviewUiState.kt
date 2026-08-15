@@ -1,7 +1,7 @@
 package com.example.footballapp.ui.viewmodel
 
 import com.example.footballapp.ui.model.LeagueOverviewUiModel
-import com.example.footballapp.ui.model.LeagueTableRowUiModel
+import com.example.footballapp.ui.model.LeagueTableGroupUiModel
 
 /**
  * UI state for the League Overview screen.
@@ -25,7 +25,7 @@ data class LeagueOverviewUiState(
      * the UI decides how many rows to display.
      */
 
-    val topStandings: List<LeagueTableRowUiModel> = emptyList(),
+    val topStandings: List<LeagueTableGroupUiModel> = emptyList(),
 
     /**
      * Error message displayed if loading fails.

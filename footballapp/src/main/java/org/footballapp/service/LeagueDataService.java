@@ -9,9 +9,7 @@ import org.footballapp.model.coaches.Coach;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.model.player.PlayersApiResponse;
 import org.footballapp.model.squad.SquadApiResponse;
-import org.footballapp.model.standings.Standing;
-import org.footballapp.model.standings.StandingLeague;
-import org.footballapp.model.standings.StandingsApiResponse;
+import org.footballapp.model.standings.*;
 import org.footballapp.model.teams.TeamResponse;
 import org.footballapp.model.teams.TeamsApiResponse;
 import org.springframework.stereotype.Service;
@@ -31,9 +29,9 @@ import org.footballapp.api.response.lineups.PlayerLineupResponse;
 import org.footballapp.model.fixtures.FixtureRow;
 import org.footballapp.model.playerdetails.PlayerSummary;
 import org.footballapp.model.teams.Team;
-import org.footballapp.model.standings.LeagueTableRow;
 import org.footballapp.model.league.LeagueOverview;
 import org.footballapp.model.playerdetails.PlayerDetails;
+import org.footballapp.model.standings.LeagueTableGroup;
 
 @Service
 public class LeagueDataService {
@@ -166,64 +164,103 @@ public class LeagueDataService {
      * Get league table by season
      */
 
-    public List<LeagueTableRow> getLeagueTable(
+    public List<LeagueTableGroup> getLeagueTable(
             int leagueId,
             int season
     ) throws Exception {
 
-        List<LeagueTableRow> table =
+        List<LeagueTableGroup> result =
                 new ArrayList<>();
 
-        for (Standing standing :
-                standingService.getLeagueStandings(
+        List<List<Standing>> groups =
+                standingService.getLeagueStandingGroups(
                         leagueId,
                         season
-                )) {
+                );
 
-            LeagueTableRow row =
-                    new LeagueTableRow();
+        for (List<Standing> standings : groups) {
 
-            row.setPosition(
-                    standing.getRank()
+            if (standings == null
+                    || standings.isEmpty()) {
+
+                continue;
+            }
+
+            LeagueTableGroup group =
+                    new LeagueTableGroup();
+
+            String groupName =
+                    standings.getFirst().getGroup();
+
+            if (groupName == null
+                    || groupName.isBlank()) {
+
+                groupName = "League Table";
+
+            }
+
+            group.setGroup(
+                    groupName
             );
 
-            row.setTeamId(
-                    standing.getTeam().getId()
+            List<LeagueTableRow> rows =
+                    new ArrayList<>();
+
+            for (Standing standing : standings) {
+
+                LeagueTableRow row =
+                        new LeagueTableRow();
+
+                row.setPosition(
+                        standing.getRank()
+                );
+
+                row.setTeamId(
+                        standing.getTeam().getId()
+                );
+
+                row.setTeamName(
+                        standing.getTeam().getName()
+                );
+
+                row.setPlayed(
+                        standing.getAll().getPlayed()
+                );
+
+                row.setWins(
+                        standing.getAll().getWin()
+                );
+
+                row.setDraws(
+                        standing.getAll().getDraw()
+                );
+
+                row.setLosses(
+                        standing.getAll().getLose()
+                );
+
+                row.setGoalDifference(
+                        standing.getGoalsDiff()
+                );
+
+                row.setPoints(
+                        standing.getPoints()
+                );
+
+                rows.add(row);
+
+            }
+
+            group.setStandings(
+                    rows
             );
 
-            row.setTeamName(
-                    standing.getTeam().getName()
+            result.add(
+                    group
             );
-
-            row.setPlayed(
-                    standing.getAll().getPlayed()
-            );
-
-            row.setWins(
-                    standing.getAll().getWin()
-            );
-
-            row.setDraws(
-                    standing.getAll().getDraw()
-            );
-
-            row.setLosses(
-                    standing.getAll().getLose()
-            );
-
-            row.setGoalDifference(
-                    standing.getGoalsDiff()
-            );
-
-            row.setPoints(
-                    standing.getPoints()
-            );
-
-            table.add(row);
-
         }
 
-        return table;
+        return result;
     }
 
     /**

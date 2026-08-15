@@ -39,13 +39,12 @@ class LeagueOverviewViewModel : ViewModel() {
                         season
                     )
 
-                val topStandings =
+                val standings =
                     tableRepository
                         .getLeagueTable(
                             leagueId,
                             season
                         )
-                        .take(5)
 
                 _uiState.value =
                     LeagueOverviewUiState(
@@ -54,7 +53,7 @@ class LeagueOverviewViewModel : ViewModel() {
 
                         overview = overview,
 
-                        topStandings = topStandings
+                        topStandings = standings
 
                     )
 

@@ -23,6 +23,7 @@ import com.example.footballapp.ui.design.Strings
 import com.example.footballapp.ui.model.LeagueTableRowUiModel
 //import com.example.footballapp.ui.previews.PreviewData
 import com.example.footballapp.ui.design.AppSpacing
+import com.example.footballapp.ui.model.LeagueTableGroupUiModel
 
 @Composable
 fun TopStandingsCard(
@@ -33,7 +34,7 @@ fun TopStandingsCard(
 
     title: String = Strings.TOP_FIVE,
 
-    standings: List<LeagueTableRowUiModel>,
+    standings: List<LeagueTableGroupUiModel>,
 
     onTeamClick: (LeagueTableRowUiModel) -> Unit,
 
@@ -53,62 +54,60 @@ fun TopStandingsCard(
 
         )
 
-        standings.forEach { standing ->
+        standings.forEach { group ->
 
-            Row(
-
+            Text(
+                text = group.group,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable {
-
-                        onTeamClick(standing)
-
-                    }
                     .padding(
-                        vertical = AppSpacing.Small
-                    ),
+                        top = AppSpacing.Small
+                    )
+            )
 
-                verticalAlignment =
-                    Alignment.CenterVertically
+            group.standings
+                .take(5)
+                .forEach { standing ->
 
-            ) {
+                    Row(
 
-                Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                onTeamClick(standing)
+                            }
+                            .padding(
+                                vertical = AppSpacing.Small
+                            ),
 
-                    text =
-                        standing.position.toString(),
+                        verticalAlignment =
+                            Alignment.CenterVertically
 
-                    modifier = Modifier.width(
-                        AppSpacing.ExtraLarge
-                    ),
+                    ) {
 
-                    fontWeight =
-                        FontWeight.Bold,
+                        Text(
+                            text = standing.position.toString(),
+                            modifier = Modifier.width(
+                                AppSpacing.ExtraLarge
+                            ),
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
 
-                    color = MaterialTheme.colorScheme.onSurface
+                        Text(
+                            text = standing.teamName,
+                            modifier = Modifier.weight(1f),
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
 
-                )
-
-                Text(
-
-                    text = standing.teamName,
-
-                    modifier = Modifier.weight(1f),
-
-                    color = MaterialTheme.colorScheme.onSurface
-
-                )
-
-                Text(
-
-                    text = "${standing.points} pts",
-
-                    color = MaterialTheme.colorScheme.onSurface
-
-                )
-
-            }
-
+                        Text(
+                            text = "${standing.points} pts",
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
         }
 
         Row(

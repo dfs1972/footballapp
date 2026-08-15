@@ -1,5 +1,6 @@
 package org.footballapp.controller;
 
+import org.footballapp.model.standings.LeagueTableGroup;
 import org.footballapp.model.standings.LeagueTableRow;
 import org.footballapp.service.LeagueDataService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +29,7 @@ public class LeagueTableController {
      * Returns the league table for a competition.
      */
     @GetMapping("/leagueTable")
-    public List<LeagueTableRow> getLeagueTable(
+    public List<LeagueTableGroup> getLeagueTable(
 
             @RequestParam int leagueId,
 

@@ -1,6 +1,8 @@
 package com.example.footballapp.data.mapper
 
+import com.example.footballapp.data.remote.dto.LeagueTableGroupDto
 import com.example.footballapp.data.remote.dto.LeagueTableRowDto
+import com.example.footballapp.ui.model.LeagueTableGroupUiModel
 import com.example.footballapp.ui.model.LeagueTableRowUiModel
 import com.example.footballapp.ui.model.QualificationType
 
@@ -37,6 +39,15 @@ fun LeagueTableRowDto.toUiModel(): LeagueTableRowUiModel {
 
     )
 
+}
+
+fun LeagueTableGroupDto.toUiModel(): LeagueTableGroupUiModel {
+    return LeagueTableGroupUiModel(
+        group = group,
+        standings = standings.map {
+            it.toUiModel()
+        }
+    )
 }
 
 /**

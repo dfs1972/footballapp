@@ -64,8 +64,10 @@ For future development, the most recent Repomix files are the source of truth fo
 
 Current authoritative files:
 
-repomix-backend-August-??-26.md
-repomix-android-August-??-26.md
+repomix-backend-August-14-26.md
+repomix-android-August-14-26.md
+
+Repomix files are usually updated daily or even twice per day.
 
 The handover describes:
 

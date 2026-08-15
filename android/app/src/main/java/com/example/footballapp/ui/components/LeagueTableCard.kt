@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.footballapp.ui.model.LeagueTableRowUiModel
+import com.example.footballapp.ui.model.LeagueTableGroupUiModel
 //import com.example.footballapp.ui.previews.PreviewData
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.design.Strings
@@ -22,7 +22,7 @@ fun LeagueTableCard(
 
     season: String,
 
-    table: List<LeagueTableRowUiModel>,
+    table: List<LeagueTableGroupUiModel>,
 
     onTeamClick: (Int) -> Unit
 
@@ -47,24 +47,42 @@ fun LeagueTableCard(
             )
         )
 
-        table.forEachIndexed { index, row ->
-
-            LeagueTableRow(
-
-                row = row,
-
-                isEvenRow = false,
-
-                onClubClick = onTeamClick
-
-            )
-
-            // Temporary location for Scottish Premiership
-            if (index == 2) {
-
-                TableDivider()
-
+        table
+            .sortedBy {
+                when (it.group) {
+                    "North" -> 0
+                    "South" -> 1
+                    else -> 2
+                }
             }
+            .forEachIndexed { groupIndex, group ->
+
+                Text(
+                    text = group.group,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(
+                    modifier = Modifier.height(
+                        AppSpacing.Small
+                    )
+                )
+
+                group.standings.forEachIndexed { index, row ->
+
+                    LeagueTableRow(
+                        row = row,
+                        isEvenRow = index % 2 == 0,
+                        onClubClick = onTeamClick
+                    )
+
+                }
+
+                if (groupIndex < table.lastIndex) {
+                    TableDivider()
+                }
 
         }
 

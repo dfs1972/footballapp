@@ -13,6 +13,8 @@ public class Standing {
 
     private int goalsDiff;
 
+    private String group;
+
     private StandingRecord all;
 
     public int getRank() {
@@ -27,7 +29,9 @@ public class Standing {
         return team;
     }
 
-    public void setTeam(StandingTeam team) {this.team = team;}
+    public void setTeam(StandingTeam team) {
+        this.team = team;
+    }
 
     public int getPoints() {
         return points;
@@ -45,9 +49,19 @@ public class Standing {
         this.goalsDiff = goalsDiff;
     }
 
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
     public StandingRecord getAll() {
         return all;
     }
 
-    public void setAll(StandingRecord all) {this.all = all;}
+    public void setAll(StandingRecord all) {
+        this.all = all;
+    }
 }

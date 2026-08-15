@@ -4,14 +4,14 @@ import androidx.compose.runtime.Composable
 import com.example.footballapp.ui.components.LeagueTableCard
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.model.LeagueOverviewUiModel
-import com.example.footballapp.ui.model.LeagueTableRowUiModel
+import com.example.footballapp.ui.model.LeagueTableGroupUiModel
 
 @Composable
 fun LeagueTableScreen(
 
     overview: LeagueOverviewUiModel,
 
-    standings: List<LeagueTableRowUiModel>,
+    standings: List<LeagueTableGroupUiModel>,
 
     onClubClick: (Int) -> Unit
 

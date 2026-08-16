@@ -5,7 +5,6 @@ package org.footballapp.service;
  */
 import org.footballapp.api.response.lineups.FixtureLineupMapper;
 import org.footballapp.model.standings.LeagueTableFormat;
-import org.footballapp.service.LeagueTableFormatResolver;
 import org.footballapp.mapper.*;
 import org.footballapp.model.coaches.Coach;
 import org.footballapp.model.fixtures.FixturesApiResponse;
@@ -260,6 +259,10 @@ public class LeagueDataService {
         return List.of(group);
     }
 
+    /**
+     * Create groups for League Table Screen
+     */
+
     private List<LeagueTableGroup> createLeagueTableGroups(
             List<List<Standing>> groups
     ) {
@@ -282,18 +285,65 @@ public class LeagueDataService {
                     || groupName.isBlank()) {
 
                 groupName = "League Table";
-
             }
+
+            /************** TEMP PRINT ***********************/
+            System.out.println(
+                    "GROUP: " + groupName
+            );
+
+            for (Standing standing : standings) {
+
+                System.out.println(
+                        "  rank=" + standing.getRank()
+                                + " team="
+                                + standing.getTeam().getName()
+                                + " points="
+                                + standing.getPoints()
+                );
+            };// END OF TEMP PRINT
 
             result.add(
                     createLeagueTableGroup(
-                            standings,
+                            preserveApiRanking(standings),
                             groupName
                     )
             );
         }
 
+        result.sort(
+                Comparator.comparingInt(
+                        group -> groupOrder(
+                                group.getGroup()
+                        )
+                )
+        );
+
         return result;
+    }
+
+    /**
+     * HELPER FOR ABOVE METHOD
+     */
+
+    private int groupOrder(String groupName) {
+
+        if (groupName == null) {
+            return Integer.MAX_VALUE;
+        }
+
+        String name =
+                groupName.trim();
+
+        if (name.equalsIgnoreCase("North")) {
+            return 0;
+        }
+
+        if (name.equalsIgnoreCase("South")) {
+            return 1;
+        }
+
+        return 100;
     }
 
     /**
@@ -409,7 +459,7 @@ public class LeagueDataService {
                     groups.get(2)
             );
 
-            return sortAndReRank(
+            return preserveApiRanking(
                     combined
             );
         }
@@ -434,7 +484,7 @@ public class LeagueDataService {
             }
         }
 
-        return sortAndReRank(
+        return preserveApiRanking(
                 combined
         );
     }
@@ -443,35 +493,15 @@ public class LeagueDataService {
      * Sorts a combined table and assigns continuous
      * league positions.
      */
-    private List<Standing> sortAndReRank(
+    private List<Standing> preserveApiRanking(
             List<Standing> standings
     ) {
 
         standings.sort(
-                Comparator
-                        .comparing(
-                                Standing::getPoints,
-                                Comparator.reverseOrder()
-                        )
-                        .thenComparing(
-                                Standing::getGoalsDiff,
-                                Comparator.reverseOrder()
-                        )
-                        .thenComparing(
-                                standing ->
-                                        standing.getTeam()
-                                                .getName(),
-                                String.CASE_INSENSITIVE_ORDER
-                        )
+                Comparator.comparingInt(
+                        Standing::getRank
+                )
         );
-
-        for (int i = 0; i < standings.size(); i++) {
-
-            standings
-                    .get(i)
-                    .setRank(i + 1);
-
-        }
 
         return standings;
     }
@@ -580,7 +610,6 @@ public class LeagueDataService {
         return fixtureMapper.toFixtureRows(
 
                 footballDataProvider.getFixtures(
-
                         leagueId,
                         season
 

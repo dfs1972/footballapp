@@ -12,7 +12,7 @@ object AppConstants {
      *
      * Remove once season selection becomes dynamic.
      */
-    const val DEVELOPMENT_SEASON = 2025
+    const val DEVELOPMENT_SEASON = 2026
 
     /**
      * Temporary development League

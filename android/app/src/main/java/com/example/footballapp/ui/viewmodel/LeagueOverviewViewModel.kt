@@ -45,14 +45,11 @@ class LeagueOverviewViewModel : ViewModel() {
                             leagueId,
                             season
                         )
-                        .firstOrNull()
-                        ?.let { group ->
+                        .map { group ->
                             group.copy(
                                 standings = group.standings.take(5)
                             )
                         }
-                        ?.let { listOf(it) }
-                        ?: emptyList()
 
                 _uiState.value =
                     LeagueOverviewUiState(

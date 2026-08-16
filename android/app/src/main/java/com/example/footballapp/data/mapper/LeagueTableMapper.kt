@@ -54,17 +54,14 @@ fun LeagueTableGroupDto.toUiModel(): LeagueTableGroupUiModel {
  * Converts a league position into the qualification band
  * displayed by the UI.
  *
- * Current implementation is for the Scottish Premiership.
- * This can be expanded later to support league-specific
- * qualification rules.
+ * Currently only the champion position is generic.
+ * Competition-specific qualification rules are not yet
+ * applied.
  */
 private fun Int.toQualification(): QualificationType =
     when (this) {
 
         1 -> QualificationType.CHAMPION
 
-        12 -> QualificationType.RELEGATION
-
         else -> QualificationType.SAFE
-
     }

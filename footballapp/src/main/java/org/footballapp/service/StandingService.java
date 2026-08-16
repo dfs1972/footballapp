@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.footballapp.api.ApiFootballClient;
 import org.footballapp.model.standings.StandingsApiResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -52,10 +53,9 @@ public class StandingService {
                         season
                 );
 
-        System.out.println("Responses = " + response.getResponse().size());
-
         if (response.getResponse() == null
                 || response.getResponse().isEmpty()) {
+
             return List.of();
         }
 
@@ -65,47 +65,40 @@ public class StandingService {
                         .getLeague()
                         .getStandings();
 
-        System.out.println("Groups = " + groups.size());
+        if (groups == null
+                || groups.isEmpty()) {
 
-        if (groups == null || groups.isEmpty()) {
             return List.of();
         }
 
-        // Normal league
+        /*
+         * Normal single-table competition.
+         */
         if (groups.size() == 1) {
-            System.out.println("Returning normal league: " + groups.getFirst().size());
+
             return groups.getFirst();
+
         }
 
-        // Scottish Premiership split
-        if (groups.size() == 3) {
-
-            List<Standing> merged =
-                    new java.util.ArrayList<>();
-
-            int rank = 1;
-
-            for (Standing standing : groups.get(1)) {
-                standing.setRank(rank++);
-                merged.add(standing);
-            }
-
-            for (Standing standing : groups.get(2)) {
-                standing.setRank(rank++);
-                merged.add(standing);
-            }
-            System.out.println("Returning Scottish merged: " + merged.size());
-            return merged;
-        }
-
-        // Fallback
+        /*
+         * This method is retained for callers that still expect
+         * a flat List<Standing>.
+         *
+         * Presentation-specific handling of groups belongs in
+         * LeagueDataService.getLeagueTable().
+         */
         List<Standing> merged =
-                new java.util.ArrayList<>();
+                new ArrayList<>();
 
         for (List<Standing> group : groups) {
-            merged.addAll(group);
+
+            if (group != null) {
+
+                merged.addAll(group);
+
+            }
         }
-        System.out.println("Returning fallback: " + merged.size());
+
         return merged;
     }
 

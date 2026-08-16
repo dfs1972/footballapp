@@ -4,6 +4,8 @@ package org.footballapp.service;
  * Spring Boot Service
  */
 import org.footballapp.api.response.lineups.FixtureLineupMapper;
+import org.footballapp.model.standings.LeagueTableFormat;
+import org.footballapp.service.LeagueTableFormatResolver;
 import org.footballapp.mapper.*;
 import org.footballapp.model.coaches.Coach;
 import org.footballapp.model.fixtures.FixturesApiResponse;
@@ -37,6 +39,7 @@ import org.footballapp.model.standings.LeagueTableGroup;
 public class LeagueDataService {
 
     private final FixtureMapper fixtureMapper;
+    private final LeagueTableFormatResolver leagueTableFormatResolver;
     private final FixtureLineupMapper fixtureLineupMapper;
     private final FootballDataProvider  fixtureService;
     private final FootballDataProvider  footballDataProvider;
@@ -56,6 +59,7 @@ public class LeagueDataService {
             CoachMapper coachMapper,
             TeamService teamService,
             StandingService standingService,
+            LeagueTableFormatResolver leagueTableFormatResolver,
             FixtureMapper fixtureMapper,
             FixtureLineupMapper fixtureLineupMapper,
             FootballDataProvider  fixtureService,
@@ -68,6 +72,7 @@ public class LeagueDataService {
         this.teamService = teamService;
         this.coachMapper = coachMapper;
         this.standingService = standingService;
+        this.leagueTableFormatResolver = leagueTableFormatResolver;
         this.fixtureMapper = fixtureMapper;
         this.fixtureService  = fixtureService;
         this.fixtureLineupMapper = fixtureLineupMapper;
@@ -164,19 +169,103 @@ public class LeagueDataService {
      * Get league table by season
      */
 
+    /**
+     * Get league table by season.
+     *
+     * The API-Football standings response may contain:
+     *
+     * - one ordinary table
+     * - multiple independent groups
+     * - multiple phases of the same competition
+     *
+     * LeagueTableFormatResolver determines how those groups
+     * should be presented to the application.
+     */
     public List<LeagueTableGroup> getLeagueTable(
             int leagueId,
             int season
     ) throws Exception {
 
-        List<LeagueTableGroup> result =
-                new ArrayList<>();
+        LeagueTableFormat format =
+                leagueTableFormatResolver.resolve(
+                        leagueId,
+                        season
+                );
 
         List<List<Standing>> groups =
                 standingService.getLeagueStandingGroups(
                         leagueId,
                         season
                 );
+
+        if (groups == null
+                || groups.isEmpty()) {
+
+            return List.of();
+        }
+
+        /*
+         * GROUPED_TABLE
+         *
+         * Preserve the groups returned by API-Football.
+         *
+         * Example:
+         *
+         * FAW Championship
+         *     North
+         *     South
+         */
+        if (format ==
+                LeagueTableFormat.GROUPED_TABLE) {
+
+            return createLeagueTableGroups(
+                    groups
+            );
+        }
+
+        /*
+         * SINGLE_TABLE
+         *
+         * The competition should be presented as one
+         * continuous table.
+         *
+         * For a normal competition this is simply the
+         * first/only standings group.
+         *
+         * For competitions with split phases, the final
+         * phase groups need to be combined.
+         */
+        List<Standing> standings =
+                getSingleTableStandings(
+                        leagueId,
+                        groups
+                );
+
+        if (standings.isEmpty()) {
+
+            return List.of();
+
+        }
+
+        /*
+         * A single LeagueTableGroup represents the
+         * complete competition table.
+         */
+        LeagueTableGroup group =
+                createLeagueTableGroup(
+                        standings,
+                        "League Table"
+                );
+
+        return List.of(group);
+    }
+
+    private List<LeagueTableGroup> createLeagueTableGroups(
+            List<List<Standing>> groups
+    ) {
+
+        List<LeagueTableGroup> result =
+                new ArrayList<>();
 
         for (List<Standing> standings : groups) {
 
@@ -185,9 +274,6 @@ public class LeagueDataService {
 
                 continue;
             }
-
-            LeagueTableGroup group =
-                    new LeagueTableGroup();
 
             String groupName =
                     standings.getFirst().getGroup();
@@ -199,68 +285,195 @@ public class LeagueDataService {
 
             }
 
-            group.setGroup(
-                    groupName
-            );
-
-            List<LeagueTableRow> rows =
-                    new ArrayList<>();
-
-            for (Standing standing : standings) {
-
-                LeagueTableRow row =
-                        new LeagueTableRow();
-
-                row.setPosition(
-                        standing.getRank()
-                );
-
-                row.setTeamId(
-                        standing.getTeam().getId()
-                );
-
-                row.setTeamName(
-                        standing.getTeam().getName()
-                );
-
-                row.setPlayed(
-                        standing.getAll().getPlayed()
-                );
-
-                row.setWins(
-                        standing.getAll().getWin()
-                );
-
-                row.setDraws(
-                        standing.getAll().getDraw()
-                );
-
-                row.setLosses(
-                        standing.getAll().getLose()
-                );
-
-                row.setGoalDifference(
-                        standing.getGoalsDiff()
-                );
-
-                row.setPoints(
-                        standing.getPoints()
-                );
-
-                rows.add(row);
-
-            }
-
-            group.setStandings(
-                    rows
-            );
-
             result.add(
-                    group
+                    createLeagueTableGroup(
+                            standings,
+                            groupName
+                    )
             );
         }
 
         return result;
+    }
+
+    /**
+     * Creates a single LeagueTableGroup from a list of standings.
+     */
+    private LeagueTableGroup createLeagueTableGroup(
+            List<Standing> standings,
+            String groupName
+    ) {
+
+        LeagueTableGroup group =
+                new LeagueTableGroup();
+
+        group.setGroup(
+                groupName
+        );
+
+        List<LeagueTableRow> rows =
+                new ArrayList<>();
+
+        for (Standing standing : standings) {
+
+            LeagueTableRow row =
+                    new LeagueTableRow();
+
+            row.setPosition(
+                    standing.getRank()
+            );
+
+            row.setTeamId(
+                    standing.getTeam().getId()
+            );
+
+            row.setTeamName(
+                    standing.getTeam().getName()
+            );
+
+            row.setPlayed(
+                    standing.getAll().getPlayed()
+            );
+
+            row.setWins(
+                    standing.getAll().getWin()
+            );
+
+            row.setDraws(
+                    standing.getAll().getDraw()
+            );
+
+            row.setLosses(
+                    standing.getAll().getLose()
+            );
+
+            row.setGoalDifference(
+                    standing.getGoalsDiff()
+            );
+
+            row.setPoints(
+                    standing.getPoints()
+            );
+
+            rows.add(row);
+        }
+
+        group.setStandings(
+                rows
+        );
+
+        return group;
+    }
+
+    /**
+     * Determines the standings that represent the complete
+     * single-table competition.
+     */
+    private List<Standing> getSingleTableStandings(
+            int leagueId,
+            List<List<Standing>> groups
+    ) {
+
+        /*
+         * Ordinary single-table competition.
+         */
+        if (groups.size() == 1) {
+
+            return groups.getFirst();
+
+        }
+
+        /*
+         * Scottish Premiership.
+         *
+         * API-Football returns:
+         *
+         *   Phase 1
+         *   Championship Round
+         *   Relegation Round
+         *
+         * The application wants the final 12-team table,
+         * so combine the two post-split groups.
+         */
+        if (leagueId == 179
+                && groups.size() >= 3) {
+
+            List<Standing> combined =
+                    new ArrayList<>();
+
+            combined.addAll(
+                    groups.get(1)
+            );
+
+            combined.addAll(
+                    groups.get(2)
+            );
+
+            return sortAndReRank(
+                    combined
+            );
+        }
+
+        /*
+         * For any other multi-group SINGLE_TABLE
+         * competition, use all groups as one table.
+         *
+         * This gives us a sensible generic fallback
+         * while we build a more complete competition
+         * format configuration.
+         */
+        List<Standing> combined =
+                new ArrayList<>();
+
+        for (List<Standing> group : groups) {
+
+            if (group != null) {
+
+                combined.addAll(group);
+
+            }
+        }
+
+        return sortAndReRank(
+                combined
+        );
+    }
+
+    /**
+     * Sorts a combined table and assigns continuous
+     * league positions.
+     */
+    private List<Standing> sortAndReRank(
+            List<Standing> standings
+    ) {
+
+        standings.sort(
+                Comparator
+                        .comparing(
+                                Standing::getPoints,
+                                Comparator.reverseOrder()
+                        )
+                        .thenComparing(
+                                Standing::getGoalsDiff,
+                                Comparator.reverseOrder()
+                        )
+                        .thenComparing(
+                                standing ->
+                                        standing.getTeam()
+                                                .getName(),
+                                String.CASE_INSENSITIVE_ORDER
+                        )
+        );
+
+        for (int i = 0; i < standings.size(); i++) {
+
+            standings
+                    .get(i)
+                    .setRank(i + 1);
+
+        }
+
+        return standings;
     }
 
     /**

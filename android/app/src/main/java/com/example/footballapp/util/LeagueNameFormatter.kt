@@ -9,6 +9,8 @@ object LeagueNameFormatter {
 
         return when (leagueId) {
 
+            110 -> "Cymru Premier"
+
             179 -> "Scottish Premiership"
 
             180 -> "Scottish Championship"

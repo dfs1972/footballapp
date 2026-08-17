@@ -13,6 +13,14 @@ sealed class FootballDestination(
     // Competition
     // -------------------------------------------------------------------------
 
+    /**
+     * Call any League
+     */
+    object LeagueExplorer :
+        FootballDestination(
+            "leagueExplorer"
+        )
+
     object LeagueOverview :
         FootballDestination(
             "leagueOverview/{leagueId}"

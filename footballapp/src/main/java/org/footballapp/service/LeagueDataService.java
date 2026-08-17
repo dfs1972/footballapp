@@ -4,6 +4,7 @@ package org.footballapp.service;
  * Spring Boot Service
  */
 import org.footballapp.api.response.lineups.FixtureLineupMapper;
+import org.footballapp.model.league.LeaguesApiResponse;
 import org.footballapp.model.standings.LeagueTableFormat;
 import org.footballapp.mapper.*;
 import org.footballapp.model.coaches.Coach;
@@ -849,9 +850,16 @@ public class LeagueDataService {
                 leagueId
         );
 
+        LeaguesApiResponse leagueResponse =
+                footballDataProvider.getLeague(
+                        leagueId
+                );
+
         overview.setLeagueName(
-                supportedCompetitionsService
-                        .getCompetitionById(leagueId)
+                leagueResponse
+                        .getResponse()
+                        .getFirst()
+                        .getLeague()
                         .getName()
         );
 
@@ -870,7 +878,6 @@ public class LeagueDataService {
         );
 
         overview.setFixtureCount(
-
                 footballDataProvider
                         .getFixtures(
                                 leagueId,
@@ -878,11 +885,9 @@ public class LeagueDataService {
                         )
                         .getResponse()
                         .size()
-
         );
 
         return overview;
-
     } // End of getLeagueOverview()
 
 }

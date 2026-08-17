@@ -17,13 +17,19 @@ import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.model.CompetitionGroupUiModel
 import com.example.footballapp.ui.model.CompetitionUiModel
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 
 @Composable
 fun CompetitionsScreen(
 
     competitionGroups: List<CompetitionGroupUiModel>,
 
-    onCompetitionSelected: (CompetitionUiModel) -> Unit = {}
+    onCompetitionSelected: (CompetitionUiModel) -> Unit = {},
+
+    onLeagueExplorerClick: () -> Unit = {}
 
 ) {
 
@@ -47,6 +53,22 @@ fun CompetitionsScreen(
                 )
             )
 
+            /**************** TEMP LEAGUE TESTER ***********************/
+            Button(
+                onClick = onLeagueExplorerClick,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "League Explorer",
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }// END OF LEAGUE TESTER
+
+            Spacer(
+                modifier = Modifier.height(
+                    AppSpacing.Medium
+                )
+            )
         }
 
         items(competitionGroups) { group ->

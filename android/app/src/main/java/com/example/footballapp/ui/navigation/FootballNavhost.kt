@@ -19,6 +19,7 @@ import com.example.footballapp.ui.screens.squad.SquadScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.footballapp.ui.screens.fixtures.FixtureDetailsScreen
 import com.example.footballapp.ui.screens.fixtures.TeamFixturesScreen
+import com.example.footballapp.ui.screens.league.LeagueExplorerScreen
 import com.example.footballapp.ui.viewmodel.ClubViewModel
 import com.example.footballapp.ui.viewmodel.ClubsViewModel
 import com.example.footballapp.ui.viewmodel.CompetitionViewModel
@@ -67,6 +68,18 @@ fun FootballNavHost() {
                             .createRoute(
                                 competition.id
                             )
+
+                    )
+
+                },
+
+                onLeagueExplorerClick = {
+
+                    navController.navigate(
+
+                        FootballDestination
+                            .LeagueExplorer
+                            .route
 
                     )
 
@@ -729,6 +742,28 @@ fun FootballNavHost() {
 
             }
 
+        }
+
+        /******************** LEAGUE EXPLORER ************************/
+        composable(
+            route = FootballDestination.LeagueExplorer.route
+        ) {
+
+            LeagueExplorerScreen(
+
+                onViewLeagueTable = { leagueId ->
+
+                    navController.navigate(
+
+                        FootballDestination
+                            .LeagueTable
+                            .createRoute(
+                                leagueId
+                            )
+
+                    )
+                }
+            )
         }
     }
 }

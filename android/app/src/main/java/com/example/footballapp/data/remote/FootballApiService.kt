@@ -2,6 +2,7 @@ package com.example.footballapp.data.remote
 
 import com.example.footballapp.data.remote.dto.ClubDto
 import com.example.footballapp.data.remote.dto.CompetitionGroupDto
+import com.example.footballapp.data.remote.dto.CompetitionMetadataDto
 import com.example.footballapp.data.remote.dto.FixtureDetailsDto
 import com.example.footballapp.data.remote.dto.FixtureDto
 import com.example.footballapp.data.remote.dto.FixtureLineupDto
@@ -13,9 +14,19 @@ import com.example.footballapp.data.remote.dto.PlayerDto
 import com.example.footballapp.data.remote.dto.TeamDto
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface FootballApiService {
+
+    /**
+     * Get dynamic competition metadata.
+     */
+    @GET("api/dev/competition/{leagueId}/{season}/metadata")
+    suspend fun getCompetitionMetadata(
+        @Path("leagueId") leagueId: Int,
+        @Path("season") season: Int
+    ): CompetitionMetadataDto
 
     /**
      * Get Leagues

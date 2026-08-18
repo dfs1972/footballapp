@@ -2,6 +2,7 @@ package org.footballapp.service;
 
 import org.footballapp.api.dto.lineups.FixtureLineupsResponse;
 import org.footballapp.model.coaches.CoachApiResponse;
+import org.footballapp.model.fixtures.FixtureRoundsApiResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.model.league.LeaguesApiResponse;
 import org.footballapp.model.player.PlayersApiResponse;
@@ -41,6 +42,12 @@ public interface FootballDataProvider {
 
     FixturesApiResponse getFixture(
             long fixtureId
+    ) throws Exception;
+
+    FixtureRoundsApiResponse getFixtureRounds(
+            int leagueId,
+            int season,
+            boolean current
     ) throws Exception;
 
     FixtureLineupsResponse getFixtureLineups(

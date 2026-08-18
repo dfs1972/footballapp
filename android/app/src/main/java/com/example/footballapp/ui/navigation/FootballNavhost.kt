@@ -17,6 +17,7 @@ import com.example.footballapp.ui.screens.league.LeagueTableScreen
 import com.example.footballapp.ui.screens.player.PlayerDetailsScreen
 import com.example.footballapp.ui.screens.squad.SquadScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.footballapp.ui.screens.competitions.CompetitionMetadataDebugScreen
 import com.example.footballapp.ui.screens.fixtures.FixtureDetailsScreen
 import com.example.footballapp.ui.screens.fixtures.TeamFixturesScreen
 import com.example.footballapp.ui.screens.league.LeagueExplorerScreen
@@ -760,10 +761,66 @@ fun FootballNavHost() {
                             .createRoute(
                                 leagueId
                             )
+                    )
+                },
 
+                onDebugCompetitionMetadata = {
+                        leagueId,
+                        season ->
+
+                    navController.navigate(
+
+                        FootballDestination
+                            .CompetitionMetadataDebug
+                            .createRoute(
+                                leagueId,
+                                season
+                            )
                     )
                 }
             )
         }
+
+        /********************* Competition Metadata Debug *************************/
+
+        composable(
+            route =
+                FootballDestination
+                    .CompetitionMetadataDebug
+                    .route
+        ) { backStackEntry ->
+
+            val leagueId =
+                backStackEntry
+                    .arguments
+                    ?.getString("leagueId")
+                    ?.toIntOrNull()
+
+            val season =
+                backStackEntry
+                    .arguments
+                    ?.getString("season")
+                    ?.toIntOrNull()
+
+            if (leagueId != null
+                && season != null
+            ) {
+
+                CompetitionMetadataDebugScreen(
+                    leagueId = leagueId,
+                    season = season
+                )
+            }
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+

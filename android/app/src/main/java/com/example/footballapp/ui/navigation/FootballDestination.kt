@@ -65,6 +65,21 @@ sealed class FootballDestination(
 
     }
 
+    /**
+     * Competition Metadata Debug
+     */
+    object CompetitionMetadataDebug :
+        FootballDestination(
+            "competitionMetadataDebug/{leagueId}/{season}"
+        ) {
+
+        fun createRoute(
+            leagueId: Int,
+            season: Int
+        ) = "competitionMetadataDebug/$leagueId/$season"
+
+    }
+
     // -------------------------------------------------------------------------
     // Club
     // -------------------------------------------------------------------------

@@ -5,7 +5,6 @@ package org.footballapp.service;
  */
 import org.footballapp.api.response.lineups.FixtureLineupMapper;
 import org.footballapp.model.league.LeaguesApiResponse;
-import org.footballapp.model.standings.LeagueTableFormat;
 import org.footballapp.mapper.*;
 import org.footballapp.model.coaches.Coach;
 import org.footballapp.model.fixtures.FixturesApiResponse;
@@ -39,7 +38,6 @@ import org.footballapp.model.standings.LeagueTableGroup;
 public class LeagueDataService {
 
     private final FixtureMapper fixtureMapper;
-    private final LeagueTableFormatResolver leagueTableFormatResolver;
     private final FixtureLineupMapper fixtureLineupMapper;
     private final FootballDataProvider  fixtureService;
     private final FootballDataProvider  footballDataProvider;
@@ -59,7 +57,6 @@ public class LeagueDataService {
             CoachMapper coachMapper,
             TeamService teamService,
             StandingService standingService,
-            LeagueTableFormatResolver leagueTableFormatResolver,
             FixtureMapper fixtureMapper,
             FixtureLineupMapper fixtureLineupMapper,
             FootballDataProvider  fixtureService,
@@ -72,7 +69,6 @@ public class LeagueDataService {
         this.teamService = teamService;
         this.coachMapper = coachMapper;
         this.standingService = standingService;
-        this.leagueTableFormatResolver = leagueTableFormatResolver;
         this.fixtureMapper = fixtureMapper;
         this.fixtureService  = fixtureService;
         this.fixtureLineupMapper = fixtureLineupMapper;
@@ -186,12 +182,6 @@ public class LeagueDataService {
             int season
     ) throws Exception {
 
-        LeagueTableFormat format =
-                leagueTableFormatResolver.resolve(
-                        leagueId,
-                        season
-                );
-
         List<List<Standing>> groups =
                 standingService.getLeagueStandingGroups(
                         leagueId,
@@ -204,60 +194,9 @@ public class LeagueDataService {
             return List.of();
         }
 
-        /*
-         * GROUPED_TABLE
-         *
-         * Preserve the groups returned by API-Football.
-         *
-         * Example:
-         *
-         * FAW Championship
-         *     North
-         *     South
-         */
-        if (format ==
-                LeagueTableFormat.GROUPED_TABLE) {
-
-            return createLeagueTableGroups(
-                    groups
-            );
-        }
-
-        /*
-         * SINGLE_TABLE
-         *
-         * The competition should be presented as one
-         * continuous table.
-         *
-         * For a normal competition this is simply the
-         * first/only standings group.
-         *
-         * For competitions with split phases, the final
-         * phase groups need to be combined.
-         */
-        List<Standing> standings =
-                getSingleTableStandings(
-                        leagueId,
-                        groups
-                );
-
-        if (standings.isEmpty()) {
-
-            return List.of();
-
-        }
-
-        /*
-         * A single LeagueTableGroup represents the
-         * complete competition table.
-         */
-        LeagueTableGroup group =
-                createLeagueTableGroup(
-                        standings,
-                        "League Table"
-                );
-
-        return List.of(group);
+        return createLeagueTableGroups(
+                groups
+        );
     }
 
     /**
@@ -288,63 +227,15 @@ public class LeagueDataService {
                 groupName = "League Table";
             }
 
-            /************** TEMP PRINT ***********************/
-            System.out.println(
-                    "GROUP: " + groupName
-            );
-
-            for (Standing standing : standings) {
-
-                System.out.println(
-                        "  rank=" + standing.getRank()
-                                + " team="
-                                + standing.getTeam().getName()
-                                + " points="
-                                + standing.getPoints()
-                );
-            };// END OF TEMP PRINT
-
             result.add(
                     createLeagueTableGroup(
-                            preserveApiRanking(standings),
+                            standings,
                             groupName
                     )
             );
         }
 
-        result.sort(
-                Comparator.comparingInt(
-                        group -> groupOrder(
-                                group.getGroup()
-                        )
-                )
-        );
-
         return result;
-    }
-
-    /**
-     * HELPER FOR ABOVE METHOD
-     */
-
-    private int groupOrder(String groupName) {
-
-        if (groupName == null) {
-            return Integer.MAX_VALUE;
-        }
-
-        String name =
-                groupName.trim();
-
-        if (name.equalsIgnoreCase("North")) {
-            return 0;
-        }
-
-        if (name.equalsIgnoreCase("South")) {
-            return 1;
-        }
-
-        return 100;
     }
 
     /**
@@ -751,21 +642,40 @@ public class LeagueDataService {
                         season
                 );
 
-        List<Standing> primaryStandings =
-                getPrimaryStandings(
-                        standings
-                );
-
         Set<Integer> teamIds =
                 new HashSet<>();
 
-        for (Standing standing
-                : primaryStandings) {
+        if (standings != null
+                && standings.getResponse() != null
+                && !standings.getResponse().isEmpty()) {
 
-            teamIds.add(
-                    standing.getTeam().getId()
-            );
+            StandingLeague league =
+                    standings.getResponse()
+                            .getFirst()
+                            .getLeague();
 
+            if (league != null
+                    && league.getStandings() != null) {
+
+                for (List<Standing> group
+                        : league.getStandings()) {
+
+                    if (group == null) {
+                        continue;
+                    }
+
+                    for (Standing standing : group) {
+
+                        if (standing != null
+                                && standing.getTeam() != null) {
+
+                            teamIds.add(
+                                    standing.getTeam().getId()
+                            );
+                        }
+                    }
+                }
+            }
         }
 
         List<Team> teams =
@@ -790,29 +700,28 @@ public class LeagueDataService {
         );
 
         return teams;
-
     }
 
     /********** HELPER FOR ABOVE METHOD, ALSO USED IN SnapshotService - TO BE MOVED INTO A SHARED UTILITY FILE ***************************************/
 
-    private List<Standing> getPrimaryStandings(
-            StandingsApiResponse standings
-    ) {
-
-        if (standings.getResponse().isEmpty()) {
-            return List.of();
-        }
-
-        StandingLeague league =
-                standings.getResponse().getFirst().getLeague();
-
-        if (league.getStandings().isEmpty()) {
-            return List.of();
-        }
-
-        return league.getStandings().getFirst();
-
-    }
+//    private List<Standing> getPrimaryStandings(
+//            StandingsApiResponse standings
+//    ) {
+//
+//        if (standings.getResponse().isEmpty()) {
+//            return List.of();
+//        }
+//
+//        StandingLeague league =
+//                standings.getResponse().getFirst().getLeague();
+//
+//        if (league.getStandings().isEmpty()) {
+//            return List.of();
+//        }
+//
+//        return league.getStandings().getFirst();
+//
+//    }
 
     /**
      * Returns fixtures for a single team.

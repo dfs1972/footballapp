@@ -29,7 +29,12 @@ fun LeagueExplorerScreen(
     viewModel: LeagueExplorerViewModel =
         viewModel(),
 
-    onViewLeagueTable: (Int) -> Unit = {}
+    onViewLeagueTable: (Int) -> Unit = {},
+
+    onDebugCompetitionMetadata: (
+        Int,
+        Int
+    ) -> Unit = { _, _ -> }
 
 ) {
 
@@ -210,6 +215,39 @@ fun LeagueExplorerScreen(
 
                     Text(
                         "View League Table"
+                    )
+
+                }
+
+                Button(
+                    onClick = {
+
+                        val id =
+                            leagueId.toIntOrNull()
+
+                        val year =
+                            season.toIntOrNull()
+
+                        if (id != null && year != null) {
+
+                            onDebugCompetitionMetadata(
+                                id,
+                                year
+                            )
+                        }
+                    },
+
+                    enabled =
+                        leagueId.isNotBlank()
+                                && season.isNotBlank(),
+
+                    modifier =
+                        Modifier.fillMaxWidth()
+
+                ) {
+
+                    Text(
+                        "DEBUG: Competition Metadata"
                     )
 
                 }

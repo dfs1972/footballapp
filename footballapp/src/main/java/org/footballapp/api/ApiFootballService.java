@@ -3,6 +3,7 @@ package org.footballapp.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.footballapp.api.ApiFootballClient;
 import org.footballapp.model.coaches.CoachApiResponse;
+import org.footballapp.model.fixtures.FixtureRoundsApiResponse;
 import org.footballapp.model.player.PlayersApiResponse;
 import org.footballapp.model.league.LeaguesApiResponse;
 import org.footballapp.model.teams.TeamsApiResponse;
@@ -331,6 +332,28 @@ public class ApiFootballService implements FootballDataProvider {
     /**
      * Gets all fixtures from a league in specified season
      */
+
+    @Override
+    public FixtureRoundsApiResponse getFixtureRounds(
+            int leagueId,
+            int season,
+            boolean current
+    ) throws Exception {
+
+        String url =
+                "https://v3.football.api-sports.io/fixtures/rounds"
+                        + "?league=" + leagueId
+                        + "&season=" + season
+                        + "&current=" + current;
+
+        String json =
+                apiClient.get(url);
+
+        return mapper.readValue(
+                json,
+                FixtureRoundsApiResponse.class
+        );
+    }
 
 
     @Override

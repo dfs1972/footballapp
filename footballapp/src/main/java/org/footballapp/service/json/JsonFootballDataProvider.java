@@ -3,6 +3,7 @@ package org.footballapp.service.json;
 import org.footballapp.api.dto.lineups.FixtureLineupsResponse;
 import org.footballapp.config.AppConfig;
 import org.footballapp.model.coaches.CoachApiResponse;
+import org.footballapp.model.fixtures.FixtureRoundsApiResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.model.league.LeaguesApiResponse;
 import org.footballapp.model.player.PlayersApiResponse;
@@ -126,6 +127,22 @@ public class JsonFootballDataProvider implements FootballDataProvider {
     /**
      ********* FIXTURES SECTION *********
      */
+
+    @Override
+    public FixtureRoundsApiResponse getFixtureRounds(
+            int leagueId,
+            int season,
+            boolean current
+    ) throws Exception {
+
+        return jsonLoader.load(
+                MockApiPaths.fixtureRounds(
+                        leagueId,
+                        season
+                ),
+                FixtureRoundsApiResponse.class
+        );
+    }
 
     @Override
     public FixturesApiResponse getFixtures(

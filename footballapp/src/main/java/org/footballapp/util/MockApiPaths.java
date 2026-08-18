@@ -90,6 +90,14 @@ public final class MockApiPaths {
                 + "/";
     }
 
+    public static String fixtureRounds(
+            int leagueId,
+            int season
+    ) {
+        return competitionRoot(leagueId)
+                + "fixture-rounds.json";
+    }
+
     public static String fixtures(
             int leagueId,
             int season

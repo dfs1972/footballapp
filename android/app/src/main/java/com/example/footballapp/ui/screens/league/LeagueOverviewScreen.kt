@@ -2,6 +2,7 @@ package com.example.footballapp.ui.screens.league
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.footballapp.ui.components.NavigationCard
@@ -16,6 +17,8 @@ import com.example.footballapp.ui.model.LeagueTableGroupUiModel
 fun LeagueOverviewScreen(
 
     overview: LeagueOverviewUiModel,
+
+    currentRound: String?,
 
     onLeagueTableClick: () -> Unit = {},
 
@@ -37,6 +40,16 @@ fun LeagueOverviewScreen(
                 modifier = Modifier.height(
                     AppSpacing.ExtraLarge
                 )
+            )
+
+        }
+
+        item {
+
+            Text(
+                text = "Current round: ${
+                    currentRound ?: "Unknown"
+                }"
             )
 
         }

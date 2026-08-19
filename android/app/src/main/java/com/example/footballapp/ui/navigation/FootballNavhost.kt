@@ -124,6 +124,8 @@ fun FootballNavHost() {
 
                     overview = overview,
 
+                    currentRound = uiState.currentRound,
+
                     topStandings = uiState.topStandings,
 
                     onLeagueTableClick = {

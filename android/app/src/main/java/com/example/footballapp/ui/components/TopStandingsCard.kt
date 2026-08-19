@@ -55,25 +55,8 @@ fun TopStandingsCard(
         )
 
         standings
-            .sortedBy {
-                when (it.group) {
-                    "North" -> 0
-                    "South" -> 1
-                    else -> 2
-                }
-            }
-            .forEach { group ->
 
-                Text(
-                    text = group.group,
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            top = AppSpacing.Small
-                        )
-                )
+            .forEach { group ->
 
             group.standings
                 .take(5)

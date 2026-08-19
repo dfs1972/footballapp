@@ -2,7 +2,7 @@ package com.example.footballapp.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.footballapp.data.remote.dto.CompetitionMetadataDto
+import com.example.footballapp.ui.model.CompetitionMetadataUiModel
 import com.example.footballapp.data.repository.CompetitionMetadataRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,9 +15,9 @@ class CompetitionMetadataViewModel : ViewModel() {
         CompetitionMetadataRepository()
 
     private val _metadata =
-        MutableStateFlow<CompetitionMetadataDto?>(null)
+        MutableStateFlow<CompetitionMetadataUiModel?>(null)
 
-    val metadata: StateFlow<CompetitionMetadataDto?> =
+    val metadata: StateFlow<CompetitionMetadataUiModel?> =
         _metadata.asStateFlow()
 
     private val _error =

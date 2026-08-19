@@ -28,6 +28,12 @@ data class LeagueOverviewUiState(
     val topStandings: List<LeagueTableGroupUiModel> = emptyList(),
 
     /**
+     * Current competition round.
+     */
+    val currentRound: String? = null,
+
+
+    /**
      * Error message displayed if loading fails.
      */
     val error: String? = null

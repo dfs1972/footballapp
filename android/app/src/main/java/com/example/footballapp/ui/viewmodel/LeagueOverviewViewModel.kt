@@ -2,6 +2,7 @@ package com.example.footballapp.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.footballapp.data.repository.CompetitionMetadataRepository
 import com.example.footballapp.data.repository.LeagueOverviewRepository
 import com.example.footballapp.data.repository.LeagueTableRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,12 +12,19 @@ import kotlinx.coroutines.launch
 
 class LeagueOverviewViewModel : ViewModel() {
 
-    private val repository = LeagueOverviewRepository()
+    private val repository =
+        LeagueOverviewRepository()
 
-    private val tableRepository = LeagueTableRepository()
+    private val tableRepository =
+        LeagueTableRepository()
+
+    private val metadataRepository =
+        CompetitionMetadataRepository()
 
     private val _uiState =
-        MutableStateFlow(LeagueOverviewUiState())
+        MutableStateFlow(
+            LeagueOverviewUiState()
+        )
 
     val uiState: StateFlow<LeagueOverviewUiState> =
         _uiState.asStateFlow()
@@ -29,7 +37,9 @@ class LeagueOverviewViewModel : ViewModel() {
         viewModelScope.launch {
 
             _uiState.value =
-                LeagueOverviewUiState(isLoading = true)
+                LeagueOverviewUiState(
+                    isLoading = true
+                )
 
             try {
 
@@ -45,11 +55,13 @@ class LeagueOverviewViewModel : ViewModel() {
                             leagueId,
                             season
                         )
-                        .map { group ->
-                            group.copy(
-                                standings = group.standings.take(5)
-                            )
-                        }
+
+                val metadata =
+                    metadataRepository
+                        .getCompetitionMetadata(
+                            leagueId,
+                            season
+                        )
 
                 _uiState.value =
                     LeagueOverviewUiState(
@@ -58,7 +70,10 @@ class LeagueOverviewViewModel : ViewModel() {
 
                         overview = overview,
 
-                        topStandings = standings
+                        topStandings = standings,
+
+                        currentRound =
+                            metadata.currentRound
 
                     )
 
@@ -66,8 +81,11 @@ class LeagueOverviewViewModel : ViewModel() {
 
                 _uiState.value =
                     LeagueOverviewUiState(
+
                         isLoading = false,
+
                         error = e.message
+
                     )
             }
         }

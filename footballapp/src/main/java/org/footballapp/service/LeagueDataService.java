@@ -195,6 +195,7 @@ public class LeagueDataService {
         }
 
         return createLeagueTableGroups(
+                leagueId,
                 groups
         );
     }
@@ -204,6 +205,7 @@ public class LeagueDataService {
      */
 
     private List<LeagueTableGroup> createLeagueTableGroups(
+            int leagueId,
             List<List<Standing>> groups
     ) {
 
@@ -233,6 +235,10 @@ public class LeagueDataService {
                             groupName
                     )
             );
+        }
+
+        if (leagueId == 111) {
+            Collections.reverse(result);
         }
 
         return result;

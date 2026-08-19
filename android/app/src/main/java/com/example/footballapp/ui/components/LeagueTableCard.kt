@@ -47,15 +47,11 @@ fun LeagueTableCard(
             )
         )
 
-        table
-            .sortedBy {
-                when (it.group) {
-                    "North" -> 0
-                    "South" -> 1
-                    else -> 2
-                }
-            }
-            .forEachIndexed { groupIndex, group ->
+        val showGroupNames = table.size > 1
+
+        table.forEachIndexed { groupIndex, group ->
+
+            if (showGroupNames) {
 
                 Text(
                     text = group.group,
@@ -69,21 +65,20 @@ fun LeagueTableCard(
                         AppSpacing.Small
                     )
                 )
+            }
 
-                group.standings.forEachIndexed { index, row ->
+            group.standings.forEachIndexed { index, row ->
 
-                    LeagueTableRow(
-                        row = row,
-                        isEvenRow = index % 2 == 0,
-                        onClubClick = onTeamClick
-                    )
+                LeagueTableRow(
+                    row = row,
+                    isEvenRow = index % 2 == 0,
+                    onClubClick = onTeamClick
+                )
+            }
 
-                }
-
-                if (groupIndex < table.lastIndex) {
-                    TableDivider()
-                }
-
+            if (groupIndex < table.lastIndex) {
+                TableDivider()
+            }
         }
 
     }

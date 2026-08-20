@@ -3,6 +3,7 @@ package org.footballapp.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.footballapp.api.ApiFootballClient;
 import org.footballapp.model.coaches.CoachApiResponse;
+import org.footballapp.model.country.CountriesApiResponse;
 import org.footballapp.model.fixtures.FixtureRoundsApiResponse;
 import org.footballapp.model.player.PlayersApiResponse;
 import org.footballapp.model.league.LeaguesApiResponse;
@@ -17,6 +18,9 @@ import org.footballapp.api.dto.fixtures.FixtureStatisticsResponse;
 import org.footballapp.service.FootballDataProvider;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @Service
 @Profile("live")
@@ -35,8 +39,26 @@ public class ApiFootballService implements FootballDataProvider {
     }
 
 
-    /**************************************************+************************************************
+    /********** Countries ******************/
 
+    @Override
+    public CountriesApiResponse getCountries()
+            throws Exception {
+
+        String url =
+                "https://v3.football.api-sports.io/countries";
+
+        String json =
+                apiClient.get(url);
+
+        return mapper.readValue(
+                json,
+                CountriesApiResponse.class
+        );
+    }
+
+
+    /**************************************************+************************************************
      LEAGUES SECTION
      *************************************************************************************************
      */
@@ -53,6 +75,34 @@ public class ApiFootballService implements FootballDataProvider {
         String url =
                 "https://v3.football.api-sports.io/leagues?id="
                         + leagueId;
+
+        String json =
+                apiClient.get(url);
+
+        return mapper.readValue(
+                json,
+                LeaguesApiResponse.class
+        );
+    }
+
+    /**
+     * Get Leagues Details
+     */
+
+    @Override
+    public LeaguesApiResponse getLeagues(
+            String country,
+            int season
+    ) throws Exception {
+
+        String url =
+                "https://v3.football.api-sports.io/leagues?country="
+                        + URLEncoder.encode(
+                        country,
+                        StandardCharsets.UTF_8
+                )
+                        + "&season="
+                        + season;
 
         String json =
                 apiClient.get(url);

@@ -2,6 +2,7 @@ package org.footballapp.service;
 
 import org.footballapp.api.dto.lineups.FixtureLineupsResponse;
 import org.footballapp.model.coaches.CoachApiResponse;
+import org.footballapp.model.country.CountriesApiResponse;
 import org.footballapp.model.fixtures.FixtureRoundsApiResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.model.league.LeaguesApiResponse;
@@ -13,8 +14,16 @@ import org.footballapp.model.teams.TeamsApiResponse;
 
 public interface FootballDataProvider {
 
+    CountriesApiResponse getCountries()
+            throws Exception;
+
     LeaguesApiResponse getLeague(
             int leagueId
+    ) throws Exception;
+
+    LeaguesApiResponse getLeagues(
+            String country,
+            int season
     ) throws Exception;
 
     TeamsApiResponse getTeams(

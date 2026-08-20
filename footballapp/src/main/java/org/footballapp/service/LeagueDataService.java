@@ -4,6 +4,8 @@ package org.footballapp.service;
  * Spring Boot Service
  */
 import org.footballapp.api.response.lineups.FixtureLineupMapper;
+import org.footballapp.model.league.LeagueApiResponse;
+import org.footballapp.model.league.LeagueListItem;
 import org.footballapp.model.league.LeaguesApiResponse;
 import org.footballapp.mapper.*;
 import org.footballapp.model.coaches.Coach;
@@ -159,6 +161,26 @@ public class LeagueDataService {
 
         );
 
+    }
+
+    public List<LeagueApiResponse> getLeagues(
+            String country,
+            int season
+    ) throws Exception {
+
+        LeaguesApiResponse response =
+                footballDataProvider.getLeagues(
+                        country,
+                        season
+                );
+
+        if (response == null
+                || response.getResponse() == null) {
+
+            return List.of();
+        }
+
+        return response.getResponse();
     }
 
     /**

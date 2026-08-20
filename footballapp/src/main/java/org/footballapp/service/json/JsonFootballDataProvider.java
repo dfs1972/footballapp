@@ -3,6 +3,7 @@ package org.footballapp.service.json;
 import org.footballapp.api.dto.lineups.FixtureLineupsResponse;
 import org.footballapp.config.AppConfig;
 import org.footballapp.model.coaches.CoachApiResponse;
+import org.footballapp.model.country.CountriesApiResponse;
 import org.footballapp.model.fixtures.FixtureRoundsApiResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.model.league.LeaguesApiResponse;
@@ -58,6 +59,29 @@ public class JsonFootballDataProvider implements FootballDataProvider {
                 LeaguesApiResponse.class
         );
 
+    }
+
+    @Override
+    public LeaguesApiResponse getLeagues(
+            String country,
+            int season
+    ) throws Exception {
+
+        LeaguesApiResponse response =
+                new LeaguesApiResponse();
+
+        response.setResponse(
+                java.util.List.of()
+        );
+
+        return response;
+    }
+
+    @Override
+    public CountriesApiResponse getCountries()
+            throws Exception {
+
+        return new CountriesApiResponse();
     }
 
 

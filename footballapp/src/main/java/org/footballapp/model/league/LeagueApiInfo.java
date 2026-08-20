@@ -7,7 +7,7 @@ public class LeagueApiInfo {
 
     private int id;
     private String name;
-    private String logo;
+    private String type;
 
     public int getId() {
         return id;
@@ -25,11 +25,8 @@ public class LeagueApiInfo {
         this.name = name;
     }
 
-    public String getLogo() {
-        return logo;
-    }
+    public String getType() {return type;}
 
-    public void setLogo(String logo) {
-        this.logo = logo;
-    }
+    public void setType(String type) {this.type = type;}
+
 }

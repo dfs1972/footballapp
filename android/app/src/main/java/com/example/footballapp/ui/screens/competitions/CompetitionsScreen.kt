@@ -1,33 +1,37 @@
 package com.example.footballapp.ui.screens
 
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.footballapp.ui.components.CompetitionList
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import com.example.footballapp.ui.components.CountryCard
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.design.AppSpacing
-import com.example.footballapp.ui.model.CompetitionGroupUiModel
-import com.example.footballapp.ui.model.CompetitionUiModel
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import com.example.footballapp.ui.model.CountryUiModel
 
 @Composable
 fun CompetitionsScreen(
 
-    competitionGroups: List<CompetitionGroupUiModel>,
+    countries: List<CountryUiModel>,
 
-    onCompetitionSelected: (CompetitionUiModel) -> Unit = {},
+    onCountrySelected: (CountryUiModel) -> Unit = {},
 
     onLeagueExplorerClick: () -> Unit = {}
 
@@ -35,115 +39,42 @@ fun CompetitionsScreen(
 
     var expandedCountry by rememberSaveable {
 
-        mutableStateOf(
-            competitionGroups
-                .firstOrNull()
-                ?.title
-        )
+        mutableStateOf<String?>(null)
 
     }
 
-    ScreenScaffold {
+    val sortedCountries =
+        countries.sortedBy {
+            it.name.lowercase()
+        }
+    val listState = rememberLazyListState()
 
-        item {
 
-            Spacer(
-                modifier = Modifier.height(
-                    AppSpacing.ExtraLarge
-                )
-            )
+    android.util.Log.d(
+        "CompetitionsScreen",
+        "countries.size = ${countries.size}, " +
+                "countries = ${countries.take(5)}"
+    )
 
-            /**************** TEMP LEAGUE TESTER ***********************/
-            Button(
-                onClick = onLeagueExplorerClick,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = "League Explorer",
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }// END OF LEAGUE TESTER
-
-            Spacer(
-                modifier = Modifier.height(
-                    AppSpacing.Medium
-                )
+    @Composable
+    fun CompetitionsScreen(
+        countries: List<CountryUiModel>,
+        onCountrySelected: (CountryUiModel) -> Unit = {},
+        onLeagueExplorerClick: () -> Unit = {}
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Red)
+        ) {
+            Text(
+                text = "COMPETITIONS SCREEN TEST",
+                color = Color.White,
+                modifier = Modifier
+                    .align(Alignment.Center)
             )
         }
-
-        items(competitionGroups) { group ->
-
-            CountryCard(
-
-                countryName = group.title,
-
-                competitionCount =
-                    group.leagues.size
-                            + group.domesticCups.size,
-
-                expanded =
-                    expandedCountry == group.title,
-
-                onClick = {
-
-                    expandedCountry =
-                        if (
-                            expandedCountry ==
-                            group.title
-                        ) {
-                            null
-                        } else {
-                            group.title
-                        }
-
-                }
-
-            )
-
-            AnimatedVisibility(
-
-                visible =
-                    expandedCountry ==
-                            group.title
-
-            ) {
-
-                Column {
-
-                    if (group.leagues.isNotEmpty()) {
-
-                        CompetitionList(
-
-                            competitions =
-                                group.leagues,
-
-                            onCompetitionSelected =
-                                onCompetitionSelected
-
-                        )
-
-                    }
-
-                    if (group.domesticCups.isNotEmpty()) {
-
-                        CompetitionList(
-
-                            competitions =
-                                group.domesticCups,
-
-                            onCompetitionSelected =
-                                onCompetitionSelected
-
-                        )
-
-                    }
-
-                }
-
-            }
-
-        }
-
     }
-
 }
+
+

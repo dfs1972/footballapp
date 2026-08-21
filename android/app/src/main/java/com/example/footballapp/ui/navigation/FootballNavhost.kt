@@ -1,5 +1,7 @@
 package com.example.footballapp.ui.navigation
 
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -24,6 +26,7 @@ import com.example.footballapp.ui.screens.league.LeagueExplorerScreen
 import com.example.footballapp.ui.viewmodel.ClubViewModel
 import com.example.footballapp.ui.viewmodel.ClubsViewModel
 import com.example.footballapp.ui.viewmodel.CompetitionViewModel
+import com.example.footballapp.ui.viewmodel.CountryViewModel
 import com.example.footballapp.ui.viewmodel.FixtureDetailsViewModel
 import com.example.footballapp.ui.viewmodel.FixturesViewModel
 import com.example.footballapp.ui.viewmodel.LeagueOverviewViewModel
@@ -50,27 +53,19 @@ fun FootballNavHost() {
             FootballDestination.Competitions.route
         ) {
 
-            val viewModel: CompetitionViewModel = viewModel()
+            val viewModel: CountryViewModel = viewModel()
 
-            val uiState by
-            viewModel.uiState.collectAsState()
+            val countries by
+            viewModel.countries.collectAsState()
 
             CompetitionsScreen(
 
-                competitionGroups =
-                    uiState.competitionGroups,
+                countries = countries,
 
-                onCompetitionSelected = { competition ->
+                onCountrySelected = { country ->
 
-                    navController.navigate(
-
-                        FootballDestination
-                            .LeagueOverview
-                            .createRoute(
-                                competition.id
-                            )
-
-                    )
+                    // We will load this country's
+                    // competitions in the next step.
 
                 },
 

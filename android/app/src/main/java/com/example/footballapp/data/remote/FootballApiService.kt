@@ -3,6 +3,7 @@ package com.example.footballapp.data.remote
 import com.example.footballapp.data.remote.dto.ClubDto
 import com.example.footballapp.data.remote.dto.CompetitionGroupDto
 import com.example.footballapp.data.remote.dto.CompetitionMetadataDto
+import com.example.footballapp.data.remote.dto.CountryDto
 import com.example.footballapp.data.remote.dto.FixtureDetailsDto
 import com.example.footballapp.data.remote.dto.FixtureDto
 import com.example.footballapp.data.remote.dto.FixtureLineupDto
@@ -47,6 +48,13 @@ interface FootballApiService {
         season: Int
 
     ): Response<LeagueOverviewDto>
+
+    /**
+     * Get Countries
+     */
+
+    @GET("countries")
+    suspend fun getCountries(): Response<List<CountryDto>>
 
     /**
      * Get LeagueTable

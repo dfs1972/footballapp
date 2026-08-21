@@ -1,5 +1,6 @@
 package com.example.footballapp.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.footballapp.data.repository.CountryRepository
@@ -32,26 +33,66 @@ class CountryViewModel(
         _error.asStateFlow()
 
     init {
+
+        Log.d(
+            "CountryViewModel",
+            "CountryViewModel CREATED"
+        )
+
         loadCountries()
     }
 
     fun loadCountries() {
 
         if (_isLoading.value) {
+
+            Log.d(
+                "CountryViewModel",
+                "loadCountries ignored - already loading"
+            )
+
             return
         }
 
         viewModelScope.launch {
+
+            Log.d(
+                "CountryViewModel",
+                "Loading countries..."
+            )
 
             _isLoading.value = true
             _error.value = null
 
             try {
 
-                _countries.value =
+                val result =
                     repository.getCountries()
 
+                Log.d(
+                    "CountryViewModel",
+                    "Repository returned ${result.size} countries"
+                )
+
+                Log.d(
+                    "CountryViewModel",
+                    "First countries: ${result.take(5)}"
+                )
+
+                _countries.value = result
+
+                Log.d(
+                    "CountryViewModel",
+                    "StateFlow now contains ${_countries.value.size} countries"
+                )
+
             } catch (exception: Exception) {
+
+                Log.e(
+                    "CountryViewModel",
+                    "Failed to load countries",
+                    exception
+                )
 
                 _error.value =
                     exception.message
@@ -60,6 +101,11 @@ class CountryViewModel(
             } finally {
 
                 _isLoading.value = false
+
+                Log.d(
+                    "CountryViewModel",
+                    "Loading finished"
+                )
             }
         }
     }

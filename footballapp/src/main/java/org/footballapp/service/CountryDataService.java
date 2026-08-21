@@ -30,6 +30,37 @@ public class CountryDataService {
             return List.of();
         }
 
-        return response.getResponse();
+        return response.getResponse()
+                .stream()
+                .map(this::mapCountry)
+                .toList();
+    }
+
+    private CountryApiResponse mapCountry(
+            CountryApiResponse country
+    ) {
+
+        if (country == null) {
+            return null;
+        }
+
+        String code = country.getCode();
+
+        /*
+         * Keep the API data if the country has no code.
+         * We already know API-Football can return missing
+         * code/flag values.
+         */
+        if (code == null || code.isBlank()) {
+            country.setFlag(null);
+            return country;
+        }
+
+        country.setFlag(
+                "/images/flags/"
+                        + code.toLowerCase()
+        );
+
+        return country;
     }
 }

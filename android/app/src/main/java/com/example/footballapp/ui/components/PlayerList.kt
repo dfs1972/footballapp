@@ -31,7 +31,17 @@ fun LazyListScope.PlayerList(
 ) {
 
     val groupedPlayers =
-        players.groupBy { it.position }
+        players.groupBy { player ->
+
+            when (player.position) {
+
+                "Forward" ->
+                    "Attacker"
+
+                else ->
+                    player.position
+            }
+        }
 
     PositionOrder.forEach { position ->
 

@@ -19,12 +19,11 @@ import java.util.Map;
 @Component
 public class PlayerMapper {
 
+
+    /************** PLAYER SUMMARIES ********************/
+
     public List<PlayerSummary> toPlayerSummaries(
-
-            PlayersApiResponse response,
-
-            SquadApiResponse squadResponse
-
+            PlayersApiResponse response
     ) {
 
         List<PlayerSummary> players =
@@ -36,56 +35,24 @@ public class PlayerMapper {
             return players;
         }
 
-        Map<Integer, SquadPlayer> squadPlayers =
-                buildSquadPlayerMap(
-                        squadResponse
-                );
-
         for (PlayerResponse playerResponse
                 : response.getResponse()) {
 
-            Player player =
-                    playerResponse.getPlayer();
-
-            /*
-             * Only include players who are
-             * currently in the squad.
-             */
-
-            if (!squadPlayers.containsKey(
-                    player.getPlayerId()
-            )) {
-
-                continue;
-
-            }
-
             players.add(
-
                     toPlayerSummary(
-
-                            playerResponse,
-
-                            squadPlayers.get(
-                                    player.getPlayerId()
-                            )
-
+                            playerResponse
                     )
-
             );
-
         }
 
         return players;
-
     }
 
+
+    /****************** PLAYER SUMMARY **********************/
+
     private PlayerSummary toPlayerSummary(
-
-            PlayerResponse response,
-
-            SquadPlayer squadPlayer
-
+            PlayerResponse response
     ) {
 
         Player player =
@@ -99,7 +66,6 @@ public class PlayerMapper {
 
             statistics =
                     response.getStatistics().getFirst();
-
         }
 
         PlayerSummary summary =
@@ -110,15 +76,11 @@ public class PlayerMapper {
         );
 
         summary.setDisplayName(
-
                 PlayerDisplayNameFormatter.format(
-
                         player.getFirstname(),
                         player.getLastname(),
                         player.getName()
-
                 )
-
         );
 
         summary.setPhotoUrl(
@@ -134,62 +96,59 @@ public class PlayerMapper {
         );
 
         /*
-         * Squad data is authoritative for
-         * current squad information.
+         * Historic-season data comes from
+         * the season-specific player statistics.
          */
-
-        summary.setShirtNumber(
-                squadPlayer.getNumber()
-        );
 
         if (statistics != null) {
 
-            summary.setPosition(
-                    statistics.getGames().getPosition()
-            );
+            if (statistics.getGames() != null) {
 
-            summary.setCaptain(
-                    statistics.getGames().getCaptain()
-            );
+                summary.setPosition(
+                        statistics.getGames().getPosition()
+                );
 
-            summary.setAppearances(
-                    statistics.getGames().getAppearances()
-            );
+                summary.setCaptain(
+                        statistics.getGames().getCaptain()
+                );
 
-            summary.setGoals(
-                    statistics.getGoals().getTotal()
-            );
+                summary.setAppearances(
+                        statistics.getGames().getAppearances()
+                );
+            }
 
-            summary.setAssists(
-                    statistics.getGoals().getAssists()
-            );
+            if (statistics.getGoals() != null) {
 
-        } else {
+                summary.setGoals(
+                        statistics.getGoals().getTotal()
+                );
 
-            /*
-             * If there are no season statistics,
-             * use the squad position.
-             */
-
-            summary.setPosition(
-                    squadPlayer.getPosition()
-            );
-
+                summary.setAssists(
+                        statistics.getGoals().getAssists()
+                );
+            }
         }
 
-        System.out.println(
+        /*
+         * Shirt number is deliberately left null.
+         *
+         * The current squad endpoint must not be
+         * used to supply historic-season data.
+         */
 
+        System.out.println(
                 summary.getDisplayName()
                         + " -> "
                         + summary.getPosition()
                         + " -> shirt "
                         + summary.getShirtNumber()
-
         );
 
         return summary;
-
     }
+
+
+    /************* BUILD SQUAD PLAYER MAP ********************/
 
     private Map<Integer, SquadPlayer> buildSquadPlayerMap(
 

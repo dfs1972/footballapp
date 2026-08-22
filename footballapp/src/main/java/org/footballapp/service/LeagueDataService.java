@@ -110,16 +110,9 @@ public class LeagueDataService {
                         season
                 );
 
-        SquadApiResponse squad =
-                footballDataProvider.getTeamSquad(
-                        teamId
-                );
-
         return playerMapper.toPlayerSummaries(
-                players,
-                squad
+                players
         );
-
     }
 
     /**

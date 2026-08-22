@@ -461,14 +461,7 @@ fun FootballNavHost(
             }
         }
 
-        /*
-         * Club
-         *
-         * Club details themselves are loaded using
-         * clubId only. The season is carried through
-         * the route so downstream season-dependent
-         * screens can use it.
-         */
+        /**************** CLUB **********************/
 
         composable(
             route = FootballDestination.Club.route
@@ -492,6 +485,30 @@ fun FootballNavHost(
                     ?.toInt()
                     ?: return@composable
 
+            /*
+             * League overview
+             */
+            val overviewViewModel:
+                    LeagueOverviewViewModel =
+                viewModel()
+
+            val overviewState by
+            overviewViewModel.uiState.collectAsState()
+
+            LaunchedEffect(
+                leagueId,
+                season
+            ) {
+
+                overviewViewModel.loadLeagueOverview(
+                    leagueId,
+                    season
+                )
+            }
+
+            /*
+             * Club
+             */
             val clubViewModel:
                     ClubViewModel =
                 viewModel()
@@ -506,12 +523,21 @@ fun FootballNavHost(
                 )
             }
 
-            clubState.club?.let { club ->
+            /*
+             * Display Club
+             */
+            if (
+                overviewState.overview != null &&
+                clubState.club != null
+            ) {
 
                 ClubScreen(
 
-                    overview = TODO(),
-                    club = club,
+                    overview =
+                        overviewState.overview!!,
+
+                    club =
+                        clubState.club!!,
 
                     onFixturesClick = { selectedClubId ->
 
@@ -526,6 +552,7 @@ fun FootballNavHost(
                                 )
 
                         )
+
                     },
 
                     onSquadClick = { selectedClubId ->
@@ -541,14 +568,14 @@ fun FootballNavHost(
                                 )
 
                         )
+
                     }
+
                 )
             }
         }
 
-        /*
-         * Squad
-         */
+        /*************** SQUAD ********************/
 
         composable(
             route = FootballDestination.Squad.route

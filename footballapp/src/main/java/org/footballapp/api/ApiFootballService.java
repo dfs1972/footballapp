@@ -300,10 +300,15 @@ public class ApiFootballService implements FootballDataProvider {
             int season
     ) throws Exception {
 
-        return getTeamPlayers(
-                teamId,
-                leagueId,
-                season
+        String json =
+                getPlayersJson(
+                        teamId,
+                        season
+                );
+
+        return mapper.readValue(
+                json,
+                PlayersApiResponse.class
         );
     }
 

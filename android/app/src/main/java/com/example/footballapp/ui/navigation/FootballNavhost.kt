@@ -10,6 +10,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import com.example.footballapp.ui.design.AppConstants
 import com.example.footballapp.ui.screens.CompetitionsScreen
 import com.example.footballapp.ui.screens.club.ClubScreen
@@ -61,40 +63,38 @@ fun FootballNavHost() {
                 FootballDestination.Competitions.route
             ) {
 
-                val viewModel: CountryViewModel = viewModel()
+                val countryViewModel: CountryViewModel = viewModel()
+
+                val competitionViewModel: CompetitionViewModel = viewModel()
 
                 val countries by
-                viewModel.countries.collectAsState()
+                countryViewModel.countries.collectAsState()
 
-                /****** TEMP PRINT *********/
-                Log.d(
-                    "FootballNavHost",
-                    "countries.size = ${countries.size}"
-                )
+                val competitions by
+                competitionViewModel.competitions.collectAsState()
 
                 CompetitionsScreen(
 
                     countries = countries,
 
+                    competitions = competitions,
+
                     onCountrySelected = { country ->
 
-                        // We will load this country's
-                        // competitions in the next step.
-
+                        competitionViewModel.loadCompetitions(
+                            country = country.name,
+                            season = 2026
+                        )
                     },
 
                     onLeagueExplorerClick = {
 
                         navController.navigate(
-
                             FootballDestination
                                 .LeagueExplorer
                                 .route
-
                         )
-
                     }
-
                 )
             }
 

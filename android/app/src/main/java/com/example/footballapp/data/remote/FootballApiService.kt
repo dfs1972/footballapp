@@ -7,6 +7,7 @@ import com.example.footballapp.data.remote.dto.CountryDto
 import com.example.footballapp.data.remote.dto.FixtureDetailsDto
 import com.example.footballapp.data.remote.dto.FixtureDto
 import com.example.footballapp.data.remote.dto.FixtureLineupDto
+import com.example.footballapp.data.remote.dto.LeagueApiResponseDto
 import com.example.footballapp.data.remote.dto.LeagueOverviewDto
 import com.example.footballapp.data.remote.dto.LeagueTableGroupDto
 import com.example.footballapp.data.remote.dto.LeagueTableRowDto
@@ -55,6 +56,21 @@ interface FootballApiService {
 
     @GET("countries")
     suspend fun getCountries(): Response<List<CountryDto>>
+
+    /**
+     * Get competitions for a country and season.
+     */
+
+    @GET("leagues/by-country")
+    suspend fun getLeaguesByCountry(
+
+        @Query("country")
+        country: String,
+
+        @Query("season")
+        season: Int
+
+    ): Response<List<LeagueApiResponseDto>>
 
     /**
      * Get LeagueTable

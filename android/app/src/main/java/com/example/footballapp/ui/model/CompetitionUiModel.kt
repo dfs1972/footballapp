@@ -1,12 +1,10 @@
 package com.example.footballapp.ui.model
 
-import android.R
-
 /**
  * Represents a football competition as displayed by the UI.
  *
  * This model is independent of the backend DTOs and exists purely
- * to provide the data required by the Compose components.
+ * to provide the data required by the Compose UI.
  */
 data class CompetitionUiModel(
 
@@ -21,13 +19,12 @@ data class CompetitionUiModel(
     val name: String,
 
     /**
-     * Competition Country
+     * Country the competition belongs to.
      */
     val country: String,
 
     /**
-     * URL of the competition logo.
+     * Competition type, for example "League" or "Cup".
      */
-    val logoUrl: String
-
+    val type: String
 )

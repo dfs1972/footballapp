@@ -1,5 +1,6 @@
 package com.example.footballapp.ui.components
 
+import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,8 @@ import coil.compose.AsyncImage
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import com.example.footballapp.data.remote.FlagUrlResolver
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.theme.AppElevation
 
@@ -34,8 +37,6 @@ import com.example.footballapp.ui.theme.AppElevation
 fun CountryCard(
 
     countryName: String,
-
-    competitionCount: Int,
 
     flagUrl: String?,
 
@@ -91,7 +92,9 @@ fun CountryCard(
                         ImageRequest.Builder(
                             LocalContext.current
                         )
-                            .data(flagUrl)
+                            .data(
+                                FlagUrlResolver.resolve(flagUrl)
+                            )
                             .decoderFactory(
                                 SvgDecoder.Factory()
                             )
@@ -130,22 +133,9 @@ fun CountryCard(
                     text = countryName,
 
                     style =
-                        MaterialTheme.typography.titleMedium
+                        MaterialTheme.typography.titleMedium,
 
-                )
-
-                Text(
-
-                    text =
-                        "$competitionCount competitions",
-
-                    style =
-                        MaterialTheme.typography.bodySmall,
-
-                    color =
-                        MaterialTheme
-                            .colorScheme
-                            .onSurfaceVariant
+                    fontWeight = FontWeight.SemiBold
 
                 )
 

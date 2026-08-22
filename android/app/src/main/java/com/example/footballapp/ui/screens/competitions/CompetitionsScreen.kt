@@ -1,7 +1,5 @@
 package com.example.footballapp.ui.screens
 
-import android.util.Log
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,23 +11,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.example.footballapp.data.remote.FlagUrlResolver
+import com.example.footballapp.ui.components.CompetitionRow
 import com.example.footballapp.ui.components.CountryCard
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.design.AppSpacing
+import com.example.footballapp.ui.model.CompetitionUiModel
 import com.example.footballapp.ui.model.CountryUiModel
-
-import androidx.compose.foundation.layout.size
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.decode.SvgDecoder
-import coil.request.ImageRequest
 
 @Composable
 fun CompetitionsScreen(
 
     countries: List<CountryUiModel>,
+
+    competitions: List<CompetitionUiModel>,
 
     onCountrySelected: (CountryUiModel) -> Unit = {},
 
@@ -72,43 +66,60 @@ fun CompetitionsScreen(
 
             CountryCard(
 
-                countryName = country.name,
-
-                // Competitions have not been loaded for the
-                // country yet.
-                competitionCount = 0,
+                countryName =
+                    country.name,
 
                 flagUrl =
-                    FlagUrlResolver.resolve(
-                        country.flag
-                    ),
+                    country.flag,
 
                 expanded =
                     expandedCountry == country.name,
 
                 onClick = {
 
+                    val isExpanding =
+                        expandedCountry != country.name
+
                     expandedCountry =
-                        if (
-                            expandedCountry ==
+                        if (isExpanding) {
                             country.name
-                        ) {
-                            null
                         } else {
-                            country.name
+                            null
                         }
 
-                    onCountrySelected(country)
+                    if (isExpanding) {
+
+                        onCountrySelected(country)
+
+                    }
                 }
             )
 
-            Spacer(
-                modifier = Modifier.height(
-                    //AppSpacing.Small
-                    AppSpacing.ExtraSmall
-                )
-            )
-        }
+            AnimatedVisibility(
 
+                visible =
+                    expandedCountry ==
+                            country.name
+
+            ) {
+
+                Column {
+
+                    competitions.forEach { competition ->
+
+                        CompetitionRow(
+
+                            competition =
+                                competition,
+
+                            onClick = {
+                                // Competition selection
+                                // will be implemented later.
+                            }
+                        )
+                    }
+                }
+            }
+        }
     }
 }

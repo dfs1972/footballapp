@@ -35,7 +35,7 @@ fun CompetitionGroupDto.toUiModel() =
 
                         country = country,
 
-                        logoUrl = it.logoUrl
+                        type = it.type
 
                     )
 
@@ -55,7 +55,7 @@ fun CompetitionGroupDto.toUiModel() =
 
                         country = country,
 
-                        logoUrl = it.logoUrl
+                        type = it.type
 
                     )
 

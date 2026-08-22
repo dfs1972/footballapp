@@ -58,6 +58,7 @@ class LeagueOverviewViewModel : ViewModel() {
 
                 val metadata =
                     metadataRepository
+
                         .getCompetitionMetadata(
                             leagueId,
                             season

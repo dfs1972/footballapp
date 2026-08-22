@@ -47,21 +47,8 @@ fun CompetitionRow(
 
             Text(
                 text = competition.name,
-                style = AppTypography.Body,
+                style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Text(
-
-                text = competition.type,
-
-                style = MaterialTheme.typography.bodySmall,
-
-                color =
-                    MaterialTheme
-                        .colorScheme
-                        .onSurfaceVariant
-
             )
 
         }

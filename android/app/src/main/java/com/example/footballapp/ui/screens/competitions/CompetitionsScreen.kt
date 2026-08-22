@@ -1,4 +1,4 @@
-package com.example.footballapp.ui.screens
+package com.example.footballapp.ui.screens.competitions
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
@@ -17,6 +17,7 @@ import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.model.CompetitionUiModel
 import com.example.footballapp.ui.model.CountryUiModel
+import com.example.footballapp.ui.components.SeasonSelector
 
 @Composable
 fun CompetitionsScreen(
@@ -25,7 +26,21 @@ fun CompetitionsScreen(
 
     competitions: List<CompetitionUiModel>,
 
-    onCountrySelected: (CountryUiModel) -> Unit = {},
+    currentSeason: Int,
+
+    selectedSeason: Int,
+
+    onSeasonSelected: (Int) -> Unit,
+
+    onCountrySelected: (
+        CountryUiModel,
+        Int
+    ) -> Unit = { _, _ -> },
+
+    onCompetitionSelected: (
+        Int,
+        Int
+    ) -> Unit = { _, _ -> },
 
     onLeagueExplorerClick: () -> Unit = {}
 
@@ -34,6 +49,12 @@ fun CompetitionsScreen(
     var expandedCountry by rememberSaveable {
 
         mutableStateOf<String?>(null)
+
+    }
+
+    var seasonSelectorExpanded by rememberSaveable {
+
+        mutableStateOf(false)
 
     }
 
@@ -50,9 +71,35 @@ fun CompetitionsScreen(
 
         item {
 
+            SeasonSelector(
+
+                selectedSeason = selectedSeason,
+
+                currentSeason = currentSeason,
+
+                expanded = seasonSelectorExpanded,
+
+                onClick = {
+
+                    seasonSelectorExpanded =
+                        !seasonSelectorExpanded
+
+                },
+
+                onSeasonSelected = { season ->
+
+                    onSeasonSelected(season)
+
+                    seasonSelectorExpanded = false
+
+                    expandedCountry = null
+
+                }
+
+            )
             Spacer(
                 modifier = Modifier.height(
-                    AppSpacing.ExtraLarge
+                    AppSpacing.Medium
                 )
             )
         }
@@ -89,7 +136,10 @@ fun CompetitionsScreen(
 
                     if (isExpanding) {
 
-                        onCountrySelected(country)
+                        onCountrySelected(
+                            country,
+                            selectedSeason
+                        )
 
                     }
                 }
@@ -109,13 +159,17 @@ fun CompetitionsScreen(
 
                         CompetitionRow(
 
-                            competition =
-                                competition,
+                            competition = competition,
 
                             onClick = {
-                                // Competition selection
-                                // will be implemented later.
+
+                                onCompetitionSelected(
+                                    competition.id,
+                                    selectedSeason
+                                )
+
                             }
+
                         )
                     }
                 }

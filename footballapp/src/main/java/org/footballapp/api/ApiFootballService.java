@@ -315,10 +315,20 @@ public class ApiFootballService implements FootballDataProvider {
     @Override
     public PlayersApiResponse getPlayer(
             int playerId,
+            int leagueId,
             int season
-    ) {
-        throw new UnsupportedOperationException(
-                "getPlayer() not implemented yet."
+    ) throws Exception {
+
+        String json =
+                getPlayerJson(
+                        playerId,
+                        leagueId,
+                        season
+                );
+
+        return mapper.readValue(
+                json,
+                PlayersApiResponse.class
         );
     }
 
@@ -434,9 +444,18 @@ public class ApiFootballService implements FootballDataProvider {
     @Override
     public FixturesApiResponse getFixture(
             long fixtureId
-    ) {
-        throw new UnsupportedOperationException(
-                "getFixture() not implemented yet."
+    ) throws Exception {
+
+        String url =
+                "https://v3.football.api-sports.io/fixtures?id="
+                        + fixtureId;
+
+        String json =
+                apiClient.get(url);
+
+        return mapper.readValue(
+                json,
+                FixturesApiResponse.class
         );
     }
 

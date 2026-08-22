@@ -142,13 +142,14 @@ sealed class FootballDestination(
      */
 
     object FixtureDetails : FootballDestination(
-        "fixtureDetails/{leagueId}/{fixtureId}"
+        "fixtureDetails/{leagueId}/{fixtureId}/{season}"
     ) {
 
         fun createRoute(
             leagueId: Int,
-            fixtureId: Long
-        ) = "fixtureDetails/$leagueId/$fixtureId"
+            fixtureId: Long,
+            season: Int
+        ) = "fixtureDetails/$leagueId/$fixtureId/$season"
 
     }
 

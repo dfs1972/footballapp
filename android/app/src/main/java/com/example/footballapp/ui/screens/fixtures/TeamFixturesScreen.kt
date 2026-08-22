@@ -45,7 +45,7 @@ fun TeamFixturesScreen(
 
     fixtureDays: List<FixtureDayUiModel>,
 
-    onFixtureSelected: (Long) -> Unit
+    onFixtureSelected: (Long, Int) -> Unit
 
 ) {
 
@@ -149,7 +149,8 @@ fun TeamFixturesScreen(
                             onClick = {
 
                                 onFixtureSelected(
-                                    fixture.fixtureId
+                                    fixture.fixtureId,
+                                    season.toInt()
                                 )
 
                             }

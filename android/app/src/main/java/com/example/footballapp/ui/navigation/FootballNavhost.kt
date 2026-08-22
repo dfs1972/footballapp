@@ -17,6 +17,7 @@ import java.util.Calendar
 import com.example.footballapp.ui.screens.club.ClubScreen
 import com.example.footballapp.ui.screens.clubs.ClubsScreen
 import com.example.footballapp.ui.screens.competitions.CompetitionsScreen
+import com.example.footballapp.ui.screens.fixtures.FixtureDetailsScreen
 import com.example.footballapp.ui.screens.fixtures.FixturesScreen
 import com.example.footballapp.ui.screens.league.LeagueOverviewScreen
 import com.example.footballapp.ui.screens.league.LeagueTableScreen
@@ -35,6 +36,7 @@ import com.example.footballapp.ui.viewmodel.SquadViewModel
 import com.example.footballapp.ui.viewmodel.TeamFixturesViewModel
 
 import com.example.footballapp.ui.viewmodel.CountryViewModel
+import com.example.footballapp.ui.viewmodel.FixtureDetailsViewModel
 
 @Composable
 fun FootballNavHost(
@@ -47,9 +49,7 @@ fun FootballNavHost(
         startDestination = startDestination
     ) {
 
-        /*
-         * Competitions
-         */
+        /***************** Competitions ***********************/
 
         composable(
             route = FootballDestination.Competitions.route
@@ -129,9 +129,9 @@ fun FootballNavHost(
 
             )
         }
-        /*
-         * League Overview
-         */
+
+
+        /********************* League Overview ****************************/
 
         composable(
             route = FootballDestination.LeagueOverview.route
@@ -236,9 +236,8 @@ fun FootballNavHost(
             }
         }
 
-        /*
-         * League Table
-         */
+
+        /*************** League Table *******************/
 
         composable(
             route = FootballDestination.LeagueTable.route
@@ -310,9 +309,8 @@ fun FootballNavHost(
             }
         }
 
-        /*
-         * Fixtures
-         */
+
+        /************* FIXTURES ********************/
 
         composable(
             route = FootballDestination.Fixtures.route
@@ -370,7 +368,7 @@ fun FootballNavHost(
                     fixtureDays =
                         fixturesState.fixtureDays,
 
-                    onFixtureSelected = { fixtureId ->
+                    onFixtureSelected = { fixtureId, season ->
 
                         navController.navigate(
 
@@ -378,18 +376,18 @@ fun FootballNavHost(
                                 .FixtureDetails
                                 .createRoute(
                                     leagueId,
-                                    fixtureId
+                                    fixtureId,
+                                    season
                                 )
 
                         )
-                    }
+                    },
                 )
             }
         }
 
-        /*
-         * Clubs
-         */
+
+        /****************** CLUBS ***********************/
 
         composable(
             route = FootballDestination.Clubs.route
@@ -669,9 +667,8 @@ fun FootballNavHost(
             }
         }
 
-        /*
-         * Team Fixtures
-         */
+
+        /****************** TEAM FIXTURES ************************/
 
         composable(
             route = FootballDestination.TeamFixtures.route
@@ -748,7 +745,7 @@ fun FootballNavHost(
                     fixtureDays =
                         fixturesUiState.fixtureDays,
 
-                    onFixtureSelected = { fixtureId ->
+                    onFixtureSelected = { fixtureId, selectedSeason ->
 
                         navController.navigate(
 
@@ -756,11 +753,12 @@ fun FootballNavHost(
                                 .FixtureDetails
                                 .createRoute(
                                     leagueId,
-                                    fixtureId
+                                    fixtureId,
+                                    selectedSeason
                                 )
 
                         )
-                    }
+                    },
                 )
             }
         }
@@ -790,13 +788,49 @@ fun FootballNavHost(
                     ?.toLong()
                     ?: return@composable
 
-            // Existing FixtureDetails implementation
-            // should remain here unchanged.
+            val season =
+                backStackEntry.arguments
+                    ?.getString("season")
+                    ?.toInt()
+                    ?: return@composable
+
+            val fixtureDetailsViewModel:
+                    FixtureDetailsViewModel =
+                viewModel()
+
+            LaunchedEffect(fixtureId) {
+
+                fixtureDetailsViewModel
+                    .loadFixture(
+                        fixtureId
+                    )
+            }
+
+            val uiState by
+            fixtureDetailsViewModel
+                .uiState
+                .collectAsState()
+
+            uiState.fixture?.let { fixture ->
+
+                FixtureDetailsScreen(
+
+                    fixture = fixture,
+
+                    lineup = uiState.lineup,
+
+                    onPlayerClick = { playerId ->
+
+                        // Player navigation later.
+
+                    }
+
+                )
+            }
         }
 
-        /*
-         * Player Details
-         */
+
+        /*************** PLAYER DETAILS ***********************/
 
         composable(
             route = FootballDestination
@@ -852,10 +886,14 @@ fun FootballNavHost(
                 .uiState
                 .collectAsState()
 
-            /*
-             * Existing PlayerDetailsScreen
-             * rendering should remain here.
-             */
+            uiState.player?.let { player ->
+
+                PlayerDetailsScreen(
+
+                    player = player
+
+                )
+            }
         }
     }
 }

@@ -128,6 +128,7 @@ public class LeagueDataService {
         PlayersApiResponse response =
                 footballDataProvider.getPlayer(
                         playerId,
+                        leagueId,
                         season
                 );
 

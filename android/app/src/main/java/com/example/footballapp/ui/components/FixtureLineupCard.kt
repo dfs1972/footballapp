@@ -35,13 +35,10 @@ fun FixtureLineupCard(
             ) {
 
                 Spacer(
-
                     modifier = Modifier.height(
                         AppSpacing.ExtraLarge
                     )
-
                 )
-
 
                 Text(
                     text = team.teamName,
@@ -50,62 +47,95 @@ fun FixtureLineupCard(
                 )
 
                 InfoRow(
-
                     label = "Coach",
-
                     value = team.coachName
-
                 )
 
                 InfoRow(
-
                     label = "Formation",
-
                     value = team.formation
+                )
 
+                FormationPitch(
+                    team = team,
+                    onPlayerClick = onPlayerClick
                 )
 
                 Spacer(
-
                     modifier = Modifier.height(
                         AppSpacing.ExtraSmall
                     )
-
                 )
 
-                val groupedPlayers = team.players.groupBy { player ->
-                    when (player.position) {
-                        "G" -> "Goalkeeper"
-                        "D" -> "Defenders"
-                        "M" -> "Midfielders"
-                        "F" -> "Forwards"
-                        else -> "Other"
-                    }
-                }
+                Text(
+                    text = "Starting XI",
+                    style =
+                        MaterialTheme
+                            .typography
+                            .titleSmall,
+                    fontWeight =
+                        FontWeight.SemiBold
+                )
 
-                groupedPlayers.forEach { (position, players) ->
+                val startingPlayers =
+                    team.players
+                        .filter { it.starting }
+                        .sortedBy {
+                            it.displayOrder
+                        }
 
-                    Text(
-                        text = position,
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.SemiBold
+                startingPlayers.forEach { player ->
+
+                    PlayerLineupRow(
+
+                        player = player,
+
+                        onClick = {
+                            onPlayerClick(
+                                player.playerId
+                            )
+                        }
+
                     )
 
-                    players.forEach { player ->
+                }
 
-                        PlayerLineupRow(
+                Spacer(
+                    modifier = Modifier.height(
+                        AppSpacing.Small
+                    )
+                )
 
-                            player = player,
+                Text(
+                    text = "Substitutes",
+                    style =
+                        MaterialTheme
+                            .typography
+                            .titleSmall,
+                    fontWeight =
+                        FontWeight.SemiBold
+                )
 
-                            onClick = {
+                val substitutePlayers =
+                    team.players
+                        .filter { !it.starting }
+                        .sortedBy {
+                            it.displayOrder
+                        }
 
-                                onPlayerClick(player.playerId)
+                substitutePlayers.forEach { player ->
 
-                            }
+                    PlayerLineupRow(
 
-                        )
+                        player = player,
 
-                    }
+                        onClick = {
+                            onPlayerClick(
+                                player.playerId
+                            )
+                        }
+
+                    )
 
                 }
 

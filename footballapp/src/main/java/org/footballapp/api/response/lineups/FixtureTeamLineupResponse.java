@@ -14,6 +14,9 @@ public class FixtureTeamLineupResponse {
     private List<PlayerLineupResponse> players =
             new ArrayList<>();
 
+    private FixtureTeamColorsResponse colors;
+
+
     public int getTeamId() {
         return teamId;
     }
@@ -58,6 +61,16 @@ public class FixtureTeamLineupResponse {
             List<PlayerLineupResponse> players
     ) {
         this.players = players;
+    }
+
+    public FixtureTeamColorsResponse getColors() {
+        return colors;
+    }
+
+    public void setColors(
+            FixtureTeamColorsResponse colors
+    ) {
+        this.colors = colors;
     }
 
 }

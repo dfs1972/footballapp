@@ -1,5 +1,6 @@
 package com.example.footballapp.ui.viewmodel
 
+import com.example.footballapp.ui.model.CompetitionStageUiModel
 import com.example.footballapp.ui.model.LeagueOverviewUiModel
 import com.example.footballapp.ui.model.LeagueTableGroupUiModel
 
@@ -31,7 +32,6 @@ data class LeagueOverviewUiState(
      * Current competition round.
      */
     val currentRound: String? = null,
-
 
     /**
      * Error message displayed if loading fails.

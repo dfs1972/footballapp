@@ -5,11 +5,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.example.footballapp.ui.components.CompetitionRoundSelector
 import com.example.footballapp.ui.components.NavigationCard
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.TopStandingsCard
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.design.Strings
+//import com.example.footballapp.ui.model.CompetitionStageUiModel
 import com.example.footballapp.ui.model.LeagueOverviewUiModel
 import com.example.footballapp.ui.model.LeagueTableGroupUiModel
 

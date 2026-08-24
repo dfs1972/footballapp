@@ -9,15 +9,15 @@ import com.example.footballapp.ui.components.InfoRow
 import com.example.footballapp.ui.components.NavigationCard
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.SectionCard
-import com.example.footballapp.ui.components.SectionHeading
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.model.ClubDetailsUiModel
-import com.example.footballapp.ui.model.LeagueOverviewUiModel
 
 @Composable
 fun ClubScreen(
 
-    overview: LeagueOverviewUiModel,
+    leagueName: String,
+
+    season: Int,
 
     club: ClubDetailsUiModel,
 
@@ -39,25 +39,17 @@ fun ClubScreen(
 
         }
 
-//        item {
-//
-//            SectionHeading(
-//
-//                text = "Club Information"
-//
-//            )
-//
-//        }
-
         item {
 
             SectionCard {
 
                 CardHeader(
 
-                    title = overview.leagueName,
+                    title =
+                        leagueName,
 
-                    subtitle = club.name.let { "$it Football Club" }
+                    subtitle =
+                        "${club.name} Football Club"
 
                 )
 

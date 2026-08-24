@@ -1,5 +1,5 @@
 [versions]
-agp = "9.3.1"
+agp = "9.3.2"
 converterJackson = "3.0.0"
 coreKtx = "1.10.1"
 jacksonModuleKotlin = "2.22.2"

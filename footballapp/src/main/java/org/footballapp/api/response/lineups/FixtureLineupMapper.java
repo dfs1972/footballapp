@@ -120,12 +120,87 @@ public class FixtureLineupMapper {
                 lineup.getFormation()
         );
 
+        if (lineup.getTeam() != null
+                && lineup.getTeam().getColors() != null) {
+
+            FixtureTeamColorsResponse colorsResponse =
+                    new FixtureTeamColorsResponse();
+
+            if (lineup.getTeam().getColors().getPlayer() != null) {
+
+                FixturePlayerColorsResponse playerColors =
+                        new FixturePlayerColorsResponse();
+
+                playerColors.setPrimary(
+                        lineup.getTeam()
+                                .getColors()
+                                .getPlayer()
+                                .getPrimary()
+                );
+
+                playerColors.setNumber(
+                        lineup.getTeam()
+                                .getColors()
+                                .getPlayer()
+                                .getNumber()
+                );
+
+                playerColors.setBorder(
+                        lineup.getTeam()
+                                .getColors()
+                                .getPlayer()
+                                .getBorder()
+                );
+
+                colorsResponse.setPlayer(
+                        playerColors
+                );
+            }
+
+            if (lineup.getTeam().getColors().getGoalkeeper() != null) {
+
+                FixturePlayerColorsResponse goalkeeperColors =
+                        new FixturePlayerColorsResponse();
+
+                goalkeeperColors.setPrimary(
+                        lineup.getTeam()
+                                .getColors()
+                                .getGoalkeeper()
+                                .getPrimary()
+                );
+
+                goalkeeperColors.setNumber(
+                        lineup.getTeam()
+                                .getColors()
+                                .getGoalkeeper()
+                                .getNumber()
+                );
+
+                goalkeeperColors.setBorder(
+                        lineup.getTeam()
+                                .getColors()
+                                .getGoalkeeper()
+                                .getBorder()
+                );
+
+                colorsResponse.setGoalkeeper(
+                        goalkeeperColors
+                );
+            }
+
+            response.setColors(
+                    colorsResponse
+            );
+        }
+
         response.setPlayers(
                 players
         );
 
         return response;
     }
+
+
 
     /**
      * Maps a lineup player.

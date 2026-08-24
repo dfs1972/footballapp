@@ -15,6 +15,9 @@ public class FixtureLineupTeam {
 
     private String logo;
 
+    private FixtureTeamColors colors;
+
+
     public int getId() {
         return id;
     }
@@ -24,6 +27,7 @@ public class FixtureLineupTeam {
     ) {
         this.id = id;
     }
+
 
     public String getName() {
         return name;
@@ -35,6 +39,7 @@ public class FixtureLineupTeam {
         this.name = name;
     }
 
+
     public String getLogo() {
         return logo;
     }
@@ -43,6 +48,17 @@ public class FixtureLineupTeam {
             String logo
     ) {
         this.logo = logo;
+    }
+
+
+    public FixtureTeamColors getColors() {
+        return colors;
+    }
+
+    public void setColors(
+            FixtureTeamColors colors
+    ) {
+        this.colors = colors;
     }
 
 }

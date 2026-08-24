@@ -11,12 +11,13 @@ import com.example.footballapp.ui.components.SectionCard
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.design.Strings
 import com.example.footballapp.ui.model.ClubUiModel
-import com.example.footballapp.ui.model.LeagueOverviewUiModel
 
 @Composable
 fun ClubsScreen(
 
-    overview: LeagueOverviewUiModel,
+    leagueName: String,
+
+    season: Int,
 
     clubs: List<ClubUiModel>,
 
@@ -42,9 +43,11 @@ fun ClubsScreen(
 
                 CardHeader(
 
-                    title = overview.leagueName,
+                    title = leagueName,
 
-                    subtitle = "${Strings.CLUBS} · ${overview.season}"
+                    subtitle =
+                        "${Strings.CLUBS} · $season"
+
                 )
 
                 ClubList(
@@ -54,9 +57,7 @@ fun ClubsScreen(
                     onClubClick = { club ->
 
                         onClubClick(
-
                             club.clubId
-
                         )
 
                     }

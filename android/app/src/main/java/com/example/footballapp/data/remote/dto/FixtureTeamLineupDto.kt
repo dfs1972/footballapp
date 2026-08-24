@@ -12,6 +12,8 @@ data class FixtureTeamLineupDto(
 
     val formation: String?,
 
+    val colors: FixtureTeamColorsDto?,
+
     val players: List<PlayerLineupDto>
 
 )

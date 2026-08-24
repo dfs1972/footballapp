@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.footballapp.data.repository.CompetitionMetadataRepository
 import com.example.footballapp.data.repository.LeagueOverviewRepository
-import com.example.footballapp.data.repository.LeagueTableRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,9 +13,6 @@ class LeagueOverviewViewModel : ViewModel() {
 
     private val repository =
         LeagueOverviewRepository()
-
-    private val tableRepository =
-        LeagueTableRepository()
 
     private val metadataRepository =
         CompetitionMetadataRepository()
@@ -49,16 +45,8 @@ class LeagueOverviewViewModel : ViewModel() {
                         season
                     )
 
-                val standings =
-                    tableRepository
-                        .getLeagueTable(
-                            leagueId,
-                            season
-                        )
-
                 val metadata =
                     metadataRepository
-
                         .getCompetitionMetadata(
                             leagueId,
                             season
@@ -71,7 +59,8 @@ class LeagueOverviewViewModel : ViewModel() {
 
                         overview = overview,
 
-                        topStandings = standings,
+                        topStandings =
+                            metadata.standings,
 
                         currentRound =
                             metadata.currentRound
@@ -85,7 +74,8 @@ class LeagueOverviewViewModel : ViewModel() {
 
                         isLoading = false,
 
-                        error = e.message
+                        error =
+                            e.message
 
                     )
             }

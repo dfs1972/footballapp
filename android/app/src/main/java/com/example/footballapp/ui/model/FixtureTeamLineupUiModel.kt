@@ -3,9 +3,17 @@ package com.example.footballapp.ui.model
 data class FixtureTeamLineupUiModel(
 
     val teamId: Int,
+
     val teamName: String,
+
     val coachId: Int?,
+
     val coachName: String?,
+
     val formation: String?,
+
+    val colors: FixtureTeamColorsUiModel?,
+
     val players: List<PlayerLineupUiModel>
+
 )

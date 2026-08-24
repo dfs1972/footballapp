@@ -9,31 +9,50 @@ public class FixtureRow {
     private int awayTeamId;
     private String homeTeam;
     private String awayTeam;
-    private int homeGoals;
-    private int awayGoals;
+    private Integer homeGoals;
+    private Integer awayGoals;
     //private String round;
 
     /**Getters and Setters*/
-    public long getFixtureId() {return fixtureId;}
+    public long getFixtureId() {
+        return fixtureId;
+    }
 
-    public void setFixtureId(long fixtureId) {this.fixtureId = fixtureId;}
+    public void setFixtureId(long fixtureId) {
+        this.fixtureId = fixtureId;
+    }
 
-    public String getFixtureDate() {return fixtureDate;}
+    public String getFixtureDate() {
+        return fixtureDate;
+    }
 
     public void setFixtureDate(String fixtureDate) {
         this.fixtureDate = fixtureDate;
     }
 
-    public String getFixtureTime() {return fixtureTime;}
-    public void setFixtureTime(String fixtureTime) {this.fixtureTime = fixtureTime;}
+    public String getFixtureTime() {
+        return fixtureTime;
+    }
 
-    public int getHomeTeamId() {return homeTeamId;}
+    public void setFixtureTime(String fixtureTime) {
+        this.fixtureTime = fixtureTime;
+    }
 
-    public void setHomeTeamId(int homeTeamId) {this.homeTeamId = homeTeamId;}
+    public int getHomeTeamId() {
+        return homeTeamId;
+    }
 
-    public int getAwayTeamId() {return awayTeamId;}
+    public void setHomeTeamId(int homeTeamId) {
+        this.homeTeamId = homeTeamId;
+    }
 
-    public void setAwayTeamId(int awayTeamId) {this.awayTeamId = awayTeamId;}
+    public int getAwayTeamId() {
+        return awayTeamId;
+    }
+
+    public void setAwayTeamId(int awayTeamId) {
+        this.awayTeamId = awayTeamId;
+    }
 
     public String getHomeTeam() {
         return homeTeam;
@@ -51,19 +70,19 @@ public class FixtureRow {
         this.awayTeam = awayTeam;
     }
 
-    public int getHomeGoals() {
+    public Integer getHomeGoals() {
         return homeGoals;
     }
 
-    public void setHomeGoals(int homeGoals) {
+    public void setHomeGoals(Integer homeGoals) {
         this.homeGoals = homeGoals;
     }
 
-    public int getAwayGoals() {
+    public Integer getAwayGoals() {
         return awayGoals;
     }
 
-    public void setAwayGoals(int awayGoals) {
+    public void setAwayGoals(Integer awayGoals) {
         this.awayGoals = awayGoals;
     }
 

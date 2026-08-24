@@ -186,7 +186,6 @@ fun FootballNavHost(
                                     leagueId,
                                     season
                                 )
-
                         )
                     },
 
@@ -211,8 +210,9 @@ fun FootballNavHost(
                             FootballDestination
                                 .Clubs
                                 .createRoute(
-                                    leagueId,
-                                    season
+                                    leagueId = leagueId,
+                                    season = season,
+                                    leagueName = overview.leagueName
                                 )
 
                         )
@@ -225,9 +225,10 @@ fun FootballNavHost(
                             FootballDestination
                                 .Club
                                 .createRoute(
-                                    leagueId,
-                                    clubId,
-                                    season
+                                    leagueId = leagueId,
+                                    clubId = clubId,
+                                    season = season,
+                                    leagueName = overview.leagueName
                                 )
 
                         )
@@ -298,9 +299,10 @@ fun FootballNavHost(
                             FootballDestination
                                 .Club
                                 .createRoute(
-                                    leagueId,
-                                    clubId,
-                                    season
+                                    leagueId = leagueId,
+                                    clubId = clubId,
+                                    season = season,
+                                    leagueName = overview.leagueName
                                 )
 
                         )
@@ -405,58 +407,55 @@ fun FootballNavHost(
                     ?.toInt()
                     ?: return@composable
 
-            val overviewViewModel:
-                    LeagueOverviewViewModel =
-                viewModel()
+            val leagueName =
+                backStackEntry.arguments
+                    ?.getString("leagueName")
+                    ?: return@composable
 
             val clubsViewModel:
                     ClubsViewModel =
                 viewModel()
 
-            LaunchedEffect(leagueId, season) {
-
-                overviewViewModel.loadLeagueOverview(
-                    leagueId,
-                    season
-                )
+            LaunchedEffect(
+                leagueId,
+                season
+            ) {
 
                 clubsViewModel.loadClubs(
                     leagueId,
                     season
                 )
-            }
 
-            val overviewState by
-            overviewViewModel.uiState.collectAsState()
+            }
 
             val clubsState by
             clubsViewModel.uiState.collectAsState()
 
-            overviewState.overview?.let { overview ->
+            ClubsScreen(
 
-                ClubsScreen(
+                leagueName = leagueName,
 
-                    overview = overview,
+                season = season,
 
-                    clubs =
-                        clubsState.clubs,
+                clubs = clubsState.clubs,
 
-                    onClubClick = { clubId ->
+                onClubClick = { clubId ->
 
-                        navController.navigate(
+                    navController.navigate(
 
-                            FootballDestination
-                                .Club
-                                .createRoute(
-                                    leagueId,
-                                    clubId,
-                                    season
-                                )
+                        FootballDestination
+                            .Club
+                            .createRoute(
+                                leagueId = leagueId,
+                                clubId = clubId,
+                                season = season,
+                                leagueName = leagueName
+                            )
+                    )
 
-                        )
-                    }
-                )
-            }
+                }
+
+            )
         }
 
         /**************** CLUB **********************/
@@ -483,30 +482,15 @@ fun FootballNavHost(
                     ?.toInt()
                     ?: return@composable
 
-            /*
-             * League overview
-             */
-            val overviewViewModel:
-                    LeagueOverviewViewModel =
-                viewModel()
-
-            val overviewState by
-            overviewViewModel.uiState.collectAsState()
-
-            LaunchedEffect(
-                leagueId,
-                season
-            ) {
-
-                overviewViewModel.loadLeagueOverview(
-                    leagueId,
-                    season
-                )
-            }
+            val leagueName =
+                backStackEntry.arguments
+                    ?.getString("leagueName")
+                    ?: return@composable
 
             /*
              * Club
              */
+
             val clubViewModel:
                     ClubViewModel =
                 viewModel()
@@ -519,23 +503,25 @@ fun FootballNavHost(
                 clubViewModel.loadClub(
                     clubId
                 )
+
             }
 
             /*
              * Display Club
              */
-            if (
-                overviewState.overview != null &&
-                clubState.club != null
-            ) {
+
+            clubState.club?.let { club ->
 
                 ClubScreen(
 
-                    overview =
-                        overviewState.overview!!,
+                    leagueName =
+                        leagueName,
+
+                    season =
+                        season,
 
                     club =
-                        clubState.club!!,
+                        club,
 
                     onFixturesClick = { selectedClubId ->
 
@@ -570,6 +556,7 @@ fun FootballNavHost(
                     }
 
                 )
+
             }
         }
 

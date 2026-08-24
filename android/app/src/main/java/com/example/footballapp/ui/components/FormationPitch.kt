@@ -1,13 +1,16 @@
 package com.example.footballapp.ui.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -17,135 +20,216 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.example.footballapp.ui.model.FixtureTeamColorsUiModel
 import com.example.footballapp.ui.model.FixtureTeamLineupUiModel
 import com.example.footballapp.ui.model.PlayerLineupUiModel
 import kotlin.math.roundToInt
 
 
+/*
+ * ---------------------------------------------------------
+ * PLAYER MARKER SIZE
+ * ---------------------------------------------------------
+ *
+ * Keep this as the single source of truth for the
+ * player-number circle size.
+ */
+private const val PLAYER_MARKER_SIZE = 30
+
+
 @Composable
 fun FormationPitch(
-
     team: FixtureTeamLineupUiModel,
-
     onPlayerClick: (Int) -> Unit
-
 ) {
 
+    /*
+     * -------------------------------------------------
+     * STARTING PLAYERS
+     * -------------------------------------------------
+     *
+     * Only starting players with a valid
+     * API-Football grid are displayed.
+     */
     val startingPlayers =
         team.players.filter {
-
             it.starting &&
                     it.grid != null
-
         }
 
     /*
-     * Theme colours are obtained outside
-     * the Canvas drawing scope.
+     * -------------------------------------------------
+     * PARSE PLAYER GRID
+     * -------------------------------------------------
+     *
+     * API-Football grid:
+     *
+     *     "row:column"
+     *
+     * Example:
+     *
+     *     "2:1"
+     *     "2:2"
+     *     "2:3"
+     *     "2:4"
+     *
+     * We keep both values because:
+     *
+     *     row    = vertical position
+     *     column = horizontal position
      */
+    val parsedPlayers =
+        startingPlayers.mapNotNull { player ->
+
+            val grid =
+                parseGrid(
+                    player.grid
+                )
+                    ?: return@mapNotNull null
+
+            player to grid
+        }
+
+    /*
+     * -------------------------------------------------
+     * GROUP PLAYERS BY ROW
+     * -------------------------------------------------
+     */
+    val rowsOfPlayers =
+        parsedPlayers.groupBy {
+            it.second.first
+        }
+
+    /*
+     * MaterialTheme colours must be obtained
+     * outside the Canvas DrawScope.
+     */
+    val lineColor =
+        MaterialTheme
+            .colorScheme
+            .onSurfaceVariant
+            .copy(alpha = 0.70f)
 
     val pitchColor =
         MaterialTheme
             .colorScheme
             .surfaceVariant
 
-    val lineColor =
-        MaterialTheme
-            .colorScheme
-            .onSurfaceVariant
-            .copy(alpha = 0.65f)
-
-    val playerColor =
-        MaterialTheme
-            .colorScheme
-            .primary
-
-    val playerTextColor =
-        MaterialTheme
-            .colorScheme
-            .onPrimary
-
+    /*
+     * -------------------------------------------------
+     * PITCH CONTAINER
+     * -------------------------------------------------
+     */
     BoxWithConstraints(
 
         modifier =
             Modifier
                 .fillMaxWidth()
                 .aspectRatio(0.68f)
-
     ) {
 
+        /*
+         * Actual rendered pitch dimensions.
+         *
+         * These are used for player coordinates.
+         */
         val pitchWidth =
             constraints.maxWidth.toFloat()
 
         val pitchHeight =
             constraints.maxHeight.toFloat()
 
+
         /*
-         * Pitch.
+         * -------------------------------------------------
+         * PITCH
+         * -------------------------------------------------
          */
-
         Canvas(
-
             modifier =
                 Modifier.fillMaxSize()
-
         ) {
 
+            /*
+             * Pitch background stripes.
+             */
+            val stripeCount =
+                10
+
+            val stripeHeight =
+                size.height /
+                        stripeCount
+
+            for (i in 0 until stripeCount) {
+
+                drawRect(
+
+                    color =
+                        if (i % 2 == 0) {
+
+                            pitchColor
+
+                        } else {
+
+                            pitchColor.copy(
+                                alpha = 0.82f
+                            )
+                        },
+
+                    topLeft =
+                        Offset(
+                            0f,
+                            i * stripeHeight
+                        ),
+
+                    size =
+                        Size(
+                            size.width,
+                            stripeHeight
+                        )
+                )
+            }
+
+            /*
+             * Pitch line width.
+             */
             val stroke =
                 2.dp.toPx()
 
-            val width =
-                size.width
-
-            val height =
-                size.height
 
             /*
-             * Pitch background.
+             * -------------------------------------------------
+             * PITCH BORDER
+             * -------------------------------------------------
              */
-
-            drawRoundRect(
-
-                color =
-                    pitchColor,
-
-                cornerRadius =
-                    CornerRadius(
-                        20f,
-                        20f
-                    )
-
-            )
-
-            /*
-             * Outer boundary.
-             */
-
             drawRoundRect(
 
                 color =
                     lineColor,
 
                 style =
-                    Stroke(stroke),
+                    Stroke(
+                        width = stroke
+                    ),
 
                 cornerRadius =
                     CornerRadius(
                         20f,
                         20f
                     )
-
             )
 
-            /*
-             * Halfway line.
-             */
 
+            /*
+             * -------------------------------------------------
+             * HALF WAY LINE
+             * -------------------------------------------------
+             */
             drawLine(
 
                 color =
@@ -154,32 +238,35 @@ fun FormationPitch(
                 start =
                     Offset(
                         0f,
-                        height / 2f
+                        size.height / 2f
                     ),
 
                 end =
                     Offset(
-                        width,
-                        height / 2f
+                        size.width,
+                        size.height / 2f
                     ),
 
                 strokeWidth =
                     stroke
-
             )
 
-            /*
-             * Centre circle.
-             */
 
+            /*
+             * -------------------------------------------------
+             * CENTRE CIRCLE
+             * -------------------------------------------------
+             */
             val centre =
                 Offset(
-                    width / 2f,
-                    height / 2f
+
+                    size.width / 2f,
+
+                    size.height / 2f
                 )
 
-            val centreCircleRadius =
-                width * 0.12f
+            val centreRadius =
+                size.minDimension * 0.12f
 
             drawCircle(
 
@@ -187,20 +274,21 @@ fun FormationPitch(
                     lineColor,
 
                 radius =
-                    centreCircleRadius,
+                    centreRadius,
 
                 center =
                     centre,
 
                 style =
-                    Stroke(stroke)
-
+                    Stroke(
+                        width = stroke
+                    )
             )
+
 
             /*
              * Centre spot.
              */
-
             drawCircle(
 
                 color =
@@ -211,52 +299,29 @@ fun FormationPitch(
 
                 center =
                     centre
-
             )
 
-            /*
-             * Penalty area dimensions.
-             */
 
+            /*
+             * -------------------------------------------------
+             * PENALTY AREAS
+             * -------------------------------------------------
+             */
             val penaltyWidth =
-                width * 0.55f
+                size.width * 0.55f
 
             val penaltyHeight =
-                height * 0.16f
+                size.height * 0.16f
 
             val penaltyLeft =
-                (width - penaltyWidth) / 2f
+                (size.width -
+                        penaltyWidth) /
+                        2f
+
 
             /*
-             * Goal / 6-yard box dimensions.
+             * Top penalty area.
              */
-
-            val goalAreaWidth =
-                width * 0.24f
-
-            val goalAreaHeight =
-                height * 0.065f
-
-            val goalAreaLeft =
-                (width - goalAreaWidth) / 2f
-
-            /*
-             * Penalty spot position.
-             */
-
-            val penaltySpotDistance =
-                height * 0.105f
-
-            /*
-             * -------------------------------------------------
-             * TOP HALF
-             * -------------------------------------------------
-             */
-
-            /*
-             * 18-yard penalty area.
-             */
-
             drawRect(
 
                 color =
@@ -275,14 +340,15 @@ fun FormationPitch(
                     ),
 
                 style =
-                    Stroke(stroke)
-
+                    Stroke(
+                        width = stroke
+                    )
             )
 
-            /*
-             * 6-yard / goal area.
-             */
 
+            /*
+             * Bottom penalty area.
+             */
             drawRect(
 
                 color =
@@ -290,31 +356,112 @@ fun FormationPitch(
 
                 topLeft =
                     Offset(
-                        goalAreaLeft,
+
+                        penaltyLeft,
+
+                        size.height -
+                                penaltyHeight
+                    ),
+
+                size =
+                    Size(
+                        penaltyWidth,
+                        penaltyHeight
+                    ),
+
+                style =
+                    Stroke(
+                        width = stroke
+                    )
+            )
+
+
+            /*
+             * -------------------------------------------------
+             * SIX-YARD BOXES
+             * -------------------------------------------------
+             */
+            val goalBoxWidth =
+                size.width * 0.25f
+
+            val goalBoxHeight =
+                size.height * 0.055f
+
+            val goalBoxLeft =
+                (size.width -
+                        goalBoxWidth) /
+                        2f
+
+
+            /*
+             * Top six-yard box.
+             */
+            drawRect(
+
+                color =
+                    lineColor,
+
+                topLeft =
+                    Offset(
+                        goalBoxLeft,
                         0f
                     ),
 
                 size =
                     Size(
-                        goalAreaWidth,
-                        goalAreaHeight
+                        goalBoxWidth,
+                        goalBoxHeight
                     ),
 
                 style =
-                    Stroke(stroke)
-
+                    Stroke(
+                        width = stroke
+                    )
             )
+
+
+            /*
+             * Bottom six-yard box.
+             */
+            drawRect(
+
+                color =
+                    lineColor,
+
+                topLeft =
+                    Offset(
+
+                        goalBoxLeft,
+
+                        size.height -
+                                goalBoxHeight
+                    ),
+
+                size =
+                    Size(
+                        goalBoxWidth,
+                        goalBoxHeight
+                    ),
+
+                style =
+                    Stroke(
+                        width = stroke
+                    )
+            )
+
+
+            /*
+             * -------------------------------------------------
+             * PENALTY SPOTS
+             * -------------------------------------------------
+             */
+            val penaltySpotDistance =
+                size.height * 0.105f
+
 
             /*
              * Top penalty spot.
              */
-
-            val topPenaltySpot =
-                Offset(
-                    width / 2f,
-                    penaltySpotDistance
-                )
-
             drawCircle(
 
                 color =
@@ -324,20 +471,49 @@ fun FormationPitch(
                     stroke * 1.5f,
 
                 center =
-                    topPenaltySpot
+                    Offset(
 
+                        size.width / 2f,
+
+                        penaltySpotDistance
+                    )
             )
 
+
             /*
-             * Top penalty "D".
-             *
-             * The arc is drawn outside the
-             * penalty area.
+             * Bottom penalty spot.
              */
+            drawCircle(
 
-            val penaltyArcRadius =
-                width * 0.16f
+                color =
+                    lineColor,
 
+                radius =
+                    stroke * 1.5f,
+
+                center =
+                    Offset(
+
+                        size.width / 2f,
+
+                        size.height -
+                                penaltySpotDistance
+                    )
+            )
+
+
+            /*
+             * -------------------------------------------------
+             * PENALTY ARCS / "D"
+             * -------------------------------------------------
+             */
+            val arcRadius =
+                size.width * 0.12f
+
+
+            /*
+             * Top D.
+             */
             drawArc(
 
                 color =
@@ -353,121 +529,33 @@ fun FormationPitch(
                     false,
 
                 topLeft =
-                    Rect(
-
-                        center =
-                            Offset(
-                                width / 2f,
-                                penaltySpotDistance
-                            ),
-
-                        radius =
-                            penaltyArcRadius
-
-                    ).topLeft,
-
-                size =
-                    Size(
-                        penaltyArcRadius * 2f,
-                        penaltyArcRadius * 2f
-                    ),
-
-                style =
-                    Stroke(stroke)
-
-            )
-
-            /*
-             * -------------------------------------------------
-             * BOTTOM HALF
-             * -------------------------------------------------
-             */
-
-            /*
-             * 18-yard penalty area.
-             */
-
-            drawRect(
-
-                color =
-                    lineColor,
-
-                topLeft =
                     Offset(
-                        penaltyLeft,
-                        height -
-                                penaltyHeight
+
+                        size.width / 2f -
+                                arcRadius,
+
+                        penaltySpotDistance -
+                                arcRadius
                     ),
 
                 size =
                     Size(
-                        penaltyWidth,
-                        penaltyHeight
+
+                        arcRadius * 2f,
+
+                        arcRadius * 2f
                     ),
 
                 style =
-                    Stroke(stroke)
-
+                    Stroke(
+                        width = stroke
+                    )
             )
 
-            /*
-             * 6-yard / goal area.
-             */
-
-            drawRect(
-
-                color =
-                    lineColor,
-
-                topLeft =
-                    Offset(
-                        goalAreaLeft,
-                        height -
-                                goalAreaHeight
-                    ),
-
-                size =
-                    Size(
-                        goalAreaWidth,
-                        goalAreaHeight
-                    ),
-
-                style =
-                    Stroke(stroke)
-
-            )
 
             /*
-             * Bottom penalty spot.
+             * Bottom D.
              */
-
-            val bottomPenaltySpot =
-                Offset(
-
-                    width / 2f,
-
-                    height -
-                            penaltySpotDistance
-
-                )
-
-            drawCircle(
-
-                color =
-                    lineColor,
-
-                radius =
-                    stroke * 1.5f,
-
-                center =
-                    bottomPenaltySpot
-
-            )
-
-            /*
-             * Bottom penalty "D".
-             */
-
             drawArc(
 
                 color =
@@ -483,99 +571,127 @@ fun FormationPitch(
                     false,
 
                 topLeft =
-                    Rect(
+                    Offset(
 
-                        center =
-                            bottomPenaltySpot,
+                        size.width / 2f -
+                                arcRadius,
 
-                        radius =
-                            penaltyArcRadius
-
-                    ).topLeft,
+                        size.height -
+                                penaltySpotDistance -
+                                arcRadius
+                    ),
 
                 size =
                     Size(
-                        penaltyArcRadius * 2f,
-                        penaltyArcRadius * 2f
+
+                        arcRadius * 2f,
+
+                        arcRadius * 2f
                     ),
 
                 style =
-                    Stroke(stroke)
-
+                    Stroke(
+                        width = stroke
+                    )
             )
-
         }
+
 
         /*
-         * Players.
+         * -------------------------------------------------
+         * PLAYERS
+         * -------------------------------------------------
+         *
+         * Position players using a strict 5x5 tactical grid.
+         *
+         * This divides the pitch into 25 equal cells. Players
+         * are assigned to the center of these cells to ensure
+         * perfect spacing and prevent sideline overlap.
          */
+        rowsOfPlayers.forEach { (apiRow, playersInRow) ->
 
-        startingPlayers.forEach { player ->
-
-            val grid =
-                parseGrid(
-                    player.grid
-                )
-                    ?: return@forEach
-
-            val position =
-                calculatePlayerPosition(
-
-                    row =
-                        grid.first,
-
-                    column =
-                        grid.second,
-
-                    width =
-                        pitchWidth,
-
-                    height =
-                        pitchHeight
-
-                )
-
-            PitchPlayerMarker(
-
-                player =
-                    player,
-
-                x =
-                    position.first,
-
-                y =
-                    position.second,
-
-                markerColor =
-                    playerColor,
-
-                textColor =
-                    playerTextColor,
-
-                onClick = {
-
-                    onPlayerClick(
-                        player.playerId
-                    )
-
+            val sortedPlayers =
+                playersInRow.sortedBy {
+                    it.second.second
                 }
 
-            )
+            val playerCount =
+                sortedPlayers.size
 
+            /*
+             * Map the number of players in this line to specific
+             * horizontal cells (1-5) to maintain tactical symmetry.
+             */
+            val horizontalCells = when (playerCount) {
+                1 -> listOf(3)           // Center cell
+                2 -> listOf(2, 4)        // Adjacent to center (Inside channels)
+                3 -> listOf(2, 3, 4)     // Adjoining cells centered
+                4 -> listOf(1, 2, 4, 5)  // Wingers and inside channels
+                5 -> listOf(1, 2, 3, 4, 5) // Full width
+                else -> List(playerCount) { i -> (i * 4 / (playerCount - 1)) + 1 }
+            }
+
+            sortedPlayers.forEachIndexed { index, (player, _) ->
+
+                val cellX = horizontalCells.getOrElse(index) { 3 }
+
+                /*
+                 * 5 Equal Horizontal Columns.
+                 *
+                 * Centers: 0.1, 0.3, 0.5, 0.7, 0.9
+                 *
+                 * We pull the wings (1 & 5) in slightly (to 0.12 and 0.88)
+                 * to ensure markers don't clip the pitch border.
+                 */
+                val xFraction = when (cellX) {
+                    1 -> 0.12f
+                    2 -> 0.31f
+                    3 -> 0.50f
+                    4 -> 0.69f
+                    5 -> 0.88f
+                    else -> 0.50f
+                }
+
+                /*
+                 * 5 Equal Vertical Rows.
+                 *
+                 * Mapped from API row IDs 1-5.
+                 * GK is always at the bottom.
+                 */
+                val yFraction = when (apiRow) {
+                    1 -> 0.90f // Goalkeeper
+                    2 -> 0.72f // Defense
+                    3 -> 0.54f // Midfield
+                    4 -> 0.36f // Attacking Midfield
+                    5 -> 0.18f // Forwards
+                    else -> 0.50f
+                }
+
+                val x = pitchWidth * xFraction
+                val y = pitchHeight * yFraction
+
+                PitchPlayerMarker(
+                    player = player,
+                    x = x,
+                    y = y,
+                    colors = team.colors,
+                    onClick = {
+                        onPlayerClick(
+                            player.playerId
+                        )
+                    }
+                )
+            }
         }
-
     }
-
 }
 
 
 /*
- * Circular player marker.
- *
- * The marker is positioned by its centre
- * rather than its top-left corner.
+ * ---------------------------------------------------------
+ * PLAYER MARKER
+ * ---------------------------------------------------------
  */
-
 @Composable
 private fun PitchPlayerMarker(
 
@@ -585,54 +701,143 @@ private fun PitchPlayerMarker(
 
     y: Float,
 
-    markerColor: androidx.compose.ui.graphics.Color,
-
-    textColor: androidx.compose.ui.graphics.Color,
+    colors: FixtureTeamColorsUiModel?,
 
     onClick: () -> Unit
 
 ) {
 
-    val markerSize =
-        38.dp
+    /*
+     * Goalkeepers use goalkeeper colours.
+     *
+     * If goalkeeper colours aren't available,
+     * fall back to normal player colours.
+     */
+    val playerColors =
+        if (player.position == "G") {
 
-    Box(
+            colors?.goalkeeper
+                ?: colors?.player
+
+        } else {
+
+            colors?.player
+        }
+
+
+    /*
+     * Marker background.
+     */
+    val markerColor =
+        parseHexColor(
+            playerColors?.primary
+        )
+            ?: MaterialTheme
+                .colorScheme
+                .primary
+
+
+    /*
+     * Shirt number colour.
+     */
+    val numberColor =
+        parseHexColor(
+            playerColors?.number
+        )
+            ?: MaterialTheme
+                .colorScheme
+                .onPrimary
+
+
+    /*
+     * Marker border.
+     */
+    val borderColor =
+        parseHexColor(
+            playerColors?.border
+        )
+            ?: markerColor
+
+
+    Column(
 
         modifier =
             Modifier
                 .offset {
 
+                    /*
+                     * The coordinate represents the
+                     * CENTRE of the marker.
+                     *
+                     * Marker size is 30dp, therefore:
+                     *
+                     *     30 / 2 = 15dp
+                     *
+                     * We deliberately calculate this
+                     * from PLAYER_MARKER_SIZE rather
+                     * than hard-coding 15dp.
+                     */
+                    val markerHalfSize =
+                        PLAYER_MARKER_SIZE
+                            .dp
+                            .toPx() /
+                                2f
+
                     IntOffset(
 
                         x =
-                            x.roundToInt() -
-                                    (markerSize.toPx() / 2f)
-                                        .roundToInt(),
+                            (
+                                    x -
+                                            markerHalfSize
+                                    )
+                                .roundToInt(),
 
                         y =
-                            y.roundToInt() -
-                                    (markerSize.toPx() / 2f)
-                                        .roundToInt()
-
+                            (
+                                    y -
+                                            markerHalfSize
+                                    )
+                                .roundToInt()
                     )
+                },
 
-                }
+        horizontalAlignment =
+            Alignment.CenterHorizontally,
 
+        verticalArrangement =
+            Arrangement.spacedBy(
+                2.dp
+            )
     ) {
 
+        /*
+         * Shirt-number circle.
+         */
         Surface(
 
+            onClick =
+                onClick,
+
             modifier =
-                Modifier
-                    .clickable(
-                        onClick = onClick
-                    ),
+                Modifier.size(
+                    PLAYER_MARKER_SIZE.dp
+                ),
 
             shape =
                 CircleShape,
 
             color =
                 markerColor,
+
+            border =
+                BorderStroke(
+
+                    width =
+                        2.dp,
+
+                    color =
+                        borderColor
+                ),
 
             shadowElevation =
                 4.dp
@@ -642,10 +847,7 @@ private fun PitchPlayerMarker(
             Box(
 
                 modifier =
-                    Modifier
-                        .then(
-                            Modifier
-                        ),
+                    Modifier.fillMaxSize(),
 
                 contentAlignment =
                     Alignment.Center
@@ -660,38 +862,64 @@ private fun PitchPlayerMarker(
                             ?: "-",
 
                     color =
-                        textColor,
+                        numberColor,
 
                     style =
                         MaterialTheme
                             .typography
                             .labelLarge
-
                 )
-
             }
-
         }
 
-    }
 
+        /*
+         * Player name.
+         *
+         * Show only the last name to prevent overlapping.
+         */
+        Text(
+
+            text =
+                player.playerName.substringAfterLast(" "),
+
+            color =
+                MaterialTheme
+                    .colorScheme
+                    .onSurface,
+
+            style =
+                MaterialTheme
+                    .typography
+                    .labelSmall,
+
+            maxLines =
+                1
+        )
+    }
 }
 
 
 /*
- * Convert API-Football grid values such as:
+ * ---------------------------------------------------------
+ * GRID PARSER
+ * ---------------------------------------------------------
  *
- *     "1:1"
+ * Converts:
+ *
  *     "2:4"
- *     "3:2"
  *
- * into row / column coordinates.
+ * into:
+ *
+ *     Pair(2, 4)
+ *
+ * where:
+ *
+ *     first  = row
+ *     second = column
  */
-
 private fun parseGrid(
-
     grid: String?
-
 ): Pair<Int, Int>? {
 
     if (grid.isNullOrBlank()) {
@@ -716,73 +944,53 @@ private fun parseGrid(
             ?: return null
 
     return row to column
-
 }
 
 
 /*
- * Convert formation grid coordinates
- * into screen coordinates.
+ * ---------------------------------------------------------
+ * HEX COLOUR PARSER
+ * ---------------------------------------------------------
  *
- * API-Football:
+ * API-Football returns colours such as:
  *
- * Row 1 = Goalkeeper
- * Row 5 = Forward
+ *     ffbb00
+ *     ff0000
+ *     ffffff
  *
- * Our pitch is displayed with the
- * goalkeeper at the bottom.
+ * Android/Compose requires:
+ *
+ *     #ffbb00
  */
+private fun parseHexColor(
+    value: String?
+): Color? {
 
-private fun calculatePlayerPosition(
+    if (value.isNullOrBlank()) {
+        return null
+    }
 
-    row: Int,
+    return try {
 
-    column: Int,
+        val hex =
+            value
+                .trim()
+                .removePrefix("#")
 
-    width: Float,
-
-    height: Float
-
-): Pair<Float, Float> {
-
-    val yFraction =
-        when (row) {
-
-            1 -> 0.84f
-
-            2 -> 0.67f
-
-            3 -> 0.50f
-
-            4 -> 0.32f
-
-            5 -> 0.16f
-
-            else -> 0.50f
-
+        if (hex.length != 6) {
+            return null
         }
 
-    val xFraction =
-        when (column) {
+        Color(
+            android.graphics.Color.parseColor(
+                "#$hex"
+            )
+        )
 
-            1 -> 0.12f
+    } catch (
+        _: IllegalArgumentException
+    ) {
 
-            2 -> 0.37f
-
-            3 -> 0.63f
-
-            4 -> 0.88f
-
-            else -> 0.50f
-
-        }
-
-    return Pair(
-
-        width * xFraction,
-
-        height * yFraction
-
-    )
-
+        null
+    }
 }

@@ -1,5 +1,7 @@
 package com.example.footballapp.ui.navigation
 
+import android.net.Uri
+
 sealed class FootballDestination(
     val route: String
 ) {
@@ -62,15 +64,18 @@ sealed class FootballDestination(
 
     object Clubs :
         FootballDestination(
-            "clubs/{leagueId}/{season}"
+            "clubs/{leagueId}/{season}/{leagueName}"
         ) {
 
         fun createRoute(
             leagueId: Int,
-            season: Int
-        ) = "clubs/$leagueId/$season"
-
+            season: Int,
+            leagueName: String
+        ) =
+            "clubs/$leagueId/$season/${Uri.encode(leagueName)}"
     }
+
+
 
     /**
      * Competition Metadata Debug
@@ -93,15 +98,16 @@ sealed class FootballDestination(
 
     object Club :
         FootballDestination(
-            "club/{leagueId}/{clubId}/{season}"
+            "club/{leagueId}/{clubId}/{season}/{leagueName}"
         ) {
 
         fun createRoute(
             leagueId: Int,
             clubId: Int,
-            season: Int
-        ) = "club/$leagueId/$clubId/$season"
-
+            season: Int,
+            leagueName: String
+        ) =
+            "club/$leagueId/$clubId/$season/${Uri.encode(leagueName)}"
     }
 
     /**

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -23,6 +24,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.example.footballapp.ui.model.FixtureTeamColorsUiModel
@@ -40,6 +43,8 @@ import kotlin.math.roundToInt
  * player-number circle size.
  */
 private const val PLAYER_MARKER_SIZE = 30
+
+private const val PLAYER_LABEL_SLOT_WIDTH = 72
 
 
 @Composable
@@ -99,7 +104,19 @@ fun FormationPitch(
      * -------------------------------------------------
      * GROUP PLAYERS BY ROW
      * -------------------------------------------------
+     *
+     * Identify unique horizontal "lines" to ensure
+     * even vertical distribution.
      */
+    val sortedRows =
+        parsedPlayers
+            .map { it.second.first }
+            .distinct()
+            .sorted()
+
+    val rowCount =
+        sortedRows.size
+
     val rowsOfPlayers =
         parsedPlayers.groupBy {
             it.second.first
@@ -602,73 +619,47 @@ fun FormationPitch(
          * PLAYERS
          * -------------------------------------------------
          *
-         * Position players using a strict 5x5 tactical grid.
+         * Position players from the API grid.
          *
-         * This divides the pitch into 25 equal cells. Players
-         * are assigned to the center of these cells to ensure
-         * perfect spacing and prevent sideline overlap.
+         * API rows define the vertical line. API columns define the
+         * left-to-right order inside that line.
          */
-        rowsOfPlayers.forEach { (apiRow, playersInRow) ->
 
-            val sortedPlayers =
-                playersInRow.sortedBy {
-                    it.second.second
-                }
+        /*
+         * Vertical bounds (Penalty Spot to Penalty Spot).
+         */
+        val bottomY = pitchHeight * 0.895f
+        val topY = pitchHeight * 0.105f
+        val availableHeight = bottomY - topY
+
+        sortedRows.forEachIndexed { lineIndex, apiRow ->
+
+            val playersInLine =
+                rowsOfPlayers[apiRow]
+                    ?.sortedBy { it.second.second }
+                    ?: return@forEachIndexed
 
             val playerCount =
-                sortedPlayers.size
+                playersInLine.size
 
             /*
-             * Map the number of players in this line to specific
-             * horizontal cells (1-5) to maintain tactical symmetry.
+             * Scale Y based on the ordinal line index.
              */
-            val horizontalCells = when (playerCount) {
-                1 -> listOf(3)           // Center cell
-                2 -> listOf(2, 4)        // Adjacent to center (Inside channels)
-                3 -> listOf(2, 3, 4)     // Adjoining cells centered
-                4 -> listOf(1, 2, 4, 5)  // Wingers and inside channels
-                5 -> listOf(1, 2, 3, 4, 5) // Full width
-                else -> List(playerCount) { i -> (i * 4 / (playerCount - 1)) + 1 }
-            }
+            val yProgress =
+                if (rowCount <= 1) 0.5f
+                else lineIndex.toFloat() / (rowCount - 1).toFloat()
 
-            sortedPlayers.forEachIndexed { index, (player, _) ->
+            // Invert so line 0 (GK) is at bottom
+            val y = bottomY - (yProgress * availableHeight)
 
-                val cellX = horizontalCells.getOrElse(index) { 3 }
+            playersInLine.forEachIndexed { index, (player, _) ->
 
-                /*
-                 * 5 Equal Horizontal Columns.
-                 *
-                 * Centers: 0.1, 0.3, 0.5, 0.7, 0.9
-                 *
-                 * We pull the wings (1 & 5) in slightly (to 0.12 and 0.88)
-                 * to ensure markers don't clip the pitch border.
-                 */
-                val xFraction = when (cellX) {
-                    1 -> 0.12f
-                    2 -> 0.31f
-                    3 -> 0.50f
-                    4 -> 0.69f
-                    5 -> 0.88f
-                    else -> 0.50f
-                }
-
-                /*
-                 * 5 Equal Vertical Rows.
-                 *
-                 * Mapped from API row IDs 1-5.
-                 * GK is always at the bottom.
-                 */
-                val yFraction = when (apiRow) {
-                    1 -> 0.90f // Goalkeeper
-                    2 -> 0.72f // Defense
-                    3 -> 0.54f // Midfield
-                    4 -> 0.36f // Attacking Midfield
-                    5 -> 0.18f // Forwards
-                    else -> 0.50f
-                }
-
-                val x = pitchWidth * xFraction
-                val y = pitchHeight * yFraction
+                val x =
+                    xForPlayerInLine(
+                        pitchWidth = pitchWidth,
+                        index = index,
+                        playerCount = playerCount
+                    )
 
                 PitchPlayerMarker(
                     player = player,
@@ -684,6 +675,54 @@ fun FormationPitch(
             }
         }
     }
+}
+
+
+/*
+ * ---------------------------------------------------------
+ * HORIZONTAL LINE POSITIONING
+ * ---------------------------------------------------------
+ *
+ * The API column is used for ordering before this function is called.
+ * The rendered row is then centered on the pitch.
+ */
+private fun xForPlayerInLine(
+    pitchWidth: Float,
+    index: Int,
+    playerCount: Int
+): Float {
+
+    val xFraction =
+        when (playerCount) {
+            1 -> listOf(0.50f)
+            2 -> listOf(0.35f, 0.65f)
+            3 -> listOf(0.25f, 0.50f, 0.75f)
+            4 -> listOf(0.15f, 0.38f, 0.62f, 0.85f)
+            5 -> listOf(0.10f, 0.30f, 0.50f, 0.70f, 0.90f)
+            else -> {
+                val safeCount =
+                    playerCount.coerceAtLeast(1)
+
+                val horizontalPadding =
+                    0.10f
+
+                val availableWidth =
+                    1f - (horizontalPadding * 2f)
+
+                List(safeCount) { i ->
+                    if (safeCount == 1) {
+                        0.50f
+                    } else {
+                        horizontalPadding + ((i.toFloat() / (safeCount - 1)) * availableWidth)
+                    }
+                }
+            }
+        }
+            .getOrElse(index) {
+                0.50f
+            }
+
+    return pitchWidth * xFraction
 }
 
 
@@ -707,195 +746,79 @@ private fun PitchPlayerMarker(
 
 ) {
 
-    /*
-     * Goalkeepers use goalkeeper colours.
-     *
-     * If goalkeeper colours aren't available,
-     * fall back to normal player colours.
-     */
-    val playerColors =
-        if (player.position == "G") {
-
-            colors?.goalkeeper
-                ?: colors?.player
-
-        } else {
-
-            colors?.player
-        }
-
+    // ... (colours logic remains same)
+    val playerColors = if (player.position == "G") colors?.goalkeeper ?: colors?.player else colors?.player
+    val markerColor = parseHexColor(playerColors?.primary) ?: MaterialTheme.colorScheme.primary
+    val numberColor = parseHexColor(playerColors?.number) ?: MaterialTheme.colorScheme.onPrimary
+    val borderColor = parseHexColor(playerColors?.border) ?: markerColor
 
     /*
-     * Marker background.
+     * To ensure perfect centering regardless of name length,
+     * we position the center of the marker at (x, y).
      */
-    val markerColor =
-        parseHexColor(
-            playerColors?.primary
-        )
-            ?: MaterialTheme
-                .colorScheme
-                .primary
+    Box(
+        modifier = Modifier
+            .offset {
 
+                val halfSlotWidth =
+                    (PLAYER_LABEL_SLOT_WIDTH.dp.toPx() / 2f).roundToInt()
 
-    /*
-     * Shirt number colour.
-     */
-    val numberColor =
-        parseHexColor(
-            playerColors?.number
-        )
-            ?: MaterialTheme
-                .colorScheme
-                .onPrimary
+                val halfMarkerHeight =
+                    (PLAYER_MARKER_SIZE.dp.toPx() / 2f).roundToInt()
 
-
-    /*
-     * Marker border.
-     */
-    val borderColor =
-        parseHexColor(
-            playerColors?.border
-        )
-            ?: markerColor
-
-
-    Column(
-
-        modifier =
-            Modifier
-                .offset {
-
-                    /*
-                     * The coordinate represents the
-                     * CENTRE of the marker.
-                     *
-                     * Marker size is 30dp, therefore:
-                     *
-                     *     30 / 2 = 15dp
-                     *
-                     * We deliberately calculate this
-                     * from PLAYER_MARKER_SIZE rather
-                     * than hard-coding 15dp.
-                     */
-                    val markerHalfSize =
-                        PLAYER_MARKER_SIZE
-                            .dp
-                            .toPx() /
-                                2f
-
-                    IntOffset(
-
-                        x =
-                            (
-                                    x -
-                                            markerHalfSize
-                                    )
-                                .roundToInt(),
-
-                        y =
-                            (
-                                    y -
-                                            markerHalfSize
-                                    )
-                                .roundToInt()
-                    )
-                },
-
-        horizontalAlignment =
-            Alignment.CenterHorizontally,
-
-        verticalArrangement =
-            Arrangement.spacedBy(
-                2.dp
-            )
-    ) {
-
-        /*
-         * Shirt-number circle.
-         */
-        Surface(
-
-            onClick =
-                onClick,
-
-            modifier =
-                Modifier.size(
-                    PLAYER_MARKER_SIZE.dp
-                ),
-
-            shape =
-                CircleShape,
-
-            color =
-                markerColor,
-
-            border =
-                BorderStroke(
-
-                    width =
-                        2.dp,
-
-                    color =
-                        borderColor
-                ),
-
-            shadowElevation =
-                4.dp
-
-        ) {
-
-            Box(
-
-                modifier =
-                    Modifier.fillMaxSize(),
-
-                contentAlignment =
-                    Alignment.Center
-
-            ) {
-
-                Text(
-
-                    text =
-                        player.shirtNumber
-                            ?.toString()
-                            ?: "-",
-
-                    color =
-                        numberColor,
-
-                    style =
-                        MaterialTheme
-                            .typography
-                            .labelLarge
+                IntOffset(
+                    x = x.roundToInt() - halfSlotWidth,
+                    y = y.roundToInt() - halfMarkerHeight
                 )
             }
+            .width(PLAYER_LABEL_SLOT_WIDTH.dp),
+        contentAlignment = Alignment.TopCenter
+    ) {
+
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+
+            /*
+             * Shirt-number circle.
+             */
+            Surface(
+                onClick = onClick,
+                modifier = Modifier.size(PLAYER_MARKER_SIZE.dp),
+                shape = CircleShape,
+                color = markerColor,
+                border = BorderStroke(width = 2.dp, color = borderColor),
+                shadowElevation = 4.dp
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = player.shirtNumber?.toString() ?: "-",
+                        color = numberColor,
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                }
+            }
+
+            /*
+             * Player name.
+             *
+             * Positioned directly below the circle.
+             */
+            Text(
+                text = player.playerName.substringAfterLast(" "),
+                modifier = Modifier.fillMaxWidth(),
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.labelSmall,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Center
+            )
         }
-
-
-        /*
-         * Player name.
-         *
-         * Show only the last name to prevent overlapping.
-         */
-        Text(
-
-            text =
-                player.playerName.substringAfterLast(" "),
-
-            color =
-                MaterialTheme
-                    .colorScheme
-                    .onSurface,
-
-            style =
-                MaterialTheme
-                    .typography
-                    .labelSmall,
-
-            maxLines =
-                1
-        )
     }
 }
 

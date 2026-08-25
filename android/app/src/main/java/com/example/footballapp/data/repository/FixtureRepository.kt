@@ -75,16 +75,48 @@ class FixtureRepository {
      * Get fixture lineups.
      */
 
+//    suspend fun getFixtureLineup(
+//        fixtureId: Long
+//    ): FixtureLineupUiModel {
+//
+//        return service
+//            .getFixtureLineup(
+//                fixtureId
+//            )
+//            .toUiModel()
+//
+//    }
     suspend fun getFixtureLineup(
         fixtureId: Long
     ): FixtureLineupUiModel {
 
-        return service
-            .getFixtureLineup(
+        val dto =
+            service.getFixtureLineup(
                 fixtureId
             )
-            .toUiModel()
 
+        android.util.Log.d(
+            "FixtureRepository",
+            "DTO teams: ${dto.teams.size}"
+        )
+
+        dto.teams.forEach { team ->
+
+            android.util.Log.d(
+                "FixtureRepository",
+                "DTO team: ${team.teamId} ${team.teamName}, players=${team.players.size}"
+            )
+        }
+
+        val uiModel =
+            dto.toUiModel()
+
+        android.util.Log.d(
+            "FixtureRepository",
+            "UI teams: ${uiModel.teams.size}"
+        )
+
+        return uiModel
     }
 
 }

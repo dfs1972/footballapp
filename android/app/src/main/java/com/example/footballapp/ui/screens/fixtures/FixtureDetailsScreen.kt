@@ -182,9 +182,7 @@ fun FixtureDetailsScreen(
                     onPlayerClick = onPlayerClick
 
                 )
-
             }
-
         }
 
     }

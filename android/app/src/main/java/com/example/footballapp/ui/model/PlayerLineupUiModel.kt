@@ -6,7 +6,7 @@ data class PlayerLineupUiModel(
     val playerName: String,
     val photo: String?,
     val shirtNumber: Int?,
-    val position: String,
+    val position: String?,
     val grid: String?,
     val starting: Boolean,
     val displayOrder: Int

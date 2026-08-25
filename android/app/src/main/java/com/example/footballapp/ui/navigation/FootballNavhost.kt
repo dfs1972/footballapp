@@ -808,10 +808,17 @@ fun FootballNavHost(
 
                     onPlayerClick = { playerId ->
 
-                        // Player navigation later.
+                        navController.navigate(
 
+                            FootballDestination
+                                .PlayerDetails
+                                .createRoute(
+                                    leagueId = leagueId,
+                                    playerId = playerId,
+                                    season = season
+                                )
+                        )
                     }
-
                 )
             }
         }

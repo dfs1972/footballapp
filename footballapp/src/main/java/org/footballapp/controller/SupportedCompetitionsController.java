@@ -19,11 +19,13 @@ public class SupportedCompetitionsController {
 
     @GetMapping("/league/{leagueId}")
     public LeaguesApiResponse getLeague(
-            @PathVariable int leagueId
+            @PathVariable int leagueId,
+            @PathVariable int season
     ) throws Exception {
 
         return footballDataProvider.getLeague(
-                leagueId
+                leagueId,
+                season
         );
     }
 }

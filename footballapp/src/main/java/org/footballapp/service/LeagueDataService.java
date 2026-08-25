@@ -783,7 +783,8 @@ public class LeagueDataService {
 
         LeaguesApiResponse leagueResponse =
                 footballDataProvider.getLeague(
-                        leagueId
+                        leagueId,
+                        season
                 );
 
         overview.setLeagueName(

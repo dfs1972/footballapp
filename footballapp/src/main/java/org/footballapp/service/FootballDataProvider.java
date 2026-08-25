@@ -18,7 +18,8 @@ public interface FootballDataProvider {
             throws Exception;
 
     LeaguesApiResponse getLeague(
-            int leagueId
+            int leagueId,
+            int season
     ) throws Exception;
 
     LeaguesApiResponse getLeagues(

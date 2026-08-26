@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,19 +32,21 @@ fun CompetitionsScreen(
 
     selectedSeason: Int,
 
+    isLoading: Boolean,
+
+    error: String?,
+
     onSeasonSelected: (Int) -> Unit,
 
     onCountrySelected: (
         CountryUiModel,
         Int
-    ) -> Unit = { _, _ -> },
+    ) -> Unit,
 
     onCompetitionSelected: (
         Int,
         Int
-    ) -> Unit = { _, _ -> },
-
-    onLeagueExplorerClick: () -> Unit = {}
+    ) -> Unit
 
 ) {
 
@@ -146,33 +150,72 @@ fun CompetitionsScreen(
             )
 
             AnimatedVisibility(
-
                 visible =
                     expandedCountry ==
                             country.name
-
             ) {
 
                 Column {
 
-                    competitions.forEach { competition ->
+                    when {
 
-                        CompetitionRow(
+                        isLoading -> {
 
-                            competition = competition,
+                            Text(
+                                text = "Loading competitions...",
+                                color =
+                                    MaterialTheme.colorScheme.onSurface
+                            )
 
-                            onClick = {
+                        }
 
-                                onCompetitionSelected(
-                                    competition.id,
-                                    selectedSeason
+                        error != null -> {
+
+                            Text(
+                                text = "Unable to load competitions.",
+                                color =
+                                    MaterialTheme.colorScheme.onSurface
+                            )
+
+                        }
+
+                        competitions.isEmpty() -> {
+
+                            Text(
+                                text =
+                                    "No competitions available " +
+                                            "for the " +
+                                            "$selectedSeason season.",
+
+                                color =
+                                    MaterialTheme.colorScheme.onSurface
+                            )
+
+                        }
+
+                        else -> {
+
+                            competitions.forEach { competition ->
+
+                                CompetitionRow(
+                                    competition = competition,
+
+                                    onClick = {
+
+                                        onCompetitionSelected(
+                                            competition.id,
+                                            selectedSeason
+                                        )
+
+                                    }
                                 )
 
                             }
 
-                        )
+                        }
                     }
                 }
+
             }
         }
     }

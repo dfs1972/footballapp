@@ -1,6 +1,5 @@
 package org.footballapp.controller;
 
-import org.footballapp.model.fixtures.CompetitionStage;
 import org.footballapp.model.standings.LeagueTableGroup;
 import org.footballapp.model.standings.StandingsApiResponse;
 import org.footballapp.service.CompetitionMetadataService;
@@ -42,18 +41,6 @@ public class DevelopmentController {
                         leagueId,
                         season
                 );
-    }
-
-    @GetMapping("/competition/{leagueId}/{season}/stages")
-    public List<CompetitionStage> getCompetitionStages(
-            @PathVariable int leagueId,
-            @PathVariable int season
-    ) throws Exception {
-
-        return competitionMetadataService.getCompetitionStages(
-                leagueId,
-                season
-        );
     }
 
     @GetMapping("/competition/{leagueId}/{season}/standings-raw")

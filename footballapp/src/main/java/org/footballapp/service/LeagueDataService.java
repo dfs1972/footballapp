@@ -799,26 +799,6 @@ public class LeagueDataService {
                 season
         );
 
-        overview.setTeamCount(
-                footballDataProvider
-                        .getTeams(
-                                leagueId,
-                                season
-                        )
-                        .getResponse()
-                        .size()
-        );
-
-        overview.setFixtureCount(
-                footballDataProvider
-                        .getFixtures(
-                                leagueId,
-                                season
-                        )
-                        .getResponse()
-                        .size()
-        );
-
         return overview;
     } // End of getLeagueOverview()
 

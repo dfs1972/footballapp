@@ -67,6 +67,12 @@ fun FootballNavHost(
             val competitions by
             competitionViewModel.competitions.collectAsState()
 
+            val competitionLoading by
+            competitionViewModel.isLoading.collectAsState()
+
+            val competitionError by
+            competitionViewModel.error.collectAsState()
+
             val currentSeason =
                 Calendar
                     .getInstance()
@@ -89,6 +95,10 @@ fun FootballNavHost(
                 currentSeason = currentSeason,
 
                 selectedSeason = selectedSeason,
+
+                isLoading = competitionLoading,
+
+                error = competitionError,
 
                 onSeasonSelected = { season ->
 
@@ -122,10 +132,6 @@ fun FootballNavHost(
                     )
 
                 },
-
-                onLeagueExplorerClick = {
-                    // Existing navigation/action.
-                }
 
             )
         }
@@ -186,35 +192,6 @@ fun FootballNavHost(
                                     leagueId,
                                     season
                                 )
-                        )
-                    },
-
-                    onFixturesClick = {
-
-                        navController.navigate(
-
-                            FootballDestination
-                                .Fixtures
-                                .createRoute(
-                                    leagueId,
-                                    season
-                                )
-
-                        )
-                    },
-
-                    onClubsClick = {
-
-                        navController.navigate(
-
-                            FootballDestination
-                                .Clubs
-                                .createRoute(
-                                    leagueId = leagueId,
-                                    season = season,
-                                    leagueName = overview.leagueName
-                                )
-
                         )
                     },
 

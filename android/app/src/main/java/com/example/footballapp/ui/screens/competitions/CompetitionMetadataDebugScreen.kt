@@ -65,21 +65,6 @@ fun CompetitionMetadataDebugScreen(
 
             val data = metadata!!
 
-            Text("Stages: ${data.stages.size}")
-
-            data.stages.forEach { stage ->
-
-                Text(
-                    text =
-                        "${stage.name}: " +
-                                "${stage.rounds.size} rounds"
-                )
-            }
-
-            Spacer(
-                modifier = Modifier.height(16.dp)
-            )
-
             Text(
                 text =
                     "Current round: " +

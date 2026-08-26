@@ -16,18 +16,12 @@ fun LeagueOverviewDto.toUiModel(): LeagueOverviewUiModel {
         leagueId = leagueId,
 
         leagueName = LeagueNameFormatter.displayName(
-
             leagueId,
-
             leagueName
         ),
 
-        season = "$season/${(season + 1).toString().takeLast(2)}",
-
-        teamCount = teamCount,
-
-        fixtureCount = fixtureCount
+        season =
+            "$season/${(season + 1).toString().takeLast(2)}"
 
     )
-
 }

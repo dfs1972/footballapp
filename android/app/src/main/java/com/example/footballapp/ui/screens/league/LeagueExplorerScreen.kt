@@ -185,16 +185,6 @@ fun LeagueExplorerScreen(
                         "Season: ${league.season}"
                 )
 
-                Text(
-                    text =
-                        "Teams: ${league.teamCount}"
-                )
-
-                Text(
-                    text =
-                        "Fixtures: ${league.fixtureCount}"
-                )
-
                 Spacer(
                     modifier =
                         Modifier.height(6.dp)

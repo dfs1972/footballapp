@@ -11,7 +11,6 @@ import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.TopStandingsCard
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.design.Strings
-//import com.example.footballapp.ui.model.CompetitionStageUiModel
 import com.example.footballapp.ui.model.LeagueOverviewUiModel
 import com.example.footballapp.ui.model.LeagueTableGroupUiModel
 
@@ -25,10 +24,6 @@ fun LeagueOverviewScreen(
     onLeagueTableClick: () -> Unit = {},
 
     topStandings: List<LeagueTableGroupUiModel>,
-
-    onFixturesClick: () -> Unit = {},
-
-    onClubsClick: () -> Unit = {},
 
     onClubClick: (Int) -> Unit = {}
 
@@ -93,40 +88,6 @@ fun LeagueOverviewScreen(
 
                 onClick =
                     onLeagueTableClick
-
-            )
-
-        }
-
-        item {
-
-            NavigationCard(
-
-                title =
-                    Strings.FIXTURES,
-
-                subtitle =
-                    Strings.UPCOMING_FIXTURES,
-
-                onClick =
-                    onFixturesClick
-
-            )
-
-        }
-
-        item {
-
-            NavigationCard(
-
-                title =
-                    Strings.CLUBS,
-
-                subtitle =
-                    Strings.BROWSE_ALL_CLUBS,
-
-                onClick =
-                    onClubsClick
 
             )
 

@@ -11,6 +11,7 @@ import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.TopStandingsCard
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.design.Strings
+import com.example.footballapp.ui.model.CountryUiModel
 import com.example.footballapp.ui.model.LeagueOverviewUiModel
 import com.example.footballapp.ui.model.LeagueTableGroupUiModel
 
@@ -23,13 +24,39 @@ fun LeagueOverviewScreen(
 
     onLeagueTableClick: () -> Unit = {},
 
-    topStandings: List<LeagueTableGroupUiModel>,
+    topStandings:
+    List<LeagueTableGroupUiModel>,
 
-    onClubClick: (Int) -> Unit = {}
+    onClubClick:
+        (Int) -> Unit = {},
+
+    searchQuery: String = "",
+
+    onSearchQueryChange:
+        (String) -> Unit = {},
+
+    searchResults:
+    List<CountryUiModel> = emptyList(),
+
+    onSearchResultClick:
+        (CountryUiModel) -> Unit = {}
 
 ) {
 
-    ScreenScaffold {
+    ScreenScaffold(
+
+        searchQuery = searchQuery,
+
+        onSearchQueryChange =
+            onSearchQueryChange,
+
+        searchResults =
+            searchResults,
+
+        onSearchResultClick =
+            onSearchResultClick
+
+    ) {
 
         item {
 

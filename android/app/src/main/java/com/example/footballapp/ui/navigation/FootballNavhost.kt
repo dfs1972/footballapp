@@ -9,8 +9,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import com.example.footballapp.ui.model.CountryUiModel
 
 import java.util.Calendar
 
@@ -43,6 +45,32 @@ fun FootballNavHost(
     navController: NavHostController,
     startDestination: String
 ) {
+
+    var searchQuery by rememberSaveable {
+        mutableStateOf("")
+    }
+
+    var pendingSearchCountry by remember {
+        mutableStateOf<CountryUiModel?>(null)
+    }
+
+    val countryViewModel: CountryViewModel =
+        viewModel()
+
+    val countries by
+    countryViewModel.countries.collectAsState()
+
+    val searchResults =
+        if (searchQuery.isBlank()) {
+            emptyList()
+        } else {
+            countries.filter { country ->
+                country.name.contains(
+                    searchQuery,
+                    ignoreCase = true
+                )
+            }
+        }
 
     NavHost(
         navController = navController,
@@ -78,9 +106,8 @@ fun FootballNavHost(
                     .getInstance()
                     .get(Calendar.YEAR)
 
-            var searchQuery by rememberSaveable {
-                mutableStateOf("")
-            }
+            val initialCountry =
+                pendingSearchCountry
 
             CompetitionsScreen(
 
@@ -99,6 +126,9 @@ fun FootballNavHost(
                 onSearchQueryChange = {
                     searchQuery = it
                 },
+
+                initialCountry =
+                    pendingSearchCountry,
 
                 onCountrySelected = { country, season ->
 
@@ -177,9 +207,7 @@ fun FootballNavHost(
                         uiState.topStandings,
 
                     onLeagueTableClick = {
-
                         navController.navigate(
-
                             FootballDestination
                                 .LeagueTable
                                 .createRoute(
@@ -192,16 +220,36 @@ fun FootballNavHost(
                     onClubClick = { clubId ->
 
                         navController.navigate(
-
                             FootballDestination
                                 .Club
                                 .createRoute(
                                     leagueId = leagueId,
                                     clubId = clubId,
                                     season = season,
-                                    leagueName = overview.leagueName
+                                    leagueName =
+                                        overview.leagueName
                                 )
+                        )
+                    },
 
+                    searchQuery = searchQuery,
+
+                    onSearchQueryChange = {
+                        searchQuery = it
+                    },
+
+                    searchResults = searchResults,
+
+                    onSearchResultClick = { country ->
+
+                        pendingSearchCountry = country
+
+                        searchQuery = ""
+
+                        navController.navigate(
+                            FootballDestination
+                                .Competitions
+                                .route
                         )
                     }
                 )

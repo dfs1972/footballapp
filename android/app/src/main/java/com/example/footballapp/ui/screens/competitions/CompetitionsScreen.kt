@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -37,6 +38,8 @@ fun CompetitionsScreen(
 
     onSearchQueryChange: (String) -> Unit,
 
+    initialCountry: CountryUiModel? = null,
+
     onCountrySelected: (
         CountryUiModel,
         Int
@@ -50,9 +53,20 @@ fun CompetitionsScreen(
 ) {
 
     var expandedCountry by rememberSaveable {
+        mutableStateOf(
+            initialCountry?.name
+        )
+    }
 
-        mutableStateOf<String?>(null)
+    LaunchedEffect(initialCountry) {
 
+        if (initialCountry != null) {
+
+            onCountrySelected(
+                initialCountry,
+                currentSeason
+            )
+        }
     }
 
     val sortedCountries =

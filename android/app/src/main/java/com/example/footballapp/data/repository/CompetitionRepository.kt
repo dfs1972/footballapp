@@ -22,7 +22,7 @@ class CompetitionRepository {
         )
     }
 
-    suspend fun getLeaguesByCountry(
+    suspend fun getFeaturedLeagues(
         country: String,
         season: Int
     ): List<LeagueApiResponseDto> {
@@ -30,7 +30,7 @@ class CompetitionRepository {
         val response =
             FootballApiClient
                 .service
-                .getLeaguesByCountry(
+                .getFeaturedLeagues(
                     country = country,
                     season = season
                 )
@@ -38,14 +38,14 @@ class CompetitionRepository {
         if (!response.isSuccessful) {
 
             throw Exception(
-                "Failed to load competitions " +
+                "Failed to load featured competitions " +
                         "(HTTP ${response.code()})"
             )
         }
 
         return response.body()
             ?: throw Exception(
-                "Competitions response was empty."
+                "Featured competitions response was empty."
             )
     }
 }

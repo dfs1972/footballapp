@@ -28,12 +28,19 @@ fun ScreenScaffold(
 
     onBackClick: (() -> Unit)? = null,
 
-    backgroundContent: (@Composable BoxScope.() -> Unit)? = null,
+    backgroundContent:
+    (@Composable BoxScope.() -> Unit)? = null,
 
-    listState: LazyListState = rememberLazyListState(),
+    listState: LazyListState =
+        rememberLazyListState(),
 
-    content: LazyListScope.() -> Unit
+    searchQuery: String = "",
 
+    onSearchQueryChange:
+        (String) -> Unit = {},
+
+    content:
+    LazyListScope.() -> Unit
 ) {
 
     Box(
@@ -90,6 +97,11 @@ fun ScreenScaffold(
          */
 
         AppHeader(
+
+            searchQuery = searchQuery,
+
+            onSearchQueryChange =
+                onSearchQueryChange
 
         )
 

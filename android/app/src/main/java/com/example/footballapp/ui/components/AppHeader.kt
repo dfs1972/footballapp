@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SearchBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,7 +25,11 @@ fun AppHeader(
     modifier: Modifier = Modifier,
 
     backgroundColor: Color =
-        MaterialTheme.colorScheme.primary
+        MaterialTheme.colorScheme.primary,
+
+    searchQuery: String = "",
+
+    onSearchQueryChange: (String) -> Unit = {}
 
 ) {
 
@@ -59,10 +64,15 @@ fun AppHeader(
                 )
             )
 
-            SearchBarPlaceholder(
+            SearchBar(
 
                 modifier =
-                    Modifier.weight(1f)
+                    Modifier.weight(1f),
+
+                query = searchQuery,
+
+                onQueryChange =
+                    onSearchQueryChange
 
             )
 

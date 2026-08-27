@@ -19,7 +19,6 @@ import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.model.CompetitionUiModel
 import com.example.footballapp.ui.model.CountryUiModel
-import com.example.footballapp.ui.components.SeasonSelector
 
 @Composable
 fun CompetitionsScreen(
@@ -30,13 +29,13 @@ fun CompetitionsScreen(
 
     currentSeason: Int,
 
-    selectedSeason: Int,
-
     isLoading: Boolean,
 
     error: String?,
 
-    onSeasonSelected: (Int) -> Unit,
+    searchQuery: String,
+
+    onSearchQueryChange: (String) -> Unit,
 
     onCountrySelected: (
         CountryUiModel,
@@ -56,12 +55,6 @@ fun CompetitionsScreen(
 
     }
 
-    var seasonSelectorExpanded by rememberSaveable {
-
-        mutableStateOf(false)
-
-    }
-
     val sortedCountries =
         countries
             .filter {
@@ -71,36 +64,35 @@ fun CompetitionsScreen(
                 it.name.lowercase()
             }
 
-    ScreenScaffold {
+    val filteredCountries =
+        if (searchQuery.isBlank()) {
+
+            sortedCountries
+
+        } else {
+
+            sortedCountries.filter { country ->
+
+                country.name.contains(
+                    searchQuery,
+                    ignoreCase = true
+                )
+
+            }
+
+        }
+
+    ScreenScaffold(
+
+            searchQuery = searchQuery,
+
+    onSearchQueryChange =
+        onSearchQueryChange
+
+    ) {
 
         item {
 
-            SeasonSelector(
-
-                selectedSeason = selectedSeason,
-
-                currentSeason = currentSeason,
-
-                expanded = seasonSelectorExpanded,
-
-                onClick = {
-
-                    seasonSelectorExpanded =
-                        !seasonSelectorExpanded
-
-                },
-
-                onSeasonSelected = { season ->
-
-                    onSeasonSelected(season)
-
-                    seasonSelectorExpanded = false
-
-                    expandedCountry = null
-
-                }
-
-            )
             Spacer(
                 modifier = Modifier.height(
                     AppSpacing.Medium
@@ -108,8 +100,27 @@ fun CompetitionsScreen(
             )
         }
 
+        if (
+            searchQuery.isNotBlank()
+            && filteredCountries.isEmpty()
+        ) {
+
+            item {
+
+                Text(
+                    text = "No countries found.",
+                    color =
+                        MaterialTheme
+                            .colorScheme
+                            .onSurface
+                )
+
+            }
+
+        }
+
         items(
-            items = sortedCountries,
+            items = filteredCountries,
             key = { country ->
                 country.code ?: country.name
             }
@@ -142,7 +153,7 @@ fun CompetitionsScreen(
 
                         onCountrySelected(
                             country,
-                            selectedSeason
+                           currentSeason
                         )
 
                     }
@@ -185,7 +196,7 @@ fun CompetitionsScreen(
                                 text =
                                     "No competitions available " +
                                             "for the " +
-                                            "$selectedSeason season.",
+                                            "$currentSeason season.",
 
                                 color =
                                     MaterialTheme.colorScheme.onSurface
@@ -204,7 +215,7 @@ fun CompetitionsScreen(
 
                                         onCompetitionSelected(
                                             competition.id,
-                                            selectedSeason
+                                            currentSeason
                                         )
 
                                     }

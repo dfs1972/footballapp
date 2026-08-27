@@ -8,10 +8,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.compose.runtime.collectAsState
-
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+
 import java.util.Calendar
 
 import com.example.footballapp.ui.screens.club.ClubScreen
@@ -78,12 +78,8 @@ fun FootballNavHost(
                     .getInstance()
                     .get(Calendar.YEAR)
 
-            var selectedSeason by rememberSaveable {
-
-                mutableIntStateOf(
-                    currentSeason
-                )
-
+            var searchQuery by rememberSaveable {
+                mutableStateOf("")
             }
 
             CompetitionsScreen(
@@ -94,16 +90,14 @@ fun FootballNavHost(
 
                 currentSeason = currentSeason,
 
-                selectedSeason = selectedSeason,
-
                 isLoading = competitionLoading,
 
                 error = competitionError,
 
-                onSeasonSelected = { season ->
+                searchQuery = searchQuery,
 
-                    selectedSeason = season
-
+                onSearchQueryChange = {
+                    searchQuery = it
                 },
 
                 onCountrySelected = { country, season ->
@@ -131,7 +125,7 @@ fun FootballNavHost(
 
                     )
 
-                },
+                }
 
             )
         }

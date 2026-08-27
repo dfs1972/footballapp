@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -40,6 +41,8 @@ fun CompetitionsScreen(
 
     initialCountry: CountryUiModel? = null,
 
+    onInitialCountryConsumed: () -> Unit = {},
+
     onCountrySelected: (
         CountryUiModel,
         Int
@@ -52,20 +55,26 @@ fun CompetitionsScreen(
 
 ) {
 
-    var expandedCountry by rememberSaveable {
-        mutableStateOf(
-            initialCountry?.name
-        )
+    var expandedCountry by remember {
+        mutableStateOf<String?>(null)
+    }
+
+    var initialSearchCountry by remember {
+        mutableStateOf(initialCountry)
     }
 
     LaunchedEffect(initialCountry) {
 
         if (initialCountry != null) {
 
+            expandedCountry = initialCountry.name
+
             onCountrySelected(
                 initialCountry,
                 currentSeason
             )
+
+            onInitialCountryConsumed()
         }
     }
 
@@ -79,23 +88,24 @@ fun CompetitionsScreen(
             }
 
     val filteredCountries =
-        if (searchQuery.isBlank()) {
-
-            sortedCountries
-
-        } else {
-
-            sortedCountries.filter { country ->
-
-                country.name.contains(
-                    searchQuery,
-                    ignoreCase = true
-                )
-
+        when {
+            initialSearchCountry != null -> {
+                listOfNotNull(initialSearchCountry)
             }
 
-        }
+            searchQuery.isBlank() -> {
+                sortedCountries
+            }
 
+            else -> {
+                sortedCountries.filter { country ->
+                    country.name.contains(
+                        searchQuery,
+                        ignoreCase = true
+                    )
+                }
+            }
+        }
     ScreenScaffold(
 
             searchQuery = searchQuery,

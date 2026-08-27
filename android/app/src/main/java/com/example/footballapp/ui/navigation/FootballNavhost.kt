@@ -1,5 +1,6 @@
 package com.example.footballapp.ui.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -130,6 +131,10 @@ fun FootballNavHost(
                 initialCountry =
                     pendingSearchCountry,
 
+                onInitialCountryConsumed = {
+                    pendingSearchCountry = null
+                },
+
                 onCountrySelected = { country, season ->
 
                     competitionViewModel.loadCompetitions(
@@ -144,17 +149,16 @@ fun FootballNavHost(
 
                 onCompetitionSelected = { leagueId, season ->
 
-                    navController.navigate(
+                    searchQuery = ""
 
+                    navController.navigate(
                         FootballDestination
                             .LeagueOverview
                             .createRoute(
                                 leagueId,
                                 season
                             )
-
                     )
-
                 }
 
             )
@@ -242,8 +246,12 @@ fun FootballNavHost(
 
                     onSearchResultClick = { country ->
 
-                        pendingSearchCountry = country
+                        Log.d(
+                            "FootballNavHost",
+                            "Global search selected: ${country.name}"
+                        )
 
+                        pendingSearchCountry = country
                         searchQuery = ""
 
                         navController.navigate(

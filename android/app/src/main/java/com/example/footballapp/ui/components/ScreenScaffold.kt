@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -111,10 +112,12 @@ fun ScreenScaffold(
 
         )
 
-        SearchResultsOverlay(
-            results = searchResults,
-            onResultClick = onSearchResultClick
-        )
+        if (searchQuery.isNotBlank()) {
+            SearchResultsOverlay(
+                results = searchResults,
+                onResultClick = onSearchResultClick
+            )
+        }
 
     }
 

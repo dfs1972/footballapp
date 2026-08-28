@@ -59,6 +59,12 @@ class PlayerDetailsViewModel : ViewModel() {
 
             } catch (e: Exception) {
 
+                e.printStackTrace()
+
+                println(
+                    ">>> PlayerDetailsViewModel error: ${e.message}"
+                )
+
                 _uiState.value =
 
                     PlayerDetailsUiState(

@@ -44,12 +44,32 @@ public class PlayerDetailsMapper {
                 response.getPlayer();
 
         PlayerStatistics statistics = null;
+        PlayerStatistics fallbackStatistics = null;
 
         if (response.getStatistics() != null) {
 
             for (PlayerStatistics playerStatistics
                     : response.getStatistics()) {
 
+                if (playerStatistics == null) {
+                    continue;
+                }
+
+                /*
+                 * Keep the first available statistics record as a fallback.
+                 *
+                 * This can provide useful squad information such as
+                 * position and shirt number even when the requested
+                 * league has no statistics for this player.
+                 */
+                if (fallbackStatistics == null) {
+                    fallbackStatistics = playerStatistics;
+                }
+
+                /*
+                 * Prefer statistics belonging to the requested
+                 * league and season.
+                 */
                 if (playerStatistics.getLeague() == null) {
                     continue;
                 }
@@ -60,9 +80,7 @@ public class PlayerDetailsMapper {
                     statistics = playerStatistics;
                     break;
                 }
-
             }
-
         }
 
         PlayerDetails details =
@@ -123,62 +141,103 @@ public class PlayerDetailsMapper {
                 player.getPhotoUrl()
         );
 
-        if (statistics != null) {
+        /*
+         * Use the requested league statistics when available.
+         *
+         * If they are not available, use a fallback statistics
+         * record only for player/squad information such as
+         * position, shirt number and club.
+         */
+        PlayerStatistics squadStatistics =
+                statistics != null
+                        ? statistics
+                        : fallbackStatistics;
 
-            details.setPosition(
-                    statistics.getGames().getPosition()
-            );
+        if (squadStatistics != null) {
 
-            details.setShirtNumber(
-                    statistics.getGames().getNumber()
-            );
+            /*
+             * Squad/player information.
+             *
+             * These values can still be useful when the player
+             * has no statistics for the requested league.
+             */
+            if (squadStatistics.getGames() != null) {
 
-            details.setCaptain(
-                    statistics.getGames().getCaptain()
-            );
+                details.setPosition(
+                        squadStatistics.getGames().getPosition()
+                );
 
-            details.setStarts(
-                    statistics.getGames().getLineups()
-            );
+                details.setShirtNumber(
+                        squadStatistics.getGames().getNumber()
+                );
 
-            details.setAppearances(
-                    statistics.getGames().getAppearances()
-            );
+                details.setCaptain(
+                        squadStatistics.getGames().getCaptain()
+                );
+            }
 
-            details.setMinutes(
-                    statistics.getGames().getMinutes()
-            );
-
-            details.setGoals(
-                    statistics.getGoals().getTotal()
-            );
-
-            details.setAssists(
-                    statistics.getGoals().getAssists()
-            );
-
-            details.setYellowCards(
-                    statistics.getCards().getYellow()
-            );
-
-            details.setRedCards(
-                    statistics.getCards().getRed()
-            );
-
-            details.setRating(
-                    statistics.getGames().getRating()
-            );
-
-            if (statistics.getTeam() != null) {
+            /*
+             * Team information.
+             */
+            if (squadStatistics.getTeam() != null) {
 
                 details.setTeamId(
-                        statistics.getTeam().getTeamId()
+                        squadStatistics.getTeam().getTeamId()
                 );
 
                 details.setTeamName(
-                        statistics.getTeam().getName()
+                        squadStatistics.getTeam().getName()
+                );
+            }
+        }
+
+        /*
+         * Only populate statistics when they actually belong
+         * to the requested league and season.
+         *
+         * Otherwise these remain null and Android displays N/A.
+         */
+        if (statistics != null) {
+
+            if (statistics.getGames() != null) {
+
+                details.setStarts(
+                        statistics.getGames().getLineups()
                 );
 
+                details.setAppearances(
+                        statistics.getGames().getAppearances()
+                );
+
+                details.setMinutes(
+                        statistics.getGames().getMinutes()
+                );
+
+                details.setRating(
+                        statistics.getGames().getRating()
+                );
+            }
+
+            if (statistics.getGoals() != null) {
+
+                details.setGoals(
+                        statistics.getGoals().getTotal()
+                );
+
+                details.setAssists(
+                        statistics.getGoals().getAssists()
+                );
+            }
+
+            if (statistics.getCards() != null) {
+
+                details.setYellowCards(
+                        statistics.getCards().getYellow()
+                );
+
+                details.setRedCards(
+                        statistics.getCards().getRed()
+                );
             }
 
             if (statistics.getLeague() != null) {
@@ -191,12 +250,10 @@ public class PlayerDetailsMapper {
                         statistics.getLeague().getName()
                 );
 
+                details.setSeason(
+                        statistics.getLeague().getSeason()
+                );
             }
-
-            details.setSeason(
-                    statistics.getLeague().getSeason()
-            );
-
         }
 
         System.out.println(

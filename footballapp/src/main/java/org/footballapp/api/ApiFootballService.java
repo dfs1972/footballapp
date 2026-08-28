@@ -335,6 +335,24 @@ public class ApiFootballService implements FootballDataProvider {
         );
     }
 
+    @Override
+    public PlayersApiResponse getPlayer(
+            int playerId,
+            int season
+    ) throws Exception {
+
+        String json =
+                getPlayerJson(
+                        playerId,
+                        season
+                );
+
+        return mapper.readValue(
+                json,
+                PlayersApiResponse.class
+        );
+    }
+
     /**
      * Gets raw data for a league in specified season
      */
@@ -369,6 +387,7 @@ public class ApiFootballService implements FootballDataProvider {
         return apiClient.get(url);
     }
 
+
     /**
      * Gets the raw JSON for a single player in a league and season.
      */
@@ -383,6 +402,20 @@ public class ApiFootballService implements FootballDataProvider {
                         + playerId
                         + "&league="
                         + leagueId
+                        + "&season="
+                        + season;
+
+        return apiClient.get(url);
+    }
+
+    public String getPlayerJson(
+            int playerId,
+            int season
+    ) throws Exception {
+
+        String url =
+                "https://v3.football.api-sports.io/players?id="
+                        + playerId
                         + "&season="
                         + season;
 

@@ -132,6 +132,50 @@ public class LeagueDataService {
                         season
                 );
 
+        if (response.getResponse() == null ||
+                response.getResponse().isEmpty()) {
+
+            System.out.println(
+                    "No player details found for playerId="
+                            + playerId
+                            + ", leagueId="
+                            + leagueId
+                            + ", season="
+                            + season
+            );
+
+            if (response.getResponse() == null ||
+                    response.getResponse().isEmpty()) {
+
+                System.out.println(
+                        "No league-specific player details found."
+                                + " Trying player-only lookup for playerId="
+                                + playerId
+                                + ", season="
+                                + season
+                );
+
+                response =
+                        footballDataProvider.getPlayer(
+                                playerId,
+                                season
+                        );
+
+                if (response.getResponse() == null ||
+                        response.getResponse().isEmpty()) {
+
+                    System.out.println(
+                            "No player details found for playerId="
+                                    + playerId
+                                    + ", season="
+                                    + season
+                    );
+
+                    return null;
+                }
+            }
+        }
+
         System.out.println(
                 "Loaded player: "
                         + response.getResponse()
@@ -146,15 +190,10 @@ public class LeagueDataService {
         );
 
         return playerDetailsMapper.toPlayerDetails(
-
                 response,
-
                 leagueId,
-
                 season
-
         );
-
     }
 
     public List<LeagueApiResponse> getLeagues(

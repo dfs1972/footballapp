@@ -48,10 +48,10 @@ data class PlayerDetailsDto(
 
     val teamName: String,
 
-    val leagueId: Int,
+    val leagueId: Int?,
 
-    val leagueName: String,
+    val leagueName: String?,
 
-    val season: Int
+    val season: Int?
 
 )

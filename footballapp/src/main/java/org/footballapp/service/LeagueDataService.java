@@ -216,6 +216,53 @@ public class LeagueDataService {
         return response.getResponse();
     }
 
+
+    /************************ LEAGUE SECTION *****************************/
+
+    /**
+     * Get League Overview
+     */
+    public LeagueOverview getLeagueOverview(
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        LeagueOverview overview =
+                new LeagueOverview();
+
+        overview.setLeagueId(
+                leagueId
+        );
+
+        LeaguesApiResponse leagueResponse =
+                footballDataProvider.getLeague(
+                        leagueId,
+                        season
+                );
+
+        overview.setLeagueName(
+                leagueResponse
+                        .getResponse()
+                        .getFirst()
+                        .getLeague()
+                        .getName()
+        );
+
+        overview.setCountryName(
+                leagueResponse
+                        .getResponse()
+                        .getFirst()
+                        .getCountry()
+                        .getName()
+        );
+
+        overview.setSeason(
+                season
+        );
+
+        return overview;
+    } // End of getLeagueOverview()
+
     /**
      * Get league table by season
      */
@@ -804,43 +851,6 @@ public class LeagueDataService {
                 response
         );
     }
-
-    /**
-     * Get League Overview
-     */
-    public LeagueOverview getLeagueOverview(
-            int leagueId,
-            int season
-    ) throws Exception {
-
-        LeagueOverview overview =
-                new LeagueOverview();
-
-        overview.setLeagueId(
-                leagueId
-        );
-
-        LeaguesApiResponse leagueResponse =
-                footballDataProvider.getLeague(
-                        leagueId,
-                        season
-                );
-
-        overview.setLeagueName(
-                leagueResponse
-                        .getResponse()
-                        .getFirst()
-                        .getLeague()
-                        .getName()
-        );
-
-        overview.setSeason(
-                season
-        );
-
-        return overview;
-    } // End of getLeagueOverview()
-
 }
 
 

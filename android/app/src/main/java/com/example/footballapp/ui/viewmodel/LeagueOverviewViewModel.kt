@@ -3,7 +3,9 @@ package com.example.footballapp.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.footballapp.data.repository.CompetitionMetadataRepository
+import com.example.footballapp.data.repository.CompetitionRepository
 import com.example.footballapp.data.repository.LeagueOverviewRepository
+import com.example.footballapp.ui.model.CompetitionUiModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,6 +18,9 @@ class LeagueOverviewViewModel : ViewModel() {
 
     private val metadataRepository =
         CompetitionMetadataRepository()
+
+    private val competitionRepository =
+        CompetitionRepository()
 
     private val _uiState =
         MutableStateFlow(
@@ -52,6 +57,22 @@ class LeagueOverviewViewModel : ViewModel() {
                             season
                         )
 
+                val competitions =
+                    competitionRepository
+                        .getFeaturedLeagues(
+                            country = overview.countryName,
+                            season = season
+                        )
+                        .map { competition ->
+
+                            CompetitionUiModel(
+                                id = competition.league.id,
+                                name = competition.league.name,
+                                country = competition.country.name,
+                                type = competition.league.type
+                            )
+                        }
+
                 _uiState.value =
                     LeagueOverviewUiState(
 
@@ -63,7 +84,10 @@ class LeagueOverviewViewModel : ViewModel() {
                             metadata.standings,
 
                         currentRound =
-                            metadata.currentRound
+                            metadata.currentRound,
+
+                        competitions =
+                            competitions
 
                     )
 

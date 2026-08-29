@@ -20,8 +20,9 @@ fun LeagueOverviewDto.toUiModel(): LeagueOverviewUiModel {
             leagueName
         ),
 
+        countryName = countryName,
+
         season =
             "$season/${(season + 1).toString().takeLast(2)}"
-
     )
 }

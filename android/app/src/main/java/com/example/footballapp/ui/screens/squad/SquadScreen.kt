@@ -51,22 +51,38 @@ fun SquadScreen(
 
         }
 
-        PlayerList(
+        if (players.isEmpty()) {
 
-            players = players,
+            item {
 
-            onPlayerClick = { player ->
+                CardHeader(
 
-                onPlayerClick(
-
-                    player.playerId
+                    title =
+                        "Squad information is not currently available for this competition."
 
                 )
 
             }
 
-        )
+        } else {
 
+            PlayerList(
+
+                players = players,
+
+                onPlayerClick = { player ->
+
+                    onPlayerClick(
+
+                        player.playerId
+
+                    )
+
+                }
+
+            )
+
+        }
     }
 
 }

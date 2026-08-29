@@ -2,9 +2,18 @@ package org.footballapp.model.league;
 
 public class LeagueOverview {
 
+    private String countryName;
     private int leagueId;
     private String leagueName;
     private int season;
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
 
     public int getLeagueId() {
         return leagueId;

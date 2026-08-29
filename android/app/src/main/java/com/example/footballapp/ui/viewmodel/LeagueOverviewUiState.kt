@@ -2,6 +2,7 @@ package com.example.footballapp.ui.viewmodel
 
 import com.example.footballapp.ui.model.LeagueOverviewUiModel
 import com.example.footballapp.ui.model.LeagueTableGroupUiModel
+import com.example.footballapp.ui.model.CompetitionUiModel
 
 /**
  * UI state for the League Overview screen.
@@ -31,6 +32,11 @@ data class LeagueOverviewUiState(
      * Current competition round.
      */
     val currentRound: String? = null,
+
+    /**
+     * Competitions available in the current country.
+     */
+    val competitions: List<CompetitionUiModel> = emptyList(),
 
     /**
      * Error message displayed if loading fails.

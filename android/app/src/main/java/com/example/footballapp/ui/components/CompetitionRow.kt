@@ -17,6 +17,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.model.CompetitionUiModel
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.StarBorder
+import androidx.compose.material3.IconButton
 import com.example.footballapp.ui.theme.AppTypography
 
 @Composable
@@ -24,7 +27,11 @@ fun CompetitionRow(
 
     competition: CompetitionUiModel,
 
-    onClick: () -> Unit
+    isFavourite: Boolean,
+
+    onClick: () -> Unit,
+
+    onFavouriteClick: () -> Unit
 
 ) {
 
@@ -53,19 +60,57 @@ fun CompetitionRow(
 
         }
 
-        Icon(
+        Row(
 
-            imageVector =
-                Icons.AutoMirrored.Filled.KeyboardArrowRight,
+            verticalAlignment = Alignment.CenterVertically
 
-            contentDescription = null,
+        ) {
 
-            tint =
-                MaterialTheme
-                    .colorScheme
-                    .onSurfaceVariant
+            IconButton(
 
-        )
+                onClick = {
+                    onFavouriteClick()
+                }
 
+            ) {
+
+                Icon(
+
+                    imageVector =
+                        if (isFavourite) {
+                            Icons.Filled.Star
+                        } else {
+                            Icons.Outlined.StarBorder
+                        },
+
+                    contentDescription =
+                        if (isFavourite) {
+                            "Remove favourite"
+                        } else {
+                            "Add favourite"
+                        },
+
+                    tint =
+                        MaterialTheme
+                            .colorScheme
+                            .onSurfaceVariant
+
+                )
+            }
+
+            Icon(
+
+                imageVector =
+                    Icons.AutoMirrored.Filled.KeyboardArrowRight,
+
+                contentDescription = null,
+
+                tint =
+                    MaterialTheme
+                        .colorScheme
+                        .onSurfaceVariant
+
+            )
+        }
     }
 }

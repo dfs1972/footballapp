@@ -15,12 +15,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.footballapp.data.repository.FavouriteCompetition
 import com.example.footballapp.ui.components.CompetitionRow
 import com.example.footballapp.ui.components.CountryCard
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.model.CompetitionUiModel
 import com.example.footballapp.ui.model.CountryUiModel
+import com.example.footballapp.ui.viewmodel.FavouriteViewModel
 
 @Composable
 fun CompetitionsScreen(
@@ -54,6 +57,8 @@ fun CompetitionsScreen(
     ) -> Unit
 
 ) {
+
+    val favouriteViewModel: FavouriteViewModel = viewModel()
 
     var expandedCountry by remember {
         mutableStateOf<String?>(null)
@@ -108,10 +113,10 @@ fun CompetitionsScreen(
         }
     ScreenScaffold(
 
-            searchQuery = searchQuery,
+        searchQuery = searchQuery,
 
-    onSearchQueryChange =
-        onSearchQueryChange
+        onSearchQueryChange =
+            onSearchQueryChange
 
     ) {
 
@@ -177,7 +182,7 @@ fun CompetitionsScreen(
 
                         onCountrySelected(
                             country,
-                           currentSeason
+                            currentSeason
                         )
 
                     }
@@ -235,22 +240,47 @@ fun CompetitionsScreen(
                                 CompetitionRow(
                                     competition = competition,
 
-                                    onClick = {
+                                    isFavourite = favouriteViewModel.isFavourite(
+                                        competition.id,
+                                        currentSeason
+                                    ),
 
+                                    onFavouriteClick = {
+
+                                        if (favouriteViewModel.isFavourite(
+                                                competition.id,
+                                                currentSeason
+                                            )
+                                        ) {
+
+                                            favouriteViewModel.clearFavourite()
+
+                                        } else {
+
+                                            favouriteViewModel.saveFavourite(
+                                                FavouriteCompetition(
+                                                    leagueId = competition.id,
+                                                    season = currentSeason,
+                                                    leagueName = competition.name,
+                                                    countryName = country.name,
+                                                    type = competition.type
+                                                )
+                                            )
+                                        }
+                                    },
+
+                                    onClick = {
                                         onCompetitionSelected(
                                             competition.id,
                                             currentSeason
                                         )
-
                                     }
                                 )
 
                             }
-
                         }
                     }
                 }
-
             }
         }
     }

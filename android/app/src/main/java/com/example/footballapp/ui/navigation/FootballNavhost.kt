@@ -37,7 +37,7 @@ import com.example.footballapp.ui.viewmodel.LeagueTableViewModel
 import com.example.footballapp.ui.viewmodel.PlayerDetailsViewModel
 import com.example.footballapp.ui.viewmodel.SquadViewModel
 import com.example.footballapp.ui.viewmodel.TeamFixturesViewModel
-
+import com.example.footballapp.ui.viewmodel.FavouriteViewModel
 import com.example.footballapp.ui.viewmodel.CountryViewModel
 import com.example.footballapp.ui.viewmodel.FixtureDetailsViewModel
 
@@ -61,6 +61,27 @@ fun FootballNavHost(
     val countries by
     countryViewModel.countries.collectAsState()
 
+    val favouriteViewModel: FavouriteViewModel =
+        viewModel()
+
+    val favourite =
+        favouriteViewModel.getFavourite()
+
+    val resolvedStartDestination =
+        if (favourite != null) {
+
+            FootballDestination
+                .LeagueOverview
+                .createRoute(
+                    favourite.leagueId,
+                    favourite.season
+                )
+
+        } else {
+
+            startDestination
+        }
+
     val searchResults =
         if (searchQuery.isBlank()) {
             emptyList()
@@ -75,8 +96,8 @@ fun FootballNavHost(
 
     NavHost(
         navController = navController,
-        startDestination = startDestination
-    ) {
+        startDestination = resolvedStartDestination
+    ){
 
         /***************** Competitions ***********************/
 

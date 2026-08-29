@@ -231,6 +231,33 @@ fun FootballNavHost(
                     topStandings =
                         uiState.topStandings,
 
+                    competitions =
+                        uiState.competitions,
+
+                    onCompetitionSelected = { leagueId, selectedSeason ->
+
+                        navController.navigate(
+                            FootballDestination
+                                .LeagueOverview
+                                .createRoute(
+                                    leagueId,
+                                    selectedSeason
+                                )
+                        ) {
+                            /*
+                             * Avoid building up a large stack of
+                             * overview screens.
+                             */
+                            popUpTo(
+                                FootballDestination
+                                    .LeagueOverview
+                                    .route
+                            ) {
+                                inclusive = true
+                            }
+                        }
+                    },
+
                     onLeagueTableClick = {
                         navController.navigate(
                             FootballDestination

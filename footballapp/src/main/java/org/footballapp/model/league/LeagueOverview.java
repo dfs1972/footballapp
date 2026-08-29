@@ -3,6 +3,7 @@ package org.footballapp.model.league;
 public class LeagueOverview {
 
     private String countryName;
+    private String countryFlag;
     private int leagueId;
     private String leagueName;
     private int season;
@@ -13,6 +14,14 @@ public class LeagueOverview {
 
     public void setCountryName(String countryName) {
         this.countryName = countryName;
+    }
+
+    public String getCountryFlag() {
+        return countryFlag;
+    }
+
+    public void setCountryFlag(String countryFlag) {
+        this.countryFlag = countryFlag;
     }
 
     public int getLeagueId() {

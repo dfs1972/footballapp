@@ -256,6 +256,14 @@ public class LeagueDataService {
                         .getName()
         );
 
+        overview.setCountryFlag(
+                leagueResponse
+                        .getResponse()
+                        .getFirst()
+                        .getCountry()
+                        .getFlag()
+        );
+
         overview.setSeason(
                 season
         );

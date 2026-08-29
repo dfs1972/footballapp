@@ -9,6 +9,7 @@ data class LeagueOverviewDto(
     val leagueId: Int,
     val leagueName: String,
     val countryName: String,
+    val countryFlag: String?,
     val season: Int,
     val teamCount: Int,
     val fixtureCount: Int

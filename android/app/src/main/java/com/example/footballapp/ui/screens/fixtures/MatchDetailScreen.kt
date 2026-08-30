@@ -3,10 +3,12 @@ package com.example.footballapp.ui.screens.fixtures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.footballapp.ui.components.FixtureLineupCard
@@ -41,7 +43,7 @@ fun MatchDetailScreen(
         searchResults = searchResults,
         onSearchResultClick = onSearchResultClick
     ) {
-        if (isLoading && fixture.fixtureId == 0L) {
+        if (isLoading && (fixture.fixtureId == 0L || fixture.fixtureId == -1L)) {
             item {
                 Box(modifier = Modifier.fillMaxWidth().padding(64.dp), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
@@ -56,7 +58,7 @@ fun MatchDetailScreen(
         }
 
         item {
-            MatchHeader(fixture)
+            MatchHeader(fixture, events)
         }
 
         item {
@@ -100,7 +102,10 @@ fun MatchDetailScreen(
 }
 
 @Composable
-private fun MatchHeader(fixture: FixtureDetailsUiModel) {
+private fun MatchHeader(
+    fixture: FixtureDetailsUiModel,
+    events: List<FixtureEventUiModel>
+) {
     SectionCard {
         Column(
             modifier = Modifier.fillMaxWidth().padding(16.dp),
@@ -109,72 +114,132 @@ private fun MatchHeader(fixture: FixtureDetailsUiModel) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.Top
             ) {
-                TeamLogo(fixture.homeTeam, fixture.homeTeamLogo)
+                // Home Team
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = fixture.homeTeam,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    )
+                    
+                    Spacer(Modifier.height(4.dp))
+                    
+                    // Home Scorers
+                    ScorersList(
+                        events = events,
+                        teamId = fixture.homeTeamId
+                    )
+                }
                 
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                // Score and Time
+                Column(
+                    modifier = Modifier.width(100.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Text(
                         text = "${fixture.homeGoals ?: 0} - ${fixture.awayGoals ?: 0}",
                         style = MaterialTheme.typography.headlineLarge,
                         fontWeight = FontWeight.Bold
                     )
-                    fixture.statusShort?.let {
-                        Text(
-                            text = it,
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.primary
-                        )
+                    
+                    val timeText = when {
+                        fixture.statusShort == "FT" -> "Full Time"
+                        fixture.statusShort == "HT" -> "Half Time"
+                        fixture.elapsed != null && fixture.elapsed > 0 -> "${fixture.elapsed}'"
+                        else -> fixture.statusShort ?: ""
                     }
+                    
+                    Text(
+                        text = timeText,
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.SemiBold
+                    )
                 }
 
-                TeamLogo(fixture.awayTeam, fixture.awayTeamLogo)
+                // Away Team
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = fixture.awayTeam,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    )
+                    
+                    Spacer(Modifier.height(4.dp))
+                    
+                    // Away Scorers
+                    ScorersList(
+                        events = events,
+                        teamId = fixture.awayTeamId
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-private fun TeamLogo(name: String, logoUrl: String?) {
+private fun ScorersList(
+    events: List<FixtureEventUiModel>,
+    teamId: Int
+) {
+    val scorers = events.filter { it.type == "Goal" && it.teamId == teamId }
+    
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        AsyncImage(
-            model = logoUrl,
-            contentDescription = null,
-            modifier = Modifier.size(64.dp)
-        )
-        Text(text = name, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
+        scorers.forEach { goal ->
+            Text(
+                text = "${goal.playerName} ${goal.elapsed}'",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
     }
 }
 
 @Composable
 private fun EventItem(event: FixtureEventUiModel) {
     Row(
-        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        // Time
         Text(
             text = "${event.elapsed}'",
             modifier = Modifier.width(40.dp),
             style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontWeight = FontWeight.Bold
         )
         
-        AsyncImage(
-            model = event.teamLogo,
-            contentDescription = null,
-            modifier = Modifier.size(24.dp)
-        )
+        Spacer(Modifier.width(8.dp))
         
-        Spacer(Modifier.width(16.dp))
-        
+        // Event Icon/Description
+        val eventDescription = when (event.type) {
+            "Goal" -> "GOAL: ${event.playerName}"
+            "Card" -> "${event.detail}: ${event.playerName}"
+            "subst" -> "SUB: ${event.assistName} for ${event.playerName}"
+            else -> "${event.type}: ${event.playerName ?: ""}"
+        }
+
         Column {
             Text(
-                text = "${event.type}: ${event.playerName ?: ""}",
-                style = MaterialTheme.typography.bodyLarge
+                text = eventDescription,
+                style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            event.detail.let {
+            if (!event.comments.isNullOrBlank()) {
                 Text(
-                    text = it,
+                    text = event.comments,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

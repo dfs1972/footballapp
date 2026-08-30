@@ -6,9 +6,11 @@ data class FixtureDetailsUiModel(
 
     val fixtureDate: String,
 
+    val homeTeamId: Int,
     val homeTeam: String,
     val homeTeamLogo: String?,
 
+    val awayTeamId: Int,
     val awayTeam: String,
     val awayTeamLogo: String?,
 

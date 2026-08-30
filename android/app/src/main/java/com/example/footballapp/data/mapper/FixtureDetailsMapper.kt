@@ -10,9 +10,13 @@ fun FixtureDetailsDto.toUiModel() =
 
         fixtureDate = fixtureDate,
 
+        homeTeamId = homeTeamId,
+
         homeTeam = homeTeam,
 
         homeTeamLogo = homeTeamLogo,
+
+        awayTeamId = awayTeamId,
 
         awayTeam = awayTeam,
 

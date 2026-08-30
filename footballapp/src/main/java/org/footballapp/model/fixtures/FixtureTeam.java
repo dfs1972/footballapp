@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class FixtureTeam {
     private int id;
     private String name;
+    private String logo;
 
     public FixtureTeam() {
 
@@ -25,5 +26,13 @@ public class FixtureTeam {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 }

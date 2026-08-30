@@ -114,12 +114,20 @@ public class FixtureMapper {
                 teams.getHome().getName()
         );
 
+        details.setHomeTeamLogo(
+                teams.getHome().getLogo()
+        );
+
         details.setAwayTeamId(
                 teams.getAway().getId()
         );
 
         details.setAwayTeam(
                 teams.getAway().getName()
+        );
+
+        details.setAwayTeamLogo(
+                teams.getAway().getLogo()
         );
 
         details.setHomeGoals(
@@ -134,6 +142,22 @@ public class FixtureMapper {
 
             details.setVenueName(
                     fixture.getVenue().getName()
+            );
+
+        }
+
+        if (fixture.getStatus() != null) {
+
+            details.setStatusLong(
+                    fixture.getStatus().getLongStatus()
+            );
+
+            details.setStatusShort(
+                    fixture.getStatus().getShortStatus()
+            );
+
+            details.setElapsed(
+                    fixture.getStatus().getElapsed()
             );
 
         }

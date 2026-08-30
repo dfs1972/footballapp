@@ -1,157 +1,37 @@
 package org.footballapp.service;
 
-import org.footballapp.model.competition.FeaturedCompetition;
+import org.footballapp.config.competitions.SupportedCompetition;
 import org.footballapp.model.league.LeagueApiResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
 public class FeaturedCompetitionService {
 
     private final LeagueDataService leagueDataService;
-
-    private final List<FeaturedCompetition> featuredCompetitions =
-            List.of(
-
-                    // England
-                    new FeaturedCompetition(
-                            "England",
-                            39,
-                            1
-                    ),
-
-                    new FeaturedCompetition(
-                            "England",
-                            40,
-                            2
-                    ),
-
-                    new FeaturedCompetition(
-                            "England",
-                            41,
-                            3
-                    ),
-
-                    new FeaturedCompetition(
-                            "England",
-                            42,
-                            4
-                    ),
-
-                    new FeaturedCompetition(
-                            "England",
-                            45,
-                            5
-                    ),
-
-                    new FeaturedCompetition(
-                            "England",
-                            46,
-                            6
-                    ),
-
-                    // Scotland
-                    new FeaturedCompetition(
-                            "Scotland",
-                            179,
-                            1
-                    ),
-
-                    new FeaturedCompetition(
-                            "Scotland",
-                            180,
-                            2
-                    ),
-
-                    new FeaturedCompetition(
-                            "Scotland",
-                            181,
-                            3
-                    ),
-
-                    new FeaturedCompetition(
-                            "Scotland",
-                            183,
-                            4
-                    ),
-
-                    new FeaturedCompetition(
-                            "Scotland",
-                            184,
-                            5
-                    ),
-
-                    new FeaturedCompetition(
-                            "Scotland",
-                            185,
-                            6
-                    )
-            );
+    private final SupportedCompetitionsService supportedCompetitionsService;
 
     public FeaturedCompetitionService(
-            LeagueDataService leagueDataService
+            LeagueDataService leagueDataService,
+            SupportedCompetitionsService supportedCompetitionsService
     ) {
-        this.leagueDataService =
-                leagueDataService;
-    }
-
-    /**
-     * Returns the configured featured competitions
-     * for a country.
-     */
-    public List<FeaturedCompetition> getFeaturedCompetitions(
-            String country
-    ) {
-
-        if (country == null
-                || country.isBlank()) {
-
-            return List.of();
-        }
-
-        List<FeaturedCompetition> result =
-                new ArrayList<>();
-
-        for (FeaturedCompetition competition
-                : featuredCompetitions) {
-
-            if (competition
-                    .getCountry()
-                    .equalsIgnoreCase(country)) {
-
-                result.add(competition);
-            }
-        }
-
-        result.sort(
-                Comparator.comparingInt(
-                        FeaturedCompetition::getPriority
-                )
-        );
-
-        return result;
+        this.leagueDataService = leagueDataService;
+        this.supportedCompetitionsService = supportedCompetitionsService;
     }
 
     /**
      * Returns the actual league data for the
      * configured featured competitions.
-     *
-     * The existing LeagueDataService remains responsible
-     * for obtaining the country's competitions from
-     * API-Football.
      */
     public List<LeagueApiResponse> getFeaturedLeagueData(
             String country,
             int season
     ) throws Exception {
 
-        List<FeaturedCompetition> configured =
-                getFeaturedCompetitions(
-                        country
-                );
+        List<SupportedCompetition> configured =
+                supportedCompetitionsService.getFeaturedCompetitionsForCountry(country);
 
         if (configured.isEmpty()) {
             return List.of();
@@ -172,11 +52,9 @@ public class FeaturedCompetitionService {
         List<LeagueApiResponse> result =
                 new ArrayList<>();
 
-        for (FeaturedCompetition featured
-                : configured) {
+        for (SupportedCompetition featured : configured) {
 
-            for (LeagueApiResponse league
-                    : available) {
+            for (LeagueApiResponse league : available) {
 
                 if (league == null
                         || league.getLeague() == null) {
@@ -187,7 +65,7 @@ public class FeaturedCompetitionService {
                 if (league
                         .getLeague()
                         .getId()
-                        == featured.getLeagueId()) {
+                        == featured.getCompetitionId()) {
 
                     result.add(league);
 

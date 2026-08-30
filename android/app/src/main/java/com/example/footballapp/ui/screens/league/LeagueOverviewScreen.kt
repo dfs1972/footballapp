@@ -1,10 +1,14 @@
 package com.example.footballapp.ui.screens.league
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -12,11 +16,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
+import coil.decode.SvgDecoder
+import coil.request.ImageRequest
+import com.example.footballapp.data.remote.FlagUrlResolver
 import com.example.footballapp.data.repository.FavouriteCompetition
 import com.example.footballapp.ui.components.CompetitionRow
 import com.example.footballapp.ui.components.CompetitionRoundSelector
-import com.example.footballapp.ui.components.CountryCard
 import com.example.footballapp.ui.components.NavigationCard
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.TopStandingsCard
@@ -65,6 +74,11 @@ fun LeagueOverviewScreen(
     var isCountryLeaguesExpanded by remember {
         mutableStateOf(false)
     }
+
+    val rotation by animateFloatAsState(
+        targetValue = if (isCountryLeaguesExpanded) 180f else 0f,
+        label = "LeagueExpandRotation"
+    )
 
     /*
      * We determine the current season year (Int) from the
@@ -138,10 +152,42 @@ fun LeagueOverviewScreen(
 
         item {
 
-            CountryCard(
-                countryName = "Other Leagues in ${overview.countryName}",
-                flagUrl = overview.countryFlag,
-                expanded = isCountryLeaguesExpanded,
+            NavigationCard(
+
+                title =
+                    Strings.LEAGUE_TABLE,
+
+                subtitle =
+                    Strings.VIEW_COMPLETE_STANDINGS,
+
+                onClick =
+                    onLeagueTableClick
+
+            )
+
+        }
+
+        item {
+
+            val context = LocalContext.current
+
+            NavigationCard(
+                title = "Other Leagues",
+                subtitle = overview.countryName,
+                icon = Icons.Default.ExpandMore,
+                iconRotation = rotation,
+                leadingContent = {
+                    if (!overview.countryFlag.isNullOrBlank()) {
+                        AsyncImage(
+                            model = ImageRequest.Builder(context)
+                                .data(FlagUrlResolver.resolve(overview.countryFlag))
+                                .decoderFactory(SvgDecoder.Factory())
+                                .build(),
+                            contentDescription = null,
+                            modifier = Modifier.size(28.dp)
+                        )
+                    }
+                },
                 onClick = {
                     isCountryLeaguesExpanded = !isCountryLeaguesExpanded
                 }
@@ -207,23 +253,6 @@ fun LeagueOverviewScreen(
                     }
                 }
             }
-        }
-
-        item {
-
-            NavigationCard(
-
-                title =
-                    Strings.LEAGUE_TABLE,
-
-                subtitle =
-                    Strings.VIEW_COMPLETE_STANDINGS,
-
-                onClick =
-                    onLeagueTableClick
-
-            )
-
         }
 
     }

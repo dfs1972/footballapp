@@ -30,6 +30,7 @@ import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.SectionHeading
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.design.Strings
+import com.example.footballapp.ui.model.CountryUiModel
 import com.example.footballapp.ui.model.FixtureDayUiModel
 import com.example.footballapp.ui.model.TeamFixturesMonthUiModel
 import com.example.footballapp.ui.model.extensions.groupByMonth
@@ -45,7 +46,15 @@ fun TeamFixturesScreen(
 
     fixtureDays: List<FixtureDayUiModel>,
 
-    onFixtureSelected: (Long, Int) -> Unit
+    onFixtureSelected: (Long, Int) -> Unit,
+
+    searchQuery: String = "",
+
+    onSearchQueryChange: (String) -> Unit = {},
+
+    searchResults: List<CountryUiModel> = emptyList(),
+
+    onSearchResultClick: (CountryUiModel) -> Unit = {}
 
 ) {
 
@@ -60,7 +69,12 @@ fun TeamFixturesScreen(
         )
     }
 
-    ScreenScaffold {
+    ScreenScaffold(
+        searchQuery = searchQuery,
+        onSearchQueryChange = onSearchQueryChange,
+        searchResults = searchResults,
+        onSearchResultClick = onSearchResultClick
+    ) {
 
         item {
 

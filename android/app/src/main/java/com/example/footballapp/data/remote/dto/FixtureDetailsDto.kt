@@ -8,9 +8,11 @@ data class FixtureDetailsDto(
 
     val homeTeamId: Int,
     val homeTeam: String,
+    val homeTeamLogo: String?,
 
     val awayTeamId: Int,
     val awayTeam: String,
+    val awayTeamLogo: String?,
 
     val homeGoals: Int?,
     val awayGoals: Int?,
@@ -22,6 +24,12 @@ data class FixtureDetailsDto(
 
     val season: Int,
 
-    val round: String
+    val round: String,
+
+    val statusLong: String?,
+
+    val statusShort: String?,
+
+    val elapsed: Int?
 
 )

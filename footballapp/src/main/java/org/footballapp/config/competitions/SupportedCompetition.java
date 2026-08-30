@@ -6,6 +6,7 @@ public class SupportedCompetition {
     private String name;
     private CompetitionType type;
     private boolean enabled;
+    private boolean featured;
     private String logoUrl;
 
     public SupportedCompetition() {
@@ -41,6 +42,14 @@ public class SupportedCompetition {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public boolean isFeatured() {
+        return featured;
+    }
+
+    public void setFeatured(boolean featured) {
+        this.featured = featured;
     }
 
     public String getLogoUrl() {return logoUrl;}

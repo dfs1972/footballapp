@@ -7,7 +7,10 @@ data class FixtureDetailsUiModel(
     val fixtureDate: String,
 
     val homeTeam: String,
+    val homeTeamLogo: String?,
+
     val awayTeam: String,
+    val awayTeamLogo: String?,
 
     val homeGoals: Int?,
     val awayGoals: Int?,
@@ -18,6 +21,12 @@ data class FixtureDetailsUiModel(
 
     val season: String,
 
-    val round: String
+    val round: String,
+
+    val statusLong: String? = null,
+
+    val statusShort: String? = null,
+
+    val elapsed: Int? = null
 
 )

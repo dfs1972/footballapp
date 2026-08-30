@@ -8,9 +8,11 @@ public class FixtureDetails {
 
     private int homeTeamId;
     private String homeTeam;
+    private String homeTeamLogo;
 
     private int awayTeamId;
     private String awayTeam;
+    private String awayTeamLogo;
 
     private Integer homeGoals;
     private Integer awayGoals;
@@ -21,6 +23,11 @@ public class FixtureDetails {
     private String leagueName;
 
     private int season;
+    private String round;
+
+    private String statusLong;
+    private String statusShort;
+    private Integer elapsed;
 
 
     /**
@@ -43,12 +50,28 @@ public class FixtureDetails {
         return homeTeam;
     }
 
+    public String getHomeTeamLogo() {
+        return homeTeamLogo;
+    }
+
+    public void setHomeTeamLogo(String homeTeamLogo) {
+        this.homeTeamLogo = homeTeamLogo;
+    }
+
     public int getAwayTeamId() {
         return awayTeamId;
     }
 
     public String getAwayTeam() {
         return awayTeam;
+    }
+
+    public String getAwayTeamLogo() {
+        return awayTeamLogo;
+    }
+
+    public void setAwayTeamLogo(String awayTeamLogo) {
+        this.awayTeamLogo = awayTeamLogo;
     }
 
     public Integer getHomeGoals() {
@@ -79,7 +102,7 @@ public class FixtureDetails {
         return round;
     }
 
-    private String round;
+    //private String round;
 
     /**
      * Fixture Details Setters
@@ -135,5 +158,29 @@ public class FixtureDetails {
 
     public void setRound(String round) {
         this.round = round;
+    }
+
+    public String getStatusLong() {
+        return statusLong;
+    }
+
+    public void setStatusLong(String statusLong) {
+        this.statusLong = statusLong;
+    }
+
+    public String getStatusShort() {
+        return statusShort;
+    }
+
+    public void setStatusShort(String statusShort) {
+        this.statusShort = statusShort;
+    }
+
+    public Integer getElapsed() {
+        return elapsed;
+    }
+
+    public void setElapsed(Integer elapsed) {
+        this.elapsed = elapsed;
     }
 }

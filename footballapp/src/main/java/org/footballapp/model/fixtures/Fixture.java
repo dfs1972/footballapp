@@ -8,6 +8,7 @@ public class Fixture {
     private long id;
     private String date;
     private FixtureVenue venue;
+    private FixtureStatus status;
 
     public Fixture() {
     }
@@ -34,5 +35,13 @@ public class Fixture {
 
     public void setVenue(FixtureVenue venue) {
         this.venue = venue;
+    }
+
+    public FixtureStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(FixtureStatus status) {
+        this.status = status;
     }
 }

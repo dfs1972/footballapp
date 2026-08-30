@@ -11,6 +11,7 @@ import com.example.footballapp.data.remote.dto.LeagueApiResponseDto
 import com.example.footballapp.data.remote.dto.LeagueOverviewDto
 import com.example.footballapp.data.remote.dto.LeagueTableGroupDto
 import com.example.footballapp.data.remote.dto.LeagueTableRowDto
+import com.example.footballapp.data.remote.dto.MatchDetailDto
 import com.example.footballapp.data.remote.dto.PlayerDetailsDto
 import com.example.footballapp.data.remote.dto.PlayerDto
 import com.example.footballapp.data.remote.dto.TeamDto
@@ -181,5 +182,14 @@ interface FootballApiService {
         fixtureId: Long
 
     ): FixtureDetailsDto
+
+    /**
+     * Get Match Details (Consolidated Live Data)
+     */
+    @GET("matchDetails")
+    suspend fun getMatchDetails(
+        @Query("fixtureId")
+        fixtureId: Long
+    ): MatchDetailDto
 
 }

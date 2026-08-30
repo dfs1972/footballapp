@@ -11,6 +11,7 @@ import com.example.footballapp.ui.components.SectionCard
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.design.Strings
 import com.example.footballapp.ui.model.ClubUiModel
+import com.example.footballapp.ui.model.CountryUiModel
 
 @Composable
 fun ClubsScreen(
@@ -21,11 +22,24 @@ fun ClubsScreen(
 
     clubs: List<ClubUiModel>,
 
-    onClubClick: (Int) -> Unit
+    onClubClick: (Int) -> Unit,
+
+    searchQuery: String = "",
+
+    onSearchQueryChange: (String) -> Unit = {},
+
+    searchResults: List<CountryUiModel> = emptyList(),
+
+    onSearchResultClick: (CountryUiModel) -> Unit = {}
 
 ) {
 
-    ScreenScaffold {
+    ScreenScaffold(
+        searchQuery = searchQuery,
+        onSearchQueryChange = onSearchQueryChange,
+        searchResults = searchResults,
+        onSearchResultClick = onSearchResultClick
+    ) {
 
         item {
 

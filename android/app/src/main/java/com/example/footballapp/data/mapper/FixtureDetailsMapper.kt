@@ -12,7 +12,11 @@ fun FixtureDetailsDto.toUiModel() =
 
         homeTeam = homeTeam,
 
+        homeTeamLogo = homeTeamLogo,
+
         awayTeam = awayTeam,
+
+        awayTeamLogo = awayTeamLogo,
 
         homeGoals = homeGoals,
 
@@ -24,6 +28,12 @@ fun FixtureDetailsDto.toUiModel() =
 
         season = season.toString(),
 
-        round = round
+        round = round,
+
+        statusLong = statusLong,
+
+        statusShort = statusShort,
+
+        elapsed = elapsed
 
     )

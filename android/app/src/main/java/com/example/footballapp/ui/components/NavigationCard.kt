@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
@@ -17,9 +18,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.theme.AppElevation
 import com.example.footballapp.ui.theme.AppShapes
@@ -29,9 +31,15 @@ fun NavigationCard(
 
     title: String,
 
-    subtitle: String,
+    subtitle: String? = null,
 
-    onClick: () -> Unit
+    onClick: () -> Unit,
+
+    icon: ImageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+
+    iconRotation: Float = 0f,
+
+    leadingContent: @Composable (() -> Unit)? = null
 
 ) {
 
@@ -71,6 +79,21 @@ fun NavigationCard(
 
         ) {
 
+            /*
+             * Leading content (e.g. Flag)
+             */
+            if (leadingContent != null) {
+
+                leadingContent()
+
+                Spacer(
+                    modifier = Modifier.width(
+                        AppSpacing.Medium
+                    )
+                )
+
+            }
+
             Column(
 
                 modifier = Modifier.weight(1f)
@@ -87,37 +110,42 @@ fun NavigationCard(
 
                 )
 
-                Spacer(
+                if (!subtitle.isNullOrBlank()) {
 
-                    modifier = Modifier.height(
-                        AppSpacing.ExtraSmall
+                    Spacer(
+
+                        modifier = Modifier.height(
+                            AppSpacing.ExtraSmall
+                        )
+
                     )
 
-                )
+                    Text(
 
-                Text(
+                        text = subtitle,
 
-                    text = subtitle,
+                        style = MaterialTheme.typography.bodyMedium,
 
-                    style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
 
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 2,
 
-                    maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
 
-                    overflow = TextOverflow.Ellipsis
-
-                )
+                    )
+                }
 
             }
 
             Icon(
 
-                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                imageVector = icon,
 
                 contentDescription = null,
 
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+
+                modifier = Modifier.rotate(iconRotation)
 
             )
 

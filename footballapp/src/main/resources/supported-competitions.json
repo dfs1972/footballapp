@@ -9,6 +9,7 @@
         "name": "Premier League",
         "type": "LEAGUE",
         "enabled": true,
+        "featured": true,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       },
       {
@@ -16,6 +17,7 @@
         "name": "Championship",
         "type": "LEAGUE",
         "enabled": true,
+        "featured": true,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       },
       {
@@ -23,6 +25,7 @@
         "name": "League One",
         "type": "LEAGUE",
         "enabled": true,
+        "featured": true,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       },
       {
@@ -30,6 +33,7 @@
         "name": "League Two",
         "type": "LEAGUE",
         "enabled": true,
+        "featured": true,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       },
       {
@@ -37,6 +41,7 @@
         "name": "National League",
         "type": "LEAGUE",
         "enabled": true,
+        "featured": false,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       },
       {
@@ -44,6 +49,7 @@
         "name": "FA WSL",
         "type": "LEAGUE",
         "enabled": true,
+        "featured": false,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       },
       {
@@ -51,6 +57,7 @@
         "name": "FA Cup",
         "type": "CUP",
         "enabled": true,
+        "featured": true,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       },
       {
@@ -58,6 +65,7 @@
         "name": "EFL Trophy",
         "type": "CUP",
         "enabled": true,
+        "featured": true,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       },
       {
@@ -65,6 +73,7 @@
         "name": "FA Trophy",
         "type": "CUP",
         "enabled": true,
+        "featured": false,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       },
       {
@@ -72,41 +81,7 @@
         "name": "League Cup",
         "type": "CUP",
         "enabled": true,
-        "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
-      },
-      {
-        "competitionId": 528,
-        "name": "Community Shield",
-        "type": "CUP",
-        "enabled": true,
-        "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
-      },
-      {
-        "competitionId": 670,
-        "name": "Community Shield Women",
-        "type": "CUP",
-        "enabled": true,
-        "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
-      },
-      {
-        "competitionId": 697,
-        "name": "WSL Cup",
-        "type": "CUP",
-        "enabled": true,
-        "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
-      },
-      {
-        "competitionId": 698,
-        "name": "FA Women's Cup",
-        "type": "CUP",
-        "enabled": true,
-        "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
-      },
-      {
-        "competitionId": 1156,
-        "name": "National League Cup",
-        "type": "CUP",
-        "enabled": true,
+        "featured": false,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       }
     ]
@@ -121,6 +96,7 @@
         "name": "Premiership",
         "type": "LEAGUE",
         "enabled": true,
+        "featured": true,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       },
       {
@@ -128,6 +104,7 @@
         "name": "Championship",
         "type": "LEAGUE",
         "enabled": true,
+        "featured": true,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       },
       {
@@ -135,6 +112,7 @@
         "name": "League One",
         "type": "LEAGUE",
         "enabled": true,
+        "featured": true,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       },
       {
@@ -142,6 +120,7 @@
         "name": "League Two",
         "type": "LEAGUE",
         "enabled": true,
+        "featured": true,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       },
       {
@@ -149,6 +128,7 @@
         "name": "FA Cup",
         "type": "CUP",
         "enabled": true,
+        "featured": true,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       },
       {
@@ -156,6 +136,7 @@
         "name": "Challenge Cup",
         "type": "CUP",
         "enabled": true,
+        "featured": false,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       },
       {
@@ -163,6 +144,7 @@
         "name": "League Cup",
         "type": "CUP",
         "enabled": true,
+        "featured": true,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       }
     ]
@@ -177,6 +159,7 @@
         "name": "Premier League",
         "type": "LEAGUE",
         "enabled": true,
+        "featured": true,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       },
       {
@@ -184,6 +167,7 @@
         "name": "FAW Championship",
         "type": "LEAGUE",
         "enabled": true,
+        "featured": true,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       },
       {
@@ -191,6 +175,7 @@
         "name": "Welsh Cup",
         "type": "CUP",
         "enabled": true,
+        "featured": true,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       },
       {
@@ -198,13 +183,119 @@
         "name": "League Cup",
         "type": "CUP",
         "enabled": true,
+        "featured": true,
+        "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
+      }
+    ]
+  },
+  {
+    "country": "Spain",
+    "displayOrder": 4,
+    "headerIcon": "🇪🇸",
+    "competitions": [
+      {
+        "competitionId": 140,
+        "name": "La Liga",
+        "type": "LEAGUE",
+        "enabled": true,
+        "featured": true,
+        "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
+      }
+    ]
+  },
+  {
+    "country": "Germany",
+    "displayOrder": 5,
+    "headerIcon": "🇩🇪",
+    "competitions": [
+      {
+        "competitionId": 78,
+        "name": "Bundesliga",
+        "type": "LEAGUE",
+        "enabled": true,
+        "featured": true,
+        "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
+      }
+    ]
+  },
+  {
+    "country": "Italy",
+    "displayOrder": 6,
+    "headerIcon": "🇮🇹",
+    "competitions": [
+      {
+        "competitionId": 135,
+        "name": "Serie A",
+        "type": "LEAGUE",
+        "enabled": true,
+        "featured": true,
+        "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
+      }
+    ]
+  },
+  {
+    "country": "France",
+    "displayOrder": 7,
+    "headerIcon": "🇫🇷",
+    "competitions": [
+      {
+        "competitionId": 61,
+        "name": "Ligue 1",
+        "type": "LEAGUE",
+        "enabled": true,
+        "featured": true,
+        "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
+      }
+    ]
+  },
+  {
+    "country": "Portugal",
+    "displayOrder": 8,
+    "headerIcon": "🇵🇹",
+    "competitions": [
+      {
+        "competitionId": 94,
+        "name": "Primeira Liga",
+        "type": "LEAGUE",
+        "enabled": true,
+        "featured": true,
+        "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
+      }
+    ]
+  },
+  {
+    "country": "Netherlands",
+    "displayOrder": 9,
+    "headerIcon": "🇳🇱",
+    "competitions": [
+      {
+        "competitionId": 88,
+        "name": "Eredivisie",
+        "type": "LEAGUE",
+        "enabled": true,
+        "featured": true,
+        "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
+      }
+    ]
+  },
+  {
+    "country": "Belgium",
+    "displayOrder": 10,
+    "headerIcon": "🇧🇪",
+    "competitions": [
+      {
+        "competitionId": 144,
+        "name": "Jupiler Pro League",
+        "type": "LEAGUE",
+        "enabled": true,
+        "featured": true,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       }
     ]
   },
   {
     "country": "Europe",
-    "displayOrder": 4,
+    "displayOrder": 11,
     "headerIcon": "🇪🇺",
     "competitions": [
       {
@@ -212,6 +303,7 @@
         "name": "UEFA Champions League",
         "type": "CUP",
         "enabled": true,
+        "featured": true,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       },
       {
@@ -219,6 +311,7 @@
         "name": "UEFA Europa League",
         "type": "CUP",
         "enabled": true,
+        "featured": true,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       },
       {
@@ -226,6 +319,7 @@
         "name": "UEFA Europa Conference League",
         "type": "CUP",
         "enabled": true,
+        "featured": true,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       },
       {
@@ -233,6 +327,7 @@
         "name": "UEFA Champions League Women",
         "type": "CUP",
         "enabled": true,
+        "featured": false,
         "logoUrl": "https://media.api-sports.io/football/leagues/{competitionId}.png"
       }
     ]

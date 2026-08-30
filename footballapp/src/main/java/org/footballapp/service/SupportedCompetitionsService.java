@@ -64,4 +64,20 @@ public class SupportedCompetitionsService {
                 "Unsupported competition: " + competitionId
         );
     }
+
+    public List<SupportedCompetition> getFeaturedCompetitionsForCountry(String country) {
+
+        for (SupportedCompetitionGroup group : competitionGroups) {
+
+            if (group.getCountry().equalsIgnoreCase(country)) {
+
+                return group.getCompetitions()
+                        .stream()
+                        .filter(SupportedCompetition::isFeatured)
+                        .toList();
+            }
+        }
+
+        return List.of();
+    }
 }

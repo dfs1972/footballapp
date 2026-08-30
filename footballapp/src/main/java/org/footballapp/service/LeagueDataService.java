@@ -3,13 +3,16 @@ package org.footballapp.service;
 /**
  * Spring Boot Service
  */
+import org.footballapp.api.dto.fixtures.MatchDetailDto;
+import org.footballapp.api.dto.events.FixtureEventsApiResponse;
+import org.footballapp.api.dto.events.FixtureEventDto;
 import org.footballapp.api.response.lineups.FixtureLineupMapper;
+import org.footballapp.model.fixtures.*;
 import org.footballapp.model.league.LeagueApiResponse;
 import org.footballapp.model.league.LeagueListItem;
 import org.footballapp.model.league.LeaguesApiResponse;
 import org.footballapp.mapper.*;
 import org.footballapp.model.coaches.Coach;
-import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.model.player.PlayersApiResponse;
 import org.footballapp.model.squad.SquadApiResponse;
 import org.footballapp.model.standings.*;
@@ -25,11 +28,9 @@ import java.util.*;
 import org.footballapp.model.club.ClubDetails;
 
 /**Import models*/
-import org.footballapp.model.fixtures.FixtureDetails;
 import org.footballapp.api.response.lineups.FixtureLineupResponse;
 import org.footballapp.api.response.lineups.FixtureTeamLineupResponse;
 import org.footballapp.api.response.lineups.PlayerLineupResponse;
-import org.footballapp.model.fixtures.FixtureRow;
 import org.footballapp.model.playerdetails.PlayerSummary;
 import org.footballapp.model.teams.Team;
 import org.footballapp.model.league.LeagueOverview;
@@ -628,8 +629,22 @@ public class LeagueDataService {
     }
 
     /**
-     * Get Fixture Details
+     * Returns consolidated details for a match (fixture, lineup, events).
      */
+    public MatchDetailDto getMatchDetails(long fixtureId) throws Exception {
+        MatchDetailDto dto = new MatchDetailDto();
+
+        // 1. Fixture & Score
+        dto.setFixture(getFixtureDetails(fixtureId));
+
+        // 2. Lineups
+        dto.setLineup(getFixtureLineupResponse(fixtureId));
+
+        // 3. Events
+        dto.setEvents(getFixtureEvents(fixtureId));
+
+        return dto;
+    }
 
     public FixtureDetails getFixtureDetails(
             long fixtureId
@@ -643,6 +658,29 @@ public class LeagueDataService {
         return fixtureMapper.toFixtureDetails(
                 response
         );
+
+    }
+
+    /**
+     * Retrieves the events for a fixture.
+     */
+    public List<FixtureEventDto> getFixtureEvents(
+            long fixtureId
+    ) throws Exception {
+
+        FixtureEventsApiResponse apiResponse =
+                footballDataProvider.getFixtureEvents(
+                        fixtureId
+                );
+
+        if (apiResponse == null
+                || apiResponse.getResponse() == null) {
+
+            return List.of();
+
+        }
+
+        return apiResponse.getResponse();
 
     }
 

@@ -9,6 +9,7 @@ import com.example.footballapp.ui.components.InfoRow
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.SectionCard
 import com.example.footballapp.ui.design.AppSpacing
+import com.example.footballapp.ui.model.CountryUiModel
 import com.example.footballapp.ui.model.LeagueOverviewUiModel
 import com.example.footballapp.ui.model.PlayerDetailsUiModel
 import com.example.footballapp.util.DateFormatter
@@ -16,11 +17,24 @@ import com.example.footballapp.util.DateFormatter
 @Composable
 fun PlayerDetailsScreen(
 
-    player: PlayerDetailsUiModel
+    player: PlayerDetailsUiModel,
+
+    searchQuery: String = "",
+
+    onSearchQueryChange: (String) -> Unit = {},
+
+    searchResults: List<CountryUiModel> = emptyList(),
+
+    onSearchResultClick: (CountryUiModel) -> Unit = {}
 
 ) {
 
-    ScreenScaffold {
+    ScreenScaffold(
+        searchQuery = searchQuery,
+        onSearchQueryChange = onSearchQueryChange,
+        searchResults = searchResults,
+        onSearchResultClick = onSearchResultClick
+    ) {
 
         item {
 

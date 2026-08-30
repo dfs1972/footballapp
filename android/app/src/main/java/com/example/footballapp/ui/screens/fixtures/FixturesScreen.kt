@@ -24,6 +24,7 @@ import com.example.footballapp.ui.components.FixtureListRow
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.design.Strings
+import com.example.footballapp.ui.model.CountryUiModel
 import com.example.footballapp.ui.model.FixtureDayUiModel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -38,7 +39,15 @@ fun FixturesScreen(
 
     fixtureDays: List<FixtureDayUiModel>,
 
-    onFixtureSelected: (Long, Int) -> Unit
+    onFixtureSelected: (Long, Int) -> Unit,
+
+    searchQuery: String = "",
+
+    onSearchQueryChange: (String) -> Unit = {},
+
+    searchResults: List<CountryUiModel> = emptyList(),
+
+    onSearchResultClick: (CountryUiModel) -> Unit = {}
 
 ) {
 
@@ -61,7 +70,15 @@ fun FixturesScreen(
 
     ScreenScaffold(
 
-        listState = listState
+        listState = listState,
+
+        searchQuery = searchQuery,
+
+        onSearchQueryChange = onSearchQueryChange,
+
+        searchResults = searchResults,
+
+        onSearchResultClick = onSearchResultClick
 
     ) {
 

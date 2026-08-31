@@ -6,6 +6,8 @@ data class ClubUiState(
 
     val isLoading: Boolean = true,
 
+    val clubId: Int? = null,
+
     val club: ClubDetailsUiModel? = null,
 
     val error: String? = null

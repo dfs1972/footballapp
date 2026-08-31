@@ -28,6 +28,15 @@ class TeamFixturesViewModel : ViewModel() {
         season: Int
     ) {
 
+        val currentState = _uiState.value
+
+        if (currentState.teamId == teamId &&
+            currentState.leagueId == leagueId &&
+            currentState.season == season &&
+            currentState.fixtureDays.isNotEmpty()) {
+            return
+        }
+
         viewModelScope.launch {
 
             try {
@@ -45,6 +54,12 @@ class TeamFixturesViewModel : ViewModel() {
                     TeamFixturesUiState(
 
                         isLoading = false,
+
+                        teamId = teamId,
+
+                        leagueId = leagueId,
+
+                        season = season,
 
                         fixtureDays = fixtureDays
 

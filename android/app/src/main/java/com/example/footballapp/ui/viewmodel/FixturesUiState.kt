@@ -6,6 +6,10 @@ data class FixturesUiState(
 
     val isLoading: Boolean = true,
 
+    val leagueId: Int? = null,
+
+    val season: Int? = null,
+
     val fixtureDays: List<FixtureDayUiModel> = emptyList(),
 
     val error: String? = null

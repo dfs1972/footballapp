@@ -28,6 +28,18 @@ class FixturesViewModel : ViewModel() {
         season: Int
     ) {
 
+        val currentState = _uiState.value
+
+        /*
+         * If we already have the fixtures for this league and season,
+         * don't re-fetch from the API.
+         */
+        if (currentState.leagueId == leagueId &&
+            currentState.season == season &&
+            currentState.fixtureDays.isNotEmpty()) {
+            return
+        }
+
         viewModelScope.launch {
 
             _uiState.value =
@@ -49,6 +61,10 @@ class FixturesViewModel : ViewModel() {
                     FixturesUiState(
 
                         isLoading = false,
+
+                        leagueId = leagueId,
+
+                        season = season,
 
                         fixtureDays = fixtureDays
 

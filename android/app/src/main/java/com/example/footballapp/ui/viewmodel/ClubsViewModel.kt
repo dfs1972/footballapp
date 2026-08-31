@@ -26,6 +26,14 @@ class ClubsViewModel : ViewModel() {
         season: Int
     ) {
 
+        val currentState = _uiState.value
+
+        if (currentState.leagueId == leagueId &&
+            currentState.season == season &&
+            currentState.clubs.isNotEmpty()) {
+            return
+        }
+
         viewModelScope.launch {
 
             _uiState.value =
@@ -45,6 +53,10 @@ class ClubsViewModel : ViewModel() {
                     ClubsUiState(
 
                         isLoading = false,
+
+                        leagueId = leagueId,
+
+                        season = season,
 
                         clubs = clubs
 

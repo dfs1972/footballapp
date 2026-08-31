@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.model.FixtureLineupUiModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FixtureLineupCard(
 
@@ -25,157 +24,125 @@ fun FixtureLineupCard(
 
 ) {
 
-    var expanded by remember { mutableStateOf(false) }
-    
-    var selectedTeam by remember(lineup) { 
-        mutableStateOf(lineup.teams.firstOrNull()) 
-    }
+    Column(
+        verticalArrangement = Arrangement.spacedBy(AppSpacing.Medium)
+    ) {
 
-    SectionCard {
+        lineup.teams.forEach { team ->
 
-        if (lineup.teams.size > 1) {
+            SectionCard {
 
-            ExposedDropdownMenuBox(
-                expanded = expanded,
-                onExpandedChange = { expanded = !expanded },
-                modifier = Modifier.padding(AppSpacing.Medium)
-            ) {
-                OutlinedTextField(
-                    value = selectedTeam?.teamName ?: "",
-                    onValueChange = {},
-                    readOnly = true,
-                    label = { Text("Team Lineups") },
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .menuAnchor(),
-                    //colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
-                    colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(
-                        focusedLabelColor = Color.White,
-                        unfocusedLabelColor = Color.White
-                    )
-                )
-
-                ExposedDropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false }
-                ) {
-                    lineup.teams.forEach { team ->
-                        DropdownMenuItem(
-                            text = { Text(team.teamName, color = Color.White) },
-                            onClick = {
-                                selectedTeam = team
-                                expanded = false
-                            },
+                Column(
+                    modifier = Modifier.padding(bottom = AppSpacing.Medium),
+                    verticalArrangement =
+                        Arrangement.spacedBy(
+                            AppSpacing.Small
                         )
+
+                ) {
+
+                    Text(
+                        text = team.teamName,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(bottom = AppSpacing.Small)
+                    )
+
+                    InfoRow(
+                        label = "Coach",
+                        value = team.coachName
+                    )
+
+                    InfoRow(
+                        label = "Formation",
+                        value = team.formation
+                    )
+
+                    FormationPitch(
+                        team = team,
+                        onPlayerClick = onPlayerClick
+                    )
+
+                    Spacer(
+                        modifier = Modifier.height(
+                            AppSpacing.ExtraSmall
+                        )
+                    )
+
+                    Text(
+                        text = "Starting XI",
+                        modifier = Modifier.padding(horizontal = AppSpacing.Medium),
+                        style =
+                            MaterialTheme
+                                .typography
+                                .titleSmall,
+                        fontWeight =
+                            FontWeight.SemiBold
+                    )
+
+                    val startingPlayers =
+                        team.players
+                            .filter { it.starting }
+                            .sortedBy {
+                                it.displayOrder
+                            }
+
+                    startingPlayers.forEach { player ->
+
+                        PlayerLineupRow(
+
+                            player = player,
+
+                            onClick = {
+                                onPlayerClick(
+                                    player.playerId
+                                )
+                            }
+
+                        )
+
                     }
-                }
-            }
-        }
 
-        selectedTeam?.let { team ->
-
-            Column(
-                modifier = Modifier.padding(bottom = AppSpacing.Medium),
-                verticalArrangement =
-                    Arrangement.spacedBy(
-                        AppSpacing.Small
+                    Spacer(
+                        modifier = Modifier.height(
+                            AppSpacing.Small
+                        )
                     )
 
-            ) {
-
-                InfoRow(
-                    label = "Coach",
-                    value = team.coachName
-                )
-
-                InfoRow(
-                    label = "Formation",
-                    value = team.formation
-                )
-
-                FormationPitch(
-                    team = team,
-                    onPlayerClick = onPlayerClick
-                )
-
-                Spacer(
-                    modifier = Modifier.height(
-                        AppSpacing.ExtraSmall
-                    )
-                )
-
-                Text(
-                    text = "Starting XI",
-                    modifier = Modifier.padding(horizontal = AppSpacing.Medium),
-                    style =
-                        MaterialTheme
-                            .typography
-                            .titleSmall,
-                    fontWeight =
-                        FontWeight.SemiBold
-                )
-
-                val startingPlayers =
-                    team.players
-                        .filter { it.starting }
-                        .sortedBy {
-                            it.displayOrder
-                        }
-
-                startingPlayers.forEach { player ->
-
-                    PlayerLineupRow(
-
-                        player = player,
-
-                        onClick = {
-                            onPlayerClick(
-                                player.playerId
-                            )
-                        }
-
+                    Text(
+                        text = "Substitutes",
+                        modifier = Modifier.padding(horizontal = AppSpacing.Medium),
+                        style =
+                            MaterialTheme
+                                .typography
+                                .titleSmall,
+                        fontWeight =
+                            FontWeight.SemiBold
                     )
 
-                }
+                    val substitutePlayers =
+                        team.players
+                            .filter { !it.starting }
+                            .sortedBy {
+                                it.displayOrder
+                            }
 
-                Spacer(
-                    modifier = Modifier.height(
-                        AppSpacing.Small
-                    )
-                )
+                    substitutePlayers.forEach { player ->
 
-                Text(
-                    text = "Substitutes",
-                    modifier = Modifier.padding(horizontal = AppSpacing.Medium),
-                    style =
-                        MaterialTheme
-                            .typography
-                            .titleSmall,
-                    fontWeight =
-                        FontWeight.SemiBold
-                )
+                        PlayerLineupRow(
 
-                val substitutePlayers =
-                    team.players
-                        .filter { !it.starting }
-                        .sortedBy {
-                            it.displayOrder
-                        }
+                            player = player,
 
-                substitutePlayers.forEach { player ->
+                            onClick = {
+                                onPlayerClick(
+                                    player.playerId
+                                )
+                            }
 
-                    PlayerLineupRow(
+                        )
 
-                        player = player,
-
-                        onClick = {
-                            onPlayerClick(
-                                player.playerId
-                            )
-                        }
-
-                    )
+                    }
 
                 }
 

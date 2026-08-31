@@ -3,9 +3,7 @@ package com.example.footballapp.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.footballapp.data.repository.CompetitionMetadataRepository
-import com.example.footballapp.data.repository.CompetitionRepository
 import com.example.footballapp.data.repository.LeagueOverviewRepository
-import com.example.footballapp.ui.model.CompetitionUiModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,9 +17,6 @@ class LeagueOverviewViewModel : ViewModel() {
     private val metadataRepository =
         CompetitionMetadataRepository()
 
-    private val competitionRepository =
-        CompetitionRepository()
-
     private val _uiState =
         MutableStateFlow(
             LeagueOverviewUiState()
@@ -34,6 +29,14 @@ class LeagueOverviewViewModel : ViewModel() {
         leagueId: Int,
         season: Int
     ) {
+
+        val currentState = _uiState.value
+
+        if (currentState.leagueId == leagueId &&
+            currentState.season == season &&
+            currentState.overview != null) {
+            return
+        }
 
         viewModelScope.launch {
 
@@ -57,26 +60,14 @@ class LeagueOverviewViewModel : ViewModel() {
                             season
                         )
 
-                val competitions =
-                    competitionRepository
-                        .getFeaturedLeagues(
-                            country = overview.countryName,
-                            season = season
-                        )
-                        .map { competition ->
-
-                            CompetitionUiModel(
-                                id = competition.league.id,
-                                name = competition.league.name,
-                                country = competition.country.name,
-                                type = competition.league.type
-                            )
-                        }
-
                 _uiState.value =
                     LeagueOverviewUiState(
 
                         isLoading = false,
+
+                        leagueId = leagueId,
+
+                        season = season,
 
                         overview = overview,
 
@@ -87,7 +78,7 @@ class LeagueOverviewViewModel : ViewModel() {
                             metadata.currentRound,
 
                         competitions =
-                            competitions
+                            overview.featuredLeagues
 
                     )
 

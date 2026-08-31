@@ -25,6 +25,13 @@ class ClubViewModel : ViewModel() {
         clubId: Int
     ) {
 
+        val currentState = _uiState.value
+
+        if (currentState.clubId == clubId &&
+            currentState.club != null) {
+            return
+        }
+
         viewModelScope.launch {
 
             _uiState.value =
@@ -43,6 +50,8 @@ class ClubViewModel : ViewModel() {
                     ClubUiState(
 
                         isLoading = false,
+
+                        clubId = clubId,
 
                         club = club
 

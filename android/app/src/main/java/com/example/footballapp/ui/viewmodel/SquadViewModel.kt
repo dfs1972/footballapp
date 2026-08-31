@@ -27,6 +27,15 @@ class SquadViewModel : ViewModel() {
         season: Int
     ) {
 
+        val currentState = _uiState.value
+
+        if (currentState.teamId == teamId &&
+            currentState.leagueId == leagueId &&
+            currentState.season == season &&
+            currentState.players.isNotEmpty()) {
+            return
+        }
+
         /*************** TEST PRINT *******************************/
 
         println(">>> SquadViewModel.loadPlayers called")
@@ -58,6 +67,9 @@ class SquadViewModel : ViewModel() {
                 _uiState.value =
                     SquadUiState(
                         isLoading = false,
+                        teamId = teamId,
+                        leagueId = leagueId,
+                        season = season,
                         players = players
                     )
 

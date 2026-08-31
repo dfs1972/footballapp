@@ -31,6 +31,13 @@ class PlayerDetailsViewModel : ViewModel() {
 
     ) {
 
+        val currentState = _uiState.value
+
+        if (currentState.playerId == playerId &&
+            currentState.player != null) {
+            return
+        }
+
         viewModelScope.launch {
 
             _uiState.value =
@@ -52,6 +59,8 @@ class PlayerDetailsViewModel : ViewModel() {
                     PlayerDetailsUiState(
 
                         isLoading = false,
+
+                        playerId = playerId,
 
                         player = player
 

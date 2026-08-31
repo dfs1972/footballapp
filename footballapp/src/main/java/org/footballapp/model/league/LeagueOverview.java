@@ -7,6 +7,7 @@ public class LeagueOverview {
     private int leagueId;
     private String leagueName;
     private int season;
+    private java.util.List<FeaturedLeagueOverview> featuredLeagues;
 
     public String getCountryName() {
         return countryName;
@@ -52,5 +53,13 @@ public class LeagueOverview {
             int season
     ) {
         this.season = season;
+    }
+
+    public java.util.List<FeaturedLeagueOverview> getFeaturedLeagues() {
+        return featuredLeagues;
+    }
+
+    public void setFeaturedLeagues(java.util.List<FeaturedLeagueOverview> featuredLeagues) {
+        this.featuredLeagues = featuredLeagues;
     }
 }

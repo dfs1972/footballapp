@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Bean;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /*
@@ -23,6 +25,11 @@ public class ApiFootballClient {
     private static final AtomicInteger requestCount =
             new AtomicInteger();
 
+    private static final long CACHE_TTL_MS = 3000;
+    private final Map<String, CachedResponse> cache = new ConcurrentHashMap<>();
+
+    private record CachedResponse(String body, long timestamp) {}
+
     public ApiFootballClient(
             String apiKey,
             ApiRateLimiter rateLimiter
@@ -38,6 +45,12 @@ public class ApiFootballClient {
      */
 
     public String get(String url) throws IOException, InterruptedException {
+
+        CachedResponse cached = cache.get(url);
+        if (cached != null && (System.currentTimeMillis() - cached.timestamp < CACHE_TTL_MS)) {
+            System.out.printf("[CACHE] %s%n", url);
+            return cached.body;
+        }
 
         System.out.printf(
                 "[%03d] %s%n",
@@ -71,6 +84,7 @@ public class ApiFootballClient {
             System.out.println(body);
 
             if (!body.contains("\"rateLimit\"")) {
+                cache.put(url, new CachedResponse(body, System.currentTimeMillis()));
                 return body;
             }
 

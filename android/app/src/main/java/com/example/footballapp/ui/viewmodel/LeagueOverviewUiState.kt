@@ -9,14 +9,12 @@ import com.example.footballapp.ui.model.CompetitionUiModel
  */
 data class LeagueOverviewUiState(
 
-    /**
-     * True while loading data.
-     */
     val isLoading: Boolean = true,
 
-    /**
-     * League overview returned from the backend.
-     */
+    val leagueId: Int? = null,
+
+    val season: Int? = null,
+
     val overview: LeagueOverviewUiModel? = null,
 
     /**

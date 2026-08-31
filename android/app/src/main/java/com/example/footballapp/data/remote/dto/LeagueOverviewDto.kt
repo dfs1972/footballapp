@@ -11,6 +11,5 @@ data class LeagueOverviewDto(
     val countryName: String,
     val countryFlag: String?,
     val season: Int,
-    val teamCount: Int,
-    val fixtureCount: Int
+    val featuredLeagues: List<FeaturedLeagueOverviewDto> = emptyList()
 )

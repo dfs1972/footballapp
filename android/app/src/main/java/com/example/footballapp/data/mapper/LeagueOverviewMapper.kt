@@ -1,6 +1,7 @@
 package com.example.footballapp.data.mapper
 
 import com.example.footballapp.data.remote.dto.LeagueOverviewDto
+import com.example.footballapp.ui.model.CompetitionUiModel
 import com.example.footballapp.ui.model.LeagueOverviewUiModel
 import com.example.footballapp.util.LeagueNameFormatter
 
@@ -25,6 +26,15 @@ fun LeagueOverviewDto.toUiModel(): LeagueOverviewUiModel {
         countryFlag = countryFlag,
 
         season =
-            "$season/${(season + 1).toString().takeLast(2)}"
+            "$season/${(season + 1).toString().takeLast(2)}",
+
+        featuredLeagues = featuredLeagues.map {
+            CompetitionUiModel(
+                id = it.id,
+                name = it.name,
+                country = countryName,
+                type = it.type
+            )
+        }
     )
 }

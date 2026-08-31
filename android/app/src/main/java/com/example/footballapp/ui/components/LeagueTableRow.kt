@@ -20,7 +20,6 @@ import androidx.compose.ui.Alignment
 
 import com.example.footballapp.ui.model.LeagueTableRowUiModel
 import com.example.footballapp.ui.model.QualificationType
-//import com.example.footballapp.ui.previews.PreviewData
 import com.example.footballapp.ui.theme.AppDimensions
 import com.example.footballapp.ui.design.AppSpacing
 
@@ -64,8 +63,14 @@ fun LeagueTableRow(
 
         Text(
             text = row.position.toString(),
-            modifier = Modifier.width(28.dp),
-            fontWeight = FontWeight.SemiBold
+            modifier = Modifier.width(AppDimensions.TablePositionWidth),
+            fontWeight = FontWeight.SemiBold,
+            textAlign = TextAlign.Center
+        )
+
+        // Gap between position and name
+        androidx.compose.foundation.layout.Spacer(
+            modifier = Modifier.width(AppSpacing.Small)
         )
 
         Text(
@@ -99,7 +104,7 @@ private fun ValueCell(
 
         text = text,
 
-        modifier = Modifier.width(28.dp),
+        modifier = Modifier.width(AppDimensions.TableStatWidth),
 
         textAlign = TextAlign.End,
 

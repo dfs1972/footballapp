@@ -34,6 +34,7 @@ import org.footballapp.api.response.lineups.PlayerLineupResponse;
 import org.footballapp.model.playerdetails.PlayerSummary;
 import org.footballapp.model.teams.Team;
 import org.footballapp.model.league.LeagueOverview;
+import org.footballapp.model.league.FeaturedLeagueOverview;
 import org.footballapp.model.playerdetails.PlayerDetails;
 import org.footballapp.model.standings.LeagueTableGroup;
 
@@ -268,6 +269,18 @@ public class LeagueDataService {
 
         overview.setSeason(
                 season
+        );
+
+        overview.setFeaturedLeagues(
+                supportedCompetitionsService
+                        .getFeaturedCompetitionsForCountry(overview.getCountryName())
+                        .stream()
+                        .map(c -> new FeaturedLeagueOverview(
+                                c.getCompetitionId(),
+                                c.getName(),
+                                c.getType().name()
+                        ))
+                        .toList()
         );
 
         return overview;

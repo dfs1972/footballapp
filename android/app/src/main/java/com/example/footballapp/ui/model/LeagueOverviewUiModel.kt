@@ -5,5 +5,6 @@ data class LeagueOverviewUiModel(
     val leagueName: String,
     val countryName: String,
     val countryFlag: String?,
-    val season: String
+    val season: String,
+    val featuredLeagues: List<CompetitionUiModel> = emptyList()
 )

@@ -11,9 +11,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import androidx.compose.ui.draw.clip
 import com.example.footballapp.ui.components.FixtureLineupCard
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.SectionCard
+import com.example.footballapp.ui.theme.AppShapes
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.model.CountryUiModel
 import com.example.footballapp.ui.model.FixtureDetailsUiModel
@@ -64,12 +66,27 @@ fun MatchDetailScreen(
         }
 
         item {
-            PrimaryTabRow(selectedTabIndex = selectedTab) {
+            SecondaryTabRow(
+                selectedTabIndex = selectedTab,
+                modifier = Modifier
+                    .padding(horizontal = AppSpacing.Screen)
+                    .padding(bottom = AppSpacing.Medium)
+                    .clip(AppShapes.Card),
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onSurface,
+                divider = {}
+            ) {
                 tabs.forEachIndexed { index, title ->
                     Tab(
                         selected = selectedTab == index,
                         onClick = { selectedTab = index },
-                        text = { Text(title) }
+                        text = {
+                            Text(
+                                text = title,
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = if (selectedTab == index) FontWeight.Bold else FontWeight.Normal
+                            )
+                        }
                     )
                 }
             }
@@ -77,15 +94,33 @@ fun MatchDetailScreen(
 
         when (selectedTab) {
             0 -> {
-                if (events.isEmpty()) {
-                    item {
-                        Box(modifier = Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) {
+                item {
+                    if (events.isEmpty()) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(32.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
                             Text("No events recorded for this match.")
                         }
-                    }
-                } else {
-                    items(events) { event ->
-                        EventItem(event)
+                    } else {
+                        SectionCard {
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(AppSpacing.Small)
+                            ) {
+                                Text(
+                                    text = "Match Events",
+                                    style = MaterialTheme.typography.titleLarge,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    modifier = Modifier.padding(bottom = AppSpacing.Small)
+                                )
+                                events.forEach { event ->
+                                    EventItem(event)
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -220,7 +255,9 @@ private fun ScorersList(
 @Composable
 private fun EventItem(event: FixtureEventUiModel) {
     Row(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 12.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Time

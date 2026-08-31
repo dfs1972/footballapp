@@ -15,7 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.footballapp.ui.design.Strings
 import com.example.footballapp.ui.design.AppSpacing
-import com.example.footballapp.ui.design.AppSpacing.ExtraLarge
+import com.example.footballapp.ui.theme.AppDimensions
 
 @Composable
 fun LeagueTableHeader() {
@@ -25,8 +25,10 @@ fun LeagueTableHeader() {
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .padding(
-                horizontal = AppSpacing.Medium,
-                vertical = AppSpacing.Small
+                start = AppSpacing.Small,
+                end = AppSpacing.Medium,
+                top = AppSpacing.Small,
+                bottom = AppSpacing.Small
             )
     ) {
 
@@ -36,12 +38,12 @@ fun LeagueTableHeader() {
 
             // Space for the position number
             androidx.compose.foundation.layout.Spacer(
-                modifier = Modifier.width(22.dp)
+                modifier = Modifier.width(AppDimensions.TablePositionWidth)
             )
 
-            // Space for the badge
+            // Gap between position and name
             androidx.compose.foundation.layout.Spacer(
-                modifier = Modifier.width(28.dp)
+                modifier = Modifier.width(AppSpacing.Small)
             )
 
             Text(
@@ -68,7 +70,7 @@ private fun HeaderCell(
 
     text: String,
 
-    modifier: Modifier = Modifier.width(ExtraLarge),
+    modifier: Modifier = Modifier.width(AppDimensions.TableStatWidth),
 
     textAlign: TextAlign = TextAlign.End
 

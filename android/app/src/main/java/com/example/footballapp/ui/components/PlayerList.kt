@@ -38,12 +38,24 @@ fun LazyListScope.PlayerList(
                 "Forward" ->
                     "Attacker"
 
+                null ->
+                    "Unknown"
+
                 else ->
                     player.position
             }
         }
 
-    PositionOrder.forEach { position ->
+    val displayPositions = PositionOrder.toMutableList()
+    
+    // Add any positions found in the data that aren't in the standard order
+    groupedPlayers.keys.forEach { pos ->
+        if (pos != null && !displayPositions.contains(pos)) {
+            displayPositions.add(pos)
+        }
+    }
+
+    displayPositions.forEach { position ->
 
         val squad =
             groupedPlayers[position]

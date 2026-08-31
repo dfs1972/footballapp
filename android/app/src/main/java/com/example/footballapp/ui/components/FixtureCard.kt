@@ -197,7 +197,7 @@ fun FixtureCard(
                         MaterialTheme.typography.labelLarge,
 
                     color =
-                        MaterialTheme.colorScheme.primary
+                        MaterialTheme.colorScheme.onSurfaceVariant
 
                 )
 
@@ -209,7 +209,7 @@ fun FixtureCard(
                     contentDescription = "View fixture details",
 
                     tint =
-                        MaterialTheme.colorScheme.primary
+                        MaterialTheme.colorScheme.onSurfaceVariant
 
                 )
 
@@ -447,7 +447,7 @@ private fun FixtureStatusText(
             TextAlign.Center,
 
         color =
-            MaterialTheme.colorScheme.primary
+            MaterialTheme.colorScheme.onSurface
 
     )
 

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.footballapp.ui.design.AppSpacing
@@ -20,7 +21,7 @@ fun FixtureLineupCard(
 
     lineup: FixtureLineupUiModel,
 
-    onPlayerClick: (Int) -> Unit
+    onPlayerClick: (Int) -> Unit,
 
 ) {
 
@@ -43,12 +44,16 @@ fun FixtureLineupCard(
                     value = selectedTeam?.teamName ?: "",
                     onValueChange = {},
                     readOnly = true,
-                    label = { Text("Lineups") },
+                    label = { Text("Team Lineups") },
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .menuAnchor(),
-                    colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
+                    //colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
+                    colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(
+                        focusedLabelColor = Color.White,
+                        unfocusedLabelColor = Color.White
+                    )
                 )
 
                 ExposedDropdownMenu(
@@ -57,11 +62,11 @@ fun FixtureLineupCard(
                 ) {
                     lineup.teams.forEach { team ->
                         DropdownMenuItem(
-                            text = { Text(team.teamName) },
+                            text = { Text(team.teamName, color = Color.White) },
                             onClick = {
                                 selectedTeam = team
                                 expanded = false
-                            }
+                            },
                         )
                     }
                 }

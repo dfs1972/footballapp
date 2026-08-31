@@ -1,12 +1,17 @@
 package org.footballapp.model.fixtures;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FixtureStatus {
 
+    @JsonProperty("long")
     private String longStatus;
+
+    @JsonProperty("short")
     private String shortStatus;
+
     private Integer elapsed;
 
     public FixtureStatus() {

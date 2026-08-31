@@ -19,6 +19,8 @@ import com.example.footballapp.ui.model.CountryUiModel
 import com.example.footballapp.ui.model.FixtureDetailsUiModel
 import com.example.footballapp.ui.model.FixtureEventUiModel
 import com.example.footballapp.ui.model.FixtureLineupUiModel
+import com.example.footballapp.util.DateFormatter
+import com.example.footballapp.util.FixtureStatusResolver
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -114,7 +116,7 @@ private fun MatchHeader(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.Top
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 // Home Team
                 Column(
@@ -148,18 +150,27 @@ private fun MatchHeader(
                         fontWeight = FontWeight.Bold
                     )
                     
+                    val status = FixtureStatusResolver.fromShortStatus(fixture.statusShort)
+
                     val timeText = when {
-                        fixture.statusShort == "FT" -> "Full Time"
-                        fixture.statusShort == "HT" -> "Half Time"
-                        fixture.elapsed != null && fixture.elapsed > 0 -> "${fixture.elapsed}'"
+                        FixtureStatusResolver.isFinished(status) -> "FT"
+                        status == com.example.footballapp.ui.model.FixtureStatus.HALF_TIME -> "HT"
+                        FixtureStatusResolver.isLive(status) -> {
+                            if (fixture.elapsed != null && fixture.elapsed > 0) "${fixture.elapsed}'"
+                            else "LIVE"
+                        }
+                        status == com.example.footballapp.ui.model.FixtureStatus.SCHEDULED -> {
+                            val time = DateFormatter.formatFixtureTime(fixture.fixtureDate)
+                            if (time.isNotBlank()) time else (fixture.statusShort ?: "")
+                        }
                         else -> fixture.statusShort ?: ""
                     }
                     
                     Text(
                         text = timeText,
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.SemiBold
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontWeight = FontWeight.Bold
                     )
                 }
 
@@ -235,7 +246,7 @@ private fun EventItem(event: FixtureEventUiModel) {
             Text(
                 text = eventDescription,
                 style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurface
             )
             if (!event.comments.isNullOrBlank()) {
                 Text(

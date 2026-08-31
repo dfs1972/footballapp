@@ -5,6 +5,7 @@ import org.footballapp.api.ApiFootballClient;
 import org.footballapp.model.coaches.CoachApiResponse;
 import org.footballapp.model.country.CountriesApiResponse;
 import org.footballapp.model.fixtures.FixtureRoundsApiResponse;
+import org.footballapp.model.player.PlayerResponse;
 import org.footballapp.model.player.PlayersApiResponse;
 import org.footballapp.model.league.LeaguesApiResponse;
 import org.footballapp.model.teams.TeamsApiResponse;
@@ -22,6 +23,8 @@ import org.springframework.stereotype.Service;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Profile("live")
@@ -304,16 +307,39 @@ public class ApiFootballService implements FootballDataProvider {
             int season
     ) throws Exception {
 
-        String json =
-                getPlayersJson(
-                        teamId,
-                        season
+        PlayersApiResponse firstPage =
+                mapper.readValue(
+                        getPlayersJson(teamId, season, 1),
+                        PlayersApiResponse.class
                 );
 
-        return mapper.readValue(
-                json,
-                PlayersApiResponse.class
-        );
+        if (firstPage.getPaging() == null
+                || firstPage.getPaging().getTotal() <= 1) {
+
+            return firstPage;
+        }
+
+        List<PlayerResponse> allPlayers =
+                new ArrayList<>(firstPage.getResponse());
+
+        int totalPages = firstPage.getPaging().getTotal();
+
+        for (int page = 2; page <= totalPages; page++) {
+
+            PlayersApiResponse nextPage =
+                    mapper.readValue(
+                            getPlayersJson(teamId, season, page),
+                            PlayersApiResponse.class
+                    );
+
+            if (nextPage.getResponse() != null) {
+                allPlayers.addAll(nextPage.getResponse());
+            }
+        }
+
+        firstPage.setResponse(allPlayers);
+
+        return firstPage;
     }
 
     @Override
@@ -376,14 +402,17 @@ public class ApiFootballService implements FootballDataProvider {
      */
     public String getPlayersJson(
             int teamId,
-            int season
+            int season,
+            int page
     ) throws Exception {
 
         String url =
                 "https://v3.football.api-sports.io/players?team="
                         + teamId
                         + "&season="
-                        + season;
+                        + season
+                        + "&page="
+                        + page;
 
         return apiClient.get(url);
     }

@@ -23,7 +23,8 @@ public class PlayerMapper {
     /************** PLAYER SUMMARIES ********************/
 
     public List<PlayerSummary> toPlayerSummaries(
-            PlayersApiResponse response
+            PlayersApiResponse response,
+            int leagueId
     ) {
 
         List<PlayerSummary> players =
@@ -40,7 +41,8 @@ public class PlayerMapper {
 
             players.add(
                     toPlayerSummary(
-                            playerResponse
+                            playerResponse,
+                            leagueId
                     )
             );
         }
@@ -52,20 +54,33 @@ public class PlayerMapper {
     /****************** PLAYER SUMMARY **********************/
 
     private PlayerSummary toPlayerSummary(
-            PlayerResponse response
+            PlayerResponse playerResponse,
+            int leagueId
     ) {
 
         Player player =
-                response.getPlayer();
+                playerResponse.getPlayer();
 
         PlayerStatistics statistics =
                 null;
 
-        if (response.getStatistics() != null
-                && !response.getStatistics().isEmpty()) {
+        if (playerResponse.getStatistics() != null) {
 
-            statistics =
-                    response.getStatistics().getFirst();
+            for (PlayerStatistics stats : playerResponse.getStatistics()) {
+
+                if (stats.getLeague() != null
+                        && stats.getLeague().getLeagueId() == leagueId) {
+
+                    statistics = stats;
+
+                    break;
+                }
+            }
+
+            // Fallback to first if league not found
+            if (statistics == null && !playerResponse.getStatistics().isEmpty()) {
+                statistics = playerResponse.getStatistics().getFirst();
+            }
         }
 
         PlayerSummary summary =
@@ -114,6 +129,10 @@ public class PlayerMapper {
 
                 summary.setAppearances(
                         statistics.getGames().getAppearances()
+                );
+
+                summary.setShirtNumber(
+                        statistics.getGames().getNumber()
                 );
             }
 

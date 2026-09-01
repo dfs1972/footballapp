@@ -35,19 +35,19 @@ public class CacheConfig {
     public CacheManager cacheManager() {
         CaffeineCacheManager cacheManager = new CaffeineCacheManager();
 
-        // 24 Hour Tiers
+        // Tier 1: 24 Hour Tiers
         Caffeine<Object, Object> staticBuilder = Caffeine.newBuilder()
                 .expireAfterWrite(24, TimeUnit.HOURS)
                 .maximumSize(500);
 
-        // 1 Hour Tiers
+        // Tier 2: 12 Hour Tiers (Was 1 hour)
         Caffeine<Object, Object> semiStaticBuilder = Caffeine.newBuilder()
-                .expireAfterWrite(1, TimeUnit.HOURS)
+                .expireAfterWrite(12, TimeUnit.HOURS)
                 .maximumSize(1000);
 
-        // 15 Second Tiers
+        // Tier 3: 2 Minute Tiers (Was 15 seconds)
         Caffeine<Object, Object> dynamicBuilder = Caffeine.newBuilder()
-                .expireAfterWrite(15, TimeUnit.SECONDS)
+                .expireAfterWrite(2, TimeUnit.MINUTES)
                 .maximumSize(1000);
 
         cacheManager.registerCustomCache(CACHE_COUNTRIES, staticBuilder.build());

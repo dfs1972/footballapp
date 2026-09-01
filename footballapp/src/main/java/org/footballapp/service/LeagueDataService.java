@@ -649,13 +649,23 @@ public class LeagueDataService {
         MatchDetailDto dto = new MatchDetailDto();
 
         // 1. Fixture & Score
-        dto.setFixture(getFixtureDetails(fixtureId));
+        FixtureDetails fixture = getFixtureDetails(fixtureId);
+        dto.setFixture(fixture);
+
+        // Calculate TTL based on fixture status
+        long ttl = 60; // Default
+        if (fixture != null) {
+            ttl = supportedCompetitionsService.getSmartCache().getTtlForStatus(
+                    fixture.getStatusShort(), 
+                    fixture.getFixtureDate()
+            );
+        }
 
         // 2. Lineups
-        dto.setLineup(getFixtureLineupResponse(fixtureId));
+        dto.setLineup(getFixtureLineupResponse(fixtureId, ttl));
 
         // 3. Events
-        dto.setEvents(getFixtureEvents(fixtureId));
+        dto.setEvents(getFixtureEvents(fixtureId, ttl));
 
         return dto;
     }
@@ -681,10 +691,18 @@ public class LeagueDataService {
     public List<FixtureEventDto> getFixtureEvents(
             long fixtureId
     ) throws Exception {
+        return getFixtureEvents(fixtureId, 60);
+    }
+
+    public List<FixtureEventDto> getFixtureEvents(
+            long fixtureId,
+            long ttl
+    ) throws Exception {
 
         FixtureEventsApiResponse apiResponse =
                 footballDataProvider.getFixtureEvents(
-                        fixtureId
+                        fixtureId,
+                        ttl
                 );
 
         if (apiResponse == null
@@ -705,8 +723,15 @@ public class LeagueDataService {
      * the development database.
      */
     public FixtureLineupResponse getFixtureLineupResponse(
-
             long fixtureId
+    ) throws Exception {
+        return getFixtureLineupResponse(fixtureId, 60);
+    }
+
+    public FixtureLineupResponse getFixtureLineupResponse(
+
+            long fixtureId,
+            long ttl
 
     ) throws Exception {
 
@@ -717,7 +742,8 @@ public class LeagueDataService {
 
         org.footballapp.api.dto.lineups.FixtureLineupsResponse apiResponse =
                 footballDataProvider.getFixtureLineups(
-                        fixtureId
+                        fixtureId,
+                        ttl
                 );
 
         if (apiResponse == null

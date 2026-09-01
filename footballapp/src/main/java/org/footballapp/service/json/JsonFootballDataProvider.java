@@ -214,6 +214,14 @@ public class JsonFootballDataProvider implements FootballDataProvider {
     }
 
     @Override
+    public FixtureLineupsResponse getFixtureLineups(
+            long fixtureId,
+            long ttl
+    ) throws Exception {
+        return getFixtureLineups(fixtureId);
+    }
+
+    @Override
     public FixtureEventsApiResponse getFixtureEvents(
             long fixtureId
     ) throws Exception {
@@ -224,6 +232,14 @@ public class JsonFootballDataProvider implements FootballDataProvider {
                 ),
                 FixtureEventsApiResponse.class
         );
+    }
+
+    @Override
+    public FixtureEventsApiResponse getFixtureEvents(
+            long fixtureId,
+            long ttl
+    ) throws Exception {
+        return getFixtureEvents(fixtureId);
     }
 
     @Override

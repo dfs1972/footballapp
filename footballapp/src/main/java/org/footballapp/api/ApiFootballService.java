@@ -18,6 +18,7 @@ import org.footballapp.api.dto.lineups.FixtureLineupsResponse;
 //import org.footballapp.api.dto.events.FixtureEventsResponse;
 import org.footballapp.api.dto.fixtures.FixtureStatisticsResponse;
 import org.footballapp.service.FootballDataProvider;
+import org.footballapp.service.SmartCacheService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -35,18 +36,18 @@ public class ApiFootballService implements FootballDataProvider {
 
     private final ApiFootballClient apiClient;
     private final ObjectMapper mapper;
+    private final SmartCacheService smartCache;
 
     public ApiFootballService(
             ApiFootballClient apiClient,
-            ObjectMapper mapper
+            ObjectMapper mapper,
+            SmartCacheService smartCache
     ) {
         this.apiClient = apiClient;
         this.mapper = mapper;
-
+        this.smartCache = smartCache;
     }
 
-
-    /********** Countries ******************/
 
     @Override
     @Cacheable(CACHE_COUNTRIES)
@@ -55,6 +56,8 @@ public class ApiFootballService implements FootballDataProvider {
 
         String url =
                 "https://v3.football.api-sports.io/countries";
+
+        System.out.printf("[NETWORK] %s%n", url);
 
         String json =
                 apiClient.get(url);
@@ -88,6 +91,8 @@ public class ApiFootballService implements FootballDataProvider {
                         + "&season="
                         + season;
 
+        System.out.printf("[NETWORK] %s%n", url);
+
         String json =
                 apiClient.get(url);
 
@@ -117,6 +122,8 @@ public class ApiFootballService implements FootballDataProvider {
                         + "&season="
                         + season;
 
+        System.out.printf("[NETWORK] %s%n", url);
+
         String json =
                 apiClient.get(url);
 
@@ -142,7 +149,7 @@ public class ApiFootballService implements FootballDataProvider {
                         + "&season="
                         + season;
 
-        System.out.println(url);
+        System.out.printf("[NETWORK] %s%n", url);
 
         String json = apiClient.get(url);
 
@@ -176,6 +183,8 @@ public class ApiFootballService implements FootballDataProvider {
                 "https://v3.football.api-sports.io/coachs?team="
                         + teamId;
 
+        System.out.printf("[NETWORK] %s%n", url);
+
         String json =
                 apiClient.get(url);
 
@@ -199,6 +208,8 @@ public class ApiFootballService implements FootballDataProvider {
                         + "&season="
                         + season;
 
+        System.out.printf("[NETWORK] %s%n", url);
+
         String json = apiClient.get(url);
 
         return mapper.readValue(
@@ -220,6 +231,8 @@ public class ApiFootballService implements FootballDataProvider {
         String url =
                 "https://v3.football.api-sports.io/teams?id="
                         + teamId;
+
+        System.out.printf("[NETWORK] %s%n", url);
 
         String json =
                 apiClient.get(url);
@@ -249,6 +262,8 @@ public class ApiFootballService implements FootballDataProvider {
                         + season
                         + "&team="
                         + teamId;
+
+        System.out.printf("[NETWORK] %s%n", url);
 
         String json =
                 apiClient.get(url);
@@ -285,6 +300,8 @@ public class ApiFootballService implements FootballDataProvider {
                         + "&page="
                         + page;
 
+        System.out.printf("[NETWORK] %s%n", url);
+
         String json =
                 apiClient.get(url);
 
@@ -303,6 +320,8 @@ public class ApiFootballService implements FootballDataProvider {
         String url =
                 "https://v3.football.api-sports.io/players/squads?team="
                         + teamId;
+
+        System.out.printf("[NETWORK] %s%n", url);
 
         String json =
                 apiClient.get(url);
@@ -413,9 +432,6 @@ public class ApiFootballService implements FootballDataProvider {
         return apiClient.get(url);
     }
 
-    /**
-     * Get Players details from API-Football
-     */
     public String getPlayersJson(
             int teamId,
             int season,
@@ -429,6 +445,8 @@ public class ApiFootballService implements FootballDataProvider {
                         + season
                         + "&page="
                         + page;
+
+        System.out.printf("[NETWORK] %s%n", url);
 
         return apiClient.get(url);
     }
@@ -451,6 +469,8 @@ public class ApiFootballService implements FootballDataProvider {
                         + "&season="
                         + season;
 
+        System.out.printf("[NETWORK] %s%n", url);
+
         return apiClient.get(url);
     }
 
@@ -464,6 +484,8 @@ public class ApiFootballService implements FootballDataProvider {
                         + playerId
                         + "&season="
                         + season;
+
+        System.out.printf("[NETWORK] %s%n", url);
 
         return apiClient.get(url);
     }
@@ -494,6 +516,8 @@ public class ApiFootballService implements FootballDataProvider {
                         + "&season=" + season
                         + "&current=" + current;
 
+        System.out.printf("[NETWORK] %s%n", url);
+
         String json =
                 apiClient.get(url);
 
@@ -505,11 +529,14 @@ public class ApiFootballService implements FootballDataProvider {
 
 
     @Override
-    @Cacheable(CACHE_FIXTURES)
     public FixturesApiResponse getFixtures(
             int leagueId,
             int season
     ) throws Exception {
+
+        String key = "fixtures-" + leagueId + "-" + season;
+        FixturesApiResponse cached = smartCache.get(key, FixturesApiResponse.class);
+        if (cached != null) return cached;
 
         String url =
                 "https://v3.football.api-sports.io/fixtures?league="
@@ -517,31 +544,46 @@ public class ApiFootballService implements FootballDataProvider {
                         + "&season="
                         + season;
 
+        System.out.printf("[NETWORK] %s%n", url);
+
         String json = apiClient.get(url);
 
-        return mapper.readValue(
+        FixturesApiResponse response = mapper.readValue(
                 json,
                 FixturesApiResponse.class
         );
+
+        smartCache.put(key, response);
+
+        return response;
     }
 
     @Override
-    @Cacheable(CACHE_FIXTURES)
     public FixturesApiResponse getFixture(
             long fixtureId
     ) throws Exception {
+
+        String key = "fixture-" + fixtureId;
+        FixturesApiResponse cached = smartCache.get(key, FixturesApiResponse.class);
+        if (cached != null) return cached;
 
         String url =
                 "https://v3.football.api-sports.io/fixtures?id="
                         + fixtureId;
 
+        System.out.printf("[NETWORK] %s%n", url);
+
         String json =
                 apiClient.get(url);
 
-        return mapper.readValue(
+        FixturesApiResponse response = mapper.readValue(
                 json,
                 FixturesApiResponse.class
         );
+
+        smartCache.put(key, response);
+
+        return response;
     }
 
     /**
@@ -549,12 +591,15 @@ public class ApiFootballService implements FootballDataProvider {
      */
 
     @Override
-    @Cacheable(CACHE_FIXTURES)
     public FixturesApiResponse getTeamFixtures(
             int teamId,
             int leagueId,
             int season
     ) throws Exception {
+
+        String key = "team-fixtures-" + teamId + "-" + leagueId + "-" + season;
+        FixturesApiResponse cached = smartCache.get(key, FixturesApiResponse.class);
+        if (cached != null) return cached;
 
         String url =
                 "https://v3.football.api-sports.io/fixtures?team="
@@ -564,13 +609,19 @@ public class ApiFootballService implements FootballDataProvider {
                         + "&season="
                         + season;
 
+        System.out.printf("[NETWORK] %s%n", url);
+
         String json =
                 apiClient.get(url);
 
-        return mapper.readValue(
+        FixturesApiResponse response = mapper.readValue(
                 json,
                 FixturesApiResponse.class
         );
+
+        smartCache.put(key, response);
+
+        return response;
     }
 
     /**
@@ -578,11 +629,14 @@ public class ApiFootballService implements FootballDataProvider {
      */
 
     @Override
-    @Cacheable(CACHE_FIXTURES)
     public FixturesApiResponse getRecentTeamFixtures(
             int teamId,
             int last
     ) throws Exception {
+
+        String key = "recent-fixtures-" + teamId + "-" + last;
+        FixturesApiResponse cached = smartCache.get(key, FixturesApiResponse.class);
+        if (cached != null) return cached;
 
         String url =
                 "https://v3.football.api-sports.io/fixtures?team="
@@ -590,55 +644,100 @@ public class ApiFootballService implements FootballDataProvider {
                         + "&last="
                         + last;
 
+        System.out.printf("[NETWORK] %s%n", url);
+
         String json =
                 apiClient.get(url);
 
-        return mapper.readValue(
+        FixturesApiResponse response = mapper.readValue(
                 json,
                 FixturesApiResponse.class
         );
+
+        smartCache.put(key, response);
+
+        return response;
     }
 
     /**
      * Retrieves the lineups for a fixture.
      */
-    @Cacheable(CACHE_LINEUPS)
+    @Override
     public FixtureLineupsResponse getFixtureLineups(
-
             long fixtureId
-
     ) throws Exception {
+        return getFixtureLineups(fixtureId, 15);
+    }
+
+    @Override
+    public FixtureLineupsResponse getFixtureLineups(
+            long fixtureId,
+            long ttl
+    ) throws Exception {
+
+        String key = "lineups-" + fixtureId;
+        FixtureLineupsResponse cached = smartCache.get(key, FixtureLineupsResponse.class);
+        if (cached != null) {
+            System.out.printf("[CACHE HIT] %s%n", key);
+            return cached;
+        }
 
         String url =
                 "https://v3.football.api-sports.io/fixtures/lineups?fixture="
                         + fixtureId;
 
+        System.out.printf("[NETWORK] %s%n", url);
+
         String json =
                 apiClient.get(url);
 
-        return mapper.readValue(
+        FixtureLineupsResponse response = mapper.readValue(
                 json,
                 FixtureLineupsResponse.class
         );
+
+        smartCache.put(key, response, ttl);
+
+        return response;
     }
 
     @Override
-    @Cacheable(CACHE_EVENTS)
     public FixtureEventsApiResponse getFixtureEvents(
             long fixtureId
     ) throws Exception {
+        return getFixtureEvents(fixtureId, 15);
+    }
+
+    @Override
+    public FixtureEventsApiResponse getFixtureEvents(
+            long fixtureId,
+            long ttl
+    ) throws Exception {
+
+        String key = "events-" + fixtureId;
+        FixtureEventsApiResponse cached = smartCache.get(key, FixtureEventsApiResponse.class);
+        if (cached != null) {
+            System.out.printf("[CACHE HIT] %s%n", key);
+            return cached;
+        }
 
         String url =
                 "https://v3.football.api-sports.io/fixtures/events?fixture="
                         + fixtureId;
 
+        System.out.printf("[NETWORK] %s%n", url);
+
         String json =
                 apiClient.get(url);
 
-        return mapper.readValue(
+        FixtureEventsApiResponse response = mapper.readValue(
                 json,
                 FixtureEventsApiResponse.class
         );
+
+        smartCache.put(key, response, ttl);
+
+        return response;
     }
 }
 

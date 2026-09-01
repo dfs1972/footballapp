@@ -65,8 +65,18 @@ public interface FootballDataProvider {
             long fixtureId
     ) throws Exception;
 
+    FixtureLineupsResponse getFixtureLineups(
+            long fixtureId,
+            long ttl
+    ) throws Exception;
+
     FixtureEventsApiResponse getFixtureEvents(
             long fixtureId
+    ) throws Exception;
+
+    FixtureEventsApiResponse getFixtureEvents(
+            long fixtureId,
+            long ttl
     ) throws Exception;
 
 

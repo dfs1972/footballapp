@@ -17,10 +17,11 @@ public class SupportedCompetitionsService {
             "https://media.api-sports.io/football/leagues/";
 
     private final List<SupportedCompetitionGroup> competitionGroups;
+    private final SmartCacheService smartCache;
 
-    public SupportedCompetitionsService(ObjectMapper objectMapper)
+    public SupportedCompetitionsService(ObjectMapper objectMapper, SmartCacheService smartCache)
             throws IOException {
-
+        this.smartCache = smartCache;
         competitionGroups = objectMapper.readValue(
                 new ClassPathResource("supported-competitions.json").getInputStream(),
                 new TypeReference<List<SupportedCompetitionGroup>>() {}
@@ -31,6 +32,10 @@ public class SupportedCompetitionsService {
 
     public List<SupportedCompetitionGroup> getCompetitionGroups() {
         return competitionGroups;
+    }
+
+    public SmartCacheService getSmartCache() {
+        return smartCache;
     }
 
     private void populateLogoUrls() {

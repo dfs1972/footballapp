@@ -57,10 +57,9 @@ fun ClubsScreen(
 
                 CardHeader(
 
-                    title = leagueName,
+                    title = "${Strings.CLUBS} · $season",
 
-                    subtitle =
-                        "${Strings.CLUBS} · $season"
+                    subtitle = leagueName
 
                 )
 

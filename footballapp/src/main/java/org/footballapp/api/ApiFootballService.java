@@ -18,6 +18,7 @@ import org.footballapp.api.dto.lineups.FixtureLineupsResponse;
 //import org.footballapp.api.dto.events.FixtureEventsResponse;
 import org.footballapp.api.dto.fixtures.FixtureStatisticsResponse;
 import org.footballapp.service.FootballDataProvider;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.footballapp.config.CacheConfig.*;
 
 @Service
 @Profile("live")
@@ -46,6 +49,7 @@ public class ApiFootballService implements FootballDataProvider {
     /********** Countries ******************/
 
     @Override
+    @Cacheable(CACHE_COUNTRIES)
     public CountriesApiResponse getCountries()
             throws Exception {
 
@@ -72,6 +76,7 @@ public class ApiFootballService implements FootballDataProvider {
      */
 
     @Override
+    @Cacheable(CACHE_LEAGUES)
     public LeaguesApiResponse getLeague(
             int leagueId,
             int season
@@ -97,6 +102,7 @@ public class ApiFootballService implements FootballDataProvider {
      */
 
     @Override
+    @Cacheable(CACHE_LEAGUES)
     public LeaguesApiResponse getLeagues(
             String country,
             int season
@@ -124,6 +130,7 @@ public class ApiFootballService implements FootballDataProvider {
      * gets league standings from a specified season
      */
     @Override
+    @Cacheable(CACHE_STANDINGS)
     public StandingsApiResponse getStandings(
             int leagueId,
             int season
@@ -160,6 +167,7 @@ public class ApiFootballService implements FootballDataProvider {
      */
 
     @Override
+    @Cacheable(CACHE_COACHES)
     public CoachApiResponse getCoach(
             int teamId
     ) throws Exception {
@@ -179,6 +187,7 @@ public class ApiFootballService implements FootballDataProvider {
     }
 
     @Override
+    @Cacheable(CACHE_TEAMS)
     public TeamsApiResponse getTeams(
             int leagueId,
             int season
@@ -203,6 +212,7 @@ public class ApiFootballService implements FootballDataProvider {
      */
 
     @Override
+    @Cacheable(CACHE_TEAMS)
     public TeamsApiResponse getTeam(
             int teamId
     ) throws Exception {
@@ -225,6 +235,7 @@ public class ApiFootballService implements FootballDataProvider {
      */
 
     @Override
+    @Cacheable(CACHE_STATS)
     public TeamStatisticsApiResponse getTeamStatistics(
             int teamId,
             int leagueId,
@@ -259,6 +270,7 @@ public class ApiFootballService implements FootballDataProvider {
     /**
      * Retrieves all players for a team in a season.
      */
+    @Cacheable(CACHE_PLAYERS)
     public PlayersApiResponse getPlayers(
             int teamId,
             int season,
@@ -283,6 +295,7 @@ public class ApiFootballService implements FootballDataProvider {
     }
 
     @Override
+    @Cacheable(CACHE_SQUADS)
     public SquadApiResponse getTeamSquad(
             int teamId
     ) throws Exception {
@@ -301,6 +314,7 @@ public class ApiFootballService implements FootballDataProvider {
     }
 
     @Override
+    @Cacheable(CACHE_PLAYERS)
     public PlayersApiResponse getTeamPlayers(
             int teamId,
             int leagueId,
@@ -343,6 +357,7 @@ public class ApiFootballService implements FootballDataProvider {
     }
 
     @Override
+    @Cacheable(CACHE_PLAYERS)
     public PlayersApiResponse getPlayer(
             int playerId,
             int leagueId,
@@ -363,6 +378,7 @@ public class ApiFootballService implements FootballDataProvider {
     }
 
     @Override
+    @Cacheable(CACHE_PLAYERS)
     public PlayersApiResponse getPlayer(
             int playerId,
             int season
@@ -465,6 +481,7 @@ public class ApiFootballService implements FootballDataProvider {
      */
 
     @Override
+    @Cacheable(CACHE_ROUNDS)
     public FixtureRoundsApiResponse getFixtureRounds(
             int leagueId,
             int season,
@@ -488,6 +505,7 @@ public class ApiFootballService implements FootballDataProvider {
 
 
     @Override
+    @Cacheable(CACHE_FIXTURES)
     public FixturesApiResponse getFixtures(
             int leagueId,
             int season
@@ -508,6 +526,7 @@ public class ApiFootballService implements FootballDataProvider {
     }
 
     @Override
+    @Cacheable(CACHE_FIXTURES)
     public FixturesApiResponse getFixture(
             long fixtureId
     ) throws Exception {
@@ -530,6 +549,7 @@ public class ApiFootballService implements FootballDataProvider {
      */
 
     @Override
+    @Cacheable(CACHE_FIXTURES)
     public FixturesApiResponse getTeamFixtures(
             int teamId,
             int leagueId,
@@ -558,6 +578,7 @@ public class ApiFootballService implements FootballDataProvider {
      */
 
     @Override
+    @Cacheable(CACHE_FIXTURES)
     public FixturesApiResponse getRecentTeamFixtures(
             int teamId,
             int last
@@ -581,6 +602,7 @@ public class ApiFootballService implements FootballDataProvider {
     /**
      * Retrieves the lineups for a fixture.
      */
+    @Cacheable(CACHE_LINEUPS)
     public FixtureLineupsResponse getFixtureLineups(
 
             long fixtureId
@@ -601,6 +623,7 @@ public class ApiFootballService implements FootballDataProvider {
     }
 
     @Override
+    @Cacheable(CACHE_EVENTS)
     public FixtureEventsApiResponse getFixtureEvents(
             long fixtureId
     ) throws Exception {

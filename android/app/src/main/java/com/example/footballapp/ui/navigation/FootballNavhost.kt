@@ -955,6 +955,16 @@ fun FootballNavHost(
                             )
                         )
                     },
+                    onTeamClick = { teamId ->
+                        navController.navigate(
+                            FootballDestination.Club.createRoute(
+                                leagueId = leagueId,
+                                clubId = teamId,
+                                season = season,
+                                leagueName = fixture.leagueName
+                            )
+                        )
+                    },
                     searchQuery = searchQuery,
                     onSearchQueryChange = { searchQuery = it },
                     searchResults = searchResults,

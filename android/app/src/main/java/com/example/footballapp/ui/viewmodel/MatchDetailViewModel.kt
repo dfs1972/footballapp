@@ -22,6 +22,13 @@ class MatchDetailViewModel : ViewModel() {
     private var pollingJob: Job? = null
 
     fun loadMatchDetails(fixtureId: Long) {
+        val currentState = _uiState.value
+        
+        if (currentState.fixture?.fixtureId == fixtureId && 
+            currentState.events.isNotEmpty()) {
+            return
+        }
+
         // Stop any existing polling
         pollingJob?.cancel()
 
@@ -57,6 +64,7 @@ class MatchDetailViewModel : ViewModel() {
     private fun startAdaptivePolling(fixtureId: Long) {
         pollingJob = viewModelScope.launch {
             while (true) {
+                // Wait for the next poll interval first, since we just fetched data
                 val currentStatus = _uiState.value.fixture?.statusShort
                     ?.let { FixtureStatusResolver.fromShortStatus(it) }
 

@@ -36,19 +36,6 @@ public class ApiConfig {
     }
 
     @Bean
-    public ApiFootballService apiFootballService(
-            ApiFootballClient apiFootballClient,
-            ObjectMapper objectMapper
-    ) {
-
-        return new ApiFootballService(
-                apiFootballClient,
-                objectMapper
-        );
-
-    }
-
-    @Bean
     public ApiRateLimiter apiRateLimiter() {
         return new ApiRateLimiter();
     }

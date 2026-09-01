@@ -59,11 +59,9 @@ fun ClubScreen(
 
                 CardHeader(
 
-                    title =
-                        leagueName,
+                    title = "${club.name} Football Club",
 
-                    subtitle =
-                        "${club.name} Football Club"
+                    subtitle = leagueName
 
                 )
 

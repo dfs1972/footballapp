@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -31,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.example.footballapp.ui.model.FixtureTeamColorsUiModel
 import com.example.footballapp.ui.model.FixtureTeamLineupUiModel
 import com.example.footballapp.ui.model.PlayerLineupUiModel
+import com.example.footballapp.util.ColorUtils
 import kotlin.math.roundToInt
 
 
@@ -748,9 +748,9 @@ private fun PitchPlayerMarker(
 
     // ... (colours logic remains same)
     val playerColors = if (player.position == "G") colors?.goalkeeper ?: colors?.player else colors?.player
-    val markerColor = parseHexColor(playerColors?.primary) ?: MaterialTheme.colorScheme.primary
-    val numberColor = parseHexColor(playerColors?.number) ?: MaterialTheme.colorScheme.onPrimary
-    val borderColor = parseHexColor(playerColors?.border) ?: markerColor
+    val markerColor = ColorUtils.parseHexColor(playerColors?.primary) ?: MaterialTheme.colorScheme.primary
+    val numberColor = ColorUtils.parseHexColor(playerColors?.number) ?: MaterialTheme.colorScheme.onPrimary
+    val borderColor = ColorUtils.parseHexColor(playerColors?.border) ?: markerColor
 
     /*
      * To ensure perfect centering regardless of name length,
@@ -876,44 +876,4 @@ private fun parseGrid(
  * ---------------------------------------------------------
  *
  * API-Football returns colours such as:
- *
- *     ffbb00
- *     ff0000
- *     ffffff
- *
- * Android/Compose requires:
- *
- *     #ffbb00
  */
-private fun parseHexColor(
-    value: String?
-): Color? {
-
-    if (value.isNullOrBlank()) {
-        return null
-    }
-
-    return try {
-
-        val hex =
-            value
-                .trim()
-                .removePrefix("#")
-
-        if (hex.length != 6) {
-            return null
-        }
-
-        Color(
-            android.graphics.Color.parseColor(
-                "#$hex"
-            )
-        )
-
-    } catch (
-        _: IllegalArgumentException
-    ) {
-
-        null
-    }
-}

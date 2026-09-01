@@ -48,7 +48,9 @@ fun InfoRow(
 
             style = MaterialTheme.typography.bodySmall,
 
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+
+            fontWeight = FontWeight.Medium
 
         )
 
@@ -67,60 +69,6 @@ fun InfoRow(
             fontWeight = FontWeight.Medium
 
         )
-
-    }
-
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun InfoRowPreview() {
-
-    MaterialTheme {
-
-        SectionCard {
-
-            InfoRow(
-
-                label = "Founded",
-
-                value = "1872"
-
-            )
-
-            InfoRow(
-
-                label = "Manager",
-
-                value = "Philippe Clement"
-
-            )
-
-            InfoRow(
-
-                label = "Capacity",
-
-                value = "50,817"
-
-            )
-
-            InfoRow(
-
-                label = "Stadium",
-
-                value = "Ibrox Stadium"
-
-            )
-
-            InfoRow(
-
-                label = "Unavailable",
-
-                value = null
-
-            )
-
-        }
 
     }
 

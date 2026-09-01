@@ -130,7 +130,9 @@ fun NavigationCard(
 
                         maxLines = 2,
 
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+
+                        fontWeight = FontWeight.SemiBold
 
                     )
                 }

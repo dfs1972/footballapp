@@ -12,7 +12,7 @@ data class PlayerDto(
 
     val photoUrl: String?,
 
-    val position: String,
+    val position: String?,
 
     val shirtNumber: Int?,
 

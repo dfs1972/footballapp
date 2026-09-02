@@ -4,6 +4,7 @@ package org.footballapp.service;
  * Spring Boot Service
  */
 import org.footballapp.api.dto.fixtures.MatchDetailDto;
+import org.footballapp.api.dto.fixtures.FixtureStatisticsResponse;
 import org.footballapp.api.dto.events.FixtureEventsApiResponse;
 import org.footballapp.api.dto.events.FixtureEventDto;
 import org.footballapp.api.response.lineups.FixtureLineupMapper;
@@ -18,6 +19,7 @@ import org.footballapp.model.squad.SquadApiResponse;
 import org.footballapp.model.standings.*;
 import org.footballapp.model.teams.TeamResponse;
 import org.footballapp.model.teams.TeamsApiResponse;
+import org.footballapp.util.TeamNameFormatter;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -401,7 +403,9 @@ public class LeagueDataService {
             );
 
             row.setTeamName(
-                    standing.getTeam().getName()
+                    TeamNameFormatter.format(
+                            standing.getTeam().getName()
+                    )
             );
 
             row.setPlayed(
@@ -556,7 +560,9 @@ public class LeagueDataService {
         );
 
         club.setName(
-                teamResponse.getTeam().getName()
+                TeamNameFormatter.format(
+                        teamResponse.getTeam().getName()
+                )
         );
 
         club.setCountry(
@@ -666,6 +672,12 @@ public class LeagueDataService {
 
         // 3. Events
         dto.setEvents(getFixtureEvents(fixtureId, ttl));
+
+        // 4. Statistics
+        FixtureStatisticsResponse statsResponse = footballDataProvider.getFixtureStatistics(fixtureId, ttl);
+        if (statsResponse != null) {
+            dto.setStatistics(statsResponse.getResponse());
+        }
 
         return dto;
     }

@@ -7,6 +7,7 @@ import org.footballapp.model.coaches.CoachApiResponse;
 import org.footballapp.model.country.CountriesApiResponse;
 import org.footballapp.model.fixtures.FixtureRoundsApiResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
+import org.footballapp.api.dto.fixtures.FixtureStatisticsResponse;
 import org.footballapp.model.league.LeaguesApiResponse;
 import org.footballapp.model.player.PlayersApiResponse;
 import org.footballapp.model.squad.SquadApiResponse;
@@ -240,6 +241,27 @@ public class JsonFootballDataProvider implements FootballDataProvider {
             long ttl
     ) throws Exception {
         return getFixtureEvents(fixtureId);
+    }
+
+    @Override
+    public FixtureStatisticsResponse getFixtureStatistics(
+            long fixtureId
+    ) throws Exception {
+
+        return jsonLoader.load(
+                MockApiPaths.fixtureStatistics(
+                        fixtureId
+                ),
+                FixtureStatisticsResponse.class
+        );
+    }
+
+    @Override
+    public FixtureStatisticsResponse getFixtureStatistics(
+            long fixtureId,
+            long ttl
+    ) throws Exception {
+        return getFixtureStatistics(fixtureId);
     }
 
     @Override

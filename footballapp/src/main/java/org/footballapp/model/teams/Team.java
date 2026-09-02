@@ -12,6 +12,7 @@ public class Team {
 
     private int id;
     private String name;
+    private String logo;
     private String country;
     private int founded;
     private int venueId;
@@ -32,6 +33,9 @@ public class Team {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getLogo() { return logo; }
+    public void setLogo(String logo) { this.logo = logo; }
 
     public String getCountry() {return country;}
     public void setCountry(String country) {this.country = country;}

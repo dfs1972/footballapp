@@ -6,8 +6,8 @@ data class TeamDto(
 
     val name: String,
 
-    val country: String,
+    val country: String? = null,
 
-    val founded: Int
+    val founded: Int? = null
 
 )

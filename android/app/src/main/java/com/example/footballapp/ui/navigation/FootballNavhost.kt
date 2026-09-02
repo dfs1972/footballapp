@@ -938,43 +938,41 @@ fun FootballNavHost(
 
             val uiState by matchDetailViewModel.uiState.collectAsState()
 
-            uiState.fixture?.let { fixture ->
-
-                MatchDetailScreen(
-                    fixture = fixture,
-                    events = uiState.events,
-                    lineup = uiState.lineup,
-                    isLoading = uiState.isLoading,
-                    error = uiState.error,
-                    onPlayerClick = { playerId ->
-                        navController.navigate(
-                            FootballDestination.PlayerDetails.createRoute(
-                                leagueId = leagueId,
-                                playerId = playerId,
-                                season = season
-                            )
+            MatchDetailScreen(
+                fixture = uiState.fixture,
+                events = uiState.events,
+                lineup = uiState.lineup,
+                statistics = uiState.statistics,
+                isLoading = uiState.isLoading,
+                error = uiState.error,
+                onPlayerClick = { playerId ->
+                    navController.navigate(
+                        FootballDestination.PlayerDetails.createRoute(
+                            leagueId = leagueId,
+                            playerId = playerId,
+                            season = season
                         )
-                    },
-                    onTeamClick = { teamId ->
-                        navController.navigate(
-                            FootballDestination.Club.createRoute(
-                                leagueId = leagueId,
-                                clubId = teamId,
-                                season = season,
-                                leagueName = fixture.leagueName
-                            )
+                    )
+                },
+                onTeamClick = { teamId ->
+                    navController.navigate(
+                        FootballDestination.Club.createRoute(
+                            leagueId = leagueId,
+                            clubId = teamId,
+                            season = season,
+                            leagueName = uiState.fixture?.leagueName ?: ""
                         )
-                    },
-                    searchQuery = searchQuery,
-                    onSearchQueryChange = { searchQuery = it },
-                    searchResults = searchResults,
-                    onSearchResultClick = { country ->
-                        pendingSearchCountry = country
-                        searchQuery = ""
-                        navController.navigate(FootballDestination.Competitions.route)
-                    }
-                )
-            }
+                    )
+                },
+                searchQuery = searchQuery,
+                onSearchQueryChange = { searchQuery = it },
+                searchResults = searchResults,
+                onSearchResultClick = { country ->
+                    pendingSearchCountry = country
+                    searchQuery = ""
+                    navController.navigate(FootballDestination.Competitions.route)
+                }
+            )
         }
 
 

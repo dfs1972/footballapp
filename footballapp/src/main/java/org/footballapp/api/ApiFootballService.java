@@ -739,5 +739,44 @@ public class ApiFootballService implements FootballDataProvider {
 
         return response;
     }
+
+    @Override
+    public FixtureStatisticsResponse getFixtureStatistics(
+            long fixtureId
+    ) throws Exception {
+        return getFixtureStatistics(fixtureId, 15);
+    }
+
+    @Override
+    public FixtureStatisticsResponse getFixtureStatistics(
+            long fixtureId,
+            long ttl
+    ) throws Exception {
+
+        String key = "stats-" + fixtureId;
+        FixtureStatisticsResponse cached = smartCache.get(key, FixtureStatisticsResponse.class);
+        if (cached != null) {
+            System.out.printf("[CACHE HIT] %s%n", key);
+            return cached;
+        }
+
+        String url =
+                "https://v3.football.api-sports.io/fixtures/statistics?fixture="
+                        + fixtureId;
+
+        System.out.printf("[NETWORK] %s%n", url);
+
+        String json =
+                apiClient.get(url);
+
+        FixtureStatisticsResponse response = mapper.readValue(
+                json,
+                FixtureStatisticsResponse.class
+        );
+
+        smartCache.put(key, response, ttl);
+
+        return response;
+    }
 }
 

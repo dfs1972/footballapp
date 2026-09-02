@@ -2,6 +2,7 @@ package org.footballapp.service;
 
 import org.footballapp.api.dto.events.FixtureEventsApiResponse;
 import org.footballapp.api.dto.lineups.FixtureLineupsResponse;
+import org.footballapp.api.dto.fixtures.FixtureStatisticsResponse;
 import org.footballapp.model.coaches.CoachApiResponse;
 import org.footballapp.model.country.CountriesApiResponse;
 import org.footballapp.model.fixtures.FixtureRoundsApiResponse;
@@ -75,6 +76,15 @@ public interface FootballDataProvider {
     ) throws Exception;
 
     FixtureEventsApiResponse getFixtureEvents(
+            long fixtureId,
+            long ttl
+    ) throws Exception;
+
+    FixtureStatisticsResponse getFixtureStatistics(
+            long fixtureId
+    ) throws Exception;
+
+    FixtureStatisticsResponse getFixtureStatistics(
             long fixtureId,
             long ttl
     ) throws Exception;

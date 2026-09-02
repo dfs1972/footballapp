@@ -46,12 +46,14 @@ class MatchDetailViewModel : ViewModel() {
             val fixtureUi = response.fixture.toUiModel()
             val eventsUi = response.events?.map { it.toUiModel() } ?: emptyList()
             val lineupUi = response.lineup?.toUiModel()
+            val statsUi = response.statistics?.toUiModel() ?: emptyList()
 
             _uiState.value = MatchDetailUiState(
                 isLoading = false,
                 fixture = fixtureUi,
                 events = eventsUi,
-                lineup = lineupUi
+                lineup = lineupUi,
+                statistics = statsUi
             )
         } catch (e: Exception) {
             _uiState.value = _uiState.value.copy(

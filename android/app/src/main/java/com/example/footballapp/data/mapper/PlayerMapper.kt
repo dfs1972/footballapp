@@ -13,6 +13,6 @@ fun PlayerDto.toUiModel() =
 
         name = displayName?: "Unknown",
 
-        position = position
+        position = position ?: "Unknown"
 
     )

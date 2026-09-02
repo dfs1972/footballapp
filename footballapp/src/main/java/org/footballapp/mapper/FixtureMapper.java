@@ -7,6 +7,7 @@ import org.footballapp.model.fixtures.FixtureResponse;
 import org.footballapp.model.fixtures.FixtureRow;
 import org.footballapp.model.fixtures.FixtureTeams;
 import org.footballapp.model.fixtures.FixturesApiResponse;
+import org.footballapp.util.TeamNameFormatter;
 import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
@@ -111,7 +112,9 @@ public class FixtureMapper {
         );
 
         details.setHomeTeam(
-                teams.getHome().getName()
+                TeamNameFormatter.format(
+                        teams.getHome().getName()
+                )
         );
 
         details.setHomeTeamLogo(
@@ -123,7 +126,9 @@ public class FixtureMapper {
         );
 
         details.setAwayTeam(
-                teams.getAway().getName()
+                TeamNameFormatter.format(
+                        teams.getAway().getName()
+                )
         );
 
         details.setAwayTeamLogo(
@@ -220,11 +225,15 @@ public class FixtureMapper {
         );
 
         row.setHomeTeam(
-                teams.getHome().getName()
+                TeamNameFormatter.format(
+                        teams.getHome().getName()
+                )
         );
 
         row.setAwayTeam(
-                teams.getAway().getName()
+                TeamNameFormatter.format(
+                        teams.getAway().getName()
+                )
         );
 
         row.setHomeGoals(

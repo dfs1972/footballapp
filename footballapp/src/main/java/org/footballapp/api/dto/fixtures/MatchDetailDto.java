@@ -9,6 +9,7 @@ public class MatchDetailDto {
     private FixtureDetails fixture;
     private FixtureLineupResponse lineup;
     private List<FixtureEventDto> events;
+    private List<FixtureTeamStatistics> statistics;
 
     public MatchDetailDto() {}
 
@@ -18,4 +19,6 @@ public class MatchDetailDto {
     public void setLineup(FixtureLineupResponse lineup) { this.lineup = lineup; }
     public List<FixtureEventDto> getEvents() { return events; }
     public void setEvents(List<FixtureEventDto> events) { this.events = events; }
+    public List<FixtureTeamStatistics> getStatistics() { return statistics; }
+    public void setStatistics(List<FixtureTeamStatistics> statistics) { this.statistics = statistics; }
 }

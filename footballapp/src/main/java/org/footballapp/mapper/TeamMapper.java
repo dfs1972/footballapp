@@ -3,6 +3,7 @@ package org.footballapp.mapper;
 import org.footballapp.model.teams.Team;
 import org.footballapp.model.teams.TeamResponse;
 import org.footballapp.model.teams.TeamsApiResponse;
+import org.footballapp.util.TeamNameFormatter;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -32,6 +33,12 @@ public class TeamMapper {
 
                 Team team =
                         teamResponse.getTeam();
+
+                team.setName(
+                        TeamNameFormatter.format(
+                                team.getName()
+                        )
+                );
 
                 if (teamResponse.getVenue() != null) {
 

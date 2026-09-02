@@ -31,7 +31,9 @@ import com.example.footballapp.ui.model.FixtureTeamColorsUiModel
 import com.example.footballapp.ui.model.FixtureTeamLineupUiModel
 import com.example.footballapp.ui.model.PlayerLineupUiModel
 import com.example.footballapp.util.ColorUtils
+import kotlin.math.acos
 import kotlin.math.roundToInt
+import kotlin.math.PI
 
 
 /*
@@ -527,6 +529,15 @@ fun FormationPitch(
             val arcRadius =
                 size.width * 0.12f
 
+            /*
+             * Calculate the angle where the arc intersects the penalty box line.
+             * h = distance from center (penalty spot) to the line.
+             * r = radius of the arc.
+             * cos(alpha) = h / r
+             */
+            val h = penaltyHeight - penaltySpotDistance
+            val alphaRad = acos((h / arcRadius).coerceIn(-1f, 1f))
+            val alphaDeg = (alphaRad * 180f / PI).toFloat()
 
             /*
              * Top D.
@@ -537,10 +548,10 @@ fun FormationPitch(
                     lineColor,
 
                 startAngle =
-                    25f,
+                    90f - alphaDeg,
 
                 sweepAngle =
-                    130f,
+                    alphaDeg * 2f,
 
                 useCenter =
                     false,
@@ -579,10 +590,10 @@ fun FormationPitch(
                     lineColor,
 
                 startAngle =
-                    205f,
+                    270f - alphaDeg,
 
                 sweepAngle =
-                    130f,
+                    alphaDeg * 2f,
 
                 useCenter =
                     false,

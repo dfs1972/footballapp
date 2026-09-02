@@ -4,6 +4,7 @@ import org.footballapp.api.dto.lineups.FixturePlayerWrapper;
 import org.footballapp.model.lineups.FixtureLineup;
 import org.footballapp.model.lineups.FixtureLineupPlayer;
 import org.footballapp.model.teams.Team;
+import org.footballapp.util.TeamNameFormatter;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -52,7 +53,9 @@ public class FixtureLineupMapper {
         if (team != null) {
 
             response.setTeamName(
-                    team.getName()
+                    TeamNameFormatter.format(
+                            team.getName()
+                    )
             );
 
         }
@@ -99,7 +102,9 @@ public class FixtureLineupMapper {
             );
 
             response.setTeamName(
-                    lineup.getTeam().getName()
+                    TeamNameFormatter.format(
+                            lineup.getTeam().getName()
+                    )
             );
 
         }

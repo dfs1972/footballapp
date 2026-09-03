@@ -2,7 +2,7 @@ package com.example.footballapp.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.footballapp.data.mapper.toUiModel
+import com.example.footballapp.data.mapper.*
 import com.example.footballapp.data.repository.MatchDetailRepository
 import com.example.footballapp.util.FixtureStatusResolver
 import kotlinx.coroutines.Job
@@ -24,8 +24,19 @@ class MatchDetailViewModel : ViewModel() {
     fun loadMatchDetails(fixtureId: Long) {
         val currentState = _uiState.value
         
-        if (currentState.fixture?.fixtureId == fixtureId && 
-            currentState.events.isNotEmpty()) {
+        // Only return if we have the correct fixture and it's already finished (data won't change)
+        // and we have a complete lineup with colors.
+        val isFinished = currentState.fixture?.statusShort?.let { 
+            FixtureStatusResolver.isFinished(FixtureStatusResolver.fromShortStatus(it)) 
+        } ?: false
+        
+        val hasCompleteLineup = currentState.lineup?.teams?.let { teams ->
+            teams.size >= 2 && teams.all { 
+                !it.colors?.player?.primary.isNullOrBlank() || !it.colors?.goalkeeper?.primary.isNullOrBlank()
+            }
+        } ?: false
+
+        if (currentState.fixture?.fixtureId == fixtureId && isFinished && hasCompleteLineup) {
             return
         }
 
@@ -45,8 +56,27 @@ class MatchDetailViewModel : ViewModel() {
 
             val fixtureUi = response.fixture.toUiModel()
             val eventsUi = response.events?.map { it.toUiModel() } ?: emptyList()
-            val lineupUi = response.lineup?.toUiModel()
+            var lineupUi = response.lineup?.toUiModel()
             val statsUi = response.statistics?.toUiModel() ?: emptyList()
+
+            // If lineup is missing, incomplete, or missing colors, fallback to the dedicated endpoint
+            val needsLineupFetch = lineupUi == null || 
+                                   lineupUi.teams.size < 2 || 
+                                   lineupUi.teams.any { 
+                                       it.colors?.player?.primary.isNullOrBlank() && 
+                                       it.colors?.goalkeeper?.primary.isNullOrBlank()
+                                   }
+            
+            if (needsLineupFetch) {
+                try {
+                    val fallbackLineup = repository.getFixtureLineup(fixtureId).toUiModel()
+                    if (fallbackLineup.teams.isNotEmpty()) {
+                        lineupUi = fallbackLineup
+                    }
+                } catch (e: Exception) {
+                    // Fallback failed, keep original lineupUi
+                }
+            }
 
             _uiState.value = MatchDetailUiState(
                 isLoading = false,
@@ -65,15 +95,31 @@ class MatchDetailViewModel : ViewModel() {
 
     private fun startAdaptivePolling(fixtureId: Long) {
         pollingJob = viewModelScope.launch {
+            var finishedFetchCount = 0
             while (true) {
-                // Wait for the next poll interval first, since we just fetched data
                 val currentStatus = _uiState.value.fixture?.statusShort
                     ?.let { FixtureStatusResolver.fromShortStatus(it) }
+
+                val isFinished = currentStatus?.let { FixtureStatusResolver.isFinished(it) } ?: false
+                val hasCompleteLineup = _uiState.value.lineup?.teams?.let { teams ->
+                    teams.size >= 2 && teams.all { 
+                        !it.colors?.player?.primary.isNullOrBlank() || !it.colors?.goalkeeper?.primary.isNullOrBlank()
+                    }
+                } ?: false
+
+                // If finished and we have complete data, or we've tried several times after finishing
+                if (isFinished && (hasCompleteLineup || finishedFetchCount >= 5)) {
+                    return@launch
+                }
+
+                if (isFinished) {
+                    finishedFetchCount++
+                }
 
                 val interval = when {
                     currentStatus == null -> 60_000L
                     FixtureStatusResolver.isLive(currentStatus) -> 15_000L
-                    FixtureStatusResolver.isFinished(currentStatus) -> return@launch // Stop polling
+                    isFinished -> 45_000L // Poll a bit more slowly after finishing
                     else -> 60_000L // Scheduled
                 }
 

@@ -757,8 +757,13 @@ private fun PitchPlayerMarker(
 
 ) {
 
-    // ... (colours logic remains same)
-    val playerColors = if (player.position == "G") colors?.goalkeeper ?: colors?.player else colors?.player
+    // Try to get colors for the specific position, but fallback to the other team kit if missing
+    val playerColors = if (player.position == "G") {
+        colors?.goalkeeper ?: colors?.player
+    } else {
+        colors?.player ?: colors?.goalkeeper
+    }
+    
     val markerColor = ColorUtils.parseHexColor(playerColors?.primary) ?: MaterialTheme.colorScheme.primary
     val numberColor = ColorUtils.parseHexColor(playerColors?.number) ?: MaterialTheme.colorScheme.onPrimary
     val borderColor = ColorUtils.parseHexColor(playerColors?.border) ?: markerColor

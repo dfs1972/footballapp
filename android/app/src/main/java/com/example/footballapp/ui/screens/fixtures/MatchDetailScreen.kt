@@ -49,13 +49,23 @@ fun MatchDetailScreen(
     onSearchResultClick: (CountryUiModel) -> Unit = {}
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
-    val tabs = listOf("Overview", "Lineups", "Stats")
+    val tabs = listOf("Overview", "Lineups", "Statistics")
 
     val homeTeamLineup = lineup?.teams?.find { it.teamId == fixture?.homeTeamId }
-    val awayTeamLineup = lineup?.teams?.find { it.teamId == fixture?.awayTeamId }
+        ?: lineup?.teams?.firstOrNull { it.teamName.equals(fixture?.homeTeam, ignoreCase = true) }
+        ?: lineup?.teams?.getOrNull(0)
 
-    val homeColor = ColorUtils.parseHexColor(homeTeamLineup?.colors?.player?.primary) ?: MaterialTheme.colorScheme.primary
-    val awayColor = ColorUtils.parseHexColor(awayTeamLineup?.colors?.player?.primary) ?: MaterialTheme.colorScheme.secondary
+    val awayTeamLineup = lineup?.teams?.find { it.teamId == fixture?.awayTeamId }
+        ?: lineup?.teams?.firstOrNull { it.teamName.equals(fixture?.awayTeam, ignoreCase = true) }
+        ?: lineup?.teams?.getOrNull(1)
+
+    val homeColor = ColorUtils.parseHexColor(homeTeamLineup?.colors?.player?.primary)
+        ?: ColorUtils.parseHexColor(homeTeamLineup?.colors?.goalkeeper?.primary)
+        ?: MaterialTheme.colorScheme.primary
+
+    val awayColor = ColorUtils.parseHexColor(awayTeamLineup?.colors?.player?.primary)
+        ?: ColorUtils.parseHexColor(awayTeamLineup?.colors?.goalkeeper?.primary)
+        ?: MaterialTheme.colorScheme.secondary
 
     ScreenScaffold(
         searchQuery = searchQuery,
@@ -82,146 +92,144 @@ fun MatchDetailScreen(
                 MatchHeader(
                     fixture = fixture,
                     events = events,
-                    homeColors = homeTeamLineup?.colors?.player?.primary,
-                    awayColors = awayTeamLineup?.colors?.player?.primary,
+                    homeColors = homeTeamLineup?.colors?.player?.primary ?: homeTeamLineup?.colors?.goalkeeper?.primary,
+                    awayColors = awayTeamLineup?.colors?.player?.primary ?: awayTeamLineup?.colors?.goalkeeper?.primary,
                     onTeamClick = onTeamClick
                 )
             }
 
             item {
-                SecondaryTabRow(
-                    selectedTabIndex = selectedTab,
-                    modifier = Modifier
-                        .padding(horizontal = AppSpacing.Screen)
-                        .padding(bottom = AppSpacing.Medium)
-                        .clip(AppShapes.Card),
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    contentColor = MaterialTheme.colorScheme.onSurface,
-                    divider = {}
-                ) {
-                    tabs.forEachIndexed { index, title ->
-                        Tab(
-                            selected = selectedTab == index,
-                            onClick = { selectedTab = index },
-                            text = {
-                                Text(
-                                    text = title,
-                                    style = MaterialTheme.typography.titleSmall,
-                                    fontWeight = if (selectedTab == index) FontWeight.Bold else FontWeight.Normal
+                SectionCard {
+                    Column {
+                        SecondaryTabRow(
+                            selectedTabIndex = selectedTab,
+                            modifier = Modifier.fillMaxWidth(),
+                            containerColor = Color.Transparent,
+                            contentColor = Color.White,
+                            divider = {}
+                        ) {
+                            tabs.forEachIndexed { index, title ->
+                                val selected = selectedTab == index
+                                Tab(
+                                    selected = selected,
+                                    onClick = { selectedTab = index },
+                                    selectedContentColor = Color.White,
+                                    unselectedContentColor = Color.White.copy(alpha = 0.6f),
+                                    text = {
+                                        Text(
+                                            text = title,
+                                            style = MaterialTheme.typography.titleSmall,
+                                            fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
+                                        )
+                                    }
                                 )
                             }
-                        )
-                    }
-                }
-            }
-
-            when (selectedTab) {
-                0 -> {
-                    item {
-                        if (events.isEmpty()) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(32.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text("No events recorded for this match.")
-                            }
-                        } else {
-                            SectionCard {
-                                Column(
-                                    verticalArrangement = Arrangement.spacedBy(AppSpacing.Small)
-                                ) {
-                                    Text(
-                                        text = "Match Events",
-                                        style = MaterialTheme.typography.titleLarge,
-                                        fontWeight = FontWeight.Bold,
-                                        color = MaterialTheme.colorScheme.onSurface,
-                                        modifier = Modifier.padding(bottom = AppSpacing.Small)
-                                    )
-                                    events.forEach { event ->
-                                        EventItem(event)
-                                    }
-                                }
-                            }
                         }
-                    }
-                }
-                1 -> {
-                    item {
-                        lineup?.let {
-                            FixtureLineupCard(
-                                lineup = it,
-                                onPlayerClick = onPlayerClick
-                            )
-                        } ?: Text("Lineup not available", modifier = Modifier.padding(16.dp))
-                    }
-                }
-                2 -> {
-                    item {
-                        SectionCard {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(AppSpacing.Medium),
-                                verticalArrangement = Arrangement.spacedBy(AppSpacing.Medium)
-                            ) {
-                                // Team identification color indicators
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Box(
-                                        modifier = Modifier
-                                            .size(40.dp, 12.dp)
-                                            .clip(CircleShape)
-                                            .background(homeColor)
-                                    )
-                                    Text(
-                                        text = "VS",
-                                        style = MaterialTheme.typography.labelSmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                    Box(
-                                        modifier = Modifier
-                                            .size(40.dp, 12.dp)
-                                            .clip(CircleShape)
-                                            .background(awayColor)
-                                    )
-                                }
 
-                                if (statistics.isEmpty()) {
+                        HorizontalDivider(
+                            modifier = Modifier.padding(vertical = AppSpacing.Small),
+                            color = MaterialTheme.colorScheme.outlineVariant
+                        )
+
+                        when (selectedTab) {
+                            0 -> {
+                                if (events.isEmpty()) {
                                     Box(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .padding(32.dp),
                                         contentAlignment = Alignment.Center
                                     ) {
-                                        Text("Statistics not available for this match.")
+                                        Text("No events recorded for this match.")
                                     }
                                 } else {
-                                    statistics.forEach { stat ->
-                                        val isPossession = stat.type.contains("Possession", ignoreCase = true)
-                                        if (isPossession) {
-                                            PossessionStatRow(
-                                                homeValue = stat.homeValue,
-                                                awayValue = stat.awayValue,
-                                                homePercentage = stat.homePercentage,
-                                                awayPercentage = stat.awayPercentage,
-                                                homeColor = homeColor,
-                                                awayColor = awayColor
-                                            )
-                                        } else {
-                                            StatComparisonRow(
-                                                label = stat.type,
-                                                homeValue = stat.homeValue,
-                                                awayValue = stat.awayValue,
-                                                homePercentage = stat.homePercentage,
-                                                awayPercentage = stat.awayPercentage,
-                                                homeColor = homeColor,
-                                                awayColor = awayColor
-                                            )
+                                    Column(
+                                        verticalArrangement = Arrangement.spacedBy(AppSpacing.Small)
+                                    ) {
+                                        Text(
+                                            text = "Match Events",
+                                            style = MaterialTheme.typography.titleMedium,
+                                            fontWeight = FontWeight.Bold,
+                                            color = MaterialTheme.colorScheme.onSurface,
+                                            modifier = Modifier.padding(bottom = AppSpacing.Small)
+                                        )
+                                        events.forEach { event ->
+                                            EventItem(event)
+                                        }
+                                    }
+                                }
+                            }
+                            1 -> {
+                                lineup?.let {
+                                    FixtureLineupCard(
+                                        lineup = it,
+                                        onPlayerClick = onPlayerClick,
+                                        useCards = false
+                                    )
+                                } ?: Text("Lineup not available", modifier = Modifier.padding(16.dp))
+                            }
+                            2 -> {
+                                Column(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalArrangement = Arrangement.spacedBy(AppSpacing.Medium)
+                                ) {
+                                    // Team identification color indicators
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(40.dp, 12.dp)
+                                                .clip(CircleShape)
+                                                .background(homeColor)
+                                        )
+                                        Text(
+                                            text = "VS",
+                                            style = MaterialTheme.typography.labelSmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                        Box(
+                                            modifier = Modifier
+                                                .size(40.dp, 12.dp)
+                                                .clip(CircleShape)
+                                                .background(awayColor)
+                                        )
+                                    }
+
+                                    if (statistics.isEmpty()) {
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(32.dp),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Text("Statistics not available for this match.")
+                                        }
+                                    } else {
+                                        statistics.forEach { stat ->
+                                            val isPossession = stat.type.contains("Possession", ignoreCase = true)
+                                            if (isPossession) {
+                                                PossessionStatRow(
+                                                    homeValue = stat.homeValue,
+                                                    awayValue = stat.awayValue,
+                                                    homePercentage = stat.homePercentage,
+                                                    awayPercentage = stat.awayPercentage,
+                                                    homeColor = homeColor,
+                                                    awayColor = awayColor
+                                                )
+                                            } else {
+                                                StatComparisonRow(
+                                                    label = stat.type,
+                                                    homeValue = stat.homeValue,
+                                                    awayValue = stat.awayValue,
+                                                    homePercentage = stat.homePercentage,
+                                                    awayPercentage = stat.awayPercentage,
+                                                    homeColor = homeColor,
+                                                    awayColor = awayColor
+                                                )
+                                            }
                                         }
                                     }
                                 }
@@ -265,7 +273,7 @@ private fun MatchHeader(
                 // Score
                 Text(
                     text = "${fixture.homeGoals ?: 0} - ${fixture.awayGoals ?: 0}",
-                    style = MaterialTheme.typography.headlineLarge,
+                    style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.weight(0.8f),
                     textAlign = TextAlign.Center
@@ -359,11 +367,11 @@ private fun TeamNameChip(
         ) {
             Text(
                 text = name,
-                style = if (name.length > 15) MaterialTheme.typography.labelSmall else MaterialTheme.typography.titleSmall,
+                style = if (name.length > 15) MaterialTheme.typography.titleSmall else MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
                 maxLines = 2,
-                lineHeight = if (name.length > 15) 12.sp else 16.sp
+                lineHeight = if (name.length > 15) 16.sp else 20.sp
             )
         }
     }
@@ -374,19 +382,29 @@ private fun ScorersList(
     events: List<FixtureEventUiModel>,
     teamId: Int
 ) {
-    val scorers = events.filter { it.type == "Goal" && it.teamId == teamId }
+    val goalEvents = events.filter { it.type == "Goal" && it.teamId == teamId }
+    
+    // Group by player to display multiple goals on one line
+    val scorers = goalEvents.groupBy { it.playerName ?: "Unknown" }
     
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        scorers.forEach { goal ->
+        scorers.forEach { (playerName, goals) ->
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = "⚽",
+                    text = "",//""⚽",
                     fontSize = 10.sp,
                     modifier = Modifier.padding(end = 4.dp)
                 )
-                val timeDisplay = if (goal.extra != null) "${goal.elapsed}+${goal.extra}'" else "${goal.elapsed}'"
+                
+                val goalsDisplay = goals.joinToString(", ") { goal ->
+                    val time = if (goal.extra != null) "${goal.elapsed}+${goal.extra}'" else "${goal.elapsed}'"
+                    val isOwnGoal = goal.detail.contains("Own Goal", ignoreCase = true)
+                    if (isOwnGoal) "$time (OG)" else time
+                }
+
+                val displayName = playerName.substringAfterLast(" ")
                 Text(
-                    text = "${goal.playerName} $timeDisplay",
+                    text = "$displayName $goalsDisplay",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -425,13 +443,13 @@ private fun EventItem(event: FixtureEventUiModel) {
         val timeDisplay = if (event.extra != null) "${event.elapsed}+${event.extra}'" else "${event.elapsed}'"
         Text(
             text = timeDisplay,
-            modifier = Modifier.width(48.dp),
+            modifier = Modifier.width(40.dp),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold
         )
         
-        Spacer(Modifier.width(8.dp))
+        Spacer(Modifier.width(4.dp))
         
         // Icon
         Box(modifier = Modifier.size(24.dp), contentAlignment = Alignment.Center) {
@@ -445,10 +463,24 @@ private fun EventItem(event: FixtureEventUiModel) {
         Spacer(Modifier.width(12.dp))
 
         val eventDescription = when (event.type) {
-            "Goal" -> event.playerName ?: "Goal"
-            "Card" -> "${event.detail}: ${event.playerName}"
-            "subst" -> "SUB: ${event.assistName} for ${event.playerName}"
-            else -> "${event.type}: ${event.playerName ?: ""}"
+            "Goal" -> {
+                val name = event.playerName ?: "Goal"
+                val isOwnGoal = event.detail.contains("Own Goal", ignoreCase = true)
+                if (isOwnGoal) "Goal: $name (OG)" else "Goal: $name"
+            }
+            "Card" -> {
+                val name = event.playerName ?: ""
+                "${event.detail}: $name"
+            }
+            "subst" -> {
+                val playerOut = event.playerName ?: ""
+                val playerIn = event.assistName ?: ""
+                "Sub: $playerIn for $playerOut"
+            }
+            else -> {
+                val name = event.playerName ?: ""
+                "${event.type}: $name"
+            }
         }
 
         Column {

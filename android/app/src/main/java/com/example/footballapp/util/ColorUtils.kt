@@ -6,19 +6,38 @@ import androidx.compose.ui.graphics.luminance
 object ColorUtils {
 
     /**
-     * Parses a hex color string (e.g. "ffbb00" or "#ffbb00") into a Compose Color.
+     * Parses a color string (e.g. "ffbb00", "#ffbb00", "0xffbb00", "red") into a Compose Color.
      */
     fun parseHexColor(value: String?): Color? {
         if (value.isNullOrBlank()) return null
         
-        return try {
-            val hex = value.trim().removePrefix("#")
-            if (hex.length != 6) return null
-            
-            Color(android.graphics.Color.parseColor("#$hex"))
+        val cleaned = value.trim()
+        
+        // 1. Try parsing as-is (handles #RRGGBB, #AARRGGBB, and color names like "red")
+        try {
+            return Color(android.graphics.Color.parseColor(cleaned))
         } catch (e: Exception) {
-            null
+            // Fall through
         }
+        
+        // 2. Try prepending # if it looks like a hex code without it
+        try {
+            val hex = cleaned.removePrefix("0x").removePrefix("#")
+            val finalHex = when (hex.length) {
+                3 -> hex.map { "$it$it" }.joinToString("")
+                6 -> hex
+                8 -> hex
+                else -> null
+            }
+            
+            if (finalHex != null) {
+                return Color(android.graphics.Color.parseColor("#$finalHex"))
+            }
+        } catch (e: Exception) {
+            // Fall through
+        }
+        
+        return null
     }
 
     /**

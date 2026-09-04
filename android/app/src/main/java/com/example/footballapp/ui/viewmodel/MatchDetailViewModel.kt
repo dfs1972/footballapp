@@ -1,9 +1,11 @@
 package com.example.footballapp.ui.viewmodel
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.footballapp.data.mapper.*
 import com.example.footballapp.data.repository.MatchDetailRepository
+import com.example.footballapp.data.repository.TeamColorRepository
 import com.example.footballapp.util.FixtureStatusResolver
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -12,9 +14,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class MatchDetailViewModel : ViewModel() {
+class MatchDetailViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = MatchDetailRepository()
+    private val colorRepository = TeamColorRepository(application)
 
     private val _uiState = MutableStateFlow(MatchDetailUiState())
     val uiState: StateFlow<MatchDetailUiState> = _uiState.asStateFlow()
@@ -76,6 +79,25 @@ class MatchDetailViewModel : ViewModel() {
                 } catch (e: Exception) {
                     // Fallback failed, keep original lineupUi
                 }
+            }
+
+            // Sync with team color cache
+            lineupUi = lineupUi?.let { ui ->
+                ui.copy(
+                    teams = ui.teams.map { team ->
+                        val colors = team.colors
+                        val hasColors = !colors?.player?.primary.isNullOrBlank() || 
+                                        !colors?.goalkeeper?.primary.isNullOrBlank()
+                        
+                        if (hasColors) {
+                            colors?.let { colorRepository.saveTeamColors(team.teamId, it) }
+                            team
+                        } else {
+                            val cached = colorRepository.getTeamColors(team.teamId)
+                            if (cached != null) team.copy(colors = cached) else team
+                        }
+                    }
+                )
             }
 
             _uiState.value = MatchDetailUiState(

@@ -12,10 +12,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
 import androidx.compose.ui.draw.clip
 import com.example.footballapp.ui.components.FixtureLineupCard
 import com.example.footballapp.ui.components.ScreenScaffold
@@ -31,6 +31,7 @@ import com.example.footballapp.ui.model.MatchStatisticsUiModel
 import com.example.footballapp.util.ColorUtils
 import com.example.footballapp.util.DateFormatter
 import com.example.footballapp.util.FixtureStatusResolver
+import kotlin.math.abs
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,9 +64,14 @@ fun MatchDetailScreen(
         ?: ColorUtils.parseHexColor(homeTeamLineup?.colors?.goalkeeper?.primary)
         ?: MaterialTheme.colorScheme.primary
 
-    val awayColor = ColorUtils.parseHexColor(awayTeamLineup?.colors?.player?.primary)
+    var awayColor = ColorUtils.parseHexColor(awayTeamLineup?.colors?.player?.primary)
         ?: ColorUtils.parseHexColor(awayTeamLineup?.colors?.goalkeeper?.primary)
         ?: MaterialTheme.colorScheme.secondary
+        
+    // Ensure teams are distinguishable if the API returns identical colors (e.g. both white)
+    if (abs(homeColor.luminance() - awayColor.luminance()) < 0.1f) {
+        awayColor = MaterialTheme.colorScheme.secondary
+    }
 
     ScreenScaffold(
         searchQuery = searchQuery,
@@ -262,7 +268,7 @@ private fun MatchHeader(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Home Team Chip
-                Box(modifier = Modifier.weight(1.2f), contentAlignment = Alignment.Center) {
+                Box(modifier = Modifier.weight(1.3f), contentAlignment = Alignment.Center) {
                     TeamNameChip(
                         name = fixture.homeTeam,
                         hexColor = homeColors,
@@ -275,12 +281,12 @@ private fun MatchHeader(
                     text = "${fixture.homeGoals ?: 0} - ${fixture.awayGoals ?: 0}",
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(0.8f),
+                    modifier = Modifier.weight(0.7f),
                     textAlign = TextAlign.Center
                 )
 
                 // Away Team Chip
-                Box(modifier = Modifier.weight(1.2f), contentAlignment = Alignment.Center) {
+                Box(modifier = Modifier.weight(1.3f), contentAlignment = Alignment.Center) {
                     TeamNameChip(
                         name = fixture.awayTeam,
                         hexColor = awayColors,
@@ -351,17 +357,25 @@ private fun TeamNameChip(
 ) {
     val backgroundColor = ColorUtils.parseHexColor(hexColor) ?: MaterialTheme.colorScheme.surfaceVariant
     val contentColor = ColorUtils.getContrastColor(backgroundColor)
+    
+    // Add a subtle border for light-colored kits to distinguish them from the surface
+    val borderColor = if (backgroundColor.luminance() > 0.8f) {
+        MaterialTheme.colorScheme.outlineVariant
+    } else {
+        Color.Transparent
+    }
 
     Surface(
         onClick = onClick,
         color = backgroundColor,
         contentColor = contentColor,
         shape = AppShapes.Card,
+        border = BorderStroke(1.dp, borderColor),
         modifier = Modifier.fillMaxWidth()
     ) {
         Box(
             modifier = Modifier
-                .defaultMinSize(minHeight = 40.dp)
+                .defaultMinSize(minHeight = 44.dp)
                 .padding(horizontal = 8.dp, vertical = 4.dp),
             contentAlignment = Alignment.Center
         ) {
@@ -371,7 +385,7 @@ private fun TeamNameChip(
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
                 maxLines = 2,
-                lineHeight = if (name.length > 15) 16.sp else 20.sp
+                lineHeight = if (name.length > 15) 14.sp else 18.sp
             )
         }
     }

@@ -23,6 +23,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
@@ -34,6 +35,7 @@ import com.example.footballapp.util.ColorUtils
 import kotlin.math.acos
 import kotlin.math.roundToInt
 import kotlin.math.PI
+import kotlin.math.abs
 
 
 /*
@@ -765,8 +767,22 @@ private fun PitchPlayerMarker(
     }
     
     val markerColor = ColorUtils.parseHexColor(playerColors?.primary) ?: MaterialTheme.colorScheme.primary
-    val numberColor = ColorUtils.parseHexColor(playerColors?.number) ?: MaterialTheme.colorScheme.onPrimary
-    val borderColor = ColorUtils.parseHexColor(playerColors?.border) ?: markerColor
+    
+    // Use a darker border for light-colored markers to ensure they stand out
+    val borderColor = if (markerColor.luminance() > 0.8f) {
+        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+    } else {
+        ColorUtils.parseHexColor(playerColors?.border) ?: markerColor
+    }
+    
+    // Ensure the shirt number is readable by checking contrast with the marker background
+    val apiNumberColor = ColorUtils.parseHexColor(playerColors?.number)
+    val numberColor = if (apiNumberColor != null && 
+                          abs(apiNumberColor.luminance() - markerColor.luminance()) > 0.3f) {
+        apiNumberColor
+    } else {
+        ColorUtils.getContrastColor(markerColor)
+    }
 
     /*
      * To ensure perfect centering regardless of name length,

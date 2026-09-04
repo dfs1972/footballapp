@@ -14,13 +14,13 @@ fun FixtureDetailsDto.toUiModel() =
 
         homeTeam = homeTeam,
 
-        homeTeamLogo = homeTeamLogo,
+        homeTeamLogo = null,
 
         awayTeamId = awayTeamId,
 
         awayTeam = awayTeam,
 
-        awayTeamLogo = awayTeamLogo,
+        awayTeamLogo = null,
 
         homeGoals = homeGoals,
 

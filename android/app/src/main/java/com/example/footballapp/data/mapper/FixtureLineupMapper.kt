@@ -73,7 +73,7 @@ fun FixtureLineupDto.toUiModel(): FixtureLineupUiModel =
 
                             playerName = player.playerName,
 
-                            photo = player.photo,
+                            photo = null,
 
                             shirtNumber = player.shirtNumber,
 

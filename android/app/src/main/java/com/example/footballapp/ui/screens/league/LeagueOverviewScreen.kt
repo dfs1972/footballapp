@@ -51,7 +51,9 @@ fun LeagueOverviewScreen(
 
     competitions: List<CompetitionUiModel> = emptyList(),
 
-    onCompetitionSelected: (Int, Int) -> Unit = { _, _ -> },
+    onCompetitionSelected: (Int, Int, String) -> Unit = { _, _, _ -> },
+
+    onCupsClick: () -> Unit = {},
 
     onClubClick:
         (Int) -> Unit = {},
@@ -125,46 +127,48 @@ fun LeagueOverviewScreen(
 
         }
 
-        item {
+        if (topStandings.isNotEmpty()) {
+            item {
 
-            TopStandingsCard(
+                TopStandingsCard(
 
-                leagueName = overview.leagueName,
+                    leagueName = overview.leagueName,
 
-                season = overview.season,
+                    season = overview.season,
 
-                standings = topStandings,
+                    standings = topStandings,
 
-                onTeamClick = {
+                    onTeamClick = {
 
-                    onClubClick(
-                        it.teamId
-                    )
+                        onClubClick(
+                            it.teamId
+                        )
 
-                },
+                    },
 
-                onViewFullTable =
+                    onViewFullTable =
                     onLeagueTableClick
 
-            )
+                )
 
-        }
+            }
 
-        item {
+            item {
 
-            NavigationCard(
+                NavigationCard(
 
-                title =
+                    title =
                     Strings.LEAGUE_TABLE,
 
-                subtitle =
+                    subtitle =
                     Strings.VIEW_COMPLETE_STANDINGS,
 
-                onClick =
+                    onClick =
                     onLeagueTableClick
 
-            )
+                )
 
+            }
         }
 
         item {
@@ -199,13 +203,14 @@ fun LeagueOverviewScreen(
 
                     val otherCompetitions =
                         competitions.filter {
-                            it.id != overview.leagueId
+                            it.id != overview.leagueId &&
+                                    it.type.equals("LEAGUE", ignoreCase = true)
                         }
 
                     if (otherCompetitions.isEmpty()) {
 
                         Text(
-                            text = "No other featured leagues found.",
+                            text = "No other leagues found.",
                             modifier = Modifier.padding(AppSpacing.Medium)
                         )
 
@@ -245,7 +250,8 @@ fun LeagueOverviewScreen(
                                 onClick = {
                                     onCompetitionSelected(
                                         competition.id,
-                                        currentSeason
+                                        currentSeason,
+                                        competition.type
                                     )
                                 }
                             )
@@ -253,6 +259,16 @@ fun LeagueOverviewScreen(
                     }
                 }
             }
+        }
+
+        item {
+
+            NavigationCard(
+                title = "Cup Competitions",
+                subtitle = "Domestic and International Cups",
+                onClick = onCupsClick
+            )
+
         }
 
     }

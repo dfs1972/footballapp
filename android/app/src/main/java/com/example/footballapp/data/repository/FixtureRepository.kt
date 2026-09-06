@@ -34,6 +34,16 @@ class FixtureRepository {
     }
 
     /**
+     * Get the list of rounds for a league season.
+     */
+    suspend fun getFixtureRounds(
+        leagueId: Int,
+        season: Int
+    ): List<String> {
+        return service.getFixtureRounds(leagueId, season)
+    }
+
+    /**
      * Get fixtures for a single club.
      */
     suspend fun getTeamFixtures(

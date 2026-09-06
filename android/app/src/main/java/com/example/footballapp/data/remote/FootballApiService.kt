@@ -102,6 +102,15 @@ interface FootballApiService {
     ): List<FixtureDto>
 
     /**
+     * Get Fixture Rounds
+     */
+    @GET("fixtures/rounds")
+    suspend fun getFixtureRounds(
+        @Query("leagueId") leagueId: Int,
+        @Query("season") season: Int
+    ): List<String>
+
+    /**
      * Get Team Fixtures
      */
     @GET("teamFixtures")

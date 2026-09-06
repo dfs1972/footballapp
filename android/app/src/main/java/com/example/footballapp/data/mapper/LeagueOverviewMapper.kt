@@ -21,6 +21,8 @@ fun LeagueOverviewDto.toUiModel(): LeagueOverviewUiModel {
             leagueName
         ),
 
+        type = type,
+
         countryName = countryName,
 
         countryFlag = countryFlag,

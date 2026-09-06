@@ -62,6 +62,30 @@ sealed class FootballDestination(
 
     }
 
+    object CupFixtures :
+        FootballDestination(
+            "cupFixtures/{leagueId}/{season}"
+        ) {
+
+        fun createRoute(
+            leagueId: Int,
+            season: Int
+        ) = "cupFixtures/$leagueId/$season"
+
+    }
+
+    object Cups :
+        FootballDestination(
+            "cups/{leagueId}/{season}"
+        ) {
+
+        fun createRoute(
+            leagueId: Int,
+            season: Int
+        ) = "cups/$leagueId/$season"
+
+    }
+
     object Clubs :
         FootballDestination(
             "clubs/{leagueId}/{season}/{leagueName}"

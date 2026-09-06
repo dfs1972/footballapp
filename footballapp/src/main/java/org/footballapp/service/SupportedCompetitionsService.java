@@ -70,6 +70,22 @@ public class SupportedCompetitionsService {
         );
     }
 
+    public List<SupportedCompetition> getCompetitionsForCountry(String country) {
+
+        for (SupportedCompetitionGroup group : competitionGroups) {
+
+            if (group.getCountry().equalsIgnoreCase(country)) {
+
+                return group.getCompetitions()
+                        .stream()
+                        .filter(SupportedCompetition::isEnabled)
+                        .toList();
+            }
+        }
+
+        return List.of();
+    }
+
     public List<SupportedCompetition> getFeaturedCompetitionsForCountry(String country) {
 
         for (SupportedCompetitionGroup group : competitionGroups) {

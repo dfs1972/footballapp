@@ -8,6 +8,7 @@ package com.example.footballapp.data.remote.dto
 data class LeagueOverviewDto(
     val leagueId: Int,
     val leagueName: String,
+    val type: String? = null,
     val countryName: String,
     val countryFlag: String?,
     val season: Int,

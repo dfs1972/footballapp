@@ -53,7 +53,8 @@ fun CompetitionsScreen(
 
     onCompetitionSelected: (
         Int,
-        Int
+        Int,
+        String
     ) -> Unit
 
 ) {
@@ -272,7 +273,8 @@ fun CompetitionsScreen(
                                     onClick = {
                                         onCompetitionSelected(
                                             competition.id,
-                                            currentSeason
+                                            currentSeason,
+                                            competition.type
                                         )
                                     }
                                 )

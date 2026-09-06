@@ -19,6 +19,8 @@ data class FixtureUiModel(
     val status: FixtureStatus,
 
     val homeScore: Int? = null,
-    val awayScore: Int? = null
+    val awayScore: Int? = null,
+
+    val round: String? = null
 
 )

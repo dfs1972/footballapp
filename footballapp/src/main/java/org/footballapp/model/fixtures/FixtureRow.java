@@ -11,7 +11,7 @@ public class FixtureRow {
     private String awayTeam;
     private Integer homeGoals;
     private Integer awayGoals;
-    //private String round;
+    private String round;
 
     /**Getters and Setters*/
     public long getFixtureId() {
@@ -86,11 +86,11 @@ public class FixtureRow {
         this.awayGoals = awayGoals;
     }
 
-//    public String getRound() {
-//        return round;
-//    }
-//
-//    public void setRound(String round) {
-//        this.round = round;
-//    }
+    public String getRound() {
+        return round;
+    }
+
+    public void setRound(String round) {
+        this.round = round;
+    }
 }

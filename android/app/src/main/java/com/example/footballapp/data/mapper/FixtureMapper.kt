@@ -35,6 +35,8 @@ fun FixtureDto.toUiModel() =
             },
 
         homeScore = homeGoals,
-        awayScore = awayGoals
+        awayScore = awayGoals,
+
+        round = round
 
     )

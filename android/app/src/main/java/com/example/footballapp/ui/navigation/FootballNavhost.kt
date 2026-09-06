@@ -20,6 +20,7 @@ import java.util.Calendar
 import com.example.footballapp.ui.screens.club.ClubScreen
 import com.example.footballapp.ui.screens.clubs.ClubsScreen
 import com.example.footballapp.ui.screens.competitions.CompetitionsScreen
+import com.example.footballapp.ui.screens.fixtures.CupFixturesScreen
 import com.example.footballapp.ui.screens.fixtures.FixtureDetailsScreen
 import com.example.footballapp.ui.screens.fixtures.FixturesScreen
 import com.example.footballapp.ui.screens.league.LeagueOverviewScreen
@@ -31,6 +32,7 @@ import com.example.footballapp.ui.screens.fixtures.TeamFixturesScreen
 import com.example.footballapp.ui.viewmodel.ClubViewModel
 import com.example.footballapp.ui.viewmodel.ClubsViewModel
 import com.example.footballapp.ui.viewmodel.CompetitionViewModel
+import com.example.footballapp.ui.viewmodel.CupViewModel
 import com.example.footballapp.ui.viewmodel.FixturesViewModel
 import com.example.footballapp.ui.viewmodel.LeagueOverviewViewModel
 import com.example.footballapp.ui.viewmodel.LeagueTableViewModel
@@ -39,6 +41,7 @@ import com.example.footballapp.ui.viewmodel.SquadViewModel
 import com.example.footballapp.ui.viewmodel.TeamFixturesViewModel
 import com.example.footballapp.ui.viewmodel.MatchDetailViewModel
 import com.example.footballapp.ui.screens.fixtures.MatchDetailScreen
+import com.example.footballapp.ui.screens.league.CupsScreen
 import com.example.footballapp.ui.viewmodel.FavouriteViewModel
 import com.example.footballapp.ui.viewmodel.CountryViewModel
 import com.example.footballapp.ui.viewmodel.FixtureDetailsViewModel
@@ -170,18 +173,17 @@ fun FootballNavHost(
 
                 },
 
-                onCompetitionSelected = { leagueId, season ->
+                onCompetitionSelected = { leagueId, season, type ->
 
                     searchQuery = ""
 
-                    navController.navigate(
-                        FootballDestination
-                            .LeagueOverview
-                            .createRoute(
-                                leagueId,
-                                season
-                            )
-                    )
+                    val destination = if (type.equals("CUP", ignoreCase = true)) {
+                        FootballDestination.CupFixtures.createRoute(leagueId, season)
+                    } else {
+                        FootballDestination.LeagueOverview.createRoute(leagueId, season)
+                    }
+
+                    navController.navigate(destination)
                 }
 
             )
@@ -236,16 +238,15 @@ fun FootballNavHost(
                     competitions =
                         uiState.competitions,
 
-                    onCompetitionSelected = { leagueId, selectedSeason ->
+                    onCompetitionSelected = { leagueId, selectedSeason, type ->
 
-                        navController.navigate(
-                            FootballDestination
-                                .LeagueOverview
-                                .createRoute(
-                                    leagueId,
-                                    selectedSeason
-                                )
-                        ) {
+                        val destination = if (type.equals("CUP", ignoreCase = true)) {
+                            FootballDestination.CupFixtures.createRoute(leagueId, selectedSeason)
+                        } else {
+                            FootballDestination.LeagueOverview.createRoute(leagueId, selectedSeason)
+                        }
+
+                        navController.navigate(destination) {
                             /*
                              * Avoid building up a large stack of
                              * overview screens.
@@ -258,6 +259,12 @@ fun FootballNavHost(
                                 inclusive = true
                             }
                         }
+                    },
+
+                    onCupsClick = {
+                        navController.navigate(
+                            FootballDestination.Cups.createRoute(leagueId, season)
+                        )
                     },
 
                     onLeagueTableClick = {
@@ -391,6 +398,116 @@ fun FootballNavHost(
 
                     searchResults = searchResults,
 
+                    onSearchResultClick = { country ->
+                        pendingSearchCountry = country
+                        searchQuery = ""
+                        navController.navigate(FootballDestination.Competitions.route)
+                    }
+                )
+            }
+        }
+
+        /*************** CUPS LIST *******************/
+
+        composable(
+            route = FootballDestination.Cups.route
+        ) { backStackEntry ->
+
+            val leagueId =
+                backStackEntry.arguments
+                    ?.getString("leagueId")
+                    ?.toInt()
+                    ?: return@composable
+
+            val season =
+                backStackEntry.arguments
+                    ?.getString("season")
+                    ?.toInt()
+                    ?: return@composable
+
+            val overviewViewModel: LeagueOverviewViewModel = viewModel()
+
+            LaunchedEffect(leagueId, season) {
+                overviewViewModel.loadLeagueOverview(leagueId, season)
+            }
+
+            val uiState by overviewViewModel.uiState.collectAsState()
+
+            uiState.overview?.let { overview ->
+                CupsScreen(
+                    overview = overview,
+                    competitions = uiState.competitions,
+                    onCompetitionSelected = { id, s, type ->
+                        val destination = if (type.equals("CUP", ignoreCase = true)) {
+                            FootballDestination.CupFixtures.createRoute(id, s)
+                        } else {
+                            FootballDestination.LeagueOverview.createRoute(id, s)
+                        }
+                        navController.navigate(destination)
+                    },
+                    searchQuery = searchQuery,
+                    onSearchQueryChange = { searchQuery = it },
+                    searchResults = searchResults,
+                    onSearchResultClick = { country ->
+                        pendingSearchCountry = country
+                        searchQuery = ""
+                        navController.navigate(FootballDestination.Competitions.route)
+                    }
+                )
+            }
+        }
+
+        /*************** CUP FIXTURES *******************/
+
+        composable(
+            route = FootballDestination.CupFixtures.route
+        ) { backStackEntry ->
+
+            val leagueId =
+                backStackEntry.arguments
+                    ?.getString("leagueId")
+                    ?.toInt()
+                    ?: return@composable
+
+            val season =
+                backStackEntry.arguments
+                    ?.getString("season")
+                    ?.toInt()
+                    ?: return@composable
+
+            val cupViewModel: CupViewModel = viewModel()
+            val overviewViewModel: LeagueOverviewViewModel = viewModel()
+
+            LaunchedEffect(leagueId, season) {
+                cupViewModel.loadCup(leagueId, season)
+                overviewViewModel.loadLeagueOverview(leagueId, season)
+            }
+
+            val cupState by cupViewModel.uiState.collectAsState()
+            val overviewState by overviewViewModel.uiState.collectAsState()
+
+            overviewState.overview?.let { overview ->
+                CupFixturesScreen(
+                    competitionName = overview.leagueName,
+                    season = overview.season,
+                    rounds = cupState.rounds,
+                    selectedRound = cupState.selectedRound,
+                    onRoundSelected = { cupViewModel.selectRound(it) },
+                    fixtures = cupState.fixtures,
+                    onFixtureSelected = { fixtureId, selectedSeason ->
+                        navController.navigate(
+                            FootballDestination.FixtureDetails.createRoute(
+                                leagueId,
+                                fixtureId,
+                                selectedSeason
+                            )
+                        )
+                    },
+                    isLoading = cupState.isLoading,
+                    error = cupState.error,
+                    searchQuery = searchQuery,
+                    onSearchQueryChange = { searchQuery = it },
+                    searchResults = searchResults,
                     onSearchResultClick = { country ->
                         pendingSearchCountry = country
                         searchQuery = ""

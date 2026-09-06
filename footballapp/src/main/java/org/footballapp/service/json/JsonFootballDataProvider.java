@@ -18,10 +18,12 @@ import org.footballapp.model.teams.TeamsApiResponse;
 import org.footballapp.model.teamstatistics.TeamStatisticsApiResponse;
 import org.footballapp.service.FootballDataProvider;
 import org.footballapp.service.json.JsonLoader;
+import org.footballapp.service.snapshot.SnapshotNotFoundException;
 import org.footballapp.util.MockApiPaths;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -43,13 +45,17 @@ public class JsonFootballDataProvider implements FootballDataProvider {
             int season
     ) throws Exception {
 
-        return jsonLoader.load(
-                MockApiPaths.standings(
-                        leagueId,
-                        season
-                ),
-                StandingsApiResponse.class
-        );
+        try {
+            return jsonLoader.load(
+                    MockApiPaths.standings(
+                            leagueId,
+                            season
+                    ),
+                    StandingsApiResponse.class
+            );
+        } catch (SnapshotNotFoundException e) {
+            return new StandingsApiResponse();
+        }
     }
 
     /**
@@ -62,12 +68,18 @@ public class JsonFootballDataProvider implements FootballDataProvider {
             int season
     ) throws Exception {
 
-        return jsonLoader.load(
-                MockApiPaths.league(
-                        leagueId
-                ),
-                LeaguesApiResponse.class
-        );
+        try {
+            return jsonLoader.load(
+                    MockApiPaths.league(
+                            leagueId
+                    ),
+                    LeaguesApiResponse.class
+            );
+        } catch (SnapshotNotFoundException e) {
+            LeaguesApiResponse response = new LeaguesApiResponse();
+            response.setResponse(List.of());
+            return response;
+        }
 
     }
 
@@ -77,10 +89,17 @@ public class JsonFootballDataProvider implements FootballDataProvider {
             int season
     ) throws Exception {
 
-        LeaguesApiResponse allLeagues = jsonLoader.load(
-                "leagues/all.json",
-                LeaguesApiResponse.class
-        );
+        LeaguesApiResponse allLeagues;
+        try {
+            allLeagues = jsonLoader.load(
+                    "leagues/all.json",
+                    LeaguesApiResponse.class
+            );
+        } catch (SnapshotNotFoundException e) {
+            LeaguesApiResponse response = new LeaguesApiResponse();
+            response.setResponse(List.of());
+            return response;
+        }
 
         if (allLeagues.getResponse() == null) {
             allLeagues.setResponse(List.of());
@@ -101,10 +120,15 @@ public class JsonFootballDataProvider implements FootballDataProvider {
     public CountriesApiResponse getCountries()
             throws Exception {
 
-        LeaguesApiResponse allLeagues = jsonLoader.load(
-                "leagues/all.json",
-                LeaguesApiResponse.class
-        );
+        LeaguesApiResponse allLeagues;
+        try {
+            allLeagues = jsonLoader.load(
+                    "leagues/all.json",
+                    LeaguesApiResponse.class
+            );
+        } catch (Exception e) {
+            return new CountriesApiResponse();
+        }
 
         if (allLeagues.getResponse() == null) {
             return new CountriesApiResponse();
@@ -144,12 +168,16 @@ public class JsonFootballDataProvider implements FootballDataProvider {
             int teamId
     ) throws Exception {
 
-        return jsonLoader.load(
-                MockApiPaths.coach(
-                        teamId
-                ),
-                CoachApiResponse.class
-        );
+        try {
+            return jsonLoader.load(
+                    MockApiPaths.coach(
+                            teamId
+                    ),
+                    CoachApiResponse.class
+            );
+        } catch (SnapshotNotFoundException e) {
+            return new CoachApiResponse();
+        }
 
     }
 
@@ -159,13 +187,19 @@ public class JsonFootballDataProvider implements FootballDataProvider {
             int season
     ) throws Exception {
 
-        return jsonLoader.load(
-                MockApiPaths.teams(
-                        leagueId,
-                        season
-                ),
-                TeamsApiResponse.class
-        );
+        try {
+            return jsonLoader.load(
+                    MockApiPaths.teams(
+                            leagueId,
+                            season
+                    ),
+                    TeamsApiResponse.class
+            );
+        } catch (SnapshotNotFoundException e) {
+            TeamsApiResponse resp = new TeamsApiResponse();
+            resp.setResponse(List.of());
+            return resp;
+        }
     }
 
     @Override
@@ -173,12 +207,18 @@ public class JsonFootballDataProvider implements FootballDataProvider {
             int teamId
     ) throws Exception {
 
-        return jsonLoader.load(
-                MockApiPaths.team(
-                        teamId
-                ),
-                TeamsApiResponse.class
-        );
+        try {
+            return jsonLoader.load(
+                    MockApiPaths.team(
+                            teamId
+                    ),
+                    TeamsApiResponse.class
+            );
+        } catch (SnapshotNotFoundException e) {
+            TeamsApiResponse resp = new TeamsApiResponse();
+            resp.setResponse(List.of());
+            return resp;
+        }
     }
 
     @Override
@@ -188,14 +228,18 @@ public class JsonFootballDataProvider implements FootballDataProvider {
             int season
     ) throws Exception {
 
-        return jsonLoader.load(
-                MockApiPaths.teamStatistics(
-                        teamId,
-                        leagueId,
-                        season
-                ),
-                TeamStatisticsApiResponse.class
-        );
+        try {
+            return jsonLoader.load(
+                    MockApiPaths.teamStatistics(
+                            teamId,
+                            leagueId,
+                            season
+                    ),
+                    TeamStatisticsApiResponse.class
+            );
+        } catch (SnapshotNotFoundException e) {
+            return new TeamStatisticsApiResponse();
+        }
     }
 
     /**
@@ -209,13 +253,19 @@ public class JsonFootballDataProvider implements FootballDataProvider {
             boolean current
     ) throws Exception {
 
-        return jsonLoader.load(
-                MockApiPaths.fixtureRounds(
-                        leagueId,
-                        season
-                ),
-                FixtureRoundsApiResponse.class
-        );
+        try {
+            return jsonLoader.load(
+                    MockApiPaths.fixtureRounds(
+                            leagueId,
+                            season
+                    ),
+                    FixtureRoundsApiResponse.class
+            );
+        } catch (SnapshotNotFoundException e) {
+            FixtureRoundsApiResponse resp = new FixtureRoundsApiResponse();
+            resp.setResponse(List.of());
+            return resp;
+        }
     }
 
     @Override
@@ -224,13 +274,19 @@ public class JsonFootballDataProvider implements FootballDataProvider {
             int season
     ) throws Exception {
 
-        return jsonLoader.load(
-                MockApiPaths.fixtures(
-                        leagueId,
-                        season
-                ),
-                FixturesApiResponse.class
-        );
+        try {
+            return jsonLoader.load(
+                    MockApiPaths.fixtures(
+                            leagueId,
+                            season
+                    ),
+                    FixturesApiResponse.class
+            );
+        } catch (SnapshotNotFoundException e) {
+            FixturesApiResponse resp = new FixturesApiResponse();
+            resp.setResponse(List.of());
+            return resp;
+        }
     }
 
     @Override
@@ -238,12 +294,18 @@ public class JsonFootballDataProvider implements FootballDataProvider {
             long fixtureId
     ) throws Exception {
 
-        return jsonLoader.load(
-                MockApiPaths.fixture(
-                        fixtureId
-                ),
-                FixturesApiResponse.class
-        );
+        try {
+            return jsonLoader.load(
+                    MockApiPaths.fixture(
+                            fixtureId
+                    ),
+                    FixturesApiResponse.class
+            );
+        } catch (SnapshotNotFoundException e) {
+            FixturesApiResponse resp = new FixturesApiResponse();
+            resp.setResponse(List.of());
+            return resp;
+        }
     }
 
     @Override
@@ -251,12 +313,18 @@ public class JsonFootballDataProvider implements FootballDataProvider {
             long fixtureId
     ) throws Exception {
 
-        return jsonLoader.load(
-                MockApiPaths.fixtureLineups(
-                        fixtureId
-                ),
-                FixtureLineupsResponse.class
-        );
+        try {
+            return jsonLoader.load(
+                    MockApiPaths.fixtureLineups(
+                            fixtureId
+                    ),
+                    FixtureLineupsResponse.class
+            );
+        } catch (SnapshotNotFoundException e) {
+            FixtureLineupsResponse resp = new FixtureLineupsResponse();
+            resp.setResponse(List.of());
+            return resp;
+        }
     }
 
     @Override
@@ -272,12 +340,18 @@ public class JsonFootballDataProvider implements FootballDataProvider {
             long fixtureId
     ) throws Exception {
 
-        return jsonLoader.load(
-                MockApiPaths.fixtureEvents(
-                        fixtureId
-                ),
-                FixtureEventsApiResponse.class
-        );
+        try {
+            return jsonLoader.load(
+                    MockApiPaths.fixtureEvents(
+                            fixtureId
+                    ),
+                    FixtureEventsApiResponse.class
+            );
+        } catch (SnapshotNotFoundException e) {
+            FixtureEventsApiResponse resp = new FixtureEventsApiResponse();
+            resp.setResponse(List.of());
+            return resp;
+        }
     }
 
     @Override
@@ -293,12 +367,18 @@ public class JsonFootballDataProvider implements FootballDataProvider {
             long fixtureId
     ) throws Exception {
 
-        return jsonLoader.load(
-                MockApiPaths.fixtureStatistics(
-                        fixtureId
-                ),
-                FixtureStatisticsResponse.class
-        );
+        try {
+            return jsonLoader.load(
+                    MockApiPaths.fixtureStatistics(
+                            fixtureId
+                    ),
+                    FixtureStatisticsResponse.class
+            );
+        } catch (SnapshotNotFoundException e) {
+            FixtureStatisticsResponse resp = new FixtureStatisticsResponse();
+            resp.setResponse(List.of());
+            return resp;
+        }
     }
 
     @Override
@@ -316,14 +396,20 @@ public class JsonFootballDataProvider implements FootballDataProvider {
             int season
     ) throws Exception {
 
-        return jsonLoader.load(
-                MockApiPaths.teamFixtures(
-                        teamId,
-                        leagueId,
-                        season
-                ),
-                FixturesApiResponse.class
-        );
+        try {
+            return jsonLoader.load(
+                    MockApiPaths.teamFixtures(
+                            teamId,
+                            leagueId,
+                            season
+                    ),
+                    FixturesApiResponse.class
+            );
+        } catch (SnapshotNotFoundException e) {
+            FixturesApiResponse resp = new FixturesApiResponse();
+            resp.setResponse(List.of());
+            return resp;
+        }
     }
 
     @Override
@@ -332,14 +418,20 @@ public class JsonFootballDataProvider implements FootballDataProvider {
             int last
     ) throws Exception {
 
-        return jsonLoader.load(
-                MockApiPaths.teamFixtures(
-                        teamId,
-                        AppConfig.DEVELOPMENT_LEAGUE,
-                        AppConfig.DEVELOPMENT_SEASON
-                ),
-                FixturesApiResponse.class
-        );
+        try {
+            return jsonLoader.load(
+                    MockApiPaths.teamFixtures(
+                            teamId,
+                            AppConfig.DEVELOPMENT_LEAGUE,
+                            AppConfig.DEVELOPMENT_SEASON
+                    ),
+                    FixturesApiResponse.class
+            );
+        } catch (SnapshotNotFoundException e) {
+            FixturesApiResponse resp = new FixturesApiResponse();
+            resp.setResponse(List.of());
+            return resp;
+        }
     }
 
 
@@ -354,14 +446,20 @@ public class JsonFootballDataProvider implements FootballDataProvider {
             int season
     ) throws Exception {
 
-        return jsonLoader.load(
-                MockApiPaths.teamPlayers(
-                        teamId,
-                        leagueId,
-                        season
-                ),
-                PlayersApiResponse.class
-        );
+        try {
+            return jsonLoader.load(
+                    MockApiPaths.teamPlayers(
+                            teamId,
+                            leagueId,
+                            season
+                    ),
+                    PlayersApiResponse.class
+            );
+        } catch (SnapshotNotFoundException e) {
+            PlayersApiResponse resp = new PlayersApiResponse();
+            resp.setResponse(List.of());
+            return resp;
+        }
     }
 
     @Override
@@ -369,12 +467,18 @@ public class JsonFootballDataProvider implements FootballDataProvider {
             int teamId
     ) throws Exception {
 
-        return jsonLoader.load(
-                MockApiPaths.teamSquad(
-                        teamId
-                ),
-                SquadApiResponse.class
-        );
+        try {
+            return jsonLoader.load(
+                    MockApiPaths.teamSquad(
+                            teamId
+                    ),
+                    SquadApiResponse.class
+            );
+        } catch (SnapshotNotFoundException e) {
+            SquadApiResponse resp = new SquadApiResponse();
+            resp.setResponse(List.of());
+            return resp;
+        }
 
     }
 
@@ -385,13 +489,19 @@ public class JsonFootballDataProvider implements FootballDataProvider {
             int season
     ) throws Exception {
 
-        return jsonLoader.load(
-                MockApiPaths.player(
-                        playerId,
-                        season
-                ),
-                PlayersApiResponse.class
-        );
+        try {
+            return jsonLoader.load(
+                    MockApiPaths.player(
+                            playerId,
+                            season
+                    ),
+                    PlayersApiResponse.class
+            );
+        } catch (SnapshotNotFoundException e) {
+            PlayersApiResponse resp = new PlayersApiResponse();
+            resp.setResponse(List.of());
+            return resp;
+        }
     }
 
     @Override
@@ -400,12 +510,18 @@ public class JsonFootballDataProvider implements FootballDataProvider {
             int season
     ) throws Exception {
 
-        return jsonLoader.load(
-                MockApiPaths.player(
-                        playerId,
-                        season
-                ),
-                PlayersApiResponse.class
-        );
+        try {
+            return jsonLoader.load(
+                    MockApiPaths.player(
+                            playerId,
+                            season
+                    ),
+                    PlayersApiResponse.class
+            );
+        } catch (SnapshotNotFoundException e) {
+            PlayersApiResponse resp = new PlayersApiResponse();
+            resp.setResponse(List.of());
+            return resp;
+        }
     }
 }

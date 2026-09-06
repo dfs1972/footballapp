@@ -20,6 +20,8 @@ data class FixtureDto(
 
     val awayGoals: Int?,
 
-    val statusShort: String? = null
+    val statusShort: String? = null,
+
+    val round: String? = null
 
 )

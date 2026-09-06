@@ -245,45 +245,82 @@ public class LeagueDataService {
                         season
                 );
 
-        overview.setLeagueName(
-                leagueResponse
-                        .getResponse()
-                        .getFirst()
-                        .getLeague()
-                        .getName()
-        );
+        if (leagueResponse != null
+                && leagueResponse.getResponse() != null
+                && !leagueResponse.getResponse().isEmpty()) {
 
-        overview.setCountryName(
-                leagueResponse
-                        .getResponse()
-                        .getFirst()
-                        .getCountry()
-                        .getName()
-        );
+            overview.setLeagueName(
+                    leagueResponse
+                            .getResponse()
+                            .getFirst()
+                            .getLeague()
+                            .getName()
+            );
 
-        overview.setCountryFlag(
-                leagueResponse
-                        .getResponse()
-                        .getFirst()
-                        .getCountry()
-                        .getFlag()
-        );
+            overview.setType(
+                    leagueResponse
+                            .getResponse()
+                            .getFirst()
+                            .getLeague()
+                            .getType()
+            );
+
+            overview.setCountryName(
+                    leagueResponse
+                            .getResponse()
+                            .getFirst()
+                            .getCountry()
+                            .getName()
+            );
+
+            overview.setCountryFlag(
+                    leagueResponse
+                            .getResponse()
+                            .getFirst()
+                            .getCountry()
+                            .getFlag()
+            );
+
+        } else {
+            // Fallback for missing league info
+            overview.setLeagueName("Unknown Competition");
+            overview.setCountryName("World");
+            // Attempt to resolve type from configuration if missing from API
+            try {
+                overview.setType(supportedCompetitionsService.getCompetitionById(leagueId).getType().name());
+            } catch (Exception e) {
+                overview.setType("LEAGUE");
+            }
+        }
 
         overview.setSeason(
                 season
         );
 
-        overview.setFeaturedLeagues(
-                supportedCompetitionsService
-                        .getFeaturedCompetitionsForCountry(overview.getCountryName())
-                        .stream()
-                        .map(c -> new FeaturedLeagueOverview(
-                                c.getCompetitionId(),
-                                c.getName(),
-                                c.getType().name()
-                        ))
-                        .toList()
-        );
+        List<FeaturedLeagueOverview> countryFeatured = supportedCompetitionsService
+                .getCompetitionsForCountry(overview.getCountryName())
+                .stream()
+                .map(c -> new FeaturedLeagueOverview(
+                        c.getCompetitionId(),
+                        c.getName(),
+                        c.getType().name()
+                ))
+                .toList();
+
+        List<FeaturedLeagueOverview> worldFeatured = supportedCompetitionsService
+                .getCompetitionsForCountry("World")
+                .stream()
+                .map(c -> new FeaturedLeagueOverview(
+                        c.getCompetitionId(),
+                        c.getName(),
+                        c.getType().name()
+                ))
+                .toList();
+
+        List<FeaturedLeagueOverview> allFeatured = new ArrayList<>(countryFeatured);
+        allFeatured.addAll(worldFeatured);
+
+        overview.setFeaturedLeagues(allFeatured);
 
         return overview;
     } // End of getLeagueOverview()
@@ -626,6 +663,30 @@ public class LeagueDataService {
 
     /**************** FIXTURES SECTION ***************************/
 
+    /**
+     * Returns the list of rounds for a league and season.
+     */
+    public List<String> getFixtureRounds(
+            int leagueId,
+            int season
+    ) throws Exception {
+
+        FixtureRoundsApiResponse response =
+                footballDataProvider.getFixtureRounds(
+                        leagueId,
+                        season,
+                        false
+                );
+
+        if (response == null
+                || response.getResponse() == null) {
+
+            return List.of();
+
+        }
+
+        return response.getResponse();
+    }
 
     /**
      *  Get Fixtures for that season.

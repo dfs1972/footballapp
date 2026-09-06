@@ -244,6 +244,10 @@ public class FixtureMapper {
                 goals.getAway()
         );
 
+        if (response.getLeague() != null) {
+            row.setRound(response.getLeague().getRound());
+        }
+
         return row;
 
     }

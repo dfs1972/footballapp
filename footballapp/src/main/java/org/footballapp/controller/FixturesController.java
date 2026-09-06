@@ -45,6 +45,17 @@ public class FixturesController {
     }
 
     /**
+     * Returns the rounds for a league and season.
+     */
+    @GetMapping("/fixtures/rounds")
+    public List<String> getRounds(
+            @RequestParam int leagueId,
+            @RequestParam int season
+    ) throws Exception {
+        return leagueDataService.getFixtureRounds(leagueId, season);
+    }
+
+    /**
      * Returns details for a single fixture.
      */
     @GetMapping("/fixtureDetails")

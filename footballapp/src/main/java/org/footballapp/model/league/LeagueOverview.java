@@ -1,13 +1,16 @@
 package org.footballapp.model.league;
 
+import java.util.List;
+
 public class LeagueOverview {
 
     private String countryName;
     private String countryFlag;
     private int leagueId;
     private String leagueName;
+    private String type;
     private int season;
-    private java.util.List<FeaturedLeagueOverview> featuredLeagues;
+    private List<FeaturedLeagueOverview> featuredLeagues;
 
     public String getCountryName() {
         return countryName;
@@ -45,6 +48,14 @@ public class LeagueOverview {
         this.leagueName = leagueName;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public int getSeason() {
         return season;
     }
@@ -55,11 +66,11 @@ public class LeagueOverview {
         this.season = season;
     }
 
-    public java.util.List<FeaturedLeagueOverview> getFeaturedLeagues() {
+    public List<FeaturedLeagueOverview> getFeaturedLeagues() {
         return featuredLeagues;
     }
 
-    public void setFeaturedLeagues(java.util.List<FeaturedLeagueOverview> featuredLeagues) {
+    public void setFeaturedLeagues(List<FeaturedLeagueOverview> featuredLeagues) {
         this.featuredLeagues = featuredLeagues;
     }
 }

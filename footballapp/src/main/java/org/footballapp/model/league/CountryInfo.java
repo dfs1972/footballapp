@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class CountryInfo {
 
     private String name;
+    private String code;
     private String flag;
 
     public String getName() {
@@ -14,6 +15,14 @@ public class CountryInfo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getFlag() {

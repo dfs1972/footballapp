@@ -8,6 +8,8 @@ data class ClubDetailsUiModel(
 
     val badgeUrl: String? = null,
 
+    val colors: FixtureTeamColorsUiModel? = null,
+
     val league: String,
 
     val founded: Int? = null,

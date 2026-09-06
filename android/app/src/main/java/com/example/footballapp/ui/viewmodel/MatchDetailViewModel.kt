@@ -7,6 +7,7 @@ import com.example.footballapp.data.mapper.*
 import com.example.footballapp.data.repository.MatchDetailRepository
 import com.example.footballapp.data.repository.TeamColorRepository
 import com.example.footballapp.util.FixtureStatusResolver
+import com.example.footballapp.util.TeamColorOverrides
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -81,20 +82,28 @@ class MatchDetailViewModel(application: Application) : AndroidViewModel(applicat
                 }
             }
 
-            // Sync with team color cache
+            // Sync with team color cache and apply manual overrides
             lineupUi = lineupUi?.let { ui ->
                 ui.copy(
                     teams = ui.teams.map { team ->
-                        val colors = team.colors
-                        val hasColors = !colors?.player?.primary.isNullOrBlank() || 
-                                        !colors?.goalkeeper?.primary.isNullOrBlank()
+                        // Check for manual overrides first
+                        val override = TeamColorOverrides.getOverride(team.teamId)
+                            ?: TeamColorOverrides.getOverrideByName(team.teamName)
                         
-                        if (hasColors) {
-                            colors?.let { colorRepository.saveTeamColors(team.teamId, it) }
-                            team
+                        if (override != null) {
+                            team.copy(colors = override)
                         } else {
-                            val cached = colorRepository.getTeamColors(team.teamId)
-                            if (cached != null) team.copy(colors = cached) else team
+                            val colors = team.colors
+                            val hasColors = !colors?.player?.primary.isNullOrBlank() || 
+                                            !colors?.goalkeeper?.primary.isNullOrBlank()
+                            
+                            if (hasColors) {
+                                colors?.let { colorRepository.saveTeamColors(team.teamId, it) }
+                                team
+                            } else {
+                                val cached = colorRepository.getTeamColors(team.teamId, team.teamName)
+                                if (cached != null) team.copy(colors = cached) else team
+                            }
                         }
                     }
                 )

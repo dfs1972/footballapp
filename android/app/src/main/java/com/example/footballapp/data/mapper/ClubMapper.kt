@@ -13,6 +13,8 @@ fun ClubDto.toDetailsUiModel() =
 
         badgeUrl = null,
 
+        colors = null,
+
         league = "Scottish Premiership",
 
         founded = founded,

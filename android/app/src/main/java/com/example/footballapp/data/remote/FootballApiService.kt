@@ -61,7 +61,17 @@ interface FootballApiService {
     /**
      * Get competitions for a country and season.
      */
+    @GET("leagues/by-country")
+    suspend fun getLeaguesByCountry(
+        @Query("country")
+        country: String,
+        @Query("season")
+        season: Int
+    ): Response<List<LeagueApiResponseDto>>
 
+    /**
+     * Get featured competitions for a country and season.
+     */
     @GET("leagues/featured")
     suspend fun getFeaturedLeagues(
 

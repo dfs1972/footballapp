@@ -56,7 +56,7 @@ class CompetitionViewModel(
             try {
 
                 val response =
-                    repository.getFeaturedLeagues(
+                    repository.getCompetitions(
                         country = country,
                         season = season
                     )

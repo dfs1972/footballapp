@@ -5,9 +5,11 @@ import org.footballapp.api.dto.events.FixtureEventsApiResponse;
 import org.footballapp.config.AppConfig;
 import org.footballapp.model.coaches.CoachApiResponse;
 import org.footballapp.model.country.CountriesApiResponse;
+import org.footballapp.model.country.CountryApiResponse;
 import org.footballapp.model.fixtures.FixtureRoundsApiResponse;
 import org.footballapp.model.fixtures.FixturesApiResponse;
 import org.footballapp.api.dto.fixtures.FixtureStatisticsResponse;
+import org.footballapp.model.league.LeagueApiResponse;
 import org.footballapp.model.league.LeaguesApiResponse;
 import org.footballapp.model.player.PlayersApiResponse;
 import org.footballapp.model.squad.SquadApiResponse;
@@ -20,7 +22,10 @@ import org.footballapp.util.MockApiPaths;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @Profile("json")
@@ -72,12 +77,22 @@ public class JsonFootballDataProvider implements FootballDataProvider {
             int season
     ) throws Exception {
 
-        LeaguesApiResponse response =
-                new LeaguesApiResponse();
-
-        response.setResponse(
-                List.of()
+        LeaguesApiResponse allLeagues = jsonLoader.load(
+                "leagues/all.json",
+                LeaguesApiResponse.class
         );
+
+        if (allLeagues.getResponse() == null) {
+            allLeagues.setResponse(List.of());
+            return allLeagues;
+        }
+
+        List<LeagueApiResponse> filtered = allLeagues.getResponse().stream()
+                .filter(l -> l.getCountry() != null && l.getCountry().getName().equalsIgnoreCase(country))
+                .toList();
+
+        LeaguesApiResponse response = new LeaguesApiResponse();
+        response.setResponse(filtered);
 
         return response;
     }
@@ -86,7 +101,37 @@ public class JsonFootballDataProvider implements FootballDataProvider {
     public CountriesApiResponse getCountries()
             throws Exception {
 
-        return new CountriesApiResponse();
+        LeaguesApiResponse allLeagues = jsonLoader.load(
+                "leagues/all.json",
+                LeaguesApiResponse.class
+        );
+
+        if (allLeagues.getResponse() == null) {
+            return new CountriesApiResponse();
+        }
+
+        List<CountryApiResponse> countries = allLeagues.getResponse().stream()
+                .map(LeagueApiResponse::getCountry)
+                .filter(Objects::nonNull)
+                .map(c -> {
+                    CountryApiResponse resp = new CountryApiResponse();
+                    resp.setName(c.getName());
+                    resp.setCode(c.getCode());
+                    resp.setFlag(c.getFlag());
+                    return resp;
+                })
+                .collect(Collectors.toMap(
+                        CountryApiResponse::getName,
+                        c -> c,
+                        (c1, c2) -> c1
+                ))
+                .values().stream()
+                .sorted(Comparator.comparing(CountryApiResponse::getName))
+                .toList();
+
+        CountriesApiResponse response = new CountriesApiResponse();
+        response.setResponse(countries);
+        return response;
     }
 
 

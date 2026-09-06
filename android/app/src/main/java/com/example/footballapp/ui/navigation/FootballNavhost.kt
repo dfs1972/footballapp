@@ -611,10 +611,12 @@ fun FootballNavHost(
             val clubState by
             clubViewModel.uiState.collectAsState()
 
-            LaunchedEffect(clubId) {
+            LaunchedEffect(clubId, leagueId, season) {
 
                 clubViewModel.loadClub(
-                    clubId
+                    clubId = clubId,
+                    leagueId = leagueId,
+                    season = season
                 )
 
             }
@@ -717,10 +719,12 @@ fun FootballNavHost(
                     SquadViewModel =
                 viewModel()
 
-            LaunchedEffect(clubId) {
+            LaunchedEffect(clubId, leagueId, season) {
 
                 clubViewModel.loadClub(
-                    clubId
+                    clubId = clubId,
+                    leagueId = leagueId,
+                    season = season
                 )
 
             }
@@ -824,10 +828,12 @@ fun FootballNavHost(
                     TeamFixturesViewModel =
                 viewModel()
 
-            LaunchedEffect(teamId) {
+            LaunchedEffect(teamId, leagueId, season) {
 
                 clubViewModel.loadClub(
-                    teamId
+                    clubId = teamId,
+                    leagueId = leagueId,
+                    season = season
                 )
             }
 

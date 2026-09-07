@@ -71,11 +71,11 @@ public class SupportedCompetitionsService {
     }
 
     public List<SupportedCompetition> getCompetitionsForCountry(String country) {
+        if (country == null) return List.of();
+        String trimmedCountry = country.trim();
 
         for (SupportedCompetitionGroup group : competitionGroups) {
-
-            if (group.getCountry().equalsIgnoreCase(country)) {
-
+            if (group.getCountry().trim().equalsIgnoreCase(trimmedCountry)) {
                 return group.getCompetitions()
                         .stream()
                         .filter(SupportedCompetition::isEnabled)

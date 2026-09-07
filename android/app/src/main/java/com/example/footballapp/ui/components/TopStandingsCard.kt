@@ -58,9 +58,20 @@ fun TopStandingsCard(
 
             .forEach { group ->
 
-            group.standings
-                .take(5)
-                .forEach { standing ->
+                if (group.group.isNotBlank() && !group.group.contains("League Table", ignoreCase = true)) {
+                    Text(
+                        text = group.group,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = AppSpacing.Medium, bottom = AppSpacing.Small)
+                    )
+                }
+
+                group.standings
+                    .take(5)
+                    .forEach { standing ->
 
                     Row(
 

@@ -2,19 +2,27 @@ package com.example.footballapp.ui.screens.league
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -25,7 +33,6 @@ import coil.request.ImageRequest
 import com.example.footballapp.data.remote.FlagUrlResolver
 import com.example.footballapp.data.repository.FavouriteCompetition
 import com.example.footballapp.ui.components.CompetitionRow
-import com.example.footballapp.ui.components.CompetitionRoundSelector
 import com.example.footballapp.ui.components.NavigationCard
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.TopStandingsCard
@@ -82,10 +89,6 @@ fun LeagueOverviewScreen(
         label = "LeagueExpandRotation"
     )
 
-    /*
-     * We determine the current season year (Int) from the
-     * formatted season string (e.g. "2024/25").
-     */
     val currentSeason =
         overview.season
             .take(4)
@@ -175,59 +178,45 @@ fun LeagueOverviewScreen(
 
             val context = LocalContext.current
 
-            NavigationCard(
-                title = "Other Leagues",
-                subtitle = overview.countryName,
-                icon = Icons.Default.ExpandMore,
-                iconRotation = rotation,
-                leadingContent = {
-                    if (!overview.countryFlag.isNullOrBlank()) {
-                        AsyncImage(
-                            model = ImageRequest.Builder(context)
-                                .data(FlagUrlResolver.resolve(overview.countryFlag))
-                                .decoderFactory(SvgDecoder.Factory())
-                                .build(),
-                            contentDescription = null,
-                            modifier = Modifier.size(28.dp)
-                        )
-                    }
-                },
-                onClick = {
-                    isCountryLeaguesExpanded = !isCountryLeaguesExpanded
-                }
-            )
-
-            AnimatedVisibility(visible = isCountryLeaguesExpanded) {
-
-                Column {
-
-                    val otherCompetitions =
-                        competitions.filter {
-                            it.id != overview.leagueId &&
-                                    it.type.equals("LEAGUE", ignoreCase = true)
+            Column {
+                NavigationCard(
+                    title = "Other Competitions",
+                    subtitle = overview.countryName,
+                    icon = Icons.Default.ExpandMore,
+                    iconRotation = rotation,
+                    leadingContent = {
+                        if (!overview.countryFlag.isNullOrBlank()) {
+                            AsyncImage(
+                                model = ImageRequest.Builder(context)
+                                    .data(FlagUrlResolver.resolve(overview.countryFlag))
+                                    .decoderFactory(SvgDecoder.Factory())
+                                    .build(),
+                                contentDescription = null,
+                                modifier = Modifier.size(28.dp)
+                            )
                         }
+                    },
+                    onClick = {
+                        isCountryLeaguesExpanded = !isCountryLeaguesExpanded
+                    }
+                )
 
-                    if (otherCompetitions.isEmpty()) {
+                if (isCountryLeaguesExpanded) {
 
-                        Text(
-                            text = "No other leagues found.",
-                            modifier = Modifier.padding(AppSpacing.Medium)
-                        )
+                    val otherCompetitions = competitions.filter {
+                        it.id != overview.leagueId && it.type.equals("LEAGUE", ignoreCase = true)
+                    }
 
-                    } else {
+                    if (otherCompetitions.isNotEmpty()) {
 
                         otherCompetitions.forEach { competition ->
-
                             CompetitionRow(
                                 competition = competition,
-
                                 isFavourite = favouriteViewModel.isFavourite(
                                     competition.id,
                                     currentSeason
                                 ),
-
                                 onFavouriteClick = {
-
                                     if (favouriteViewModel.isFavourite(
                                             competition.id,
                                             currentSeason
@@ -246,7 +235,6 @@ fun LeagueOverviewScreen(
                                         )
                                     }
                                 },
-
                                 onClick = {
                                     onCompetitionSelected(
                                         competition.id,
@@ -257,20 +245,30 @@ fun LeagueOverviewScreen(
                             )
                         }
                     }
+
+                    // Cup Competitions Row
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(AppSpacing.Large)
+                            .clickable { onCupsClick() }
+                            .padding(horizontal = AppSpacing.Medium),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "Cup Competitions",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
             }
         }
-
-        item {
-
-            NavigationCard(
-                title = "Cup Competitions",
-                subtitle = "Domestic and International Cups",
-                onClick = onCupsClick
-            )
-
-        }
-
     }
-
 }

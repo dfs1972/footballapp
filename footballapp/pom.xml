@@ -18,7 +18,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <java.version>25</java.version>
+        <java.version>23</java.version>
     <kotlin.version>2.3.10</kotlin.version>
     </properties>
 
@@ -102,7 +102,7 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <jvmTarget>1.8</jvmTarget>
+                    <jvmTarget>23</jvmTarget>
                     <compilerPlugins>
                         <plugin>spring</plugin>
                     </compilerPlugins>

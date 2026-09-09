@@ -31,11 +31,6 @@ data class CompetitionGroupUiModel(
      *
      * Empty for UEFA.
      */
-    val domesticCups: List<CompetitionUiModel>,
-
-    /**
-     * Allows groups to be displayed in a particular order.
-     */
-    val displayOrder: Int
+    val domesticCups: List<CompetitionUiModel>
 
 )

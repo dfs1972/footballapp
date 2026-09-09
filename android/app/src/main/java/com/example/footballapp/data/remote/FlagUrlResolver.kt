@@ -2,9 +2,6 @@ package com.example.footballapp.data.remote
 
 object FlagUrlResolver {
 
-    private const val BASE_URL =
-        "http://10.0.2.2:8081"
-
     fun resolve(
         flagPath: String?
     ): String? {
@@ -28,10 +25,11 @@ object FlagUrlResolver {
          *
          * /images/flags/al
          */
+        val baseUrl = NetworkConfig.baseUrl.removeSuffix("/")
         return if (flagPath.startsWith("/")) {
-            BASE_URL + flagPath
+            baseUrl + flagPath
         } else {
-            "$BASE_URL/$flagPath"
+            "$baseUrl/$flagPath"
         }
     }
 }

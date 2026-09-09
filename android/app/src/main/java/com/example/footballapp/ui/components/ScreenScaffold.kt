@@ -92,6 +92,12 @@ fun ScreenScaffold(
 
             content()
 
+            item {
+                Spacer(
+                    modifier = Modifier.height(160.dp)
+                )
+            }
+
         }
         /*
          * Fixed application header.

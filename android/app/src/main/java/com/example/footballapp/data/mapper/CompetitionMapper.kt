@@ -13,8 +13,6 @@ fun CompetitionGroupDto.toUiModel() =
 
         headerIcon = headerIcon,
 
-        displayOrder = displayOrder,
-
         leagues =
 
             competitions

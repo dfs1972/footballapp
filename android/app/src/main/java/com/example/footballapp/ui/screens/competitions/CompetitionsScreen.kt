@@ -42,6 +42,10 @@ fun CompetitionsScreen(
 
     onSearchQueryChange: (String) -> Unit,
 
+    searchResults: List<CountryUiModel> = emptyList(),
+
+    onSearchResultClick: (CountryUiModel) -> Unit = {},
+
     initialCountry: CountryUiModel? = null,
 
     onInitialCountryConsumed: () -> Unit = {},
@@ -65,16 +69,20 @@ fun CompetitionsScreen(
         mutableStateOf<String?>(null)
     }
 
-    var initialSearchCountry by remember {
+    var activeCountryFilter by remember {
         mutableStateOf(initialCountry)
+    }
+
+    // Sync external initialCountry to internal state immediately during composition
+    if (initialCountry != null && initialCountry != activeCountryFilter) {
+        activeCountryFilter = initialCountry
+        expandedCountry = initialCountry.name
     }
 
     LaunchedEffect(initialCountry) {
 
         if (initialCountry != null) {
-
-            expandedCountry = initialCountry.name
-
+            // Note: activeCountryFilter and expandedCountry are already updated by composition sync
             onCountrySelected(
                 initialCountry,
                 currentSeason
@@ -95,15 +103,7 @@ fun CompetitionsScreen(
 
     val filteredCountries =
         when {
-            initialSearchCountry != null -> {
-                listOfNotNull(initialSearchCountry)
-            }
-
-            searchQuery.isBlank() -> {
-                sortedCountries
-            }
-
-            else -> {
+            searchQuery.isNotBlank() -> {
                 sortedCountries.filter { country ->
                     country.name.contains(
                         searchQuery,
@@ -111,13 +111,27 @@ fun CompetitionsScreen(
                     )
                 }
             }
+
+            activeCountryFilter != null -> {
+                listOfNotNull(activeCountryFilter)
+            }
+
+            else -> {
+                sortedCountries
+            }
         }
     ScreenScaffold(
 
         searchQuery = searchQuery,
 
         onSearchQueryChange =
-            onSearchQueryChange
+            onSearchQueryChange,
+
+        searchResults =
+            searchResults,
+
+        onSearchResultClick =
+            onSearchResultClick
 
     ) {
 
@@ -180,12 +194,15 @@ fun CompetitionsScreen(
                         }
 
                     if (isExpanding) {
-
+                        activeCountryFilter = country
                         onCountrySelected(
                             country,
                             currentSeason
                         )
+                        onSearchQueryChange("") // Clear search on selection
 
+                    } else {
+                        activeCountryFilter = null // Return to full list on collapse
                     }
                 }
             )

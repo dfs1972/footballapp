@@ -25,11 +25,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.footballapp.ui.components.CardHeader
+import com.example.footballapp.ui.components.ClubHeaderCard
 import com.example.footballapp.ui.components.FixtureListRow
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.components.SectionHeading
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.design.Strings
+import com.example.footballapp.ui.model.ClubDetailsUiModel
 import com.example.footballapp.ui.model.CountryUiModel
 import com.example.footballapp.ui.model.FixtureDayUiModel
 import com.example.footballapp.ui.model.TeamFixturesMonthUiModel
@@ -40,7 +42,7 @@ import java.util.Locale
 @Composable
 fun TeamFixturesScreen(
 
-    clubName: String,
+    club: ClubDetailsUiModel?,
 
     season: String,
 
@@ -86,17 +88,20 @@ fun TeamFixturesScreen(
 
         }
 
-        item {
+        if (club != null) {
+            item {
+                ClubHeaderCard(
+                    club = club,
+                    showDetails = false
+                )
+            }
 
-            CardHeader(
-
-                title = clubName,
-
-                subtitle =
-                    "${Strings.FIXTURES} · $season"
-
-            )
-
+            item {
+                CardHeader(
+                    title = "Fixtures",
+                    subtitle = season
+                )
+            }
         }
 
         months.forEach { month ->

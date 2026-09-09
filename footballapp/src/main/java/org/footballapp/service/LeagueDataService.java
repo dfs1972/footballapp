@@ -23,6 +23,7 @@ import org.footballapp.util.TeamNameFormatter;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**Import repositories*/
@@ -218,7 +219,15 @@ public class LeagueDataService {
             return List.of();
         }
 
-        return response.getResponse();
+        Set<Integer> supportedIds = supportedCompetitionsService
+                .getCompetitionsForCountry(country)
+                .stream()
+                .map(org.footballapp.config.competitions.SupportedCompetition::getCompetitionId)
+                .collect(Collectors.toSet());
+
+        return response.getResponse().stream()
+                .filter(league -> supportedIds.contains(league.getLeague().getId()))
+                .toList();
     }
 
 

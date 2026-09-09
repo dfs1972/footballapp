@@ -53,9 +53,7 @@ fun List<CompetitionUiModel>.toCompetitionGroups(): List<CompetitionGroupUiModel
 
                 leagues = scottishLeagues,
 
-                domesticCups = scottishCups,
-
-                displayOrder = 1
+                domesticCups = scottishCups
 
             )
 
@@ -63,10 +61,6 @@ fun List<CompetitionUiModel>.toCompetitionGroups(): List<CompetitionGroupUiModel
 
     }
 
-    return groups.sortedBy {
-
-        it.displayOrder
-
-    }
+    return groups
 
 }

@@ -44,7 +44,6 @@
                 "featured": true,
                 "logoUrl": "https://media.api-sports.io/football/leagues/45.png"
             },
-
             {
                 "competitionId": 48,
                 "name": "League Cup",
@@ -62,7 +61,7 @@
         "competitions": [
             {
                 "competitionId": 179,
-                "name": "Premiership",
+                "name": "Scottish Premiership",
                 "type": "LEAGUE",
                 "enabled": true,
                 "featured": true,
@@ -71,7 +70,7 @@
 
             {
                 "competitionId": 180,
-                "name": "Championship",
+                "name": "Scottish Championship",
                 "type": "LEAGUE",
                 "enabled": true,
                 "featured": true,
@@ -79,7 +78,7 @@
             },
             {
                 "competitionId": 183,
-                "name": "League One",
+                "name": "Scottish League One",
                 "type": "LEAGUE",
                 "enabled": true,
                 "featured": true,
@@ -87,7 +86,7 @@
             },
             {
                 "competitionId": 184,
-                "name": "League Two",
+                "name": "Scottish League Two",
                 "type": "LEAGUE",
                 "enabled": true,
                 "featured": true,
@@ -103,7 +102,7 @@
             },
             {
                 "competitionId": 185,
-                "name": "League Cup",
+                "name": "Scottish League Cup",
                 "type": "CUP",
                 "enabled": true,
                 "featured": true,
@@ -118,11 +117,56 @@
         "competitions": [
             {
                 "competitionId": 110,
-                "name": "Premier League",
+                "name": "Wales Premier League",
                 "type": "LEAGUE",
                 "enabled": true,
                 "featured": true,
                 "logoUrl": "https://media.api-sports.io/football/leagues/110.png"
+            }
+        ]
+    },
+    {
+        "country": "Wales",
+        "displayOrder": 3,
+        "headerIcon": "🏳️",
+        "competitions": [
+            {
+                "competitionId": 111,
+                "name": "FAW Championship",
+                "type": "LEAGUE",
+                "enabled": true,
+                "featured": true,
+                "logoUrl": "https://media.api-sports.io/football/leagues/111.png"
+            }
+        ]
+    },
+    {
+        "country": "Wales",
+        "displayOrder": 3,
+        "headerIcon": "🏳️",
+        "competitions": [
+            {
+                "competitionId": 112,
+                "name": "Welsh Cup",
+                "type": "CUP",
+                "enabled": true,
+                "featured": true,
+                "logoUrl": "https://media.api-sports.io/football/leagues/112.png"
+            }
+        ]
+    },
+    {
+        "country": "Wales",
+        "displayOrder": 3,
+        "headerIcon": "🏳️",
+        "competitions": [
+            {
+                "competitionId": 738,
+                "name": "Welsh League Cup",
+                "type": "CUP",
+                "enabled": true,
+                "featured": true,
+                "logoUrl": "https://media.api-sports.io/football/leagues/738.png"
             }
         ]
     },

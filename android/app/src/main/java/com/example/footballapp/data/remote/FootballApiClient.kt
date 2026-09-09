@@ -9,12 +9,6 @@ import retrofit2.converter.jackson.JacksonConverterFactory
 
 object FootballApiClient {
 
-    private const val BASE_URL =
-        "http://10.0.2.2:8081/"
-
-    private const val LAN =
-        "http://192.168.1.65:8081/"
-
     private val logging =
         HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
@@ -34,7 +28,7 @@ object FootballApiClient {
 
     val service: FootballApiService =
         Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(NetworkConfig.baseUrl)
             .client(client)
             .addConverterFactory(
                 JacksonConverterFactory.create(mapper)

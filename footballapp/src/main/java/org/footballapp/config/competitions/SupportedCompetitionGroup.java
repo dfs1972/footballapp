@@ -5,7 +5,6 @@ import java.util.List;
 public class SupportedCompetitionGroup {
 
     private String country;
-    private int displayOrder;
     private String headerIcon;
     private List<SupportedCompetition> competitions;
 
@@ -18,14 +17,6 @@ public class SupportedCompetitionGroup {
 
     public void setCountry(String country) {
         this.country = country;
-    }
-
-    public int getDisplayOrder() {
-        return displayOrder;
-    }
-
-    public void setDisplayOrder(int displayOrder) {
-        this.displayOrder = displayOrder;
     }
 
     public String getHeaderIcon() {

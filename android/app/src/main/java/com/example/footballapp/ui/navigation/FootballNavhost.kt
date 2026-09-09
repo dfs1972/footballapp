@@ -161,6 +161,14 @@ fun FootballNavHost(
                     pendingSearchCountry = null
                 },
 
+                searchResults = searchResults,
+
+                onSearchResultClick = { country ->
+                    pendingSearchCountry = country
+                    searchQuery = ""
+                    // No need to navigate, we are already here
+                },
+
                 onCountrySelected = { country, season ->
 
                     competitionViewModel.loadCompetitions(
@@ -873,8 +881,7 @@ fun FootballNavHost(
 
                 SquadScreen(
 
-                    clubName =
-                        club.name,
+                    club = club,
 
                     season =
                         season.toString(),
@@ -983,8 +990,7 @@ fun FootballNavHost(
 
                 TeamFixturesScreen(
 
-                    clubName =
-                        club.name,
+                    club = club,
 
                     season =
                         season.toString(),

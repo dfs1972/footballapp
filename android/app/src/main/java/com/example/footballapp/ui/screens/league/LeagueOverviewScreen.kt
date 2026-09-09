@@ -175,98 +175,100 @@ fun LeagueOverviewScreen(
         }
 
         item {
-
             val context = LocalContext.current
-
-            Column {
-                NavigationCard(
-                    title = "Other Competitions",
-                    subtitle = overview.countryName,
-                    icon = Icons.Default.ExpandMore,
-                    iconRotation = rotation,
-                    leadingContent = {
-                        if (!overview.countryFlag.isNullOrBlank()) {
-                            AsyncImage(
-                                model = ImageRequest.Builder(context)
-                                    .data(FlagUrlResolver.resolve(overview.countryFlag))
-                                    .decoderFactory(SvgDecoder.Factory())
-                                    .build(),
-                                contentDescription = null,
-                                modifier = Modifier.size(28.dp)
-                            )
-                        }
-                    },
-                    onClick = {
-                        isCountryLeaguesExpanded = !isCountryLeaguesExpanded
+            NavigationCard(
+                title = "Other Competitions",
+                subtitle = overview.countryName,
+                icon = Icons.Default.ExpandMore,
+                iconRotation = rotation,
+                leadingContent = {
+                    if (!overview.countryFlag.isNullOrBlank()) {
+                        AsyncImage(
+                            model = ImageRequest.Builder(context)
+                                .data(FlagUrlResolver.resolve(overview.countryFlag))
+                                .decoderFactory(SvgDecoder.Factory())
+                                .build(),
+                            contentDescription = null,
+                            modifier = Modifier.size(28.dp)
+                        )
                     }
-                )
+                },
+                onClick = {
+                    isCountryLeaguesExpanded = !isCountryLeaguesExpanded
+                }
+            )
+        }
 
-                if (isCountryLeaguesExpanded) {
+        if (isCountryLeaguesExpanded) {
+            val otherCompetitions = competitions.filter {
+                it.id != overview.leagueId && it.type.equals("LEAGUE", ignoreCase = true)
+            }
 
-                    val otherCompetitions = competitions.filter {
-                        it.id != overview.leagueId && it.type.equals("LEAGUE", ignoreCase = true)
-                    }
-
-                    if (otherCompetitions.isNotEmpty()) {
-
-                        otherCompetitions.forEach { competition ->
-                            CompetitionRow(
-                                competition = competition,
-                                isFavourite = favouriteViewModel.isFavourite(
-                                    competition.id,
-                                    currentSeason
-                                ),
-                                onFavouriteClick = {
-                                    if (favouriteViewModel.isFavourite(
-                                            competition.id,
-                                            currentSeason
-                                        )
-                                    ) {
-                                        favouriteViewModel.clearFavourite()
-                                    } else {
-                                        favouriteViewModel.saveFavourite(
-                                            FavouriteCompetition(
-                                                leagueId = competition.id,
-                                                season = currentSeason,
-                                                leagueName = competition.name,
-                                                countryName = overview.countryName,
-                                                type = competition.type
-                                            )
-                                        )
-                                    }
-                                },
-                                onClick = {
-                                    onCompetitionSelected(
-                                        competition.id,
-                                        currentSeason,
-                                        competition.type
-                                    )
-                                }
-                            )
-                        }
-                    }
-
-                    // Cup Competitions Row
-                    Row(
+            otherCompetitions.forEach { competition ->
+                item {
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(AppSpacing.Large)
-                            .clickable { onCupsClick() }
-                            .padding(horizontal = AppSpacing.Medium),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
+                            .padding(horizontal = AppSpacing.Screen)
                     ) {
-                        Text(
-                            text = "Cup Competitions",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        CompetitionRow(
+                            competition = competition,
+                            isFavourite = favouriteViewModel.isFavourite(
+                                competition.id,
+                                currentSeason
+                            ),
+                            onFavouriteClick = {
+                                if (favouriteViewModel.isFavourite(
+                                        competition.id,
+                                        currentSeason
+                                    )
+                                ) {
+                                    favouriteViewModel.clearFavourite()
+                                } else {
+                                    favouriteViewModel.saveFavourite(
+                                        FavouriteCompetition(
+                                            leagueId = competition.id,
+                                            season = currentSeason,
+                                            leagueName = competition.name,
+                                            countryName = overview.countryName,
+                                            type = competition.type
+                                        )
+                                    )
+                                }
+                            },
+                            onClick = {
+                                onCompetitionSelected(
+                                    competition.id,
+                                    currentSeason,
+                                    competition.type
+                                )
+                            }
                         )
                     }
+                }
+            }
+
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = AppSpacing.Screen)
+                        .height(64.dp)
+                        .clickable { onCupsClick() }
+                        .padding(horizontal = AppSpacing.Medium),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Cup Competitions",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             }
         }

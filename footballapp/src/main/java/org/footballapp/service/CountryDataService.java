@@ -2,20 +2,27 @@ package org.footballapp.service;
 
 import org.footballapp.model.country.CountryApiResponse;
 import org.footballapp.model.country.CountriesApiResponse;
+import org.footballapp.config.competitions.SupportedCompetitionGroup;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CountryDataService {
 
     private final FootballDataProvider footballDataProvider;
+    private final SupportedCompetitionsService supportedCompetitionsService;
 
     public CountryDataService(
-            FootballDataProvider footballDataProvider
+            FootballDataProvider footballDataProvider,
+            SupportedCompetitionsService supportedCompetitionsService
     ) {
         this.footballDataProvider =
                 footballDataProvider;
+        this.supportedCompetitionsService =
+                supportedCompetitionsService;
     }
 
     public List<CountryApiResponse> getCountries()
@@ -30,8 +37,16 @@ public class CountryDataService {
             return List.of();
         }
 
+        Set<String> supportedCountries = supportedCompetitionsService
+                .getCompetitionGroups()
+                .stream()
+                .map(SupportedCompetitionGroup::getCountry)
+                .map(String::toLowerCase)
+                .collect(Collectors.toSet());
+
         return response.getResponse()
                 .stream()
+                .filter(country -> supportedCountries.contains(country.getName().toLowerCase()))
                 .map(this::mapCountry)
                 .toList();
     }

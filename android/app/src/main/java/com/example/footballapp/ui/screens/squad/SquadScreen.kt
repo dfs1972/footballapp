@@ -5,17 +5,19 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.footballapp.ui.components.CardHeader
+import com.example.footballapp.ui.components.ClubHeaderCard
 import com.example.footballapp.ui.components.PlayerList
 import com.example.footballapp.ui.components.ScreenScaffold
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.design.Strings
+import com.example.footballapp.ui.model.ClubDetailsUiModel
 import com.example.footballapp.ui.model.CountryUiModel
 import com.example.footballapp.ui.model.PlayerUiModel
 
 @Composable
 fun SquadScreen(
 
-    clubName: String,
+    club: ClubDetailsUiModel?,
 
     season: String,
 
@@ -50,19 +52,20 @@ fun SquadScreen(
 
         }
 
-        item {
-
-            CardHeader(
-
-                title =
-                    clubName +
-                            Strings.Football_Club,
-
-                subtitle =
-                    "${Strings.SQUAD} · $season"
-
-            )
-
+        if (club != null) {
+            item {
+                ClubHeaderCard(
+                    club = club,
+                    showDetails = false
+                )
+            }
+            
+            item {
+                CardHeader(
+                    title = "Squad",
+                    subtitle = season
+                )
+            }
         }
 
         if (players.isEmpty()) {

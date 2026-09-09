@@ -128,6 +128,12 @@ fun FootballNavHost(
             val competitionError by
             competitionViewModel.error.collectAsState()
 
+            val countryLoading by
+            countryViewModel.isLoading.collectAsState()
+
+            val countryError by
+            countryViewModel.error.collectAsState()
+
             val currentSeason =
                 Calendar
                     .getInstance()
@@ -147,6 +153,10 @@ fun FootballNavHost(
                 isLoading = competitionLoading,
 
                 error = competitionError,
+
+                countryLoading = countryLoading,
+
+                countryError = countryError,
 
                 searchQuery = searchQuery,
 

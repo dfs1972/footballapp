@@ -3,11 +3,13 @@ package com.example.footballapp.ui.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.footballapp.data.remote.RemoteConfigManager
 import com.example.footballapp.data.repository.CountryRepository
 import com.example.footballapp.ui.model.CountryUiModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class CountryViewModel(
@@ -39,7 +41,14 @@ class CountryViewModel(
             "CountryViewModel CREATED"
         )
 
-        loadCountries()
+        viewModelScope.launch {
+            RemoteConfigManager.isReady.collectLatest { ready ->
+                if (ready) {
+                    Log.d("CountryViewModel", "RemoteConfig ready, loading countries...")
+                    loadCountries()
+                }
+            }
+        }
     }
 
     fun loadCountries() {

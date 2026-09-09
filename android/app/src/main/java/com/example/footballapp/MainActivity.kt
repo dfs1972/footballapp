@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.rememberNavController
+import com.example.footballapp.data.remote.RemoteConfigManager
 import com.example.footballapp.data.repository.FavouriteRepository
 import com.example.footballapp.ui.navigation.FootballDestination
 import com.example.footballapp.ui.navigation.FootballNavHost
@@ -13,6 +14,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Fetch Remote Config
+        RemoteConfigManager.fetchAndActivate()
 
         val favouriteRepository =
             FavouriteRepository(applicationContext)

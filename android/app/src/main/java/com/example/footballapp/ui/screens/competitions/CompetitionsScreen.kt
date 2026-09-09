@@ -38,6 +38,10 @@ fun CompetitionsScreen(
 
     error: String?,
 
+    countryLoading: Boolean = false,
+
+    countryError: String? = null,
+
     searchQuery: String,
 
     onSearchQueryChange: (String) -> Unit,
@@ -144,7 +148,31 @@ fun CompetitionsScreen(
             )
         }
 
+        if (countryLoading && countries.isEmpty()) {
+            item {
+                Text(
+                    text = "Loading countries...",
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        } else if (countryError != null && countries.isEmpty()) {
+            item {
+                Column {
+                    Text(
+                        text = "Failed to load countries.",
+                        color = MaterialTheme.colorScheme.error
+                    )
+                    Text(
+                        text = countryError,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            }
+        }
+
         if (
+            !countryLoading &&
             searchQuery.isNotBlank()
             && filteredCountries.isEmpty()
         ) {

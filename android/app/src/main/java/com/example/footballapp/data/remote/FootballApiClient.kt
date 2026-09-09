@@ -26,14 +26,27 @@ object FootballApiClient {
                 false
             )
 
-    val service: FootballApiService =
-        Retrofit.Builder()
-            .baseUrl(NetworkConfig.baseUrl)
+    private var currentBaseUrl: String = NetworkConfig.baseUrl
+    private var cachedService: FootballApiService? = null
+
+    val service: FootballApiService
+        get() {
+            val latestUrl = NetworkConfig.baseUrl
+            if (latestUrl != currentBaseUrl || cachedService == null) {
+                currentBaseUrl = latestUrl
+                cachedService = createService(latestUrl)
+            }
+            return cachedService!!
+        }
+
+    private fun createService(baseUrl: String): FootballApiService {
+        return Retrofit.Builder()
+            .baseUrl(baseUrl)
             .client(client)
             .addConverterFactory(
                 JacksonConverterFactory.create(mapper)
             )
             .build()
             .create(FootballApiService::class.java)
-
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.footballapp.ui.model.extensions
 
+import android.util.Log
 import com.example.footballapp.ui.model.FixtureDayUiModel
 import com.example.footballapp.ui.model.FixtureUiModel
 import com.example.footballapp.ui.model.TeamFixturesMonthUiModel
@@ -48,7 +49,11 @@ fun List<FixtureDayUiModel>.groupByMonth():
             DateFormatter.parseFixtureDate(
                 fixtureDate
             )
-                ?: continue
+
+        if (date == null) {
+            Log.e("FixtureExtensions", "Failed to parse fixture date: $fixtureDate")
+            continue
+        }
 
         val yearMonth =
             YearMonth.from(date)
@@ -63,6 +68,8 @@ fun List<FixtureDayUiModel>.groupByMonth():
     return monthGroups
         .toSortedMap()
         .map { (yearMonth, fixtureDays) ->
+
+            Log.d("FixtureExtensions", "Grouped month: $yearMonth with ${fixtureDays.size} days")
 
             TeamFixturesMonthUiModel(
 

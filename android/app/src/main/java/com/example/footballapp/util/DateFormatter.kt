@@ -156,7 +156,7 @@ object DateFormatter {
                     fixtureDate,
                     DateTimeFormatter.ofPattern(
                         "EEE dd MMM yyyy",
-                        Locale.UK
+                        Locale.US // Use US for more stable 3-letter month parsing
                     )
                 )
 
@@ -250,7 +250,7 @@ object DateFormatter {
                     fixtureDate,
                     DateTimeFormatter.ofPattern(
                         "EEE dd MMM yyyy",
-                        Locale.UK
+                        Locale.US // Use US for more stable 3-letter month parsing
                     )
                 )
 

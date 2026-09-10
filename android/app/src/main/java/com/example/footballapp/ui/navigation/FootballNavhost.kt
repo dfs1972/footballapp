@@ -66,6 +66,12 @@ fun FootballNavHost(
     val countries by
     countryViewModel.countries.collectAsState()
 
+    val countryLoading by
+    countryViewModel.isLoading.collectAsState()
+
+    val countryError by
+    countryViewModel.error.collectAsState()
+
     val favouriteViewModel: FavouriteViewModel =
         viewModel()
 
@@ -110,14 +116,8 @@ fun FootballNavHost(
             route = FootballDestination.Competitions.route
         ) {
 
-            val countryViewModel: CountryViewModel =
-                viewModel()
-
             val competitionViewModel: CompetitionViewModel =
                 viewModel()
-
-            val countries by
-            countryViewModel.countries.collectAsState()
 
             val competitions by
             competitionViewModel.competitions.collectAsState()
@@ -128,19 +128,10 @@ fun FootballNavHost(
             val competitionError by
             competitionViewModel.error.collectAsState()
 
-            val countryLoading by
-            countryViewModel.isLoading.collectAsState()
-
-            val countryError by
-            countryViewModel.error.collectAsState()
-
             val currentSeason =
                 Calendar
                     .getInstance()
                     .get(Calendar.YEAR)
-
-            val initialCountry =
-                pendingSearchCountry
 
             CompetitionsScreen(
 

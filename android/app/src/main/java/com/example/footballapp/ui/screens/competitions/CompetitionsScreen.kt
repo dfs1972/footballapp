@@ -1,21 +1,30 @@
 package com.example.footballapp.ui.screens.competitions
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.footballapp.data.remote.NetworkConfig
+import com.example.footballapp.data.remote.RemoteConfigManager
 import com.example.footballapp.data.repository.FavouriteCompetition
 import com.example.footballapp.ui.components.CompetitionRow
 import com.example.footballapp.ui.components.CountryCard
@@ -146,6 +155,36 @@ fun CompetitionsScreen(
                     AppSpacing.Medium
                 )
             )
+        }
+
+        // DEBUG OVERLAY
+        item {
+            val isReady by RemoteConfigManager.isReady.collectAsState()
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(AppSpacing.Medium)
+                    .background(Color.Yellow)
+                    .padding(AppSpacing.Small)
+            ) {
+                Text(
+                    text = "DEBUG INFO (High Contrast)",
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color.Black
+                )
+                Text(
+                    text = "Current URL: ${NetworkConfig.baseUrl}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "Firebase Synced: $isReady",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.Black
+                )
+            }
         }
 
         if (countryLoading && countries.isEmpty()) {

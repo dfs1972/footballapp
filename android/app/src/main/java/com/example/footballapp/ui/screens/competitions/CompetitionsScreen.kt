@@ -184,6 +184,19 @@ fun CompetitionsScreen(
                     style = MaterialTheme.typography.bodySmall,
                     color = Color.Black
                 )
+                Text(
+                    text = "Countries in Memory: ${countries.size}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold
+                )
+                if (countryError != null) {
+                    Text(
+                        text = "Last Error: $countryError",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = Color.Red
+                    )
+                }
             }
         }
 
@@ -237,13 +250,20 @@ fun CompetitionsScreen(
             }
         ) { country ->
 
+            // Fix relative flag URLs from backend
+            val fullFlagUrl = if (country.flag?.startsWith("/") == true) {
+                "${NetworkConfig.baseUrl.removeSuffix("/")}${country.flag}"
+            } else {
+                country.flag
+            }
+
             CountryCard(
 
                 countryName =
                     country.name,
 
                 flagUrl =
-                    country.flag,
+                    fullFlagUrl,
 
                 expanded =
                     expandedCountry == country.name,

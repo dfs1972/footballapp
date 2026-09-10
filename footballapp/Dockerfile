@@ -1,23 +1,27 @@
-# Use a Maven image with Java 23 to build the application
+# Stage 1: Build the application
 FROM maven:3.9.9-eclipse-temurin-23 AS build
 WORKDIR /app
 
-# Copy the pom.xml and source code
+# Copy pom.xml and source code
 COPY pom.xml .
 COPY src ./src
 
-# Build the application
+# Build the JAR file, skipping tests for faster builds
 RUN mvn clean package -DskipTests
 
-# Use a lightweight JRE image for the final container
+# Stage 2: Run the application
 FROM eclipse-temurin:23-jre-alpine
 WORKDIR /app
 
-# Copy the built jar from the build stage
+# Copy the JAR from the build stage
 COPY --from=build /app/target/footballapp-1.0-SNAPSHOT.jar app.jar
 
-# Railway will provide the PORT environment variable
+# Railway provides the PORT environment variable
+# We set a default memory limit to prevent OOM kills on low-RAM plans (512MB)
+ENV JAVA_OPTS="-Xmx384m -Xms256m -XX:+UseG1GC -XX:+ExitOnOutOfMemoryError"
+
+# Expose the port (informative)
 EXPOSE 8081
 
-# Start the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Start the application using the JAVA_OPTS
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]

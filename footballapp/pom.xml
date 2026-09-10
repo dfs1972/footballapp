@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.4</version>
+        <version>3.4.3</version>
     </parent>
 
     <groupId>org.footballapp</groupId>
@@ -19,7 +19,7 @@
 
     <properties>
         <java.version>23</java.version>
-    <kotlin.version>2.3.10</kotlin.version>
+    <kotlin.version>2.1.10</kotlin.version>
     </properties>
 
     <dependencies>

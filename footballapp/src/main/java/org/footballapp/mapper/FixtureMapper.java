@@ -16,6 +16,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Component
 public class FixtureMapper {
@@ -275,7 +276,8 @@ public class FixtureMapper {
         row.setFixtureDate(
                 ukDateTime.format(
                         DateTimeFormatter.ofPattern(
-                                "EEE dd MMM yyyy"
+                                "EEE dd MMM yyyy",
+                                Locale.US
                         )
                 )
         );
@@ -283,7 +285,8 @@ public class FixtureMapper {
         row.setFixtureTime(
                 ukDateTime.format(
                         DateTimeFormatter.ofPattern(
-                                "HH:mm"
+                                "HH:mm",
+                                Locale.US
                         )
                 )
         );

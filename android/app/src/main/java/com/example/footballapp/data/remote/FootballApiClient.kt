@@ -1,5 +1,6 @@
 package com.example.footballapp.data.remote
 
+import android.util.Log
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import okhttp3.OkHttpClient
@@ -40,8 +41,11 @@ object FootballApiClient {
         }
 
     private fun createService(baseUrl: String): FootballApiService {
+        val normalizedUrl = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
+        Log.d("FootballApiClient", "Creating service with URL: $normalizedUrl")
+        
         return Retrofit.Builder()
-            .baseUrl(baseUrl)
+            .baseUrl(normalizedUrl)
             .client(client)
             .addConverterFactory(
                 JacksonConverterFactory.create(mapper)

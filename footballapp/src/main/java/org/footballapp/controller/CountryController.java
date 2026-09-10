@@ -23,6 +23,7 @@ public class CountryController {
     public List<CountryApiResponse> getCountries()
             throws Exception {
 
+        System.out.println("[API] Request received: /countries");
         return countryDataService.getCountries();
     }
 }

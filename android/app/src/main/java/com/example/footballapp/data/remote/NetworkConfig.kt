@@ -39,7 +39,7 @@ object NetworkConfig {
             // If Firebase is still returning the default (127.0.0.1) and we are NOT on an emulator,
             // let's try to use the Railway URL as a hardcoded fallback to help the user.
             return if (remoteUrl.contains("127.0.0.1") && !isEmulator) {
-                "https://footballapp-production.up.railway.app/"
+                "https://footballapp-production-1b1d.up.railway.app/"
             } else {
                 remoteUrl
             }

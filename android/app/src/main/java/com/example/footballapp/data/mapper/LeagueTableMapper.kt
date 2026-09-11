@@ -19,7 +19,7 @@ fun LeagueTableRowDto.toUiModel(): LeagueTableRowUiModel {
 
         teamName = teamName,
 
-        teamLogo = null,
+        teamLogo = teamLogo,
 
         played = played,
 

@@ -6,6 +6,7 @@ public class LeagueTableRow {
     private int position;
     private int teamId;
     private String teamName;
+    private String teamLogo;
     private int played;
     private int wins;
     private int draws;
@@ -27,6 +28,14 @@ public class LeagueTableRow {
 
     public void setTeamName(String teamName) {
         this.teamName = teamName;
+    }
+
+    public String getTeamLogo() {
+        return teamLogo;
+    }
+
+    public void setTeamLogo(String teamLogo) {
+        this.teamLogo = teamLogo;
     }
 
     public int getPlayed() {return played;}

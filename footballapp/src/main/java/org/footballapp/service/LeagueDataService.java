@@ -454,6 +454,10 @@ public class LeagueDataService {
                     )
             );
 
+            row.setTeamLogo(
+                    standing.getTeam().getLogo()
+            );
+
             row.setPlayed(
                     standing.getAll().getPlayed()
             );

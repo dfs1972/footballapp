@@ -13,6 +13,8 @@ data class LeagueTableRowDto(
 
     val teamName: String,
 
+    val teamLogo: String?,
+
     val played: Int,
 
     val wins: Int,

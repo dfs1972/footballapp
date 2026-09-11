@@ -42,9 +42,19 @@ fun LeagueTableHeader() {
                 modifier = Modifier.width(AppDimensions.TablePositionWidth)
             )
 
+            // Gap between position and logo
+            Spacer(
+                modifier = Modifier.width(AppSpacing.Small)
+            )
+
             // Space for the logo
             Spacer(
-                modifier = Modifier.width(AppDimensions.TableLogoWidth + AppSpacing.ExtraSmall)
+                modifier = Modifier.width(AppDimensions.TableLogoWidth)
+            )
+
+            // Gap between logo and name
+            Spacer(
+                modifier = Modifier.width(AppSpacing.Small)
             )
 
             Text(

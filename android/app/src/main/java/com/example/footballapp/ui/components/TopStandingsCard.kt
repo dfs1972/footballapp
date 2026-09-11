@@ -22,8 +22,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import coil.compose.AsyncImage
 import com.example.footballapp.ui.design.Strings
 import com.example.footballapp.ui.model.LeagueTableRowUiModel
 //import com.example.footballapp.ui.previews.PreviewData
@@ -103,16 +101,12 @@ fun TopStandingsCard(
                             color = MaterialTheme.colorScheme.onSurface
                         )
 
-                        val placeholder = rememberVectorPainter(Icons.Default.SportsSoccer)
-
-                        AsyncImage(
-                            model = standing.teamLogo,
-                            contentDescription = "${standing.teamName} logo",
-                            placeholder = placeholder,
-                            error = placeholder,
-                            modifier = Modifier
-                                .padding(end = AppSpacing.Medium)
-                                .size(24.dp)
+                        TeamLogo(
+                            teamId = standing.teamId,
+                            teamName = standing.teamName,
+                            remoteLogoUrl = standing.teamLogo,
+                            modifier = Modifier.padding(end = AppSpacing.Medium),
+                            size = 24.dp
                         )
 
                         Text(

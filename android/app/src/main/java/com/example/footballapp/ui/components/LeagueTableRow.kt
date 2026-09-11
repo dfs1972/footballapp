@@ -3,6 +3,7 @@ package com.example.footballapp.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,11 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.SportsSoccer
-import coil.compose.AsyncImage
-
 import com.example.footballapp.ui.model.LeagueTableRowUiModel
 import com.example.footballapp.ui.model.QualificationType
 import com.example.footballapp.ui.theme.AppDimensions
@@ -72,16 +68,18 @@ fun LeagueTableRow(
             textAlign = TextAlign.Center
         )
 
-        val placeholder = rememberVectorPainter(Icons.Default.SportsSoccer)
+        Spacer(
+            modifier = Modifier.width(AppSpacing.Small)
+        )
 
-        AsyncImage(
-            model = row.teamLogo,
-            contentDescription = "${row.teamName} logo",
-            placeholder = placeholder,
-            error = placeholder,
-            modifier = Modifier
-                .padding(end = AppSpacing.ExtraSmall)
-                .size(AppDimensions.TableLogoWidth)
+        TeamLogo(
+            teamId = row.teamId,
+            teamName = row.teamName,
+            remoteLogoUrl = row.teamLogo
+        )
+
+        Spacer(
+            modifier = Modifier.width(AppSpacing.Small)
         )
 
         Text(
@@ -120,7 +118,7 @@ private fun ValueCell(
 
         textAlign = TextAlign.End,
 
-        style = MaterialTheme.typography.bodySmall,
+        style = MaterialTheme.typography.bodyMedium,
 
         fontWeight = fontWeight
 

@@ -23,7 +23,7 @@ object AppDimensions {
 
     val TableLogoWidth = 20.dp
 
-    val TableStatWidth = 24.dp
+    val TableStatWidth = 32.dp
     val BadgeBorder = 1.dp
 
     val FixtureCentreWidth = 80.dp

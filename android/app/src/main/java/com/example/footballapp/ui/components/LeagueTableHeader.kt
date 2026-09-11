@@ -2,6 +2,7 @@ package com.example.footballapp.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -41,9 +42,9 @@ fun LeagueTableHeader() {
                 modifier = Modifier.width(AppDimensions.TablePositionWidth)
             )
 
-            // Gap between position and name
-            androidx.compose.foundation.layout.Spacer(
-                modifier = Modifier.width(AppSpacing.Small)
+            // Space for the logo
+            Spacer(
+                modifier = Modifier.width(AppDimensions.TableLogoWidth + (AppSpacing.Small * 2))
             )
 
             Text(

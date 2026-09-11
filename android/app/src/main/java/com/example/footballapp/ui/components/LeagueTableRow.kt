@@ -17,6 +17,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.SportsSoccer
+import coil.compose.AsyncImage
 
 import com.example.footballapp.ui.model.LeagueTableRowUiModel
 import com.example.footballapp.ui.model.QualificationType
@@ -68,9 +72,16 @@ fun LeagueTableRow(
             textAlign = TextAlign.Center
         )
 
-        // Gap between position and name
-        androidx.compose.foundation.layout.Spacer(
-            modifier = Modifier.width(AppSpacing.Small)
+        val placeholder = rememberVectorPainter(Icons.Default.SportsSoccer)
+
+        AsyncImage(
+            model = row.teamLogo,
+            contentDescription = "${row.teamName} logo",
+            placeholder = placeholder,
+            error = placeholder,
+            modifier = Modifier
+                .padding(horizontal = AppSpacing.Small)
+                .size(AppDimensions.TableLogoWidth)
         )
 
         Text(

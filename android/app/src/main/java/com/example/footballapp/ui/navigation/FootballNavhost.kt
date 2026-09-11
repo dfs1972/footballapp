@@ -42,15 +42,20 @@ import com.example.footballapp.ui.viewmodel.TeamFixturesViewModel
 import com.example.footballapp.ui.viewmodel.MatchDetailViewModel
 import com.example.footballapp.ui.screens.fixtures.MatchDetailScreen
 import com.example.footballapp.ui.screens.league.CupsScreen
+import com.example.footballapp.ui.screens.settings.SettingsScreen
 import com.example.footballapp.ui.viewmodel.FavouriteViewModel
 import com.example.footballapp.ui.viewmodel.CountryViewModel
 import com.example.footballapp.ui.viewmodel.FixtureDetailsViewModel
+import com.example.footballapp.ui.viewmodel.SettingsViewModel
 
 @Composable
 fun FootballNavHost(
     navController: NavHostController,
     startDestination: String
 ) {
+    val settingsViewModel: SettingsViewModel = viewModel()
+    val isLogoEditMode by settingsViewModel.isLogoEditMode.collectAsState()
+
 
     var searchQuery by rememberSaveable {
         mutableStateOf("")
@@ -110,6 +115,32 @@ fun FootballNavHost(
         startDestination = resolvedStartDestination
     ){
 
+        /***************** Settings ***********************/
+
+        composable(
+            route = FootballDestination.Settings.route
+        ) {
+            SettingsScreen(
+                isLogoEditMode = isLogoEditMode,
+                onLogoEditModeChange = { enabled ->
+                    settingsViewModel.setLogoEditMode(enabled)
+                    if (enabled) {
+                        val fav = favouriteViewModel.getFavourite()
+                        if (fav != null) {
+                            navController.navigate(
+                                FootballDestination.LeagueTable.createRoute(fav.leagueId, fav.season)
+                            )
+                        } else {
+                            navController.navigate(FootballDestination.Competitions.route)
+                        }
+                    }
+                },
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
         /***************** Competitions ***********************/
 
         composable(
@@ -153,6 +184,12 @@ fun FootballNavHost(
 
                 onSearchQueryChange = {
                     searchQuery = it
+                },
+
+                onAccountClick = {
+                    navController.navigate(
+                        FootballDestination.Settings.route
+                    )
                 },
 
                 initialCountry =
@@ -325,6 +362,12 @@ fun FootballNavHost(
                                 .Competitions
                                 .route
                         )
+                    },
+
+                    onAccountClick = {
+                        navController.navigate(
+                            FootballDestination.Settings.route
+                        )
                     }
                 )
             }
@@ -411,6 +454,12 @@ fun FootballNavHost(
                         pendingSearchCountry = country
                         searchQuery = ""
                         navController.navigate(FootballDestination.Competitions.route)
+                    },
+
+                    onAccountClick = {
+                        navController.navigate(
+                            FootballDestination.Settings.route
+                        )
                     }
                 )
             }
@@ -461,6 +510,12 @@ fun FootballNavHost(
                         pendingSearchCountry = country
                         searchQuery = ""
                         navController.navigate(FootballDestination.Competitions.route)
+                    },
+
+                    onAccountClick = {
+                        navController.navigate(
+                            FootballDestination.Settings.route
+                        )
                     }
                 )
             }
@@ -521,6 +576,12 @@ fun FootballNavHost(
                         pendingSearchCountry = country
                         searchQuery = ""
                         navController.navigate(FootballDestination.Competitions.route)
+                    },
+
+                    onAccountClick = {
+                        navController.navigate(
+                            FootballDestination.Settings.route
+                        )
                     }
                 )
             }
@@ -610,6 +671,12 @@ fun FootballNavHost(
                         pendingSearchCountry = country
                         searchQuery = ""
                         navController.navigate(FootballDestination.Competitions.route)
+                    },
+
+                    onAccountClick = {
+                        navController.navigate(
+                            FootballDestination.Settings.route
+                        )
                     }
                 )
             }
@@ -692,6 +759,12 @@ fun FootballNavHost(
                     pendingSearchCountry = country
                     searchQuery = ""
                     navController.navigate(FootballDestination.Competitions.route)
+                },
+
+                onAccountClick = {
+                    navController.navigate(
+                        FootballDestination.Settings.route
+                    )
                 }
 
             )
@@ -806,6 +879,12 @@ fun FootballNavHost(
                         pendingSearchCountry = country
                         searchQuery = ""
                         navController.navigate(FootballDestination.Competitions.route)
+                    },
+
+                    onAccountClick = {
+                        navController.navigate(
+                            FootballDestination.Settings.route
+                        )
                     }
 
                 )
@@ -915,6 +994,12 @@ fun FootballNavHost(
                         pendingSearchCountry = country
                         searchQuery = ""
                         navController.navigate(FootballDestination.Competitions.route)
+                    },
+
+                    onAccountClick = {
+                        navController.navigate(
+                            FootballDestination.Settings.route
+                        )
                     }
                 )
             }
@@ -1024,6 +1109,12 @@ fun FootballNavHost(
                         pendingSearchCountry = country
                         searchQuery = ""
                         navController.navigate(FootballDestination.Competitions.route)
+                    },
+
+                    onAccountClick = {
+                        navController.navigate(
+                            FootballDestination.Settings.route
+                        )
                     }
                 )
             }
@@ -1101,6 +1192,11 @@ fun FootballNavHost(
                     pendingSearchCountry = country
                     searchQuery = ""
                     navController.navigate(FootballDestination.Competitions.route)
+                },
+                onAccountClick = {
+                    navController.navigate(
+                        FootballDestination.Settings.route
+                    )
                 }
             )
         }
@@ -1142,25 +1238,16 @@ fun FootballNavHost(
                 season
             ) {
 
-                playerDetailsViewModel
-                    .loadPlayerDetails(
+                playerDetailsViewModel.loadPlayerDetails(
+                    playerId = playerId,
+                    leagueId = leagueId,
+                    season = season
+                )
 
-                        playerId =
-                            playerId,
-
-                        leagueId =
-                            leagueId,
-
-                        season =
-                            season
-
-                    )
             }
 
             val uiState by
-            playerDetailsViewModel
-                .uiState
-                .collectAsState()
+            playerDetailsViewModel.uiState.collectAsState()
 
             uiState.player?.let { player ->
 
@@ -1178,10 +1265,18 @@ fun FootballNavHost(
                         pendingSearchCountry = country
                         searchQuery = ""
                         navController.navigate(FootballDestination.Competitions.route)
+                    },
+
+                    onAccountClick = {
+                        navController.navigate(
+                            FootballDestination.Settings.route
+                        )
                     }
 
                 )
+
             }
+
         }
     }
 }

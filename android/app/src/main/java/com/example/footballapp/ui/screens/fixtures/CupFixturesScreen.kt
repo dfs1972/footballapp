@@ -42,7 +42,8 @@ fun CupFixturesScreen(
     searchQuery: String = "",
     onSearchQueryChange: (String) -> Unit = {},
     searchResults: List<CountryUiModel> = emptyList(),
-    onSearchResultClick: (CountryUiModel) -> Unit = {}
+    onSearchResultClick: (CountryUiModel) -> Unit = {},
+    onAccountClick: () -> Unit = {}
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -50,7 +51,8 @@ fun CupFixturesScreen(
         searchQuery = searchQuery,
         onSearchQueryChange = onSearchQueryChange,
         searchResults = searchResults,
-        onSearchResultClick = onSearchResultClick
+        onSearchResultClick = onSearchResultClick,
+        onAccountClick = onAccountClick
     ) {
         item {
             Spacer(modifier = Modifier.height(AppSpacing.ExtraLarge))

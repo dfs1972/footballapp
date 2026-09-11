@@ -56,7 +56,9 @@ fun TeamFixturesScreen(
 
     searchResults: List<CountryUiModel> = emptyList(),
 
-    onSearchResultClick: (CountryUiModel) -> Unit = {}
+    onSearchResultClick: (CountryUiModel) -> Unit = {},
+
+    onAccountClick: () -> Unit = {}
 
 ) {
 
@@ -75,7 +77,8 @@ fun TeamFixturesScreen(
         searchQuery = searchQuery,
         onSearchQueryChange = onSearchQueryChange,
         searchResults = searchResults,
-        onSearchResultClick = onSearchResultClick
+        onSearchResultClick = onSearchResultClick,
+        onAccountClick = onAccountClick
     ) {
 
         item {

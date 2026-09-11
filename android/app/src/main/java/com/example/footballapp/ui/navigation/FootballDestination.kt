@@ -198,4 +198,12 @@ sealed class FootballDestination(
         ) = "playerDetails/$leagueId/$playerId/$season"
 
     }
+
+    /**
+     * Settings
+     */
+    object Settings :
+        FootballDestination(
+            "settings"
+        )
 }

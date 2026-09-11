@@ -1,5 +1,6 @@
 package com.example.footballapp.ui.components
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,7 +29,15 @@ fun LeagueTableCard(
 
 ) {
 
-    SectionCard {
+    SectionCard(
+        outerPadding = PaddingValues(
+            vertical = AppSpacing.Twelve
+        ),
+        innerPadding = PaddingValues(
+            horizontal = AppSpacing.Small,
+            vertical = AppSpacing.Twenty
+        )
+    ) {
 
         CardHeader(
 

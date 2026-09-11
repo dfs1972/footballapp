@@ -47,7 +47,9 @@ fun FixturesScreen(
 
     searchResults: List<CountryUiModel> = emptyList(),
 
-    onSearchResultClick: (CountryUiModel) -> Unit = {}
+    onSearchResultClick: (CountryUiModel) -> Unit = {},
+
+    onAccountClick: () -> Unit = {}
 
 ) {
 
@@ -78,7 +80,9 @@ fun FixturesScreen(
 
         searchResults = searchResults,
 
-        onSearchResultClick = onSearchResultClick
+        onSearchResultClick = onSearchResultClick,
+
+        onAccountClick = onAccountClick
 
     ) {
 

@@ -28,13 +28,15 @@ fun CupsScreen(
     searchQuery: String = "",
     onSearchQueryChange: (String) -> Unit = {},
     searchResults: List<CountryUiModel> = emptyList(),
-    onSearchResultClick: (CountryUiModel) -> Unit = {}
+    onSearchResultClick: (CountryUiModel) -> Unit = {},
+    onAccountClick: () -> Unit = {}
 ) {
     ScreenScaffold(
         searchQuery = searchQuery,
         onSearchQueryChange = onSearchQueryChange,
         searchResults = searchResults,
-        onSearchResultClick = onSearchResultClick
+        onSearchResultClick = onSearchResultClick,
+        onAccountClick = onAccountClick
     ) {
         item {
             Spacer(modifier = Modifier.height(AppSpacing.ExtraLarge))

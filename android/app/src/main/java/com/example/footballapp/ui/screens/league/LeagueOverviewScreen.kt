@@ -5,6 +5,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -74,7 +75,9 @@ fun LeagueOverviewScreen(
     List<CountryUiModel> = emptyList(),
 
     onSearchResultClick:
-        (CountryUiModel) -> Unit = {}
+        (CountryUiModel) -> Unit = {},
+
+    onAccountClick: () -> Unit = {}
 
 ) {
 
@@ -106,29 +109,11 @@ fun LeagueOverviewScreen(
             searchResults,
 
         onSearchResultClick =
-            onSearchResultClick
+            onSearchResultClick,
+
+        onAccountClick = onAccountClick
 
     ) {
-
-        item {
-
-            Spacer(
-                modifier = Modifier.height(
-                    AppSpacing.ExtraLarge
-                )
-            )
-
-        }
-
-        item {
-
-            Text(
-                text = "Current round: ${
-                    currentRound ?: "Unknown"
-                }"
-            )
-
-        }
 
         if (topStandings.isNotEmpty()) {
             item {
@@ -150,7 +135,16 @@ fun LeagueOverviewScreen(
                     },
 
                     onViewFullTable =
-                    onLeagueTableClick
+                    onLeagueTableClick,
+
+                    outerPadding = PaddingValues(
+                        vertical = AppSpacing.Twelve
+                    ),
+
+                    innerPadding = PaddingValues(
+                        horizontal = AppSpacing.Small,
+                        vertical = AppSpacing.Twenty
+                    )
 
                 )
 
@@ -167,7 +161,16 @@ fun LeagueOverviewScreen(
                     Strings.VIEW_COMPLETE_STANDINGS,
 
                     onClick =
-                    onLeagueTableClick
+                    onLeagueTableClick,
+
+                    outerPadding = PaddingValues(
+                        vertical = AppSpacing.Small
+                    ),
+
+                    innerPadding = PaddingValues(
+                        horizontal = AppSpacing.Small,
+                        vertical = AppSpacing.Medium
+                    )
 
                 )
 
@@ -195,7 +198,14 @@ fun LeagueOverviewScreen(
                 },
                 onClick = {
                     isCountryLeaguesExpanded = !isCountryLeaguesExpanded
-                }
+                },
+                outerPadding = PaddingValues(
+                    vertical = AppSpacing.Small
+                ),
+                innerPadding = PaddingValues(
+                    horizontal = AppSpacing.Small,
+                    vertical = AppSpacing.Medium
+                )
             )
         }
 

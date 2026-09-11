@@ -2,6 +2,7 @@ package com.example.footballapp.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -43,11 +44,23 @@ fun TopStandingsCard(
 
     onViewFullTable: () -> Unit,
 
-    viewMoreText: String = Strings.VIEW_FULL_TABLE
+    viewMoreText: String = Strings.VIEW_FULL_TABLE,
+
+    outerPadding: PaddingValues = PaddingValues(
+        horizontal = AppSpacing.Screen,
+        vertical = AppSpacing.Twelve
+    ),
+
+    innerPadding: PaddingValues = PaddingValues(
+        AppSpacing.Twenty
+    )
 
 ) {
 
-    SectionCard {
+    SectionCard(
+        outerPadding = outerPadding,
+        innerPadding = innerPadding
+    ) {
 
         CardHeader(
 
@@ -60,17 +73,6 @@ fun TopStandingsCard(
         standings
 
             .forEach { group ->
-
-                if (group.group.isNotBlank() && !group.group.contains("League Table", ignoreCase = true)) {
-                    Text(
-                        text = group.group,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = AppSpacing.Medium, bottom = AppSpacing.Small)
-                    )
-                }
 
                 group.standings
                     .take(5)

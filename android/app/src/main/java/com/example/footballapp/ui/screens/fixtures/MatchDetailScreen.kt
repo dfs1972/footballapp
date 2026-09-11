@@ -47,7 +47,8 @@ fun MatchDetailScreen(
     searchQuery: String = "",
     onSearchQueryChange: (String) -> Unit = {},
     searchResults: List<CountryUiModel> = emptyList(),
-    onSearchResultClick: (CountryUiModel) -> Unit = {}
+    onSearchResultClick: (CountryUiModel) -> Unit = {},
+    onAccountClick: () -> Unit = {}
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
     val tabs = listOf("Overview", "Lineups", "Statistics")
@@ -77,7 +78,8 @@ fun MatchDetailScreen(
         searchQuery = searchQuery,
         onSearchQueryChange = onSearchQueryChange,
         searchResults = searchResults,
-        onSearchResultClick = onSearchResultClick
+        onSearchResultClick = onSearchResultClick,
+        onAccountClick = onAccountClick
     ) {
         if (isLoading && fixture == null) {
             item {

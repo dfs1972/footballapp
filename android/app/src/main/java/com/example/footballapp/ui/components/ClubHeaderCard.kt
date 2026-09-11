@@ -2,14 +2,17 @@ package com.example.footballapp.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.example.footballapp.ui.design.AppSpacing
 import com.example.footballapp.ui.model.ClubDetailsUiModel
+import com.example.footballapp.ui.theme.AppDimensions
 import com.example.footballapp.ui.theme.AppElevation
 import com.example.footballapp.ui.theme.AppShapes
 import com.example.footballapp.util.ColorUtils
@@ -18,7 +21,8 @@ import com.example.footballapp.util.ColorUtils
 fun ClubHeaderCard(
     club: ClubDetailsUiModel,
     leagueName: String? = null,
-    showDetails: Boolean = true
+    showDetails: Boolean = true,
+    onEditLogo: (() -> Unit)? = null
 ) {
     val teamColor = ColorUtils.parseHexColor(club.colors?.player?.primary)
         ?: MaterialTheme.colorScheme.primary
@@ -48,13 +52,27 @@ fun ClubHeaderCard(
                     .padding(vertical = AppSpacing.Twenty, horizontal = AppSpacing.Medium),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "${club.name} Football Club",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = contentColor,
-                    textAlign = TextAlign.Center
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    TeamLogo(
+                        teamId = club.clubId,
+                        teamName = club.name,
+                        remoteLogoUrl = club.badgeUrl,
+                        size = 48.dp
+                    )
+
+                    Spacer(modifier = Modifier.width(AppSpacing.Medium))
+
+                    Text(
+                        text = "${club.name} Football Club",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = contentColor,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
 
             if (showDetails) {
@@ -89,6 +107,21 @@ fun ClubHeaderCard(
                         label = "Coach",
                         value = club.coach
                     )
+
+                    if (onEditLogo != null) {
+                        Spacer(modifier = Modifier.height(AppSpacing.Large))
+
+                        Button(
+                            onClick = onEditLogo,
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = teamColor,
+                                contentColor = contentColor
+                            )
+                        ) {
+                            Text("Customize Logo")
+                        }
+                    }
                 }
             }
         }

@@ -2,6 +2,7 @@ package com.example.footballapp.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,7 +40,17 @@ fun NavigationCard(
 
     iconRotation: Float = 0f,
 
-    leadingContent: @Composable (() -> Unit)? = null
+    leadingContent: @Composable (() -> Unit)? = null,
+
+    outerPadding: PaddingValues = PaddingValues(
+        horizontal = AppSpacing.Screen,
+        vertical = AppSpacing.Small
+    ),
+
+    innerPadding: PaddingValues = PaddingValues(
+        horizontal = AppSpacing.Large,
+        vertical = AppSpacing.Medium
+    )
 
 ) {
 
@@ -48,10 +59,7 @@ fun NavigationCard(
 
         modifier = Modifier
             .fillMaxWidth()
-            .padding(
-                horizontal = AppSpacing.Screen,
-                vertical = AppSpacing.Small
-            ),
+            .padding(outerPadding),
 
         shape = AppShapes.Card,
 
@@ -68,10 +76,7 @@ fun NavigationCard(
 
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(
-                    horizontal = AppSpacing.Large,
-                    vertical = AppSpacing.Medium
-                ),
+                .padding(innerPadding),
 
             verticalAlignment = Alignment.CenterVertically,
 

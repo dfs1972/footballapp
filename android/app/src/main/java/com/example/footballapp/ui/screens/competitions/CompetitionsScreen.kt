@@ -55,6 +55,8 @@ fun CompetitionsScreen(
 
     onSearchResultClick: (CountryUiModel) -> Unit = {},
 
+    onAccountClick: () -> Unit = {},
+
     initialCountry: CountryUiModel? = null,
 
     onInitialCountryConsumed: () -> Unit = {},
@@ -140,7 +142,9 @@ fun CompetitionsScreen(
             searchResults,
 
         onSearchResultClick =
-            onSearchResultClick
+            onSearchResultClick,
+
+        onAccountClick = onAccountClick
 
     ) {
 

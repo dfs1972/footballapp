@@ -1,6 +1,7 @@
 package com.example.footballapp.ui.components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -17,6 +18,15 @@ fun SectionCard(
 
     modifier: Modifier = Modifier,
 
+    outerPadding: PaddingValues = PaddingValues(
+        horizontal = AppSpacing.Screen,
+        vertical = AppSpacing.Twelve
+    ),
+
+    innerPadding: PaddingValues = PaddingValues(
+        AppSpacing.Twenty
+    ),
+
     content: @Composable () -> Unit
 
 ) {
@@ -25,10 +35,7 @@ fun SectionCard(
 
         modifier = modifier
             .fillMaxWidth()
-            .padding(
-                horizontal = AppSpacing.Screen,
-                vertical = AppSpacing.Twelve
-            ),
+            .padding(outerPadding),
 
         shape = AppShapes.Card,
 
@@ -50,11 +57,7 @@ fun SectionCard(
 
         Column(
 
-            modifier = Modifier.padding(
-
-                AppSpacing.Twenty
-
-            )
+            modifier = Modifier.padding(innerPadding)
 
         ) {
 

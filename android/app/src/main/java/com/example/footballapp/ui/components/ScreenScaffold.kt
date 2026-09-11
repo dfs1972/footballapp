@@ -46,6 +46,8 @@ fun ScreenScaffold(
     onSearchResultClick:
         (CountryUiModel) -> Unit = {},
 
+    onAccountClick: () -> Unit = {},
+
     content:
     LazyListScope.() -> Unit
 ) {
@@ -114,7 +116,9 @@ fun ScreenScaffold(
             searchQuery = searchQuery,
 
             onSearchQueryChange =
-                onSearchQueryChange
+                onSearchQueryChange,
+
+            onAccountClick = onAccountClick
 
         )
 

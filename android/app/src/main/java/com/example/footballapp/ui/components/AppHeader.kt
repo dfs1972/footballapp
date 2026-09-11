@@ -29,7 +29,9 @@ fun AppHeader(
 
     searchQuery: String = "",
 
-    onSearchQueryChange: (String) -> Unit = {}
+    onSearchQueryChange: (String) -> Unit = {},
+
+    onAccountClick: () -> Unit = {}
 
 ) {
 
@@ -82,7 +84,9 @@ fun AppHeader(
                 )
             )
 
-            AccountMenuButton()
+            AccountMenuButton(
+                onClick = onAccountClick
+            )
 
         }
 

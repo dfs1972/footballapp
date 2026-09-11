@@ -26,8 +26,8 @@ fun LeagueTableHeader() {
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .padding(
-                start = AppSpacing.Small,
-                end = AppSpacing.Medium,
+                start = AppSpacing.ExtraSmall,
+                end = AppSpacing.Small,
                 top = AppSpacing.Small,
                 bottom = AppSpacing.Small
             )
@@ -44,7 +44,7 @@ fun LeagueTableHeader() {
 
             // Space for the logo
             Spacer(
-                modifier = Modifier.width(AppDimensions.TableLogoWidth + (AppSpacing.Small * 2))
+                modifier = Modifier.width(AppDimensions.TableLogoWidth + AppSpacing.ExtraSmall)
             )
 
             Text(

@@ -19,11 +19,11 @@ object AppDimensions {
 
     val CompetitionRowHeight = 64.dp
 
-    val TablePositionWidth = 28.dp
+    val TablePositionWidth = 24.dp
 
-    val TableLogoWidth = 24.dp
+    val TableLogoWidth = 20.dp
 
-    val TableStatWidth = 28.dp
+    val TableStatWidth = 24.dp
     val BadgeBorder = 1.dp
 
     val FixtureCentreWidth = 80.dp

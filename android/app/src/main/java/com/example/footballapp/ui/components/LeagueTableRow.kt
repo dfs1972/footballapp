@@ -55,8 +55,8 @@ fun LeagueTableRow(
                 onClubClick(row.teamId)
             }
             .padding(
-                start = AppSpacing.Small,
-                end = AppSpacing.Medium,
+                start = AppSpacing.ExtraSmall,
+                end = AppSpacing.Small,
                 top = AppSpacing.ExtraSmall,
                 bottom = AppSpacing.ExtraSmall
             ),
@@ -80,12 +80,13 @@ fun LeagueTableRow(
             placeholder = placeholder,
             error = placeholder,
             modifier = Modifier
-                .padding(horizontal = AppSpacing.Small)
+                .padding(end = AppSpacing.ExtraSmall)
                 .size(AppDimensions.TableLogoWidth)
         )
 
         Text(
             text = row.teamName,
+            style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.weight(1f),
             maxLines = 1
         )
@@ -118,6 +119,8 @@ private fun ValueCell(
         modifier = Modifier.width(AppDimensions.TableStatWidth),
 
         textAlign = TextAlign.End,
+
+        style = MaterialTheme.typography.bodySmall,
 
         fontWeight = fontWeight
 

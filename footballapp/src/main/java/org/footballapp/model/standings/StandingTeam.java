@@ -7,6 +7,7 @@ public class StandingTeam {
 
     private int id;
     private String name;
+    private String logo;
 
     /**Getters and Setters*/
     public int getId() {
@@ -23,5 +24,13 @@ public class StandingTeam {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 }

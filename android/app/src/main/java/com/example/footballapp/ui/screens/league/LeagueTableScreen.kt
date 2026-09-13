@@ -20,14 +20,18 @@ fun LeagueTableScreen(
     onSearchQueryChange: (String) -> Unit = {},
     searchResults: List<CountryUiModel> = emptyList(),
     onSearchResultClick: (CountryUiModel) -> Unit = {},
-    onAccountClick: () -> Unit = {}
+    onAccountClick: () -> Unit = {},
+    onCloseEditModeClick: () -> Unit = {},
+    isEditMode: Boolean = false
 ) {
     ScreenScaffold(
         searchQuery = searchQuery,
         onSearchQueryChange = onSearchQueryChange,
         searchResults = searchResults,
         onSearchResultClick = onSearchResultClick,
-        onAccountClick = onAccountClick
+        onAccountClick = onAccountClick,
+        showBackButton = isEditMode,
+        onBackClick = onCloseEditModeClick
     ) {
         if (standings.isEmpty()) {
             item {
@@ -42,7 +46,8 @@ fun LeagueTableScreen(
                     leagueName = overview.leagueName,
                     season = overview.season,
                     table = standings,
-                    onTeamClick = onClubClick
+                    onTeamClick = onClubClick,
+                    isEditMode = isEditMode
                 )
             }
         }

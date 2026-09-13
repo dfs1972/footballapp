@@ -40,13 +40,14 @@ sealed class FootballDestination(
 
     object LeagueTable :
         FootballDestination(
-            "leagueTable/{leagueId}/{season}"
+            "leagueTable/{leagueId}/{season}?editMode={editMode}"
         ) {
 
         fun createRoute(
             leagueId: Int,
-            season: Int
-        ) = "leagueTable/$leagueId/$season"
+            season: Int,
+            editMode: Boolean = false
+        ) = "leagueTable/$leagueId/$season?editMode=$editMode"
 
     }
 

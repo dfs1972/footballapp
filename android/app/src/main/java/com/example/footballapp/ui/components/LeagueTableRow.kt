@@ -30,7 +30,9 @@ fun LeagueTableRow(
 
     isEvenRow: Boolean,
 
-    onClubClick: (Int) -> Unit
+    onClubClick: (Int) -> Unit,
+
+    isEditMode: Boolean = false
 
 ) {
 
@@ -75,7 +77,8 @@ fun LeagueTableRow(
         TeamLogo(
             teamId = row.teamId,
             teamName = row.teamName,
-            remoteLogoUrl = row.teamLogo
+            remoteLogoUrl = row.teamLogo,
+            isEditable = isEditMode
         )
 
         Spacer(

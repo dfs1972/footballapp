@@ -13,6 +13,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModelStoreOwner
 import com.example.footballapp.ui.model.CountryUiModel
 
 import java.util.Calendar
@@ -53,10 +55,6 @@ fun FootballNavHost(
     navController: NavHostController,
     startDestination: String
 ) {
-    val settingsViewModel: SettingsViewModel = viewModel()
-    val isLogoEditMode by settingsViewModel.isLogoEditMode.collectAsState()
-
-
     var searchQuery by rememberSaveable {
         mutableStateOf("")
     }
@@ -121,19 +119,15 @@ fun FootballNavHost(
             route = FootballDestination.Settings.route
         ) {
             SettingsScreen(
-                isLogoEditMode = isLogoEditMode,
-                onLogoEditModeChange = { enabled ->
-                    settingsViewModel.setLogoEditMode(enabled)
-                    if (enabled) {
-                        val fav = favouriteViewModel.getFavourite()
-                        if (fav != null) {
-                            navController.navigate(
-                                FootballDestination.LeagueTable.createRoute(fav.leagueId, fav.season)
-                            )
-                        } else {
-                            navController.navigate(FootballDestination.Competitions.route)
-                        }
-                    }
+                favourite = favourite,
+                onCustomizeLogosClick = { fav ->
+                    navController.navigate(
+                        FootballDestination.LeagueTable.createRoute(
+                            fav.leagueId, 
+                            fav.season, 
+                            editMode = true
+                        )
+                    )
                 },
                 onBackClick = {
                     navController.popBackStack()
@@ -392,6 +386,11 @@ fun FootballNavHost(
                     ?.toInt()
                     ?: return@composable
 
+            val isEditMode =
+                backStackEntry.arguments
+                    ?.getString("editMode")
+                    ?.toBoolean() ?: false
+
             val overviewViewModel:
                     LeagueOverviewViewModel =
                 viewModel()
@@ -460,9 +459,14 @@ fun FootballNavHost(
                         navController.navigate(
                             FootballDestination.Settings.route
                         )
-                    }
-                )
-            }
+                    },
+
+                    onCloseEditModeClick = {
+                        navController.popBackStack()
+                    },
+
+                    isEditMode = isEditMode
+                )            }
         }
 
         /*************** CUPS LIST *******************/
@@ -886,7 +890,6 @@ fun FootballNavHost(
                             FootballDestination.Settings.route
                         )
                     }
-
                 )
 
             }
@@ -1272,7 +1275,6 @@ fun FootballNavHost(
                             FootballDestination.Settings.route
                         )
                     }
-
                 )
 
             }

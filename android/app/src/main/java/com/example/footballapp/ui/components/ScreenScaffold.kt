@@ -118,7 +118,11 @@ fun ScreenScaffold(
             onSearchQueryChange =
                 onSearchQueryChange,
 
-            onAccountClick = onAccountClick
+            onAccountClick = onAccountClick,
+
+            showBackButton = showBackButton,
+
+            onBackClick = onBackClick ?: {}
 
         )
 

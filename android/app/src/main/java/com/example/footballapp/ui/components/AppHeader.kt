@@ -10,6 +10,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.runtime.Composable
@@ -31,7 +35,11 @@ fun AppHeader(
 
     onSearchQueryChange: (String) -> Unit = {},
 
-    onAccountClick: () -> Unit = {}
+    onAccountClick: () -> Unit = {},
+
+    showBackButton: Boolean = false,
+
+    onBackClick: () -> Unit = {}
 
 ) {
 
@@ -58,7 +66,19 @@ fun AppHeader(
 
         ) {
 
-            LogoPlaceholder()
+            if (showBackButton) {
+                IconButton(onClick = onBackClick) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color.White
+                    )
+                }
+                
+                Spacer(Modifier.width(AppSpacing.Small))
+            } else {
+                LogoPlaceholder()
+            }
 
             Spacer(
                 Modifier.width(

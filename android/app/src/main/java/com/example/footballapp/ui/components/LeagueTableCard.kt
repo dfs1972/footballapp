@@ -25,8 +25,8 @@ fun LeagueTableCard(
 
     table: List<LeagueTableGroupUiModel>,
 
-    onTeamClick: (Int) -> Unit
-
+    onTeamClick: (Int) -> Unit,
+    isEditMode: Boolean = false
 ) {
 
     SectionCard(
@@ -81,7 +81,8 @@ fun LeagueTableCard(
                 LeagueTableRow(
                     row = row,
                     isEvenRow = index % 2 == 0,
-                    onClubClick = onTeamClick
+                    onClubClick = onTeamClick,
+                    isEditMode = isEditMode
                 )
             }
 
